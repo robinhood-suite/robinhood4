@@ -12,6 +12,7 @@ enum lustre_predicate {
     LPRED_COMP_END,
     LPRED_COMP_START,
     LPRED_COMP_COUNT,
+    LPRED_COMPOSITE,
     LPRED_EXPIRED,
     LPRED_EXPIRED_AT,
     LPRED_FID,

@@ -750,6 +750,29 @@ mirror_state2filter(const char *mirror_state)
     return filter;
 }
 
+static struct rbh_filter *
+composite2filter()
+{
+    struct rbh_filter *filter;
+
+    /**
+     * Little trick, if an entry is composite, we record a mirror count for it,
+     * so simply check that field exists.
+     */
+    filter = rbh_filter_exists_new(get_filter_field(LPRED_MIRROR_COUNT));
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "composite2filter");
+
+    return filter;
+}
+
+static bool
+predicate_has_argument(int predicate)
+{
+    return predicate != LPRED_COMPOSITE;
+}
+
 struct rbh_filter *
 rbh_lustre_build_filter(const char **argv, int argc, int *index,
                         __attribute__((unused)) bool *need_prefetch)
@@ -760,7 +783,7 @@ rbh_lustre_build_filter(const char **argv, int argc, int *index,
 
     predicate = str2lustre_predicate(argv[i]);
 
-    if (i + 1 >= argc)
+    if (predicate_has_argument(predicate) && i + 1 >= argc)
         error(EX_USAGE, 0, "missing argument to `%s'", argv[i]);
 
     /* In the following block, functions should call error() themselves rather
@@ -778,6 +801,9 @@ rbh_lustre_build_filter(const char **argv, int argc, int *index,
         break;
     case LPRED_COMP_COUNT:
         filter = comp_count2filter(argv[++i]);
+        break;
+    case LPRED_COMPOSITE:
+        filter = composite2filter();
         break;
     case LPRED_FID:
         filter = fid2filter(argv[++i]);

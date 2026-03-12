@@ -19,24 +19,24 @@ str2lustre_predicate(const char *string)
 
     switch (string[1]) {
     case 'c':
-        if (strncmp(&string[2], "omp-", 4))
+        if (strncmp(&string[2], "omp", 3))
             break;
 
-        switch (string[6]) {
-        case 'c':
-            if (!strcmp(&string[7], "ount"))
+        switch (string[5]) {
+        case '-':
+            if (!strcmp(&string[6], "count"))
                 return LPRED_COMP_COUNT;
 
-            break;
-        case 'e':
-            if (!strcmp(&string[7], "nd"))
+            if (!strcmp(&string[6], "end"))
                 return LPRED_COMP_END;
 
-            break;
-        case 's':
-            if (!strcmp(&string[7], "tart"))
+            if (!strcmp(&string[6], "start"))
                 return LPRED_COMP_START;
 
+            break;
+        case 'o':
+            if (strcmp(&string[6], "site") == 0)
+                return LPRED_COMPOSITE;
             break;
         }
         break;
@@ -115,6 +115,7 @@ static const char *__lustre_predicate2str[] = {
     [LPRED_COMP_COUNT]     = "comp-count",
     [LPRED_COMP_END]       = "comp-end",
     [LPRED_COMP_START]     = "comp-start",
+    [LPRED_COMPOSITE]      = "composite",
     [LPRED_FID]            = "fid",
     [LPRED_HSM_STATE]      = "hsm-state",
     [LPRED_IPOOL]          = "ipool",
