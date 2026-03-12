@@ -159,7 +159,7 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
     statx.stx_gid = inode_gid(*inode);
     statx.stx_mode = inode->i_mode;
     statx.stx_ino = dentry->ino;
-    statx.stx_size = inode->i_size;
+    statx.stx_size = EXT2_I_SIZE(inode);
     statx.stx_blocks = inode_blocks(inode);
     /* statx.stx_attributes_mask; */
     statx.stx_atime.tv_sec = ext2fs_inode_xtime_get(inode, i_atime);
