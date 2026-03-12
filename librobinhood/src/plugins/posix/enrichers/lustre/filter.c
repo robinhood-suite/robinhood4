@@ -40,6 +40,8 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                               .xattr = "begin"},
     [LPRED_FID]            = {.fsentry = RBH_FP_INODE_XATTRS,
                               .xattr = "fid"},
+    [LPRED_HASH_TYPE]      = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "mdt_hash"},
     [LPRED_HSM_STATE]      = {.fsentry = RBH_FP_INODE_XATTRS,
                               .xattr = "hsm_state"},
     [LPRED_LAYOUT_PATTERN] = {.fsentry = RBH_FP_INODE_XATTRS,
@@ -767,6 +769,41 @@ composite2filter()
     return filter;
 }
 
+static enum lmv_hash_type
+str2hash_type(const char *hash_type)
+{
+    if (strcmp(mirror_state, "all_char") == 0)
+        return LMV_HASH_TYPE_ALL_CHARS;
+
+    if (strcmp(mirror_state, "fnv_1a_64") == 0)
+        return LMV_HASH_TYPE_FNV_1A_64;
+
+    return LMV_HASH_TYPE_UNKNOWN;
+}
+
+static struct rbh_filter *
+mdt_hash2filter(const char *mdt_hash)
+{
+    struct rbh_filter *filter;
+    enum lmv_hash_type type;
+
+    type = str2hash_type(hash_type);
+    if (type == LMV_HASH_TYPE_UNKNOWN)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Invalid hash type provided, should be 'all_chars' or 'fnv', got '%s'",
+                      hash_type);
+
+    filter = rbh_filter_compare_uint32_new(RBH_FOP_EQUAL,
+                                           get_filter_field(LPRED_HASH_TYPE),
+                                           type);
+
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Failed to create the filter for the hash type");
+
+    return filter;
+}
+
 struct rbh_filter *
 rbh_lustre_build_filter(const char **argv, int argc, int *index,
                         __attribute__((unused)) bool *need_prefetch)
@@ -816,6 +853,9 @@ rbh_lustre_build_filter(const char **argv, int argc, int *index,
         break;
     case LPRED_MDT_INDEX:
         filter = mdt_index2filter(argv[++i]);
+        break;
+    case LPRED_MDT_HASH:
+        filter = mdt_hash2filter(argv[++i]);
         break;
     case LPRED_MIRROR_COUNT:
         filter = mirror_count2filter(argv[++i]);

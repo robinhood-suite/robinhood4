@@ -14,6 +14,7 @@ integration_tests = [
     'test_comp',
     'test_mdt_index',
     'test_mdt_count',
+    'test_mdt_hash',
     'test_mirror',
     'test_composite',
 ]

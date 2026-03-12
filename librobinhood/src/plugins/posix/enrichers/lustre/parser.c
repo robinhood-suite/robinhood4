@@ -45,8 +45,9 @@ str2lustre_predicate(const char *string)
             return LPRED_FID;
         break;
     case 'h':
-        if (strcmp(&string[2], "sm-state") == 0)
+        if (!strcmp(&string[2], "sm-state"))
             return LPRED_HSM_STATE;
+
         break;
     case 'i':
         if (strcmp(&string[2], "pool") == 0)
@@ -64,6 +65,9 @@ str2lustre_predicate(const char *string)
 
             if (strcmp(&string[3], "t-index") == 0)
                 return LPRED_MDT_INDEX;
+
+            if (strcmp(&string[3], "t-hash") == 0)
+                return LPRED_MDT_HASH;
             break;
         case 'i':
             if (strcmp(&string[3], "rror-count") == 0)
@@ -122,6 +126,7 @@ static const char *__lustre_predicate2str[] = {
     [LPRED_LAYOUT_PATTERN] = "layout-pattern",
     [LPRED_MDT_COUNT]      = "mdt-count",
     [LPRED_MDT_INDEX]      = "mdt-index",
+    [LPRED_MDT_HASH]       = "mdt-hash",
     [LPRED_MIRROR_COUNT]   = "mirror-count",
     [LPRED_OST_INDEX]      = "ost",
     [LPRED_POOL]           = "pool",
