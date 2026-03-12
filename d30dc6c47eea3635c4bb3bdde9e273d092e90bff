@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c9708fd_242b3951",
+        "filename": "rbh-policy/tests/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-03-12T08:09:45Z",
+      "side": 1,
+      "message": "question: why having one more time this import ? In addition of the one we already have at root rbh-policy/meson.build ?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 5
+      },
+      "revId": "d30dc6c47eea3635c4bb3bdde9e273d092e90bff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
