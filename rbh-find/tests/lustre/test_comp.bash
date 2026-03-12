@@ -94,11 +94,47 @@ test_comp_count()
         difflines "/" "/1comp"
 }
 
+test_comp_flags()
+{
+    lfs setstripe -E 1M -S 256k -E 2M -S 1M -E -1 -S 1G file0
+    truncate -s 1M "file0"
+
+    # XXX: extension components don't have a stripe size but an extension size
+    #lfs setstripe --extension-size 64M -c 1 -E -1 file1
+
+    lfs mirror create -N -Eeof -c2 -o0,1 -N -Eeof -c2 -o1,2 file2
+    echo "blob" > file2
+
+    lfs setstripe -E 1M -S 256k -E 2M -S 1M -E -1 -S 1G file3
+    lfs setstripe --comp-set -I 1 --comp-flags=nosync file3
+
+    lfs setstripe -E 1M -S 256k -E -1 -S 1M file4
+    lfs setstripe --comp-set -I 1 --comp-flags=prefer file4
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -comp-flags init | sort |
+        difflines "/file0" "/file2" "/file3" "/file4"
+    #rbh_find "rbh:$db:$testdb" -comp-flags extension | sort |
+    #    difflines "/file1"
+    rbh_find "rbh:$db:$testdb" -comp-flags stale | sort |
+        difflines "/file2"
+    rbh_find "rbh:$db:$testdb" -comp-flags nosync | sort |
+        difflines "/file3"
+    rbh_find "rbh:$db:$testdb" -comp-flags prefer | sort |
+        difflines "/file4"
+
+    rbh_find "rbh:$db:$testdb" -comp-flags init -comp-flags prefer| sort |
+        difflines "/file4"
+    rbh_find "rbh:$db:$testdb" -comp-flags stale -or -comp-flags prefer| sort |
+        difflines "/file2" "/file4"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_comp_start test_comp_end test_comp_count)
+declare -a tests=(test_comp_start test_comp_end test_comp_count test_comp_flags)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"

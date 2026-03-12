@@ -30,6 +30,9 @@ str2lustre_predicate(const char *string)
             if (!strcmp(&string[6], "end"))
                 return LPRED_COMP_END;
 
+            if (!strcmp(&string[6], "flags"))
+                return LPRED_COMP_FLAGS;
+
             if (!strcmp(&string[6], "start"))
                 return LPRED_COMP_START;
 
@@ -124,6 +127,7 @@ rbh_lustre_check_valid_token(const char *token)
 static const char *__lustre_predicate2str[] = {
     [LPRED_COMP_COUNT]     = "comp-count",
     [LPRED_COMP_END]       = "comp-end",
+    [LPRED_COMP_FLAGS]     = "comp-flags",
     [LPRED_COMP_START]     = "comp-start",
     [LPRED_COMPOSITE]      = "composite",
     [LPRED_FID]            = "fid",
