@@ -25,6 +25,10 @@
 #include "robinhood/backend.h"
 #include "robinhood/config.h"
 
+#ifndef ARRAY_SIZE
+# define ARRAY_SIZE(array) sizeof(array) / sizeof(array[0])
+#endif
+
 #define _debug(file, line, func, fmt, ...)          \
     ({                         \
       int save_errno = errno; \

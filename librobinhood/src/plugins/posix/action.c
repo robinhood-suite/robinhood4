@@ -41,10 +41,6 @@ static const mode_t MODE_BITS[] = {
     S_IROTH, S_IWOTH, S_IXOTH
 };
 
-#ifndef ARRAY_SIZE
-# define ARRAY_SIZE(array) sizeof(array) / sizeof(array[0])
-#endif
-
 static void
 parse_delete_params(const struct rbh_value_map *params,
                     bool *remove_empty_parent,
