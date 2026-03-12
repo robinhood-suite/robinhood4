@@ -1092,7 +1092,9 @@ rbh_lustre_helper(__attribute__((unused)) const char *backend,
         "    -composite\n"
         "                         filter entries based on if they have a composite layout.\n"
         "    -hash-type {all_char, fnv_1a_64}\n"
-        "                         filter entries based on their MDT hash type.\n");
+        "                         filter entries based on their MDT hash type.\n"
+        "    -comp-flags {init, stale, offline, prefer, nosync}\n"
+        "                         filter entries based on their component's flags.\n");
 
     if (rc == -1)
         *predicate_helper = NULL;

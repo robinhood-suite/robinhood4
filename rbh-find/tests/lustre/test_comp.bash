@@ -94,11 +94,30 @@ test_comp_count()
         difflines "/" "/1comp"
 }
 
+test_comp_flags()
+{
+    lfs setstripe --comp-flags init file0
+    lfs setstripe --comp-flags offline,stale file1
+    lfs setstripe --comp-flags prefer,nosync,init file2
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -comp-flags init | sort |
+        difflines "/" "/file0" "/file2"
+    rbh_find "rbh:$db:$testdb" -comp-flags offline | sort |
+        difflines "/file1"
+
+    rbh_find "rbh:$db:$testdb" -comp-flags init -comp-flags nosync | sort |
+        difflines "/file2"
+    rbh_find "rbh:$db:$testdb" -comp-flags stale -or -comp-flags nosync | sort |
+        difflines "/file1" "/file2"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_comp_start test_comp_end test_comp_count)
+declare -a tests=(test_comp_start test_comp_end test_comp_count test_comp_flags)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
