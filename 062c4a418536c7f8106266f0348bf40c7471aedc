@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f76d08ef_1afed608",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/action.c",
+        "patchSetId": 18
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-12T08:28:30Z",
+      "side": 1,
+      "message": "minor: remove this line also",
+      "revId": "062c4a418536c7f8106266f0348bf40c7471aedc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
