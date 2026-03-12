@@ -22,6 +22,30 @@
       },
       "revId": "d30dc6c47eea3635c4bb3bdde9e273d092e90bff",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "159c0cf3_158d253f",
+        "filename": "rbh-policy/tests/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-12T08:12:00Z",
+      "side": 1,
+      "message": "+1, I think you can reuse the python variable from the first meson.build",
+      "parentUuid": "3c9708fd_242b3951",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 5
+      },
+      "revId": "d30dc6c47eea3635c4bb3bdde9e273d092e90bff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
