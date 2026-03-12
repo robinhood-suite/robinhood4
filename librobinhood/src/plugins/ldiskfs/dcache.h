@@ -15,7 +15,7 @@
 #include <robinhood/iterator.h>
 #include <robinhood/utils.h>
 #include <robinhood/id.h>
-#include "lu_fid.h"
+#include "internals.h"
 
 struct rbh_dcache {
     GHashTable *dentries;
