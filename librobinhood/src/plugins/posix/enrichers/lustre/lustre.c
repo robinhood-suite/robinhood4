@@ -1057,6 +1057,7 @@ rbh_lustre_helper(__attribute__((unused)) const char *backend,
         "                         not considered if given an interval in CSV.\n"
         "    -composite           filter entries based on if they have a composite layout.\n"
         "    -fid FID             filter entries based on their FID.\n"
+        "    -foreign             filter entries based on if they have a foreign layout.\n"
         "    -hsm-state {archived, dirty, exists, lost, noarchive, none, norelease, released}\n"
         "                         filter entries based on their HSM state.\n"
         "    -layout-pattern {default, raid0, released, mdt, overstriped}\n"

@@ -44,8 +44,18 @@ str2lustre_predicate(const char *string)
         }
         break;
     case 'f':
-        if (strcmp(&string[2], "id") == 0)
-            return LPRED_FID;
+        switch (string[2]) {
+        case 'i':
+            if (strcmp(&string[3], "id") == 0)
+                return LPRED_FID;
+
+            break;
+        case 'o':
+            if (strcmp(&string[3], "reign") == 0)
+                return LPRED_FOREIGN;
+
+            break;
+        }
         break;
     case 'h':
         if (!strcmp(&string[2], "sm-state"))
@@ -125,6 +135,7 @@ static const char *__lustre_predicate2str[] = {
     [LPRED_COMP_START]     = "comp-start",
     [LPRED_COMPOSITE]      = "composite",
     [LPRED_FID]            = "fid",
+    [LPRED_FOREIGN]        = "foreign",
     [LPRED_HSM_STATE]      = "hsm-state",
     [LPRED_IPOOL]          = "ipool",
     [LPRED_LAYOUT_PATTERN] = "layout-pattern",

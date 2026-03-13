@@ -15,6 +15,7 @@ enum lustre_predicate {
     LPRED_COMP_START,
     LPRED_COMPOSITE,
     LPRED_FID,
+    LPRED_FOREIGN,
     LPRED_HSM_STATE,
     LPRED_IPOOL,
     LPRED_LAYOUT_PATTERN,

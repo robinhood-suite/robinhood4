@@ -855,6 +855,17 @@ comp_flags2filter(const char *comp_flags)
     return filter;
 }
 
+static struct rbh_filter *
+foreign2filter()
+{
+    struct rbh_filter *filter;
+
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "composite2filter");
+
+    return filter;
+}
+
 struct rbh_filter *
 rbh_lustre_build_filter(const char **argv, int argc, int *index,
                         __attribute__((unused)) bool *need_prefetch)
@@ -892,6 +903,9 @@ rbh_lustre_build_filter(const char **argv, int argc, int *index,
         break;
     case LPRED_FID:
         filter = fid2filter(argv[++i]);
+        break;
+    case LPRED_FOREIGN:
+        filter = foreign2filter(argv[i]);
         break;
     case LPRED_HSM_STATE:
         filter = hsm_state2filter(argv[++i]);
