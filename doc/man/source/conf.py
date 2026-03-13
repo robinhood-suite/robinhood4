@@ -68,7 +68,12 @@ man_pages = [
     ('robinhood4-conf', 'robinhood4',
      'configuration file for the RobinHood4 tool suite',
      [author], 5),
-    ('rbh-update-path', 'rbh-update-path', 'rbh-update-path tool', [author], 1),
+    ('rbh-update-path', 'rbh-update-path',
+     'update the path of entries without any - RobinHood4 tool suite',
+     [author], 1),
+    ('rbh-gc', 'rbh-gc',
+     'remove deleted entries from a RobinHood4 mirror backend - RobinHood4 tool suite',
+     [author], 1),
 ]
 
 smartquotes = False
