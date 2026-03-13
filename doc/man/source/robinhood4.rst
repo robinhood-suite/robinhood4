@@ -67,9 +67,9 @@ Mongo database:
 ADDITIONAL PARAMETERS
 ---------------------
 
-The URI is parsed as an actuel URI, meaning that every component of a URI is
+The URI is parsed as an actual URI, meaning that every component of a URI is
 correctly parsed and understood by RobinHood4. This however does not mean the
-targeted backend is able to understand these additional parameters.
+targeted backend will use these additional parameters.
 
 For instance, `rbh://test:42@localhost:27018/lustre:/mnt/lustre?something="42"`
 is a valid URI, but the Lustre backend won't use any additional information
@@ -92,7 +92,8 @@ EXAMPLES
 SEE ALSO
 --------
 
-rbh-info(1), rbh-find(1), rbh-report(1), rbh-sync(1), rbh-fsevents(1), rbh-undelete(1), robinhood4(5)
+rbh-info(1), rbh-find(1), rbh-report(1), rbh-sync(1), rbh-fsevents(1),
+rbh-undelete(1), rbh-update-path(1), rbh-gc(1), robinhood4(5)
 
 CREDITS
 -------

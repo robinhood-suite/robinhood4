@@ -1,12 +1,6 @@
 rbh-update-path(1)
 ==================
 
-NAME
-----
-
-rbh-update-path - update the path of directory trees in SOURCE after directories
-rename
-
 SYNOPSIS
 --------
 
