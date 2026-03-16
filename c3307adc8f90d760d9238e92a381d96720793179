@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "386f1b2a_5c926a49",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-16T14:50:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "313d912b_021a9886",
+      "range": {
+        "startLine": 7,
+        "startChar": 9,
+        "endLine": 7,
+        "endChar": 51
+      },
+      "revId": "c3307adc8f90d760d9238e92a381d96720793179",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d38a6309_aebf2b30",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-03-13T14:37:42Z",
       "side": 1,
       "message": "style: for commit messages we limit ourselves to 70 columns",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 52
+      },
+      "revId": "c3307adc8f90d760d9238e92a381d96720793179",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a865a6cf_7680dc4a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-16T14:50:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d38a6309_aebf2b30",
       "range": {
         "startLine": 9,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecdef40b_6bcfde28",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-16T14:50:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ef1008c_900541e1",
+      "range": {
+        "startLine": 10,
+        "startChar": 7,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "c3307adc8f90d760d9238e92a381d96720793179",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38760e7d_a42d37fc",
@@ -83,6 +155,30 @@
       "writtenOn": "2026-03-13T14:37:42Z",
       "side": 1,
       "message": "style: new line after the return type",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 4
+      },
+      "revId": "c3307adc8f90d760d9238e92a381d96720793179",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e1e58e4_660a64a7",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-16T14:50:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38760e7d_a42d37fc",
       "range": {
         "startLine": 16,
         "startChar": 0,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31f04b61_0492ee70",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-16T14:50:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3bd46d3_404cd1b7",
+      "range": {
+        "startLine": 17,
+        "startChar": 19,
+        "endLine": 17,
+        "endChar": 23
+      },
+      "revId": "c3307adc8f90d760d9238e92a381d96720793179",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5afc0efe_ca40cfa6",
@@ -129,6 +249,30 @@
       "writtenOn": "2026-03-13T14:37:42Z",
       "side": 1,
       "message": "style: move this after the variable declarations",
+      "range": {
+        "startLine": 20,
+        "startChar": 3,
+        "endLine": 20,
+        "endChar": 21
+      },
+      "revId": "c3307adc8f90d760d9238e92a381d96720793179",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0cc8851_3d3c48fc",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-16T14:50:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5afc0efe_ca40cfa6",
       "range": {
         "startLine": 20,
         "startChar": 3,
@@ -162,6 +306,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2008c74e_f5866d90",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-16T14:50:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf14f398_bc10620c",
+      "range": {
+        "startLine": 37,
+        "startChar": 41,
+        "endLine": 37,
+        "endChar": 76
+      },
+      "revId": "c3307adc8f90d760d9238e92a381d96720793179",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04027ce2_7ae243b8",
@@ -175,6 +343,30 @@
       "writtenOn": "2026-03-13T14:37:42Z",
       "side": 1,
       "message": "nit: I don\u0027t think it is necessary to get the function\u0027s address here. I think C uses the address by default for function names.",
+      "range": {
+        "startLine": 85,
+        "startChar": 40,
+        "endLine": 85,
+        "endChar": 41
+      },
+      "revId": "c3307adc8f90d760d9238e92a381d96720793179",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f9e8903_3d743e42",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-16T14:50:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04027ce2_7ae243b8",
       "range": {
         "startLine": 85,
         "startChar": 40,
