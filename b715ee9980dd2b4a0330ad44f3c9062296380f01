@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afb0a7f5_50762e9b",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-17T08:06:49Z",
+      "side": 1,
+      "message": "style: alignement",
+      "range": {
+        "startLine": 13,
+        "startChar": 19,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "b715ee9980dd2b4a0330ad44f3c9062296380f01",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39d2323a_650f4a19",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-17T08:06:49Z",
+      "side": 1,
+      "message": "style: remove empty line",
+      "revId": "b715ee9980dd2b4a0330ad44f3c9062296380f01",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3912f324_980778f3",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-17T08:06:49Z",
+      "side": 1,
+      "message": "style: in reverse pyramidal order",
+      "range": {
+        "startLine": 63,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 17
+      },
+      "revId": "b715ee9980dd2b4a0330ad44f3c9062296380f01",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50ac32e5_fb983648",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-17T08:06:49Z",
+      "side": 1,
+      "message": "style: in all the if blocks below\n```\nif (err)\n    goto err;\n```",
+      "range": {
+        "startLine": 73,
+        "startChar": 13,
+        "endLine": 75,
+        "endChar": 5
+      },
+      "revId": "b715ee9980dd2b4a0330ad44f3c9062296380f01",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68880648_acf87045",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-17T08:06:49Z",
+      "side": 1,
+      "message": "style: declare it at the start of the function",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 93,
+        "endChar": 1
+      },
+      "revId": "b715ee9980dd2b4a0330ad44f3c9062296380f01",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c346b5a_c429edff",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-17T08:06:49Z",
+      "side": 1,
+      "message": "style: remove empty line",
+      "revId": "b715ee9980dd2b4a0330ad44f3c9062296380f01",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
