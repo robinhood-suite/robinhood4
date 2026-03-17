@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "359e53a0_c4178b0d",
+        "filename": "rbh-policy/tests/test_actions.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-17T12:46:25Z",
+      "side": 1,
+      "message": "question: isn\u0027t there 10 other files and directories ?",
+      "range": {
+        "startLine": 246,
+        "startChar": 21,
+        "endLine": 246,
+        "endChar": 45
+      },
+      "revId": "73d27a2893e35cbda1cf4ae4e6eab91ec081fd06",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
