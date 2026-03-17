@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfe4aca8_6db6d929",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 18
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-17T09:48:28Z",
+      "side": 1,
+      "message": "question: no error if this fails ?",
+      "range": {
+        "startLine": 74,
+        "startChar": 30,
+        "endLine": 75,
+        "endChar": 21
+      },
+      "revId": "b1b59d21152887dec655bf15d4561d151d305102",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4d37c40_8d6ba045",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 18
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-17T09:48:28Z",
+      "side": 1,
+      "message": "question: no error if this fails ?",
+      "range": {
+        "startLine": 80,
+        "startChar": 22,
+        "endLine": 81,
+        "endChar": 25
+      },
+      "revId": "b1b59d21152887dec655bf15d4561d151d305102",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ce82a9e_8d50387f",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/action.c",
+        "patchSetId": 18
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-17T09:48:28Z",
+      "side": 1,
+      "message": "major: all of this function and the one in POSIX could be mutualized in a single function, with only additionnal information requested for each backend. Here, path/params are always there for any backend, only a tiny part is added for the Lustre log. Therefore, you could simply give a pointer to this function that is filled with data the backend finds relevant, and sent back for printing by a main function",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 20
+      },
+      "revId": "b1b59d21152887dec655bf15d4561d151d305102",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80b93645_b894c484",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/plugin.c",
+        "patchSetId": 18
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-17T09:48:28Z",
+      "side": 1,
+      "message": "major: seems to me this doesn\u0027t have to be a generic function, and instead its content could be part of this structure. IE you could put the \"log\" directly here, and not underneath another wrapper function",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 44
+      },
+      "revId": "b1b59d21152887dec655bf15d4561d151d305102",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78c340fe_74f45266",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/plugin.c",
+        "patchSetId": 18
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-17T09:48:28Z",
+      "side": 1,
+      "message": "major: highly confusing IMO, the common ops do not use this, but this field could be mistaken for what is implemented or not. IMO, just having the actions directly implemented in the common_ops should be enough to tell you what is and isn\u0027t implemented, as the fields would be NULL or not.",
+      "range": {
+        "startLine": 35,
+        "startChar": 8,
+        "endLine": 35,
+        "endChar": 61
+      },
+      "revId": "b1b59d21152887dec655bf15d4561d151d305102",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
