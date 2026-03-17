@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "634f6c80_d3aa5f1d",
+        "filename": "rbh-policy/rbhpolicy/config/config_validator.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-17T11:03:40Z",
+      "side": 1,
+      "message": "question: not familiar enough with python, is a `str` supposed to be callable ? From the error raised, I\u0027d say the condition should be `rule.action is not None and (not isinstance... or not callable)`",
+      "range": {
+        "startLine": 46,
+        "startChar": 16,
+        "endLine": 47,
+        "endChar": 41
+      },
+      "revId": "57a2dfc8ab8cb91c443fb4c0aaf4baa2b338a05f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fecd6f2f_aece0219",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-17T11:03:40Z",
+      "side": 1,
+      "message": "minor: similar to the other remark below, I think the parsing should be more thorough",
+      "range": {
+        "startLine": 347,
+        "startChar": 8,
+        "endLine": 347,
+        "endChar": 29
+      },
+      "revId": "57a2dfc8ab8cb91c443fb4c0aaf4baa2b338a05f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "654c2b4b_00aa391f",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-17T11:03:40Z",
+      "side": 1,
+      "message": "minor: using `startswith` would be better, avoiding issues with `cmd:` being elsewhere in the action",
+      "range": {
+        "startLine": 349,
+        "startChar": 8,
+        "endLine": 349,
+        "endChar": 30
+      },
+      "revId": "57a2dfc8ab8cb91c443fb4c0aaf4baa2b338a05f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
