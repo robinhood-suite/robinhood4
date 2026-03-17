@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac16cac2_09ee3a66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-17T10:40:24Z",
+      "side": 1,
+      "message": "As discussed, I\u0027m not a fan of having another level of indirection in the common_ops structure, and this whole patch could just use the delete_entry function already existant",
+      "revId": "36cbb18f86fc46e10af22b8999b91603b9c6af50",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
