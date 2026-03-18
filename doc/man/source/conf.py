@@ -44,6 +44,12 @@ rst_prolog = ''
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
+    ('rbh-policy', 'rbh-policy',
+     'run RobinHood4 Policy Engine policies in manual mode - RobinHood4 tool suite',
+     [author], 1),
+    ('rbh-policy-conf', 'rbh-policy-conf',
+     'configuration file format for RobinHood4 Policy Engine - RobinHood4 tool suite',
+     [author], 5),
     ('rbh-sync', 'rbh-sync',
      'synchronize metadata between RobinHood4 backends - RobinHood4 tool suite',
      [author], 1),
