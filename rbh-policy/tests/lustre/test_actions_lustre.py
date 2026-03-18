@@ -190,7 +190,7 @@ declare_policy(
     name = "test_lustre_log_policy",
     target = (Type == "f"),
     action = lustre.log,
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
 
@@ -251,7 +251,7 @@ declare_policy(
     name = "test_lustre_delete",
     target = (Type == "f") & (Name == "file1.txt"),
     action = action.delete,
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
         result = self._run_policy(config_path, "test_lustre_delete")
@@ -289,7 +289,7 @@ declare_policy(
     name = "test_posix_log_on_lustre",
     target = (Type == "f"),
     action = posix.log,
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
 
