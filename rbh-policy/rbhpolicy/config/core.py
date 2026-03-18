@@ -9,6 +9,8 @@ from rbhpolicy.config.triggers.triggers import (
     Periodic,
     Scheduled,
     AlwaysTrigger,
+    GlobalSizePercent,
+    GlobalInodePercent
 )
 from rbhpolicy.config.fileclass import declare_fileclass
 from rbhpolicy.config.policy import declare_policy, Rule
