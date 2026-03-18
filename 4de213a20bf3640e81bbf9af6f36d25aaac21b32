@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87f657af_11cb3255",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-03-18T10:42:26Z",
+      "side": 1,
+      "message": "defect: `hash_type`, same below",
+      "range": {
+        "startLine": 775,
+        "startChar": 15,
+        "endLine": 775,
+        "endChar": 27
+      },
+      "revId": "4de213a20bf3640e81bbf9af6f36d25aaac21b32",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6403efed_037b3d2f",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/parser.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-03-18T10:42:26Z",
+      "side": 1,
+      "message": "comment: ok, random change for one value :).",
+      "range": {
+        "startLine": 48,
+        "startChar": 12,
+        "endLine": 48,
+        "endChar": 13
+      },
+      "revId": "4de213a20bf3640e81bbf9af6f36d25aaac21b32",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
