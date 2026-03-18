@@ -52,6 +52,15 @@ struct rbh_policy {
     size_t rule_count;
 };
 
+const char *
+rbh_backend_get_mountpoint(struct rbh_backend *backend);
+
+const char *
+rbh_backend_get_source_backend(struct rbh_backend *backend);
+
+void
+rbh_pe_free_backend(struct rbh_backend *backend);
+
 struct rbh_mut_iterator *
 rbh_collect_fsentries(struct rbh_backend *backend, struct rbh_filter *filter);
 
