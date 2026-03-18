@@ -47,6 +47,13 @@ librbh.build_filter_from_uri.argtypes = [c_char_p, ctypes.POINTER(c_char_p)]
 librbh.rbh_backend_from_uri.restype = rbh_backend_p
 librbh.rbh_backend_from_uri.argtypes = [c_char_p, c_bool]
 
+# const char *rbh_config_get_extended_plugin(const char *backend)
+# Returns the plugin that a backend extends (walks the YAML 'extends' key),
+# or the backend name itself if it is already a root plugin.
+# The returned pointer belongs to the config — do NOT free it.
+librbh.rbh_config_get_extended_plugin.restype = c_char_p
+librbh.rbh_config_get_extended_plugin.argtypes = [c_char_p]
+
 librbh.rbh_collect_fsentries.restype = rbh_mut_iterator_p
 librbh.rbh_collect_fsentries.argtypes = [rbh_backend_p, rbh_filter_p]
 
@@ -203,6 +210,34 @@ def rbh_filter_free(ptr):
 def set_backend(uri: str):
     global backend
     backend = uri
+
+def get_backend():
+    global backend
+    return backend
+
+def resolve_backend_type(backend_name: str) -> str:
+    """Walk the YAML 'extends' chain to find the root plugin type.
+
+    Example: with "toto: extends: posix" in the YAML,
+    resolve_backend_type("toto") returns "posix".
+
+    Handles multi-level chains and guards against circular references.
+    If the config is not loaded yet, returns backend_name unchanged.
+    """
+    seen = set()
+    current = backend_name
+    while current not in seen:
+        seen.add(current)
+        raw = librbh.rbh_config_get_extended_plugin(current.encode())
+        if raw is None:
+            # Config not loaded — return the name as-is.
+            return current
+        resolved = raw.decode()
+        if resolved == current:
+            return current
+        current = resolved
+    # Circular reference guard — should never happen in a valid config.
+    return current
 
 def set_database(uri: str):
     global database
