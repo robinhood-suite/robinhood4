@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f06399aa_f119b1e1",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-18T08:31:06Z",
+      "side": 1,
+      "message": "defect: A composite file has one component flag for each component, so we can have a list of component flag. I think `lfs find` return an entry if it has atleast one component with the flag specified",
+      "revId": "512e9eab49e912bf9b9f77fc4de66b148134eaf6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
