@@ -11,6 +11,11 @@ from datetime import datetime
 from typing import Optional, TypeVar
 import re
 
+from rbhpolicy.config.triggers.capacity_providers import (
+    capacity_provider_from_filesystem,
+)
+from rbhpolicy.config.triggers import posix_capacity_provider
+
 T = TypeVar("T", bound="BaseTrigger")
 
 @dataclass(frozen=True)
@@ -179,10 +184,195 @@ def Periodic(interval_str: str) -> PeriodicTrigger:
     interval_seconds = _parse_duration(interval_str)
     return PeriodicTrigger(interval_seconds)
 
-
 def Scheduled(datetime_str: str) -> ScheduledTrigger:
     """
     Create a scheduled trigger from a datetime string like '2025-06-01 03:00'.
     """
     target_dt = _parse_datetime(datetime_str)
     return ScheduledTrigger(target_dt)
+
+# ============================================================================
+# Capacity-based triggers: GlobalSizePercent and GlobalInodePercent
+# ============================================================================
+
+class GlobalSizePercentTrigger(BaseTrigger):
+    """Trigger that matches when used bytes meet a comparison with a threshold
+    percentage of total capacity on the filesystem.
+
+    Example: GlobalSizePercent > 80 matches when > 80% of space is used.
+             GlobalSizePercent >= 80 matches when >= 80% of space is used.
+    """
+
+    def __init__(self, threshold: float, operator: str = ">="):
+        if not (0.0 <= threshold <= 100.0):
+            raise ValueError("threshold must be between 0 and 100")
+        if operator not in (">", "<", ">=", "<=", "==", "!="):
+            raise ValueError(f"invalid operator: {operator}")
+        self.threshold = threshold
+        self.operator = operator
+
+    def evaluate(self, context: TriggerContext) -> TriggerDecision:
+        provider = capacity_provider_from_filesystem(context.filesystem)
+        metrics = provider.get_capacity()
+
+        if metrics.total_bytes == 0:
+            return TriggerDecision(
+                matched=False,
+                reason="GlobalSizePercent: total_bytes is 0 (filesystem "
+                       "not available or not mounted)",
+            )
+
+        used_pct = metrics.used_bytes / metrics.total_bytes * 100.0
+
+        # Compare using operator
+        if self.operator == ">":
+            matched = used_pct > self.threshold
+        elif self.operator == "<":
+            matched = used_pct < self.threshold
+        elif self.operator == ">=":
+            matched = used_pct >= self.threshold
+        elif self.operator == "<=":
+            matched = used_pct <= self.threshold
+        elif self.operator == "==":
+            matched = used_pct == self.threshold
+        elif self.operator == "!=":
+            matched = used_pct != self.threshold
+
+        return TriggerDecision(
+            matched=matched,
+            reason=(
+                f"GlobalSizePercent: {used_pct:.1f}% used "
+                f"({self.operator} threshold {self.threshold}%): "
+                f"{'matched' if matched else 'not matched'}"
+            ),
+        )
+
+class GlobalInodePercentTrigger(BaseTrigger):
+    """Trigger that matches when used inodes meet a comparison with a threshold
+    percentage of total inodes on the filesystem.
+
+    Example: GlobalInodePercent > 90 matches when > 90% of inodes are used.
+             GlobalInodePercent <= 80 matches when <= 80% of inodes are used.
+    """
+
+    def __init__(self, threshold: float, operator: str = ">="):
+        if not (0.0 <= threshold <= 100.0):
+            raise ValueError("threshold must be between 0 and 100")
+        if operator not in (">", "<", ">=", "<=", "==", "!="):
+            raise ValueError(f"invalid operator: {operator}")
+        self.threshold = threshold
+        self.operator = operator
+
+    def evaluate(self, context: TriggerContext) -> TriggerDecision:
+        provider = capacity_provider_from_filesystem(context.filesystem)
+        metrics = provider.get_capacity()
+
+        if metrics.total_inodes == 0:
+            return TriggerDecision(
+                matched=False,
+                reason="GlobalInodePercent: total_inodes is 0 (filesystem "
+                       "not available or inode counting not supported)",
+            )
+
+        used_pct = metrics.used_inodes / metrics.total_inodes * 100.0
+
+        # Compare using operator
+        if self.operator == ">":
+            matched = used_pct > self.threshold
+        elif self.operator == "<":
+            matched = used_pct < self.threshold
+        elif self.operator == ">=":
+            matched = used_pct >= self.threshold
+        elif self.operator == "<=":
+            matched = used_pct <= self.threshold
+        elif self.operator == "==":
+            matched = used_pct == self.threshold
+        elif self.operator == "!=":
+            matched = used_pct != self.threshold
+
+        return TriggerDecision(
+            matched=matched,
+            reason=(
+                f"GlobalInodePercent: {used_pct:.1f}% inodes used "
+                f"({self.operator} threshold {self.threshold}%): "
+                f"{'matched' if matched else 'not matched'}"
+            ),
+        )
+
+# ============================================================================
+# Comparator classes for operator overloading (GlobalSizePercent, GlobalInodePercent)
+# ============================================================================
+
+class _SizePercentComparator:
+    """
+    Allows syntax like: GlobalSizePercent > 90, GlobalSizePercent <= 80, etc.
+    """
+
+    def __gt__(self, threshold: float) -> GlobalSizePercentTrigger:
+        """GlobalSizePercent > threshold"""
+        return GlobalSizePercentTrigger(threshold, operator=">")
+
+    def __lt__(self, threshold: float) -> GlobalSizePercentTrigger:
+        """GlobalSizePercent < threshold"""
+        return GlobalSizePercentTrigger(threshold, operator="<")
+
+    def __ge__(self, threshold: float) -> GlobalSizePercentTrigger:
+        """GlobalSizePercent >= threshold"""
+        return GlobalSizePercentTrigger(threshold, operator=">=")
+
+    def __le__(self, threshold: float) -> GlobalSizePercentTrigger:
+        """GlobalSizePercent <= threshold"""
+        return GlobalSizePercentTrigger(threshold, operator="<=")
+
+    def __eq__(self, threshold: float) -> GlobalSizePercentTrigger:
+        """GlobalSizePercent == threshold"""
+        return GlobalSizePercentTrigger(threshold, operator="==")
+
+    def __ne__(self, threshold: float) -> GlobalSizePercentTrigger:
+        """GlobalSizePercent != threshold"""
+        return GlobalSizePercentTrigger(threshold, operator="!=")
+
+    def __call__(self, threshold: float) -> GlobalSizePercentTrigger:
+        """Legacy syntax: GlobalSizePercent(80) for backwards compatibility"""
+        return GlobalSizePercentTrigger(threshold, operator=">=")
+
+class _InodePercentComparator:
+    """
+    Allows syntax like: GlobalInodePercent > 90, GlobalInodePercent <= 80, etc.
+    """
+
+    def __gt__(self, threshold: float) -> GlobalInodePercentTrigger:
+        """GlobalInodePercent > threshold"""
+        return GlobalInodePercentTrigger(threshold, operator=">")
+
+    def __lt__(self, threshold: float) -> GlobalInodePercentTrigger:
+        """GlobalInodePercent < threshold"""
+        return GlobalInodePercentTrigger(threshold, operator="<")
+
+    def __ge__(self, threshold: float) -> GlobalInodePercentTrigger:
+        """GlobalInodePercent >= threshold"""
+        return GlobalInodePercentTrigger(threshold, operator=">=")
+
+    def __le__(self, threshold: float) -> GlobalInodePercentTrigger:
+        """GlobalInodePercent <= threshold"""
+        return GlobalInodePercentTrigger(threshold, operator="<=")
+
+    def __eq__(self, threshold: float) -> GlobalInodePercentTrigger:
+        """GlobalInodePercent == threshold"""
+        return GlobalInodePercentTrigger(threshold, operator="==")
+
+    def __ne__(self, threshold: float) -> GlobalInodePercentTrigger:
+        """GlobalInodePercent != threshold"""
+        return GlobalInodePercentTrigger(threshold, operator="!=")
+
+    def __call__(self, threshold: float) -> GlobalInodePercentTrigger:
+        """Legacy syntax: GlobalInodePercent(90) for backwards compatibility"""
+        return GlobalInodePercentTrigger(threshold, operator=">=")
+
+# ============================================================================
+# DSL functions for creating capacity-based triggers
+# ============================================================================
+
+# Instantiate comparators as the DSL functions
+GlobalSizePercent = _SizePercentComparator()
+GlobalInodePercent = _InodePercentComparator()
