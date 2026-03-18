@@ -8,6 +8,7 @@
 from rbhpolicy.config.conditions import LogicalCondition
 from rbhpolicy.config.policy import Rule
 from rbhpolicy.config.utils import normalize_action
+from rbhpolicy.config.triggers.triggers import normalize_trigger, BaseTrigger
 
 def validate_fileclass(name, condition):
     """
@@ -72,6 +73,10 @@ def validate_policy(name, condition, action, trigger, parameters=None,
         raise TypeError(f"Policy action must be a normalized string (use cmd(), "
                         f"a callable, or a prefixed string like 'common:...'). "
                         f"Got {type(action).__name__}")
+
+    if not (trigger is None or isinstance(trigger, BaseTrigger)):
+        raise TypeError(f"Policy trigger must be a BaseTrigger instance or "
+                        f"None, got {type(trigger).__name__}")
 
     if rules is not None:
         if isinstance(rules, Rule):
