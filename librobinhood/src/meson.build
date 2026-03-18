@@ -43,6 +43,7 @@ librobinhood = library(
         'policyengine/core.c',
         'policyengine/actions.c',
         'policyengine/python.c',
+        'policyengine/trigger.c',
         'queue.c',
         'ring.c',
         'ringr.c',
