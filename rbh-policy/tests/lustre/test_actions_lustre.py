@@ -186,7 +186,7 @@ declare_policy(
     target = (Type == "f"),
     action = lustre.log,
     parameters = {"format": "path=%p, fid=%F"},
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
 
@@ -246,7 +246,7 @@ declare_policy(
     name = "test_lustre_delete",
     target = (Type == "f") & (Name == "file1.txt"),
     action = action.delete,
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
         result = self._run_policy(config_path, "test_lustre_delete")
