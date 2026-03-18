@@ -148,7 +148,7 @@ declare_policy(
     name = "test_log_policy",
     target = (Type == "f"),
     action = action.log,
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
 
@@ -202,7 +202,7 @@ config(
 declare_policy(
     name = "test_log_policy",
     target = (Type == "f"),
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
 
@@ -229,7 +229,7 @@ declare_policy(
     name = "test_delete_file",
     target = (Type == "f") & (Name == "file1.txt"),
     action = action.delete,
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
         result = self._run_policy(config_path, "test_delete_file")
@@ -272,7 +272,7 @@ declare_policy(
     name = "test_delete_dir",
     target = (Type == "d") & (Name == "emptydir"),
     action = action.delete,
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
         result = self._run_policy(config_path, "test_delete_dir")
@@ -309,7 +309,7 @@ declare_policy(
     name = "test_mixed_policy",
     target = (Type == "f") | (Type == "d"),
     action = action.log,
-    trigger = 'Periodic("10m")',
+    trigger = Always,
     rules = [
         Rule(
             name = "delete_files_rule",
@@ -373,7 +373,7 @@ declare_policy(
     target = (Type == "f") & (Name == "solo.txt"),
     action = action.delete,
     parameters = {"remove_empty_parent": True},
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
         result = self._run_policy(config_path, "test_delete_with_parent")
@@ -427,7 +427,7 @@ declare_policy(
         "remove_empty_parent": True,
         "remove_parents_below": "filedir/a/b",
     },
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
         result = self._run_policy(config_path, "test_delete_parents_below")
@@ -475,7 +475,7 @@ declare_policy(
     target = (Type == "f") & (Name == "alone.txt"),
     action = action.delete,
     parameters = {"remove_parents_below": "filedir/alone_dir"},
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
         result = self._run_policy(config_path, "test_no_remove_parent")
@@ -515,7 +515,7 @@ declare_policy(
     parameters = {
         "exemple_param": "-la"
     },
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
         result = self._run_policy(config_path, "test_cmd_policy")
@@ -553,7 +553,7 @@ declare_policy(
     name = "test_cmd_policy_no_params",
     target = (Type == "f"),
     action = cmd("ls {}"),
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
         result = self._run_policy(config_path, "test_cmd_policy_no_params")
@@ -582,7 +582,7 @@ declare_policy(
     name = "test_cmd_policy_with_rules",
     target = (Type == "f") | (Type == "d"),
     action = action.log,
-    trigger = 'Periodic("10m")',
+    trigger = Always,
     rules = [
         Rule(
             name = "cmd_rule",
@@ -642,7 +642,7 @@ declare_policy(
     name = "test_error_handling",
     target = (Type == "f"),
     action = cmd("nonexistent_command {}"),
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
         result = self._run_policy(config_path, "test_error_handling")
@@ -691,7 +691,7 @@ declare_policy(
     target = (Type == "f") & (Name == "file1.txt"),
     action = my_python_action,
     parameters = {"tag": "test_value"},
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
         result = self._run_policy(config_path, "test_py_action")
@@ -745,7 +745,7 @@ declare_policy(
     target = (Type == "f") & (Name == "file2.log"),
     action = test_actions_module.external_action,
     parameters = {"label": "module_test"},
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
 
@@ -782,7 +782,7 @@ declare_policy(
     name = "test_missing_func",
     target = (Type == "f") & (Name == "file1.txt"),
     action = nonexistent_function,
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
         result = self._run_policy(config_path, "test_missing_func")
@@ -811,7 +811,7 @@ declare_policy(
     name = "test_exception",
     target = (Type == "f") & (Name == "file1.txt"),
     action = failing_action,
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
         result = self._run_policy(config_path, "test_exception")
@@ -847,7 +847,7 @@ declare_policy(
     name = "test_simple_py",
     target = (Type == "f") & (Name == "file3.csv"),
     action = simple_action,
-    trigger = 'Periodic("10m")'
+    trigger = Always
 )
 """)
         result = self._run_policy(config_path, "test_simple_py")
@@ -879,7 +879,7 @@ declare_policy(
     name = "test_py_rules",
     target = (Type == "f") | (Type == "d"),
     action = action.log,
-    trigger = 'Periodic("10m")',
+    trigger = Always,
     rules = [
         Rule(
             name = "python_rule",
