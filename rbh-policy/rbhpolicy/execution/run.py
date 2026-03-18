@@ -6,7 +6,12 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
 from rbhpolicy.config.policy import rbh_policies
-from rbhpolicy.config.cpython import collect_fs_entries, rbh_pe_execute
+from rbhpolicy.config.cpython import (
+    collect_fs_entries,
+    get_backend,
+    rbh_pe_execute,
+)
+from rbhpolicy.config.triggers.triggers import TriggerContext, evaluate_trigger
 
 def run(policies):
     unknown = [name for name in policies if name not in rbh_policies]
@@ -15,6 +20,18 @@ def run(policies):
 
     for name in policies:
         policy = rbh_policies[name]
+        decision = evaluate_trigger(
+            policy.trigger,
+            TriggerContext(manual_mode=True, filesystem=get_backend()),
+        )
+
+        if not decision.matched:
+            print(
+                f"[INFO] Skipping policy '{name}': trigger not matched "
+                f"({decision.reason})"
+            )
+            continue
+
         print(f"[INFO] Executing policy '{name}'")
         rbhfilter = policy._filter
         iterator, backend = collect_fs_entries(rbhfilter)
