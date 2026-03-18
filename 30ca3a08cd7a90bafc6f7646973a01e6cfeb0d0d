@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "beddd5fa_56c2f6e3",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-18T12:28:37Z",
+      "side": 1,
+      "message": "minor: this is not necessary. `rbh_sstack_push` will copy `strlen + 1` characters from `_name`. This includes the final `\\0`. Note that this line would not work if `name` wasn\u0027t already nul terminated since you are using `strlen`.",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 30
+      },
+      "revId": "30ca3a08cd7a90bafc6f7646973a01e6cfeb0d0d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
