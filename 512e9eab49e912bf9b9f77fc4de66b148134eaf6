@@ -16,6 +16,47 @@
       "message": "defect: A composite file has one component flag for each component, so we can have a list of component flag. I think `lfs find` return an entry if it has atleast one component with the flag specified",
       "revId": "512e9eab49e912bf9b9f77fc4de66b148134eaf6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21fe9bf1_9e1b5dbb",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-03-18T10:48:56Z",
+      "side": 1,
+      "message": "It seems the test was written according to what you are suggesting. Maybe the filter compare operation already considers that?",
+      "parentUuid": "f06399aa_f119b1e1",
+      "revId": "512e9eab49e912bf9b9f77fc4de66b148134eaf6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c44f90e8_7a1b6cac",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/parser.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-03-18T10:48:56Z",
+      "side": 1,
+      "message": "style: not in alphabetical order",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 37,
+        "endChar": 40
+      },
+      "revId": "512e9eab49e912bf9b9f77fc4de66b148134eaf6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
