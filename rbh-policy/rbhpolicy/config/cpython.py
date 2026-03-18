@@ -47,6 +47,12 @@ librbh.build_filter_from_uri.argtypes = [c_char_p, ctypes.POINTER(c_char_p)]
 librbh.rbh_backend_from_uri.restype = rbh_backend_p
 librbh.rbh_backend_from_uri.argtypes = [c_char_p, c_bool]
 
+librbh.rbh_backend_get_source_backend.restype = c_char_p
+librbh.rbh_backend_get_source_backend.argtypes = [c_void_p]
+
+librbh.rbh_backend_get_mountpoint.restype = c_char_p
+librbh.rbh_backend_get_mountpoint.argtypes = [c_void_p]
+
 librbh.rbh_collect_fsentries.restype = rbh_mut_iterator_p
 librbh.rbh_collect_fsentries.argtypes = [rbh_backend_p, rbh_filter_p]
 
@@ -204,9 +210,34 @@ def set_backend(uri: str):
     global backend
     backend = uri
 
+def resolve_backend_info(uri: str, getter) -> str:
+    if not uri:
+        return None
+
+    uri_c = c_char_p(uri.encode("utf-8"))
+    backend_ptr = librbh.rbh_backend_from_uri(uri_c, True)
+    if not backend_ptr:
+        return None
+
+    raw = getter(backend_ptr)
+    if not raw:
+        return None
+
+    return raw.decode()
+
+def resolve_backend_type(uri: str) -> str:
+    return resolve_backend_info(uri, librbh.rbh_backend_get_source_backend)
+
+def resolve_backend_mountpoint(uri: str) -> str:
+    return resolve_backend_info(uri, librbh.rbh_backend_get_mountpoint)
+
 def set_database(uri: str):
     global database
     database = uri
+
+def get_database():
+    global database
+    return database
 
 def set_evaluation_interval(interval):
     global evaluation_interval
