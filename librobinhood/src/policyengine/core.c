@@ -22,6 +22,60 @@
 #include "robinhood/filters/core.h"
 #include <robinhood.h>
 
+static const char *
+extract_string_info(struct rbh_backend *backend, int info_flag,
+                    const char *key)
+{
+    struct rbh_value_map *info_map = rbh_backend_get_info(backend, info_flag);
+    const struct rbh_value *val;
+
+    if (!info_map)
+        return NULL;
+
+    val = rbh_map_find(info_map, key);
+    if (!val)
+        return NULL;
+
+    if (val->type == RBH_VT_STRING)
+        return val->string;
+
+    if (val->type == RBH_VT_SEQUENCE) {
+        for (size_t i = 0; i < val->sequence.count; i++) {
+            const struct rbh_value_map *map = &val->sequence.values[i].map;
+            const struct rbh_value *plugin = rbh_map_find(map, "plugin");
+            const struct rbh_value *type = rbh_map_find(map, "type");
+
+            if (type && strcmp(type->string, "plugin") == 0 && plugin)
+                return plugin->string;
+        }
+    }
+
+    return NULL;
+}
+
+const char *
+rbh_backend_get_source_backend(struct rbh_backend *backend)
+{
+    return extract_string_info(backend, RBH_INFO_BACKEND_SOURCE,
+                               "backend_source");
+}
+
+const char *
+rbh_backend_get_mountpoint(struct rbh_backend *backend)
+{
+    return extract_string_info(backend, RBH_INFO_MOUNTPOINT,
+                               "mountpoint");
+}
+
+void
+rbh_pe_free_backend(struct rbh_backend *backend)
+{
+    if (backend)
+        rbh_backend_destroy(backend);
+
+
+}
+
 struct rbh_mut_iterator *
 rbh_collect_fsentries(struct rbh_backend *backend, struct rbh_filter *filter)
 {
