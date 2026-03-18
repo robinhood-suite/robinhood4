@@ -63,6 +63,11 @@ librbh.rbh_pe_execute.restype = c_int
 librbh.rbh_pe_execute.argtypes = [rbh_mut_iterator_p, rbh_backend_p, c_char_p,
                                   c_void_p]
 
+librbh.rbh_trigger_query_stat.restype = c_int
+librbh.rbh_trigger_query_stat.argtypes = [rbh_backend_p, rbh_filter_p,
+                                          ctypes.c_uint32,
+                                          ctypes.POINTER(ctypes.c_int64)]
+
 class RbhDeleteParams(Structure):
     _fields_ = [
         ("remove_empty_parent", c_bool),
@@ -192,6 +197,31 @@ def rbh_pe_execute(mirror_iter, mirror_backend, policy_obj):
                                    ctypes.byref(c_policy))
 
     return result
+
+def trigger_query_stat(rbh_filter, stat_field):
+    """
+    Query aggregated statistics from the database backend.
+
+    @param rbh_filter   pre-built filter from build_filter(); NULL queries all
+    @param stat_field   0 for count, RBH_STATX_SIZE, etc.
+
+    @return             aggregated value (count or sum)
+    """
+    global database
+    uri_c = c_char_p(database.encode("utf-8"))
+    backend = librbh.rbh_backend_from_uri(uri_c, True)
+    if not backend:
+        raise RuntimeError("Failed to create database backend")
+
+    result = ctypes.c_int64()
+    rc = librbh.rbh_trigger_query_stat(backend, rbh_filter,
+                                       ctypes.c_uint32(stat_field),
+                                       ctypes.byref(result))
+
+    if rc != 0:
+        raise RuntimeError(f"rbh_trigger_query_stat failed: {rc}")
+
+    return result.value
 
 def rbh_filter_and(filter1, filter2):
     return librbh.rbh_filter_and(filter1, filter2)
