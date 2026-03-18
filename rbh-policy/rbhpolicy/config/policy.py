@@ -8,6 +8,7 @@
 import sys
 from rbhpolicy.config.conditions import LogicalCondition
 from rbhpolicy.config.utils import normalize_action, resolve_cmd_action
+from rbhpolicy.config.triggers.triggers import normalize_trigger
 
 rbh_policies = {}
 
@@ -44,7 +45,7 @@ class Policy:
             parameters=None, rules=None):
         self.name = name
         self.target = target
-        self.trigger = trigger
+        self.trigger = normalize_trigger(trigger)
         self.parameters = parameters or {}
         self.action = resolve_cmd_action(
             normalize_action(action) if action is not None else None,
