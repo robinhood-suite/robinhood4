@@ -32,6 +32,29 @@ test_save_idx()
     fi
 }
 
+test_save_idx_with_error()
+{
+    touch entry
+    touch entry2
+    touch entry3
+    rm entry2
+
+    # Enriching of second batch (entry2) will failed because entry2 is already
+    # deleted.
+    rbh_fsevents -b 2 --no-skip -e rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT"?ack-user="$userid" "rbh:$db:$testdb" &&
+        error "Should have failed"
+
+    local fsevents_source_idx=$(do_db fsevents "$testdb" "$LUSTRE_MDT")
+    local first_changelog=$(lfs changelog $LUSTRE_MDT | head -n 1 |
+                            cut -d' ' -f1)
+
+    if [[ $fsevents_source_idx != $(($first_changelog - 1)) ]]; then
+        error "Fsevents source index should be $(($first_changelog - 1)), got" \
+              "$fsevents_source_idx"
+    fi
+}
+
 test_save_idx_multiple_mdt()
 {
     local entry="test_entry"
@@ -115,7 +138,8 @@ test_start_idx()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_save_idx test_save_idx_multiple_mdt test_start_idx)
+declare -a tests=(test_save_idx test_save_idx_with_error
+                  test_save_idx_multiple_mdt test_start_idx)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
