@@ -51,7 +51,8 @@ static inline time_t decode_extra_sec(time_t seconds,
 static void
 fifo_push(struct ldiskfs_iter *iter, struct rbh_dentry *dentry)
 {
-    g_queue_push_tail(iter->tasks, dentry);
+    if (dentry)
+        g_queue_push_tail(iter->tasks, dentry);
 }
 
 static struct rbh_dentry *
@@ -78,11 +79,12 @@ static const struct rbh_id ROOT_ID = {
 
 static ssize_t
 build_path(struct rbh_dentry *dentry, struct rbh_dentry *root,
-           char **path, size_t len)
+           struct rbh_dentry *remote_parent_dir, char **path, size_t len)
 {
     ssize_t offset;
 
-    if (dentry->ino == EXT2_ROOT_INO || dentry == root) {
+    if (dentry->ino == EXT2_ROOT_INO || dentry == root ||
+        dentry == remote_parent_dir) {
         len += 2; /* '/\0' */
         *path = malloc(len);
         if (!*path)
@@ -97,7 +99,7 @@ build_path(struct rbh_dentry *dentry, struct rbh_dentry *root,
         return 0;
 
     len += dentry->namelen + (is_dir(dentry) ? 1 : 0);
-    offset = build_path(dentry->parent, root, path, len);
+    offset = build_path(dentry->parent, root, remote_parent_dir, path, len);
     if (offset == -1)
         return -1;
 
@@ -111,12 +113,13 @@ build_path(struct rbh_dentry *dentry, struct rbh_dentry *root,
 }
 
 static char *
-dentry_path(struct rbh_dentry *dentry, struct rbh_dentry *root)
+dentry_path(struct rbh_dentry *dentry, struct rbh_dentry *root,
+            struct rbh_dentry *remote_parent_dir)
 {
     ssize_t offset;
     char *path;
 
-    offset = build_path(dentry, root, &path, 0);
+    offset = build_path(dentry, root, remote_parent_dir, &path, 0);
     if (offset == -1)
         return NULL;
 
@@ -125,7 +128,8 @@ dentry_path(struct rbh_dentry *dentry, struct rbh_dentry *root)
 
 static struct rbh_fsentry *
 fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
-                    ext2_filsys fs, struct rbh_sstack *sstack)
+                    struct rbh_dentry *remote_parent_dir,ext2_filsys fs,
+                    struct rbh_sstack *sstack)
 {
     struct ext2_inode_large *inode = (struct ext2_inode_large *)dentry->inode;
     struct rbh_value_map inode_xattrs = get_xattrs_from_inode(fs, inode, dentry->ino,
@@ -180,7 +184,7 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
 
     ns_xattrs.count = 1;
     ns_xattrs.pairs = &path;
-    path_value.string = dentry_path(dentry, root);
+    path_value.string = dentry_path(dentry, root, remote_parent_dir);
 
     fsentry = rbh_fsentry_new(id, parent_id, dentry->name,  &statx, &ns_xattrs,
                               &inode_xattrs, NULL);
@@ -208,7 +212,8 @@ ldiskfs_iter_next(void *iterator)
     if (is_dir(dentry))
         fifo_push_child_entries(iter, dentry);
 
-    return fsentry_from_dentry(dentry, iter->root, iter->fs, iter->sstack);
+    return fsentry_from_dentry(dentry, iter->root, iter->remote_parent_dir,
+                               iter->fs, iter->sstack);
 }
 
 static void
