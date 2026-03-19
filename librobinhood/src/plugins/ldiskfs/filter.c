@@ -51,7 +51,8 @@ static inline time_t decode_extra_sec(time_t seconds,
 static void
 fifo_push(struct ldiskfs_iter *iter, struct rbh_dentry *dentry)
 {
-    g_queue_push_tail(iter->tasks, dentry);
+    if (dentry)
+        g_queue_push_tail(iter->tasks, dentry);
 }
 
 static struct rbh_dentry *
