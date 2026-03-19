@@ -843,42 +843,6 @@ end_event:
     return NULL;
 }
 
-static int
-lustre_changelog_set_last_read(void *iterator)
-{
-    struct rbh_value_pair last_read_pair, mdt_pair, fsevents_pair;
-    struct lustre_changelog_iterator *records = iterator;
-    struct rbh_value *last_read_value;
-    struct rbh_value *map, *mdt_map;
-    struct rbh_value_map value_map;
-    int rc = 0;
-
-    last_read_value = rbh_value_uint64_new(records->last_changelog_index);
-
-    last_read_pair.key = "last_read";
-    last_read_pair.value = last_read_value;
-
-    mdt_map = rbh_value_map_new(&last_read_pair, 1);
-
-    mdt_pair.key = records->mdt_name;
-    mdt_pair.value = mdt_map;
-
-    map = rbh_value_map_new(&mdt_pair, 1);
-
-    fsevents_pair.key = "fsevents_source";
-    fsevents_pair.value = map;
-    value_map.pairs = &fsevents_pair;
-    value_map.count = 1;
-
-    rc = sink_insert_metadata(records->sink, &value_map, RBH_DT_INFO);
-
-    free(last_read_value);
-    free(mdt_map);
-    free(map);
-
-    return errno != ENOTSUP ? rc : 0;
-}
-
 void
 lustre_changelog_iter_destroy(void *iterator)
 {
@@ -889,15 +853,8 @@ lustre_changelog_iter_destroy(void *iterator)
     if (records->fsevents_iterator)
         rbh_iter_destroy(records->fsevents_iterator);
 
-    if (records->username) {
-        int rc;
-
-        rc = lustre_changelog_set_last_read(records);
-        if (rc < 0)
-            error(EXIT_FAILURE, -rc, "Failed to set backend_fsevents info");
-
+    if (records->username)
         free(records->username);
-    }
 
     free(records->mdt_name);
     if (records->dump_file != NULL && records->dump_file != stdout)
