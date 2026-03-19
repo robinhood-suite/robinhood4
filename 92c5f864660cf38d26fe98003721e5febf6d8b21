@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8f08fc7_7590edf2",
+        "filename": "librobinhood/src/plugins/ldiskfs/internals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-19T15:41:45Z",
+      "side": 1,
+      "message": "I would be nice to put the file from which it was copied.",
+      "range": {
+        "startLine": 52,
+        "startChar": 47,
+        "endLine": 52,
+        "endChar": 58
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a80d7c7_731f782d",
+        "filename": "librobinhood/src/plugins/ldiskfs/internals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-19T15:41:45Z",
+      "side": 1,
+      "message": "minor: if you only use this in the functions that convert to an FID, I would prefer if you move the definitions there. You should keep things in a header file only if you intend to use them in another file. Also, this make the code of the other functions easier to read.",
+      "range": {
+        "startLine": 53,
+        "startChar": 7,
+        "endLine": 53,
+        "endChar": 20
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b425238_4a2b8d4d",
+        "filename": "librobinhood/src/plugins/ldiskfs/internals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-19T15:41:45Z",
+      "side": 1,
+      "message": "This structure is small so it is cheep to copy but if you don\u0027t need to pass a copy, prefer passing a pointer.",
+      "range": {
+        "startLine": 99,
+        "startChar": 27,
+        "endLine": 99,
+        "endChar": 40
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6501f42e_5c8e1cc3",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-19T15:41:45Z",
+      "side": 1,
+      "message": "nit: prefer void* here. What you did is correct but void* convains the idea that it is a pointer to some binary data (and for the other functions as well when appropriate).",
+      "range": {
+        "startLine": 94,
+        "startChar": 16,
+        "endLine": 94,
+        "endChar": 20
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5212f6a6_9eae037e",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-19T15:41:45Z",
+      "side": 1,
+      "message": "minor: a general comment on these functions. You should probably document them to explain where the argument comes from and what it contains. Something taken from the output of debugfs would be a nice way of explaining what you are doing here.",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 15
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a074fb1c_63f51f3a",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-19T15:41:45Z",
+      "side": 1,
+      "message": "suggets: from_filter_fid. Otherwise the name of the function is a bit confusing.",
+      "range": {
+        "startLine": 108,
+        "startChar": 12,
+        "endLine": 108,
+        "endChar": 14
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3f06ddc_359d53d2",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-19T15:41:45Z",
+      "side": 1,
+      "message": "style: I know Lustre uses this a lot but this makes the code harder to read. Prefer more explicite names like header and link_entry for instance.",
+      "range": {
+        "startLine": 127,
+        "startChar": 27,
+        "endLine": 127,
+        "endChar": 30
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7343ee7_9c5bb48b",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-19T15:41:45Z",
+      "side": 1,
+      "message": "major: if the symbol is not exported by Lustre, you should redefine it. Avoid user magic number in the code like this. It also helps find the original definition in Lustre\u0027s source code.",
+      "range": {
+        "startLine": 138,
+        "startChar": 25,
+        "endLine": 138,
+        "endChar": 36
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b55bb6e_daf1cefc",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-19T15:41:45Z",
+      "side": 1,
+      "message": "style: space after while",
+      "range": {
+        "startLine": 151,
+        "startChar": 4,
+        "endLine": 151,
+        "endChar": 9
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb52fae4_d0af1639",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-19T15:41:45Z",
+      "side": 1,
+      "message": "You could do a small representation of the data with ASCII boxes with the header, its content and then one or two entries. Put this at the begining of the function. That way people understand what you are doing without having to look at the structures.",
+      "range": {
+        "startLine": 154,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 39
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dba9d29_ffe0b6c9",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-19T15:41:45Z",
+      "side": 1,
+      "message": "nit: not necessary",
+      "range": {
+        "startLine": 161,
+        "startChar": 8,
+        "endLine": 161,
+        "endChar": 30
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9443044_e003528b",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-19T15:41:45Z",
+      "side": 1,
+      "message": "defect: This not how it works. The endianess depends on the CPU architecture. You need to swap it to the right endianness. On a big endian computer, there is nothing to do. On a little endian computer, you need to swap. There a some functions that implement this logic for you. You can look at `man be64toh`.",
+      "range": {
+        "startLine": 169,
+        "startChar": 47,
+        "endLine": 169,
+        "endChar": 65
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
