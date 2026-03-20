@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b7fd73b_035af479",
+        "filename": "rbh-policy/tests/test_actions.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-20T10:18:40Z",
+      "side": 1,
+      "message": "major: Lustre specific tests should be in their own directories. This is linked to the separation of allowed actions/filters/... in backends, Lustre should not be needed for the policy engine to be used, but should be an extension",
+      "range": {
+        "startLine": 907,
+        "startChar": 6,
+        "endLine": 907,
+        "endChar": 17
+      },
+      "revId": "8ddc820c6274df12cf23ea62aa5eeaac06b0db8d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "694f83d0_24821e5f",
+        "filename": "rbh-policy/tests/test_actions.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-20T10:18:40Z",
+      "side": 1,
+      "message": "typo: empty space",
+      "range": {
+        "startLine": 1078,
+        "startChar": 32,
+        "endLine": 1078,
+        "endChar": 33
+      },
+      "revId": "8ddc820c6274df12cf23ea62aa5eeaac06b0db8d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
