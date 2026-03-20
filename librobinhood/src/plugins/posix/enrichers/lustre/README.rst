@@ -1,5 +1,5 @@
 .. This file is part of RobinHood
-   Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+   Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
                       alternatives
 
    SPDX-License-Identifier: LGPL-3.0-or-later
@@ -16,6 +16,9 @@ The enricher is mainly used by rbh-sync_ and rbh-fsevents_.
 
 .. _rbh-fsevents: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-fsevents
 .. _rbh-sync: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-sync
+
+/!\ This extension has been tested for Lustre 2.15 and may not work for previous
+versions.
 
 Enrichment
 ==========
