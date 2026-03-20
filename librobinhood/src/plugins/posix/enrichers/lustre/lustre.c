@@ -1,7 +1,7 @@
 /**
  * This file is part of RobinHood
  *
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  * alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -542,8 +542,13 @@ get_data_striping(const char *lov_buf, bool is_dir)
     lum = (struct lov_user_md *) lov_buf;
 
     lum_size = lov_user_md_size(lum->lmm_stripe_count, lum->lmm_magic);
+#ifdef HAVE_LLAPI_LAYOUT_GET_CHECK
     layout = llapi_layout_get_by_xattr(lum, lum_size,
                                        is_dir ? 0 : LLAPI_LAYOUT_GET_CHECK);
+#else
+    (void) is_dir;
+    layout = llapi_layout_get_by_xattr(lum, lum_size, 0);
+#endif
     if (!layout)
         return NULL;
 

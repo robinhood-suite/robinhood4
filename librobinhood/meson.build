@@ -1,5 +1,5 @@
 # This file is part of RobinHood
-# Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -43,6 +43,11 @@ have_lov_user_magic_foreign = cc.has_header_symbol('lustre/lustre_user.h',
                                                    'LOV_USER_MAGIC_FOREIGN',
                                                    args: '-D_GNU_SOURCE')
 conf_data.set('HAVE_LOV_USER_MAGIC_FOREIGN', have_lov_user_magic_foreign)
+
+have_llapi_layout_get_check = cc.has_header_symbol('lustre/lustreapi.h',
+                                                   'LLAPI_LAYOUT_GET_CHECK',
+                                                   args: '-D_GNU_SOURCE')
+conf_data.set('HAVE_LLAPI_LAYOUT_GET_CHECK', have_llapi_layout_get_check)
 
 have_lustre_file_handle = cc.has_member(
     'struct lustre_file_handle',
