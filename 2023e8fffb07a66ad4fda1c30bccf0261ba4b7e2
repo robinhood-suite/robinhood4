@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4600281e_4181b229",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-20T08:11:48Z",
+      "side": 1,
+      "message": "comment: we use \"rbh_sstack\" to handle such cases generally",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 17,
+        "endChar": 108
+      },
+      "revId": "2023e8fffb07a66ad4fda1c30bccf0261ba4b7e2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2a8aee7_a05574b7",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-20T08:11:48Z",
+      "side": 1,
+      "message": "style: no spaces between the asterisk and the variable name",
+      "range": {
+        "startLine": 18,
+        "startChar": 10,
+        "endLine": 18,
+        "endChar": 11
+      },
+      "revId": "2023e8fffb07a66ad4fda1c30bccf0261ba4b7e2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75dde956_4e9ddedf",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-20T08:11:48Z",
+      "side": 1,
+      "message": "style: order",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 70
+      },
+      "revId": "2023e8fffb07a66ad4fda1c30bccf0261ba4b7e2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d14f55e_ebfff16e",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-20T08:11:48Z",
+      "side": 1,
+      "message": "question: so if the retrieval of xattrs fails, we just ignore the error without any warning ? I\u0027d say it would be better to use the `skip_error` parameter we use in other places to determine that behaviour",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 96,
+        "endChar": 23
+      },
+      "revId": "2023e8fffb07a66ad4fda1c30bccf0261ba4b7e2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
