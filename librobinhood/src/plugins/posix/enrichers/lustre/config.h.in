@@ -1,11 +1,12 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
 #mesondefine HAVE_FID_PARSE
+#mesondefine HAVE_LLAPI_LAYOUT_GET_CHECK
 #mesondefine HAVE_LOV_USER_MAGIC_FOREIGN
 #mesondefine HAVE_LOV_USER_MAGIC_SEL
 #mesondefine HAVE_LUSTRE_FILE_HANDLE
