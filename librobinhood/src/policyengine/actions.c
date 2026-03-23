@@ -245,12 +245,35 @@ rbh_pe_select_common_ops_for_actions(const struct rbh_action *action,
 }
 
 /**
- * Delete an entry from the filesystem/object store by dispatching a DELETE
- * action through the backend's apply_action operation.
+ * Log an entry from the filesystem/object store by calling the associated
+ * action via the commons_ops of the backend.
  *
  * @param action       the action to apply (contains parsed parameters)
  * @param mi_backend   the mirror backend
- * @param fs_backend   the filesystem backend to use for deletion
+ * @param entry        the fsentry to delete
+ * @param common_ops   the backend's common operations interface
+ *
+ * @return 0 on success, -1 on error (errno is set)
+ */
+static int
+rbh_pe_log_action(const struct rbh_action *action,
+                     struct rbh_backend *mi_backend,
+                     struct rbh_fsentry *entry,
+                     const struct rbh_pe_common_operations *common_ops)
+{
+    const struct rbh_value_map *params;
+
+    params = action->params.count > 0 ? &action->params : NULL;
+
+    return rbh_pe_common_ops_log_entry(common_ops, entry, params);
+}
+
+/**
+ * Delete an entry from the filesystem/object store by calling the associated
+ * action via the commons_ops of the backend.
+ *
+ * @param action       the action to apply (contains parsed parameters)
+ * @param mi_backend   the mirror backend
  * @param entry        the fsentry to delete
  * @param common_ops   the backend's common operations interface
  *
@@ -259,19 +282,20 @@ rbh_pe_select_common_ops_for_actions(const struct rbh_action *action,
 static int
 rbh_pe_delete_action(const struct rbh_action *action,
                      struct rbh_backend *mi_backend,
-                     struct rbh_backend *fs_backend,
                      struct rbh_fsentry *entry,
                      const struct rbh_pe_common_operations *common_ops)
 {
+    const struct rbh_value_map *params;
     int rc;
+
+    params = action->params.count > 0 ? &action->params : NULL;
 
     if (!entry) {
         fprintf(stderr, "DeleteAction | entry is NULL\n");
         return -1;
     }
 
-    rc = rbh_pe_common_ops_apply_action(common_ops, action, entry, mi_backend,
-                                        fs_backend);
+    rc = rbh_pe_common_ops_delete_entry(common_ops, mi_backend, entry, params);
     if (rc == 0 || rc == 1) {
         printf("DeleteAction | deleted '%s'\n", fsentry_relative_path(entry));
         if (rc == 1)
@@ -553,16 +577,14 @@ rbh_pe_apply_action(const struct rbh_action *action,
         if (!common_ops)
             return -1;
 
-        return rbh_pe_common_ops_apply_action(common_ops, action, entry,
-                                              mi_backend, fs_backend);
+        return rbh_pe_log_action(action, mi_backend, entry, common_ops);
     case RBH_ACTION_DELETE:
         common_ops = rbh_pe_select_common_ops_for_actions(action, fs_backend,
                                                           f_ctx);
         if (!common_ops)
             return -1;
 
-        return rbh_pe_delete_action(action, mi_backend, fs_backend, entry,
-                                    common_ops);
+        return rbh_pe_delete_action(action, mi_backend, entry, common_ops);
     case RBH_ACTION_CMD:
         return rbh_pe_cmd_action(action, entry, mi_backend);
     case RBH_ACTION_PYTHON:
