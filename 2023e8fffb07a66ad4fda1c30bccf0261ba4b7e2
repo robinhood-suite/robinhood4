@@ -71,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95756cd5_6dabf1c0",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-23T13:11:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2a8aee7_a05574b7",
+      "range": {
+        "startLine": 18,
+        "startChar": 10,
+        "endLine": 18,
+        "endChar": 11
+      },
+      "revId": "2023e8fffb07a66ad4fda1c30bccf0261ba4b7e2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75dde956_4e9ddedf",
@@ -84,6 +108,30 @@
       "writtenOn": "2026-03-20T08:11:48Z",
       "side": 1,
       "message": "style: order",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 70
+      },
+      "revId": "2023e8fffb07a66ad4fda1c30bccf0261ba4b7e2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ded1a5cf_5ec25112",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-23T13:11:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75dde956_4e9ddedf",
       "range": {
         "startLine": 18,
         "startChar": 4,
