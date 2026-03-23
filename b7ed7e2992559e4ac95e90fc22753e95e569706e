@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07d20826_f115a351",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-23T12:36:14Z",
+      "side": 1,
+      "message": "As discussed, I\u0027m ok with doing the changes later, but at least acknowledge the comments",
+      "revId": "b7ed7e2992559e4ac95e90fc22753e95e569706e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe73177a_ea1e3145",
+        "filename": "librobinhood/src/plugins/sqlite/json/encode.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-23T12:36:14Z",
+      "side": 1,
+      "message": "style: all of the file\u0027s original style has been removed, specifically the empty lines",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 15
+      },
+      "revId": "b7ed7e2992559e4ac95e90fc22753e95e569706e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
