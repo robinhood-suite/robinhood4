@@ -97,28 +97,36 @@ struct rbh_pe_common_operations {
                            const char *directive, const char *backend);
 
     /**
-     * Apply an action on a given entry.
+     * Delete an entry from the filesystem or object store.
      *
-     * This function is responsible for executing the action described by
-     * action on the provided fsentry. The backend implementation decides
-     * whether the action is supported and how it should be executed.
+     * This function performs the backend‑specific deletion of an entry.
      *
-     * @param action        the action to apply, containing its type and
-     *                      associated parameters
-     * @param fsentry       the filesystem entry on which the action must be
-     *                      applied
-     * @param mi_backend    the storage backend
-     * @param fs_backend    the filesystem backend
+     * @param mi_backend   the mirror backend
+     * @param fsentry      the entry to delete
+     * @param params       parsed action parameters, or NULL
      *
-     * @return              0 on success
-     *                      -1 on error and errno is set appropriately
-     *                      ENOTSUP if the action is not supported by the
-     *                      backend
+     * @return             0 on success
+     *                     -1 on error and errno is set appropriately
+     *                     ENOTSUP if the backend does not support deletion
      */
-    int (*apply_action)(const struct rbh_action *action,
-                        struct rbh_fsentry *entry,
-                        struct rbh_backend *mi_backend,
-                        struct rbh_backend *fs_backend);
+    int (*delete_entry)(struct rbh_backend *mi_backend,
+                        struct rbh_fsentry *fsentry,
+                        const struct rbh_value_map *params);
+
+    /**
+     * Log information about an entry.
+     *
+     * This function performs the backend‑specific logging of @p entry.
+     *
+     * @param fsentry      the entry to log
+     * @param params       parsed action parameters, or NULL
+     *
+     * @return             0 on success
+     *                     -1 on error and errno is set appropriately
+     *                     ENOTSUP if the backend does not support logging
+     */
+    int (*log_entry)(struct rbh_fsentry *fsentry,
+                     const struct rbh_value_map *params);
 
     /**
      * Fill the projection to retrieve only the information needed
@@ -227,15 +235,25 @@ rbh_pe_common_ops_fill_entry_info(
 }
 
 static inline int
-rbh_pe_common_ops_apply_action(
-    const struct rbh_pe_common_operations *common_ops,
-    const struct rbh_action *action,
-    struct rbh_fsentry *entry,
-    struct rbh_backend *mi_backend,
-    struct rbh_backend *fs_backend)
+rbh_pe_common_ops_delete_entry(const struct rbh_pe_common_operations *ops,
+                               struct rbh_backend *mi_backend,
+                               struct rbh_fsentry *entry,
+                               const struct rbh_value_map *params)
 {
-    if (common_ops && common_ops->apply_action)
-        return common_ops->apply_action(action, entry, mi_backend, fs_backend);
+    if (ops && ops->delete_entry)
+        return ops->delete_entry(mi_backend, entry, params);
+
+    errno = ENOTSUP;
+    return -1;
+}
+
+static inline int
+rbh_pe_common_ops_log_entry(const struct rbh_pe_common_operations *ops,
+                            struct rbh_fsentry *entry,
+                            const struct rbh_value_map *params)
+{
+    if (ops && ops->log_entry)
+        return ops->log_entry(entry, params);
 
     errno = ENOTSUP;
     return -1;
