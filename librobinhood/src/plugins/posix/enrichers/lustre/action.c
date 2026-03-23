@@ -14,7 +14,7 @@
 #include <robinhood/utils.h>
 #include <robinhood.h>
 
-static int
+int
 rbh_lustre_log_entry(struct rbh_fsentry *entry,
                      const struct rbh_value_map *params)
 {
@@ -47,19 +47,3 @@ rbh_lustre_log_entry(struct rbh_fsentry *entry,
     free(params_str);
     return 0;
 }
-
-int
-rbh_lustre_apply_action(const struct rbh_action *action,
-                        struct rbh_fsentry *entry,
-                        struct rbh_backend *mi_backend,
-                        struct rbh_backend *fs_backend)
-{
-    switch (action->type) {
-    case RBH_ACTION_LOG:
-        return rbh_lustre_log_entry(entry, &action->params);
-    default:
-        errno = ENOTSUP;
-        return -1;
-    }
-}
-
