@@ -126,8 +126,8 @@ rbh_posix_fill_entry_info(char *output, int max_length,
  *                           floor directory itself is never removed.
  *                           Only meaningful when remove_empty_parent is true.
  *
- * @return 0 on success, 1 if at least one parent directory was also removed,
- *        -1 on error and errno is set
+ * @return               0 on success, 1 if at least one parent directory was
+ *                       also removed, -1 on error and errno is set
  */
 int
 rbh_posix_delete_entry(struct rbh_backend *backend,
@@ -135,21 +135,17 @@ rbh_posix_delete_entry(struct rbh_backend *backend,
                        const struct rbh_value_map *params);
 
 /**
- * Apply a RobinHood action to a POSIX backend entry.
+ * Log information about an entry from the plugin.
  *
- * @param action         Action to apply with its parameters.
- * @param entry          Target filesystem entry for the action.
- * @param mi_backend     RobinHood storage backend.
- * @param fs_backend     RobinHood filesystem backend.
+ * @param fsentry        the entry to log
+ * @param params         optional action parameters (may be NULL)
  *
- * @return               0 on success, 1 if at least one parent directory was
- *                       also removed (delete), -1 on error and errno is set.
+ * @return               0 on success, -1 on error and errno is set
+ *                       appropriately
  */
 int
-rbh_posix_apply_action(const struct rbh_action *action,
-                       struct rbh_fsentry *entry,
-                       struct rbh_backend *mi_backend,
-                       struct rbh_backend *fs_backend);
+rbh_posix_log_entry(struct rbh_fsentry *fsentry,
+                    const struct rbh_value_map *params);
 
 /**
  * Fill the projection to retrieve only the information needed
