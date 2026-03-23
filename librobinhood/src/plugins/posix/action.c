@@ -173,7 +173,7 @@ rbh_posix_delete_entry(struct rbh_backend *backend,
     return rc;
 }
 
-static int
+int
 rbh_posix_log_entry(struct rbh_fsentry *entry,
                     const struct rbh_value_map *params)
 {
@@ -195,25 +195,6 @@ rbh_posix_log_entry(struct rbh_fsentry *entry,
 
     free(params_str);
     return 0;
-}
-
-int
-rbh_posix_apply_action(const struct rbh_action *action,
-                       struct rbh_fsentry *entry,
-                       struct rbh_backend *mi_backend,
-                       struct rbh_backend *fs_backend)
-{
-    switch (action->type) {
-    case RBH_ACTION_LOG:
-        return rbh_posix_log_entry(entry, &action->params);
-    case RBH_ACTION_DELETE:
-        return rbh_posix_delete_entry(mi_backend, entry,
-                                      action->params.count > 0 ?
-                                      &action->params : NULL);
-    default:
-        errno = ENOTSUP;
-        return -1;
-    }
 }
 
 #define MAX_OUTPUT_SIZE (PATH_MAX + 256)
