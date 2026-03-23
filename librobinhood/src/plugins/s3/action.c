@@ -20,7 +20,8 @@
 #include "s3_wrapper.h"
 
 int
-rbh_s3_delete_entry(struct rbh_backend *backend, struct rbh_fsentry *fsentry)
+rbh_s3_delete_entry(struct rbh_backend *backend, struct rbh_fsentry *fsentry,
+                    const struct rbh_value_map *params)
 {
     const struct rbh_value *value;
     char *bucket, *object;
@@ -42,21 +43,6 @@ rbh_s3_delete_entry(struct rbh_backend *backend, struct rbh_fsentry *fsentry)
     object = sep + 1;
 
     return s3_delete_object(bucket, object);
-}
-
-int
-rbh_s3_apply_action(const struct rbh_action *action,
-                    struct rbh_fsentry *entry,
-                    struct rbh_backend *mi_backend,
-                    struct rbh_backend *fs_backend)
-{
-    switch (action->type) {
-    case RBH_ACTION_DELETE:
-        return rbh_s3_delete_entry(fs_backend, entry);
-    default:
-        errno = ENOTSUP;
-        return -1;
-    }
 }
 
 int

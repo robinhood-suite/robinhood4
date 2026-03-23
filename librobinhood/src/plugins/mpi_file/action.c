@@ -12,32 +12,15 @@
 #include "plugin_callback_common.h"
 #include "mpi_file.h"
 
-static int
-rbh_mpi_file_delete_entry(const struct rbh_action *action,
-                          struct rbh_fsentry *entry,
-                          struct rbh_backend *mi_backend,
-                          struct rbh_backend *fs_backend)
+int
+rbh_mpi_file_delete_entry(struct rbh_backend *backend,
+                          struct rbh_fsentry *fsentry,
+                          const struct rbh_value_map *params)
 {
     if (posix_plugin == NULL)
         if (import_posix_plugin())
             return -1;
 
-    return rbh_pe_common_ops_apply_action(posix_plugin->common_ops, action,
-                                          entry, mi_backend, fs_backend);
-}
-
-int
-rbh_mpi_file_apply_action(const struct rbh_action *action,
-                          struct rbh_fsentry *entry,
-                          struct rbh_backend *mi_backend,
-                          struct rbh_backend *fs_backend)
-{
-    switch (action->type) {
-    case RBH_ACTION_DELETE:
-        return rbh_mpi_file_delete_entry(action, entry, mi_backend,
-                                         fs_backend);
-    default:
-        errno = ENOTSUP;
-        return -1;
-    }
+    return rbh_pe_common_ops_delete_entry(posix_plugin->common_ops,
+                                          backend, fsentry, params);
 }
