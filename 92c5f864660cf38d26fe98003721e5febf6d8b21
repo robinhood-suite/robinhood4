@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05f1b167_2fe4dede",
+        "filename": "librobinhood/src/plugins/ldiskfs/internals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-23T12:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8f08fc7_7590edf2",
+      "range": {
+        "startLine": 52,
+        "startChar": 47,
+        "endLine": 52,
+        "endChar": 58
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a80d7c7_731f782d",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ceea5eb_c4e236e5",
+        "filename": "librobinhood/src/plugins/ldiskfs/internals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-23T12:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a80d7c7_731f782d",
+      "range": {
+        "startLine": 53,
+        "startChar": 7,
+        "endLine": 53,
+        "endChar": 20
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b425238_4a2b8d4d",
@@ -60,6 +108,30 @@
       "writtenOn": "2026-03-19T15:41:45Z",
       "side": 1,
       "message": "This structure is small so it is cheep to copy but if you don\u0027t need to pass a copy, prefer passing a pointer.",
+      "range": {
+        "startLine": 99,
+        "startChar": 27,
+        "endLine": 99,
+        "endChar": 40
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4e68e61_78513541",
+        "filename": "librobinhood/src/plugins/ldiskfs/internals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-23T12:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b425238_4a2b8d4d",
       "range": {
         "startLine": 99,
         "startChar": 27,
@@ -116,6 +188,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8ccabb4_6dbc1536",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-23T12:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6501f42e_5c8e1cc3",
+      "range": {
+        "startLine": 94,
+        "startChar": 16,
+        "endLine": 94,
+        "endChar": 20
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d2d1064_b9560ca9",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-23T12:28:34Z",
+      "side": 1,
+      "message": "Done in the header",
+      "parentUuid": "5212f6a6_9eae037e",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 15
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a074fb1c_63f51f3a",
@@ -129,6 +249,30 @@
       "writtenOn": "2026-03-19T15:41:45Z",
       "side": 1,
       "message": "suggets: from_filter_fid. Otherwise the name of the function is a bit confusing.",
+      "range": {
+        "startLine": 108,
+        "startChar": 12,
+        "endLine": 108,
+        "endChar": 14
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e42c18c_c7b3310b",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-23T12:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a074fb1c_63f51f3a",
       "range": {
         "startLine": 108,
         "startChar": 12,
@@ -162,6 +306,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1861df1_acde15ff",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-23T12:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3f06ddc_359d53d2",
+      "range": {
+        "startLine": 127,
+        "startChar": 27,
+        "endLine": 127,
+        "endChar": 30
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7343ee7_9c5bb48b",
@@ -175,6 +343,30 @@
       "writtenOn": "2026-03-19T15:41:45Z",
       "side": 1,
       "message": "major: if the symbol is not exported by Lustre, you should redefine it. Avoid user magic number in the code like this. It also helps find the original definition in Lustre\u0027s source code.",
+      "range": {
+        "startLine": 138,
+        "startChar": 25,
+        "endLine": 138,
+        "endChar": 36
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96cbc4d1_3756f44c",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-23T12:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7343ee7_9c5bb48b",
       "range": {
         "startLine": 138,
         "startChar": 25,
@@ -208,6 +400,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e717495_42e7eda7",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-23T12:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b55bb6e_daf1cefc",
+      "range": {
+        "startLine": 151,
+        "startChar": 4,
+        "endLine": 151,
+        "endChar": 9
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb52fae4_d0af1639",
@@ -221,6 +437,30 @@
       "writtenOn": "2026-03-19T15:41:45Z",
       "side": 1,
       "message": "You could do a small representation of the data with ASCII boxes with the header, its content and then one or two entries. Put this at the begining of the function. That way people understand what you are doing without having to look at the structures.",
+      "range": {
+        "startLine": 154,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 39
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb43e262_5e2180bb",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-23T12:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb52fae4_d0af1639",
       "range": {
         "startLine": 154,
         "startChar": 8,
@@ -278,6 +518,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4b0a59f_661d761a",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-23T12:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64431d42_31a6ee58",
+      "range": {
+        "startLine": 161,
+        "startChar": 8,
+        "endLine": 161,
+        "endChar": 30
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f9443044_e003528b",
@@ -291,6 +555,30 @@
       "writtenOn": "2026-03-19T15:41:45Z",
       "side": 1,
       "message": "defect: This not how it works. The endianess depends on the CPU architecture. You need to swap it to the right endianness. On a big endian computer, there is nothing to do. On a little endian computer, you need to swap. There a some functions that implement this logic for you. You can look at `man be64toh`.",
+      "range": {
+        "startLine": 169,
+        "startChar": 47,
+        "endLine": 169,
+        "endChar": 65
+      },
+      "revId": "92c5f864660cf38d26fe98003721e5febf6d8b21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a3866c4_b0505deb",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-23T12:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9443044_e003528b",
       "range": {
         "startLine": 169,
         "startChar": 47,
