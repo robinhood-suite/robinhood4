@@ -54,12 +54,24 @@ librbh.rbh_pe_execute.restype = c_int
 librbh.rbh_pe_execute.argtypes = [rbh_mut_iterator_p, rbh_backend_p, c_char_p,
                                   c_void_p]
 
+class RbhDeleteParams(Structure):
+    _fields_ = [
+        ("remove_empty_parent", c_bool),
+        ("remove_parents_below", c_char_p),
+    ]
+
+class RbhParamsUnion(Union):
+    _fields_ = [
+        ("generic", c_char_p),
+        ("delete", RbhDeleteParams),
+    ]
+
 class RbhRule(Structure):
     _fields_ = [
         ("name", c_char_p),
         ("filter", rbh_filter_p),
         ("action", c_char_p),
-        ("parameters", c_char_p),  # JSON string
+        ("parameters", RbhParamsUnion),
     ]
 
 class RbhPolicy(Structure):
@@ -67,29 +79,54 @@ class RbhPolicy(Structure):
         ("name", c_char_p),
         ("filter", rbh_filter_p),
         ("action", c_char_p),
-        ("parameters", c_char_p),
+        ("parameters", RbhParamsUnion),
         ("rules", POINTER(RbhRule)),
         ("rule_count", ctypes.c_size_t),
     ]
 
+def make_c_parameters(action: str, params: dict):
+    action = action or ""
+    verb = action.split(":", 1)[-1]  # "_:delete" -> "delete"
+
+    if verb == "delete":
+        p = RbhDeleteParams()
+        p.remove_empty_parent = bool(params.get("remove_empty_parent", False))
+
+        below = params.get("remove_parents_below")
+        p.remove_parents_below = below.encode() if below else None
+
+        return ("delete", p)
+
+    yaml_bytes = yaml.safe_dump(params or {}).encode()
+    return ("generic", yaml_bytes)
+
 def make_c_rules(py_rules):
     arr = (RbhRule * len(py_rules))()
     for i, rule in enumerate(py_rules):
-        params_yaml = yaml.safe_dump(rule.parameters or {}).encode()
+        kind, value = make_c_parameters(rule.action, rule.parameters)
         arr[i].name = rule.name.encode()
         arr[i].filter = rule.to_filter()
         arr[i].action = (rule.action or "").encode()
-        arr[i].parameters = params_yaml
+
+        if kind == "delete":
+            arr[i].parameters.delete = value
+        else:
+            arr[i].parameters.generic = value
     return arr, len(py_rules)
 
 def make_c_policy(py_policy):
     rules_arr, rules_len = make_c_rules(py_policy.rules)
-    root_params_yaml = yaml.safe_dump(py_policy.parameters or {}).encode()
+    kind, value = make_c_parameters(py_policy.action, py_policy.parameters)
     c_policy = RbhPolicy()
     c_policy.name = py_policy.name.encode()
     c_policy.filter = py_policy.to_filter()
     c_policy.action = (py_policy.action or "").encode()
-    c_policy.parameters = root_params_yaml
+
+    if kind == "delete":
+        c_policy.parameters.delete = value
+    else:
+        c_policy.parameters.generic = value
+
     c_policy.rules = rules_arr
     c_policy.rule_count = rules_len
 
