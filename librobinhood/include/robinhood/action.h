@@ -23,6 +23,11 @@ enum rbh_action_type {
     RBH_ACTION_UNKNOWN
 };
 
+struct rbh_delete_params {
+    bool remove_empty_parent;
+    const char *remove_parents_below;
+};
+
 /**
  * Parsed representation of an action.
  *
@@ -32,7 +37,10 @@ enum rbh_action_type {
 struct rbh_action {
     enum rbh_action_type type;
     const char *value;
-    struct rbh_value_map params;
+    union {
+        struct rbh_value_map generic;
+        struct rbh_delete_params delete;
+    } params;
 };
 
 /**
