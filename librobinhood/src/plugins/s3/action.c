@@ -21,7 +21,7 @@
 
 int
 rbh_s3_delete_entry(struct rbh_backend *backend, struct rbh_fsentry *fsentry,
-                    const struct rbh_value_map *params)
+                    const struct rbh_delete_params *params)
 {
     const struct rbh_value *value;
     char *bucket, *object;
