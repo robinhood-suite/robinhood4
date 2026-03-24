@@ -111,7 +111,7 @@ struct rbh_pe_common_operations {
      */
     int (*delete_entry)(struct rbh_backend *mi_backend,
                         struct rbh_fsentry *fsentry,
-                        const struct rbh_value_map *params);
+                        const struct rbh_delete_params *params);
 
     /**
      * Log information about an entry.
@@ -238,7 +238,7 @@ static inline int
 rbh_pe_common_ops_delete_entry(const struct rbh_pe_common_operations *ops,
                                struct rbh_backend *mi_backend,
                                struct rbh_fsentry *entry,
-                               const struct rbh_value_map *params)
+                               const struct rbh_delete_params *params)
 {
     if (ops && ops->delete_entry)
         return ops->delete_entry(mi_backend, entry, params);

@@ -6,6 +6,7 @@
  */
 
 #include <assert.h>
+#include <errno.h>
 #include <error.h>
 #include <grp.h>
 #include <inttypes.h>
@@ -41,23 +42,6 @@ static const mode_t MODE_BITS[] = {
     S_IROTH, S_IWOTH, S_IXOTH
 };
 
-static void
-parse_delete_params(const struct rbh_value_map *params,
-                    bool *remove_empty_parent,
-                    const char **parents_below)
-{
-    if (!params)
-        return;
-
-    const struct rbh_value *val = rbh_map_find(params, "remove_empty_parent");
-    if (val && val->type == RBH_VT_STRING)
-        *remove_empty_parent = (strcmp(val->string, "true") == 0);
-
-    val = rbh_map_find(params, "remove_parents_below");
-    if (val && val->type == RBH_VT_STRING)
-        *parents_below = val->string;
-}
-
 /* Build the absolute floor path:
  * - If parents_below is given, use it as the floor relative to the mountpoint.
  * - Otherwise, set the floor to the grandparent of the deleted entry so that
@@ -85,12 +69,12 @@ build_abs_floor(const char *path, size_t mountpoint_len,
     return abs_floor;
 }
 
-static bool
+static enum rbh_delete_action_return
 remove_empty_parents(const char *path, size_t mountpoint_len,
                      const char *abs_floor)
 {
-    bool parent_removed = false;
     char *current = xstrdup(path);
+    bool parent_removed = false;
 
     while (true) {
         char *tmp = xstrdup(current);
@@ -113,27 +97,39 @@ remove_empty_parents(const char *path, size_t mountpoint_len,
             free(current);
             current = tmp;
         } else {
+            /* ENOTEMPTY means the directory is not empty; this is not really
+             * an error, just a stopping condition. Other errors should be
+             * signified to the user. */
+            if (errno != ENOTEMPTY) {
+                free(tmp);
+                free(current);
+
+                return RBH_DELETE_ERROR;
+            }
+
             free(tmp);
             break;
         }
     }
 
     free(current);
-    return parent_removed;
+    return parent_removed ? RBH_DELETE_OK_WITH_PARENTS : RBH_DELETE_OK;
 }
 
 int
 rbh_posix_delete_entry(struct rbh_backend *backend,
                        struct rbh_fsentry *fsentry,
-                       const struct rbh_value_map *params)
+                       const struct rbh_delete_params *params)
 {
     bool remove_empty_parent = false;
     const char *parents_below = NULL;
     char *path;
     int rc;
 
-    parse_delete_params(params, &remove_empty_parent, &parents_below);
-
+    if (params) {
+        remove_empty_parent = params->remove_empty_parent;
+        parents_below = params->remove_parents_below;
+    }
     path = fsentry_absolute_path(backend, fsentry);
 
     if (S_ISDIR(fsentry->statx->stx_mode))
@@ -143,23 +139,34 @@ rbh_posix_delete_entry(struct rbh_backend *backend,
 
     if (rc == 0 && remove_empty_parent) {
         const char *rel_path = fsentry_relative_path(fsentry);
+        bool parent_is_mountpoint = false;
+
         /* Do not attempt to remove the parent if it is the backend mount
-         * point. This is the case when the entry's relative path contains
-         * no '/', meaning the entry lives directly in the mount point
-         * directory. */
-        bool parent_is_mountpoint = (rel_path == NULL ||
-                                     strchr(rel_path, '/') == NULL);
+         * point. Since rel_path is relative to the mountpoint, checking if
+         * its dirname equals "." means we're attempting to delete from the
+         * mountpoint itself. */
+        if (rel_path != NULL) {
+            char *rel_path_copy = xstrdup(rel_path);
+            char *parent = dirname(rel_path_copy);
+            /* If dirname is ".", the entry is at the mountpoint root */
+            parent_is_mountpoint = (strcmp(parent, ".") == 0);
+            free(rel_path_copy);
+        } else {
+            parent_is_mountpoint = true;
+        }
 
         if (!parent_is_mountpoint) {
             /* mountpoint_len is the length of the absolute mountpoint path,
              * e.g. len("/mnt/fs") when abs_path is "/mnt/fs/a/b/c" and
              * rel_path is "a/b/c". */
             size_t mountpoint_len = strlen(path) - strlen(rel_path) - 1;
-            char *abs_floor = build_abs_floor(path, mountpoint_len,
-                                              parents_below);
+            enum rbh_delete_action_return result;
+            char *abs_floor;
 
-            if (remove_empty_parents(path, mountpoint_len, abs_floor))
-                rc = 1; /* signal: at least one parent was also removed */
+            abs_floor = build_abs_floor(path, mountpoint_len, parents_below);
+            result = remove_empty_parents(path, mountpoint_len, abs_floor);
+
+            rc = result;
 
             free(abs_floor);
         }

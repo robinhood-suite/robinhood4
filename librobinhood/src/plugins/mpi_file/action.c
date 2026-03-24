@@ -15,7 +15,7 @@
 int
 rbh_mpi_file_delete_entry(struct rbh_backend *backend,
                           struct rbh_fsentry *fsentry,
-                          const struct rbh_value_map *params)
+                          const struct rbh_delete_params *params)
 {
     if (posix_plugin == NULL)
         if (import_posix_plugin())

@@ -68,7 +68,7 @@ START_TEST(rbh_pe_execute_empty_iter_test)
         .name = "test_policy",
         .filter = NULL,
         .action = "test_action",
-        .parameters = NULL,
+        .parameters.generic = NULL,
         .rules = NULL,
         .rule_count = 0,
     };
