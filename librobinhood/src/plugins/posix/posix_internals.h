@@ -132,7 +132,7 @@ rbh_posix_fill_entry_info(char *output, int max_length,
 int
 rbh_posix_delete_entry(struct rbh_backend *backend,
                        struct rbh_fsentry *fsentry,
-                       const struct rbh_value_map *params);
+                       const struct rbh_delete_params *params);
 
 /**
  * Log information about an entry from the plugin.
