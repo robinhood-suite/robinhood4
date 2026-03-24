@@ -45,23 +45,6 @@ static const mode_t MODE_BITS[] = {
 # define ARRAY_SIZE(array) sizeof(array) / sizeof(array[0])
 #endif
 
-static void
-parse_delete_params(const struct rbh_value_map *params,
-                    bool *remove_empty_parent,
-                    const char **parents_below)
-{
-    if (!params)
-        return;
-
-    const struct rbh_value *val = rbh_map_find(params, "remove_empty_parent");
-    if (val && val->type == RBH_VT_STRING)
-        *remove_empty_parent = (strcmp(val->string, "true") == 0);
-
-    val = rbh_map_find(params, "remove_parents_below");
-    if (val && val->type == RBH_VT_STRING)
-        *parents_below = val->string;
-}
-
 /* Build the absolute floor path:
  * - If parents_below is given, use it as the floor relative to the mountpoint.
  * - Otherwise, set the floor to the grandparent of the deleted entry so that
@@ -129,15 +112,17 @@ remove_empty_parents(const char *path, size_t mountpoint_len,
 int
 rbh_posix_delete_entry(struct rbh_backend *backend,
                        struct rbh_fsentry *fsentry,
-                       const struct rbh_value_map *params)
+                       const struct rbh_delete_params *params)
 {
     bool remove_empty_parent = false;
     const char *parents_below = NULL;
     char *path;
     int rc;
 
-    parse_delete_params(params, &remove_empty_parent, &parents_below);
-
+    if (params) {
+        remove_empty_parent = params->remove_empty_parent;
+        parents_below = params->remove_parents_below;
+    }
     path = fsentry_absolute_path(backend, fsentry);
 
     if (S_ISDIR(fsentry->statx->stx_mode))
