@@ -133,16 +133,16 @@ static void
 rbh_pe_load_action_params(struct rbh_action *parsed, const char *parameters)
 {
     /* Initialize to empty map */
-    parsed->params.pairs = NULL;
-    parsed->params.count = 0;
+    parsed->params.generic.pairs = NULL;
+    parsed->params.generic.count = 0;
 
     if (!parameters)
         return;
 
     /* Parse YAML into value_map using global context */
-    if (!rbh_action_parameters2value_map(parameters, &parsed->params)) {
-        parsed->params.pairs = NULL;
-        parsed->params.count = 0;
+    if (!rbh_action_parameters2value_map(parameters, &parsed->params.generic)) {
+        parsed->params.generic.pairs = NULL;
+        parsed->params.generic.count = 0;
     }
 }
 
@@ -172,9 +172,16 @@ rbh_pe_select_action(const struct rbh_policy *policy,
 
     if (has_rule && cache->rule_actions != NULL) {
         if (cache->rule_actions[matched_index].type == RBH_ACTION_UNSET) {
-            parsed = rbh_pe_parse_action(policy->rules[matched_index].action);
-            parameters = policy->rules[matched_index].parameters;
-            rbh_pe_load_action_params(&parsed, parameters);
+            const struct rbh_rule *rule = &policy->rules[matched_index];
+
+            parsed = rbh_pe_parse_action(rule->action);
+            if (parsed.type == RBH_ACTION_DELETE)
+                parsed.params.delete = rule->parameters.delete;
+            else {
+                parameters = rule->parameters.generic;
+                rbh_pe_load_action_params(&parsed, parameters);
+            }
+
             cache->rule_actions[matched_index] = parsed;
         }
         return cache->rule_actions[matched_index];
@@ -183,8 +190,13 @@ rbh_pe_select_action(const struct rbh_policy *policy,
     /* Default action */
     if (cache->default_action.type == RBH_ACTION_UNSET) {
         parsed = rbh_pe_parse_action(policy->action);
-        parameters = policy->parameters;
-        rbh_pe_load_action_params(&parsed, parameters);
+        if (parsed.type == RBH_ACTION_DELETE)
+            parsed.params.delete = policy->parameters.delete;
+        else {
+            parameters = policy->parameters.generic;
+            rbh_pe_load_action_params(&parsed, parameters);
+        }
+
         cache->default_action = parsed;
     }
     return cache->default_action;
@@ -263,7 +275,7 @@ rbh_pe_log_action(const struct rbh_action *action,
 {
     const struct rbh_value_map *params;
 
-    params = action->params.count > 0 ? &action->params : NULL;
+    params = action->params.generic.count > 0 ? &action->params.generic : NULL;
 
     return rbh_pe_common_ops_log_entry(common_ops, entry, params);
 }
@@ -285,17 +297,15 @@ rbh_pe_delete_action(const struct rbh_action *action,
                      struct rbh_fsentry *entry,
                      const struct rbh_pe_common_operations *common_ops)
 {
-    const struct rbh_value_map *params;
     int rc;
-
-    params = action->params.count > 0 ? &action->params : NULL;
 
     if (!entry) {
         fprintf(stderr, "DeleteAction | entry is NULL\n");
         return -1;
     }
 
-    rc = rbh_pe_common_ops_delete_entry(common_ops, mi_backend, entry, params);
+    rc = rbh_pe_common_ops_delete_entry(common_ops, mi_backend, entry,
+                                        &action->params.delete);
     if (rc == 0 || rc == 1) {
         printf("DeleteAction | deleted '%s'\n", fsentry_relative_path(entry));
         if (rc == 1)
@@ -493,8 +503,8 @@ rbh_pe_python_action(const struct rbh_action *action,
         return -1;
     }
 
-    if (action->params.count > 0) {
-        const struct rbh_value_map *map = &action->params;
+    if (action->params.generic.count > 0) {
+        const struct rbh_value_map *map = &action->params.generic;
 
         for (size_t i = 0; i < map->count; i++) {
             const struct rbh_value_pair *pair = &map->pairs[i];
