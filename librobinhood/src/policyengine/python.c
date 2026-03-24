@@ -153,8 +153,8 @@ rbh_pe_python_action(const struct rbh_action *action,
         return -1;
     }
 
-    if (action->params.count > 0) {
-        const struct rbh_value_map *map = &action->params;
+    if (action->params.generic.count > 0) {
+        const struct rbh_value_map *map = &action->params.generic;
 
         for (size_t i = 0; i < map->count; i++) {
             const struct rbh_value_pair *pair = &map->pairs[i];
@@ -181,11 +181,9 @@ rbh_pe_python_action(const struct rbh_action *action,
                 errno = ENOMEM;
                 return -1;
             }
-
             Py_DECREF(pyval);
         }
     }
-
     /* Call func(*posargs, **kwargs), i.e. func(abs_path, key=val, ...). */
     result = PyObject_Call(func, posargs, kwargs);
     Py_DECREF(kwargs);

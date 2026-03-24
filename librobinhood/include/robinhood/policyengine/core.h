@@ -29,14 +29,23 @@ struct rbh_rule {
     const char *name;
     struct rbh_filter *filter;
     const char *action;
-    const char *parameters;
+
+    union {
+        const char *generic;               // YAML
+        struct rbh_delete_params delete;
+    } parameters;
 };
 
 struct rbh_policy {
     const char *name;
     struct rbh_filter *filter;
     const char *action;
-    const char *parameters;
+
+    union {
+        const char *generic;               // YAML
+        struct rbh_delete_params delete;
+    } parameters;
+
     struct rbh_rule *rules;
     size_t rule_count;
 };
