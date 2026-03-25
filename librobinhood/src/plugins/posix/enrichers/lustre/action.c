@@ -15,35 +15,27 @@
 #include <robinhood.h>
 
 int
-rbh_lustre_log_entry(struct rbh_fsentry *entry,
-                     const struct rbh_value_map *params)
+rbh_lustre_fill_entry_info(char *output, int max_length,
+                           const struct rbh_fsentry *entry,
+                           const char *directive,
+                           __attribute__((unused)) const char *backend)
 {
-    const struct lu_fid *fid = NULL;
-    const char *path = "(NULL)";
-    char *params_str = NULL;
+    const struct lu_fid *fid;
 
-    /* Path */
-    if (entry) {
-        const char *rel_path = fsentry_relative_path(entry);
-        if (rel_path)
-            path = rel_path;
+    if (!directive || *directive == '\0')
+        return 0;
 
-        /* FID */
+    switch (*directive) {
+    case 'F':
+        if (!entry)
+            return snprintf(output, max_length, "(NULL)");
+
         fid = rbh_lu_fid_from_id(&entry->id);
+        if (!fid)
+            return snprintf(output, max_length, "(NULL)");
+
+        return snprintf(output, max_length, DFID, PFID(fid));
     }
 
-    /* Parameters */
-    if (params && params->count > 0) {
-        params_str = rbh_value_map_to_string(params);
-    }
-
-    if (fid)
-        printf("LogAction | fid=" DFID ", path=%s, params=%s\n",
-               PFID(fid), path, params_str ? params_str : "{}");
-    else
-        printf("LogAction | fid=(NULL), path=%s, params=%s\n",
-               path, params_str ? params_str : "{}");
-
-    free(params_str);
     return 0;
 }

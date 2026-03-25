@@ -34,6 +34,10 @@ struct rbh_delete_params {
     const char *remove_parents_below;
 };
 
+struct rbh_log_params {
+    const char *format;
+};
+
 /**
  * Parsed representation of an action.
  *
@@ -46,6 +50,7 @@ struct rbh_action {
     union {
         struct rbh_value_map generic;
         struct rbh_delete_params delete;
+        struct rbh_log_params log;
     } params;
 };
 
