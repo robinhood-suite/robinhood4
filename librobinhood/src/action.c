@@ -6,6 +6,7 @@
  */
 
 #include <error.h>
+#include <errno.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -15,9 +16,10 @@
 #include <jansson.h>
 
 #include "robinhood/action.h"
+#include "robinhood/filters/core.h"
+#include "robinhood/plugins/common_ops.h"
 #include "robinhood/utils.h"
 #include "robinhood/serialization.h"
-#include "robinhood/action.h"
 
 const char *
 action2string(enum rbh_action_type type)
@@ -226,4 +228,99 @@ rbh_action_exec_command(const char *cmd_str, const char *path)
     wordfree(&we);
 
     return rc;
+}
+
+int
+rbh_action_format_fsentry(const char *format_string,
+                          const struct filters_context *f_ctx,
+                          const struct rbh_fsentry *fsentry,
+                          const char *backend,
+                          char *output,
+                          size_t output_size)
+{
+    const char *backend_name = backend ? backend : "";
+    size_t output_length = 0;
+    size_t length;
+
+    if (!format_string || !f_ctx || !fsentry || !output || output_size == 0) {
+        errno = EINVAL;
+        return -1;
+    }
+
+    output[0] = '\0';
+    length = strlen(format_string);
+
+    for (size_t i = 0; i < length; i++) {
+        int tmp_length = 0;
+
+        if (output_length >= output_size - 1)
+            break;
+
+        if (format_string[i] == '%') {
+            if (i + 1 < length) {
+                if (format_string[i + 1] == '%') {
+                    output[output_length++] = '%';
+                    i++;
+                    continue;
+                }
+
+                char directive[2] = { format_string[i + 1], '\0' };
+
+                for (size_t j = 0; j < f_ctx->info_pe_count; ++j) {
+                    const struct rbh_pe_common_operations *ops;
+
+                    ops = get_common_operations(&f_ctx->info_pe[j]);
+                    if (!ops || !ops->fill_entry_info)
+                        continue;
+
+                    tmp_length = rbh_pe_common_ops_fill_entry_info(
+                        ops,
+                        output + output_length,
+                        (int)(output_size - output_length),
+                        fsentry,
+                        directive,
+                        backend_name
+                    );
+
+                    if (tmp_length > 0)
+                        break;
+                }
+
+                /* Go over the directive that was just printed. */
+                i++;
+            } else {
+                output[output_length++] = '%';
+            }
+        } else if (format_string[i] == '\\' && i + 1 < length) {
+            char escaped = format_string[i + 1];
+            char out = escaped;
+
+            if (escaped == 'n')
+                out = '\n';
+            else if (escaped == 't')
+                out = '\t';
+            else if (escaped == '\\')
+                out = '\\';
+
+            output[output_length++] = out;
+            i++;
+        } else {
+            output[output_length++] = format_string[i];
+        }
+
+        if (tmp_length > 0) {
+            size_t remaining = output_size - output_length;
+
+            if ((size_t)tmp_length >= remaining) {
+                output_length = output_size - 1;
+                break;
+            }
+
+            output_length += (size_t)tmp_length;
+        }
+    }
+
+    output[output_length] = '\0';
+
+    return (int)output_length;
 }
