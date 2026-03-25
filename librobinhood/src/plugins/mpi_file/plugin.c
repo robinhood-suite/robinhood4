@@ -36,7 +36,6 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(MPI_FILE) = {
     .ops = &MPI_FILE_BACKEND_PLUGIN_OPS,
     .common_ops = &MPI_FILE_BACKEND_PLUGIN_COMMON_OPS,
     .capabilities = RBH_SYNC_OPS | RBH_FILTER_OPS | RBH_UPDATE_OPS,
-    .available_actions = RBH_ACTION_FLAG(RBH_ACTION_DELETE),
     .info = 0,
 };
 
