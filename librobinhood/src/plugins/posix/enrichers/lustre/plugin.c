@@ -20,7 +20,7 @@ static const struct rbh_pe_common_operations LUSTRE_EXTENSION_COMMON_OPS = {
     .check_valid_token = rbh_lustre_check_valid_token,
     .build_filter = rbh_lustre_build_filter,
     .undelete = rbh_lustre_undelete,
-    .log_entry = rbh_lustre_log_entry,
+    .fill_entry_info = rbh_lustre_fill_entry_info,
 };
 
 const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, LUSTRE) = {
