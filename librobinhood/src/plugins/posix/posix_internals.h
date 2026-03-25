@@ -135,19 +135,6 @@ rbh_posix_delete_entry(struct rbh_backend *backend,
                        const struct rbh_delete_params *params);
 
 /**
- * Log information about an entry from the plugin.
- *
- * @param fsentry        the entry to log
- * @param params         optional action parameters (may be NULL)
- *
- * @return               0 on success, -1 on error and errno is set
- *                       appropriately
- */
-int
-rbh_posix_log_entry(struct rbh_fsentry *fsentry,
-                    const struct rbh_value_map *params);
-
-/**
  * Fill the projection to retrieve only the information needed
  *
  * @param projection the projection to fill

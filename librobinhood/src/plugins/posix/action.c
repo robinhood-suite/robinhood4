@@ -180,30 +180,6 @@ rbh_posix_delete_entry(struct rbh_backend *backend,
     return rc;
 }
 
-int
-rbh_posix_log_entry(struct rbh_fsentry *entry,
-                    const struct rbh_value_map *params)
-{
-    const char *path = "(NULL)";
-    char *params_str = NULL;
-
-    if (entry) {
-        const char *rel_path = fsentry_relative_path(entry);
-        if (rel_path)
-            path = rel_path;
-    }
-
-    if (params && params->count > 0) {
-        params_str = rbh_value_map_to_string(params);
-    }
-
-    printf("LogAction | path=%s, params=%s\n", path,
-           params_str ? params_str : "{}");
-
-    free(params_str);
-    return 0;
-}
-
 #define MAX_OUTPUT_SIZE (PATH_MAX + 256)
 
 static const char*
@@ -398,7 +374,7 @@ rbh_posix_fill_entry_info(char *output, int max_length,
         return snprintf(output, max_length, "%d", fsentry->statx->stx_nlink);
     case 'p':
         return snprintf(output, max_length, "%s",
-                        rbh_fsentry_find_ns_xattr(fsentry, "path")->string);
+                        fsentry_relative_path(fsentry));
     case 'P':
         return snprintf(output, max_length, "%s",
                         remove_start_point(rbh_fsentry_find_ns_xattr(

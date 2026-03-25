@@ -25,7 +25,6 @@ struct rbh_backend_plugin {
     struct rbh_plugin plugin;
     const struct rbh_backend_plugin_operations *ops;
     const struct rbh_pe_common_operations *common_ops;
-    const uint64_t available_actions;
     const uint8_t capabilities;
     const uint64_t info;
 };

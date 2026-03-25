@@ -40,5 +40,4 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(S3) = {
     .ops = &S3_BACKEND_PLUGIN_OPS,
     .common_ops = &S3_BACKEND_PLUGIN_COMMON_OPS,
     .capabilities = RBH_SYNC_OPS,
-    .available_actions = RBH_ACTION_FLAG(RBH_ACTION_DELETE),
 };
