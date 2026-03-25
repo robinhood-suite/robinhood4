@@ -1,6 +1,6 @@
 Name:    robinhood4
 Version: 1.5.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: RobinHood V4 tool suite
 
 Group:   Applications/System
@@ -14,13 +14,13 @@ Source0: %{name}-%{version}.tar.xz
 # --with mfu       ||   %%_with_mfu 1    || force libmfu as dependency
 # --with hestia    ||   %%_with_hestia 1 || force hestia as dependency
 # --with s3        ||   %%_with_s3 1     || force s3 as dependency
-# --with man       ||   %%_with_man 1    || build man pages
+# --without man    ||   %%_with_man 0    || don't build man pages
 
 %bcond_without lustre
 %bcond_with mfu
 %bcond_with hestia
 %bcond_with s3
-%bcond_with man
+%bcond_without man
 
 # FIXME to remove when rbhpolicy is correctly packaged
 %define _unpackaged_files_terminate_build 0
@@ -89,7 +89,7 @@ rbh-update-retention.
 %package devel
 Summary: C API for RobinHood V4 tool suite.
 Conflicts: robinhood
-Requires: robinhood4 >= 1.5
+Requires: robinhood4 == 1.5
 Requires: pkgconf-pkg-config
 %if %{with lustre}
 #Requires: (lustre-devel or lustre-client < 2.15)
@@ -239,9 +239,11 @@ OPTS=""
 ldconfig
 
 %changelog
+* Wed Mar 25 2026 - Yoann Valeri <yoann.valeri@cea.fr> - 1.5-2
+- Build man pages by default in spec file
+
 * Mon Mar 02 2026 - Yoann Valeri <yoann.valeri@cea.fr> - 1.5-1
 - New SQLite plugin for smaller DB setup
-- New ldiskfs plugin for directly reading a Lustre MDT
 - New MPI iterator for S3
 - Added specific filters and actions for S3 in rbh-find
 - Added support for project-id metadata and associated filter
@@ -251,6 +253,8 @@ ldconfig
 after a change to its name
 - New rbh-gc tool to clear entries kept in the mirror backend that aren't
 available anymore in the original backend
+- Start of the ldiskfs plugin for directly reading a Lustre MDT, still a
+work-in-progress
 - Start of the rbh-policy tool for a policy engine, still a work-in-progress
 
 * Mon Oct 20 2025 - Yoann Valeri <yoann.valeri@cea.fr> - 1.4-1
