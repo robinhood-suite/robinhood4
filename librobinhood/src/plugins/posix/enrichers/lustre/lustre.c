@@ -1103,5 +1103,10 @@ rbh_lustre_helper(__attribute__((unused)) const char *backend,
     if (rc == -1)
         *predicate_helper = NULL;
 
-    *directive_helper = NULL;
+     rc = asprintf(directive_helper,
+         "  - Lustre:\n"
+         "   %%F         Lustre FID.\n");
+
+     if (rc == -1)
+         *directive_helper = NULL;
 }
