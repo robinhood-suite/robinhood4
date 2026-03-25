@@ -114,21 +114,6 @@ struct rbh_pe_common_operations {
                         const struct rbh_delete_params *params);
 
     /**
-     * Log information about an entry.
-     *
-     * This function performs the backend‑specific logging of @p entry.
-     *
-     * @param fsentry      the entry to log
-     * @param params       parsed action parameters, or NULL
-     *
-     * @return             0 on success
-     *                     -1 on error and errno is set appropriately
-     *                     ENOTSUP if the backend does not support logging
-     */
-    int (*log_entry)(struct rbh_fsentry *fsentry,
-                     const struct rbh_value_map *params);
-
-    /**
      * Fill the projection to retrieve only the information needed
      *
      * @param projection the projection to fill
@@ -242,18 +227,6 @@ rbh_pe_common_ops_delete_entry(const struct rbh_pe_common_operations *ops,
 {
     if (ops && ops->delete_entry)
         return ops->delete_entry(mi_backend, entry, params);
-
-    errno = ENOTSUP;
-    return -1;
-}
-
-static inline int
-rbh_pe_common_ops_log_entry(const struct rbh_pe_common_operations *ops,
-                            struct rbh_fsentry *entry,
-                            const struct rbh_value_map *params)
-{
-    if (ops && ops->log_entry)
-        return ops->log_entry(entry, params);
 
     errno = ENOTSUP;
     return -1;
