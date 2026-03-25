@@ -189,7 +189,7 @@ config(
 declare_policy(
     name = "test_lustre_log_policy",
     target = (Type == "f"),
-    action = action.log,
+    action = lustre.log,
     trigger = 'Periodic("10m")'
 )
 """)
@@ -201,17 +201,18 @@ declare_policy(
 
         output = result.stdout
 
-        # Verify the Lustre-specific format with FID before path
-        # Pattern matches: LogAction | fid=[0x...:0x...:0x...], ...
+        # Verify composite log format with both POSIX path and Lustre FID.
+        # Pattern matches: LogAction | path=<...>, fid=[0x...:0x...:0x...],
+        # params=...
         lustre_log_pattern = re.compile(
-            r'LogAction \| fid=\[0x[0-9a-fA-F]+:0x[0-9a-fA-F]+:0x[0-9a-fA-F]+\], '
-            r'path=([^,]+), params='
+            r'LogAction \| path=([^,]+), '
+            r'fid=\[0x[0-9a-fA-F]+:0x[0-9a-fA-F]+:0x[0-9a-fA-F]+\], params='
         )
 
         log_matches = lustre_log_pattern.findall(output)
         self.assertTrue(log_matches,
                         "Lustre log entries should follow format: "
-                        "LogAction | fid=[...], path=..., params=...")
+                        "LogAction | path=..., fid=[...], params=...")
 
         logged_paths = log_matches
 
