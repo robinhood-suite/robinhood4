@@ -8,8 +8,13 @@
 #ifndef RBH_ACT
 #define RBH_ACT
 
+#include <stddef.h>
+
 #include "robinhood/sstack.h"
 #include "robinhood/value.h"
+
+struct filters_context;
+struct rbh_fsentry;
 
 /**
  * Types of actions supported by the policy engine.
@@ -34,6 +39,10 @@ struct rbh_delete_params {
     const char *remove_parents_below;
 };
 
+struct rbh_log_params {
+    const char *format;
+};
+
 /**
  * Parsed representation of an action.
  *
@@ -46,6 +55,7 @@ struct rbh_action {
     union {
         struct rbh_value_map generic;
         struct rbh_delete_params delete;
+        struct rbh_log_params log;
     } params;
 };
 
@@ -96,4 +106,27 @@ rbh_action_exec_argv(const char **argv, const char *path);
 int
 rbh_action_exec_command(const char *cmd_str, const char *path);
 
+/**
+ * Format a filesystem entry according to a printf-like format string.
+ *
+ * Directives are resolved through registered plugins/extensions from
+ * \p f_ctx (via fill_entry_info callbacks).
+ *
+ * @param format_string  format string containing directives (e.g. "%p\n")
+ * @param f_ctx          filters context containing plugin/extension metadata
+ * @param fsentry        entry to format
+ * @param backend        backend identifier passed to providers (may be NULL)
+ * @param output         output buffer
+ * @param output_size    size of \p output
+ *
+ * @return               number of chars written (excluding trailing '\0')
+ *                       -1 on error with errno set
+ */
+int
+rbh_action_format_fsentry(const char *format_string,
+                          const struct filters_context *f_ctx,
+                          const struct rbh_fsentry *fsentry,
+                          const char *backend,
+                          char *output,
+                          size_t output_size);
 #endif

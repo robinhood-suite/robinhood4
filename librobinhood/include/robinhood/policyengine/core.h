@@ -33,6 +33,7 @@ struct rbh_rule {
     union {
         const char *generic;               // YAML
         struct rbh_delete_params delete;
+        struct rbh_log_params log;
     } parameters;
 };
 
@@ -44,6 +45,7 @@ struct rbh_policy {
     union {
         const char *generic;               // YAML
         struct rbh_delete_params delete;
+        struct rbh_log_params log;
     } parameters;
 
     struct rbh_rule *rules;
