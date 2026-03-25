@@ -93,6 +93,7 @@ declare_policy(
     name = "test_log_policy",
     target = (Type == "f"),
     action = action.log,
+    parameters = {"format": "path=%P"},
     trigger = 'Periodic("10m")'
 )
 """)
@@ -119,8 +120,7 @@ declare_policy(
         ]
         for relpath in expected_files:
             self.assertIn(f"LogAction | path={relpath}", output,
-                          f"Fichier attendu non trouvé dans le log: {relpath}")
-        self.assertIn("params=", output)
+                          f"Expected file not found in the log: {relpath}")
 
         # Directories must not be logged
         self.assertNotIn("LogAction | path=filedir,", output)
@@ -254,6 +254,7 @@ declare_policy(
     name = "test_mixed_policy",
     target = (Type == "f") | (Type == "d"),
     action = action.log,
+    parameters = {"format": "path=%P"},
     trigger = 'Periodic("10m")',
     rules = [
         Rule(
@@ -288,9 +289,9 @@ declare_policy(
                 f"{rel} should not have been deleted")
 
         # Directories must appear in the log output
-        self.assertIn("LogAction | path=filedir, params=", output)
-        self.assertIn("LogAction | path=filedir/test1, params=", output)
-        self.assertIn("LogAction | path=filedir/test1/test2, params=", output)
+        self.assertIn("LogAction | path=filedir", output)
+        self.assertIn("LogAction | path=filedir/test1", output)
+        self.assertIn("LogAction | path=filedir/test1/test2", output)
 
     def test_delete_remove_empty_parent(self):
         """
@@ -528,6 +529,7 @@ declare_policy(
     target = (Type == "f") | (Type == "d"),
     action = action.log,
     trigger = 'Periodic("10m")',
+    parameters = {"format": "path=%P"},
     rules = [
         Rule(
             name = "cmd_rule",
@@ -824,6 +826,7 @@ declare_policy(
     name = "test_py_rules",
     target = (Type == "f") | (Type == "d"),
     action = action.log,
+    parameters = {"format": "path=%P"},
     trigger = 'Periodic("10m")',
     rules = [
         Rule(

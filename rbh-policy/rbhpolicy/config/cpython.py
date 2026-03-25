@@ -60,10 +60,16 @@ class RbhDeleteParams(Structure):
         ("remove_parents_below", c_char_p),
     ]
 
+class RbhLogParams(Structure):
+    _fields_ = [
+        ("format", c_char_p),
+    ]
+
 class RbhParamsUnion(Union):
     _fields_ = [
         ("generic", c_char_p),
         ("delete", RbhDeleteParams),
+        ("log", RbhLogParams),
     ]
 
 class RbhRule(Structure):
@@ -97,6 +103,12 @@ def make_c_parameters(action: str, params: dict):
 
         return ("delete", p)
 
+    elif verb == "log":
+        p = RbhLogParams()
+        log_format = params.get("format")
+        p.format = log_format.encode() if log_format else None
+        return ("log", p)
+
     yaml_bytes = yaml.safe_dump(params or {}).encode()
     return ("generic", yaml_bytes)
 
@@ -110,6 +122,8 @@ def make_c_rules(py_rules):
 
         if kind == "delete":
             arr[i].parameters.delete = value
+        elif kind == "log":
+            arr[i].parameters.log = value
         else:
             arr[i].parameters.generic = value
     return arr, len(py_rules)
@@ -124,6 +138,8 @@ def make_c_policy(py_policy):
 
     if kind == "delete":
         c_policy.parameters.delete = value
+    elif kind == "log":
+        c_policy.parameters.log = value
     else:
         c_policy.parameters.generic = value
 

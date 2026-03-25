@@ -248,105 +248,21 @@ fsentry_print_ls_dils(FILE *file, const struct rbh_fsentry *fsentry)
 
 #define MAX_OUTPUT_SIZE (PATH_MAX + 256)
 
-static int
-fsentry_print_escape(char *output, int max_length, const char *escape)
-{
-    assert(escape != NULL);
-    assert(*escape != '\0');
-
-    (void) max_length;
-
-    /* For now, consider the escape to be a single character */
-    switch (*escape) {
-    case 'n':
-        *output = '\n';
-        return 1;
-    default:
-        error(EXIT_FAILURE, ENOTSUP, "format escape not supported");
-    }
-
-    __builtin_unreachable();
-}
-
-static int
-fsentry_print_regular_char(char *output, int max_length,
-                           const char *format_string)
-{
-    int sublength = 0;
-
-    assert(format_string != NULL);
-    assert(*format_string != '\0');
-
-    while (format_string[sublength] != '%' &&
-           format_string[sublength] != '\\' &&
-           format_string[sublength] != 0 &&
-           sublength < max_length) {
-        output[sublength] = format_string[sublength];
-        sublength++;
-    }
-
-    return sublength;
-}
-
 void
 fsentry_printf_format(struct find_context *ctx, size_t backend_index,
                       const struct rbh_fsentry *fsentry)
 {
     const char *format_string = ctx->format_string;
     const char *backend = ctx->uris[backend_index];
-    size_t length = strlen(format_string);
-    int max_length = MAX_OUTPUT_SIZE;
     FILE *file = ctx->action_file;
     char output[MAX_OUTPUT_SIZE];
-    size_t output_length = 0;
+    int rc;
 
-    for (size_t i = 0; i < length; i++) {
-        int tmp_length = 0;
+    rc = rbh_action_format_fsentry(format_string, &ctx->f_ctx, fsentry,
+                                   backend, output, sizeof(output));
+    if (rc < 0)
+        error(EXIT_FAILURE, EINVAL, "failed to write to buffer for printf");
 
-        switch (format_string[i]) {
-        case '%':
-            for (int j = 0; j < ctx->f_ctx.info_pe_count; ++j) {
-                const struct rbh_pe_common_operations *common_ops =
-                    get_common_operations(&ctx->f_ctx.info_pe[j]);
-
-                tmp_length = rbh_pe_common_ops_fill_entry_info(
-                    common_ops, &output[output_length], max_length, fsentry,
-                    format_string + i + 1, backend
-                );
-
-                if (tmp_length > 0)
-                    break;
-            }
-            /* Go over the directive that was just printed */
-            i++;
-            break;
-        case '\\':
-            tmp_length = fsentry_print_escape(&output[output_length],
-                                              max_length,
-                                              format_string + i + 1);
-            /* Go over the escape that was just printed */
-            i++;
-            break;
-        default:
-            tmp_length = fsentry_print_regular_char(&output[output_length],
-                                                    max_length,
-                                                    format_string + i);
-            i += tmp_length - 1;
-        }
-
-        output_length += tmp_length;
-        max_length -= tmp_length;
-
-        if (tmp_length < 0) {
-            error(EXIT_FAILURE, EINVAL, "failed to write to buffer for printf");
-        } else if (max_length <= 0) {
-            /* No more data can fit in the output array */
-            output_length = MAX_OUTPUT_SIZE - 1;
-            break;
-        }
-    }
-
-    output[output_length] = 0;
     fprintf(file, "%s", output);
 }
 
