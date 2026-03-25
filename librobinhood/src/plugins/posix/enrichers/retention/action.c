@@ -69,6 +69,22 @@ rbh_retention_fill_entry_info(char *output, int max_length,
     assert(*directive != '\0');
 
     switch (*directive) {
+    case 'L': {
+        char expiration_date[128];
+        char expires[128];
+        int rc1;
+        int rc2;
+
+        rc1 = write_expires_from_entry(fsentry, expires, sizeof(expires));
+        rc2 = write_expiration_date_from_entry(fsentry, expiration_date,
+                                               sizeof(expiration_date));
+        if (rc1 < 0 || rc2 < 0)
+            return -1;
+
+        return snprintf(output, max_length,
+                        "retention.expires=%s, retention.expiration_date=%s",
+                        expires, expiration_date);
+    }
     case 'e':
         return write_expires_from_entry(fsentry, output, max_length);
     case 'E':

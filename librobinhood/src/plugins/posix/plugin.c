@@ -21,7 +21,6 @@ static const struct rbh_pe_common_operations POSIX_BACKEND_PLUGIN_COMMON_OPS = {
     .sort2field = rbh_posix_sort2field,
     .build_filter = rbh_posix_build_filter,
     .fill_entry_info = rbh_posix_fill_entry_info,
-    .log_entry = rbh_posix_log_entry,
     .delete_entry = rbh_posix_delete_entry,
     .fill_projection = rbh_posix_fill_projection,
 };
@@ -38,7 +37,5 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(POSIX) = {
     .ops = &POSIX_BACKEND_PLUGIN_OPS,
     .common_ops = &POSIX_BACKEND_PLUGIN_COMMON_OPS,
     .capabilities = RBH_SYNC_OPS | RBH_BRANCH_OPS,
-    .available_actions = RBH_ACTION_FLAG(RBH_ACTION_LOG) |
-                         RBH_ACTION_FLAG(RBH_ACTION_DELETE),
     .info = 0,
 };
