@@ -45,7 +45,8 @@ rbh_lustre_undelete(void *backend, const char *path,
                     struct rbh_fsentry *fsentry);
 
 int
-rbh_lustre_log_entry(struct rbh_fsentry *entry,
-                     const struct rbh_value_map *params);
+rbh_lustre_fill_entry_info(char *output, int max_length,
+                           const struct rbh_fsentry *entry,
+                           const char *directive, const char *backend);
 
 #endif
