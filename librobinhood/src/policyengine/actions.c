@@ -19,6 +19,13 @@
 #include "robinhood/plugins/common_ops.h"
 #include <robinhood.h>
 
+static bool
+rbh_pe_action_provider_hint(const struct rbh_action *action,
+                            const char **hint, size_t *hint_len);
+
+static bool
+rbh_pe_name_matches_hint(const char *name, const char *hint, size_t hint_len);
+
 /**
  * Parse an action string into a structured rbh_action.
  *
@@ -227,7 +234,6 @@ rbh_pe_select_action(const struct rbh_policy *policy,
 
 static const struct rbh_pe_common_operations *
 rbh_pe_select_common_ops_for_actions(const struct rbh_action *action,
-                                     struct rbh_backend *fs_backend,
                                      const struct filters_context *f_ctx)
 {
     const struct rbh_pe_common_operations *plugin_ops = NULL;
@@ -237,22 +243,8 @@ rbh_pe_select_common_ops_for_actions(const struct rbh_action *action,
     const char *ext_hint = NULL;
     size_t ext_hint_len = 0;
     size_t ext_matches = 0;
-    uint64_t flag;
 
-    flag = RBH_ACTION_FLAG(action->type);
-
-    /*
-     * For LOG/DELETE, action->value may encode an extension hint as
-     * "<ext_name>:<builtin>" (e.g. "lustre:log").  Extract the prefix so
-     * we can restrict the search to the named extension only.
-     */
-    if (action->value) {
-        const char *colon = strchr(action->value, ':');
-        if (colon) {
-            ext_hint = action->value;
-            ext_hint_len = (size_t)(colon - action->value);
-        }
-    }
+    rbh_pe_action_provider_hint(action, &ext_hint, &ext_hint_len);
 
     for (size_t i = 0; i < f_ctx->info_pe_count; ++i) {
         const struct rbh_plugin_extension *ext;
@@ -268,14 +260,13 @@ rbh_pe_select_common_ops_for_actions(const struct rbh_action *action,
 
         ext = f_ctx->info_pe[i].extension;
 
-        if (!ext || !(ext->available_actions & flag))
+        if (!ext || !ext->common_ops || !ext->common_ops->delete_entry)
             continue;
 
         /* If the user specified an extension hint ("lustre:log"), skip any
          * extension whose name does not match. */
         if (ext_hint != NULL &&
-            (strncmp(ext->name, ext_hint, ext_hint_len) != 0 ||
-             ext->name[ext_hint_len] != '\0'))
+            !rbh_pe_name_matches_hint(ext->name, ext_hint, ext_hint_len))
             continue;
 
         if (ext_matches > 0) {
@@ -291,12 +282,11 @@ rbh_pe_select_common_ops_for_actions(const struct rbh_action *action,
         ext_matches++;
     }
 
-    if (plugin && plugin_ops && (plugin->available_actions & flag)) {
+    if (plugin && plugin_ops && plugin_ops->delete_entry) {
         if (ext_hint == NULL) {
             plugin_hint_matches = true;
-        } else if (plugin->plugin.name != NULL &&
-                   strncmp(plugin->plugin.name, ext_hint, ext_hint_len) == 0 &&
-                   plugin->plugin.name[ext_hint_len] == '\0') {
+        } else if (rbh_pe_name_matches_hint(plugin->plugin.name, ext_hint,
+                                            ext_hint_len)) {
             plugin_hint_matches = true;
         }
     }
@@ -341,28 +331,181 @@ rbh_pe_select_common_ops_for_actions(const struct rbh_action *action,
     return NULL;
 }
 
+static bool
+rbh_pe_action_provider_hint(const struct rbh_action *action,
+                            const char **hint, size_t *hint_len)
+{
+    const char *colon;
+
+    *hint = NULL;
+    *hint_len = 0;
+
+    if (!action || !action->value)
+        return false;
+
+    colon = strchr(action->value, ':');
+    if (!colon)
+        return false;
+
+    *hint = action->value;
+    *hint_len = (size_t)(colon - action->value);
+    return true;
+}
+
+static bool
+rbh_pe_name_matches_hint(const char *name, const char *hint, size_t hint_len)
+{
+    return name != NULL && strncmp(name, hint, hint_len) == 0 &&
+           name[hint_len] == '\0';
+}
+
+static int
+rbh_pe_append_log_part(char *buffer, size_t buffer_len, size_t *length,
+                       const char *part)
+{
+    int written;
+
+    if (!part || *part == '\0')
+        return 0;
+
+    written = snprintf(buffer + *length, buffer_len - *length,
+                       *length == 0 ? "%s" : ", %s", part);
+    if (written < 0)
+        return -1;
+
+    if (written >= buffer_len - *length) {
+        *length = buffer_len - 1;
+        return -1;
+    }
+
+    *length += written;
+    return 0;
+}
+
 /**
- * Log an entry from the filesystem/object store by calling the associated
- * action via the commons_ops of the backend.
+ * Log an entry by composing log fragments from plugin/extension providers.
  *
  * @param action       the action to apply (contains parsed parameters)
- * @param mi_backend   the mirror backend
- * @param entry        the fsentry to delete
- * @param common_ops   the backend's common operations interface
+ * @param entry        the fsentry to log
+ * @param f_ctx        context containing loaded plugins/extensions
  *
  * @return 0 on success, -1 on error (errno is set)
  */
 static int
 rbh_pe_log_action(const struct rbh_action *action,
-                     struct rbh_backend *mi_backend,
-                     struct rbh_fsentry *entry,
-                     const struct rbh_pe_common_operations *common_ops)
+                  struct rbh_fsentry *entry,
+                  const struct filters_context *f_ctx)
 {
     const struct rbh_value_map *params;
+    bool hint_matched = false;
+    char *params_str = NULL;
+    size_t details_len = 0;
+    char details[2048];
+    const char *hint;
+    size_t hint_len;
+    char tmp[512];
+    int rc;
+
+    if (!entry || !f_ctx)
+        return -1;
 
     params = action->params.generic.count > 0 ? &action->params.generic : NULL;
+    rbh_pe_action_provider_hint(action, &hint, &hint_len);
 
-    return rbh_pe_common_ops_log_entry(common_ops, entry, params);
+    details[0] = '\0';
+
+    /* Compose log output from plugin */
+    for (size_t i = 0; i < f_ctx->info_pe_count; ++i) {
+        const struct rbh_pe_common_operations *ops;
+
+        if (!f_ctx->info_pe[i].is_plugin)
+            continue;
+
+        ops = get_common_operations(&f_ctx->info_pe[i]);
+        if (!ops || !ops->fill_entry_info)
+            break;
+
+        rc = rbh_pe_common_ops_fill_entry_info(ops, tmp, sizeof(tmp), entry,
+                                               "L", "");
+        if (rc < 0)
+            return -1;
+
+        if (rc > 0) {
+            tmp[rc < sizeof(tmp) ? rc : sizeof(tmp) - 1] = '\0';
+            if (rbh_pe_append_log_part(details, sizeof(details), &details_len,
+                                       tmp) < 0)
+                return -1;
+
+            if (hint == NULL || rbh_pe_name_matches_hint(
+                    f_ctx->info_pe[i].plugin->plugin.name, hint, hint_len))
+                hint_matched = true;
+        }
+
+        break;
+    }
+
+    if (details_len == 0) {
+        errno = ENOTSUP;
+        return -1;
+    }
+
+    /* Compose log output from extensions */
+    for (size_t i = 0; i < f_ctx->info_pe_count; ++i) {
+        const struct rbh_pe_common_operations *ops;
+        const struct rbh_plugin_extension *ext;
+
+        if (f_ctx->info_pe[i].is_plugin)
+            continue;
+
+        ext = f_ctx->info_pe[i].extension;
+        if (!ext || !ext->name)
+            continue;
+
+        if (hint != NULL && !rbh_pe_name_matches_hint(ext->name, hint,
+                                                      hint_len))
+            continue;
+
+        ops = get_common_operations(&f_ctx->info_pe[i]);
+        if (!ops || !ops->fill_entry_info)
+            continue;
+
+        rc = rbh_pe_common_ops_fill_entry_info(ops, tmp, sizeof(tmp), entry,
+                                               "L", "");
+        if (rc < 0)
+            return -1;
+
+        if (rc > 0) {
+            tmp[rc < sizeof(tmp) ? rc : sizeof(tmp) - 1] = '\0';
+            if (rbh_pe_append_log_part(details, sizeof(details), &details_len,
+                                       tmp) < 0)
+                return -1;
+            hint_matched = true;
+        }
+    }
+
+    /* Verify hint matched if specified */
+    if (hint != NULL && !hint_matched) {
+        char hint_str[256];
+        size_t copy_len;
+
+        copy_len = hint_len < sizeof(hint_str) - 1
+                   ? hint_len : sizeof(hint_str) - 1;
+        memcpy(hint_str, hint, copy_len);
+        hint_str[copy_len] = '\0';
+        fprintf(stderr, "Error: plugin or extension '%s' not found\n",
+                hint_str);
+        errno = ENOTSUP;
+        return -1;
+    }
+
+    if (params)
+        params_str = rbh_value_map_to_string(params);
+
+    printf("LogAction | %s, params=%s\n", details,
+           params_str ? params_str : "{}");
+    free(params_str);
+
+    return 0;
 }
 
 /**
@@ -667,15 +810,9 @@ rbh_pe_apply_action(const struct rbh_action *action,
 
     switch (action->type) {
     case RBH_ACTION_LOG:
-        common_ops = rbh_pe_select_common_ops_for_actions(action, fs_backend,
-                                                          f_ctx);
-        if (!common_ops)
-            return -1;
-
-        return rbh_pe_log_action(action, mi_backend, entry, common_ops);
+        return rbh_pe_log_action(action, entry, f_ctx);
     case RBH_ACTION_DELETE:
-        common_ops = rbh_pe_select_common_ops_for_actions(action, fs_backend,
-                                                          f_ctx);
+        common_ops = rbh_pe_select_common_ops_for_actions(action, f_ctx);
         if (!common_ops)
             return -1;
 
