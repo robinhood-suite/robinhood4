@@ -46,6 +46,30 @@
       },
       "revId": "1923498d52be62841c6f19c6c132a5f706562b6d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac18a6a7_ad0da939",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-26T10:53:14Z",
+      "side": 1,
+      "message": "Putting this explanation in the commit description would be nice",
+      "parentUuid": "cc13c51a_dc2462fb",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 16
+      },
+      "revId": "1923498d52be62841c6f19c6c132a5f706562b6d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
