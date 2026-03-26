@@ -22,6 +22,30 @@
       },
       "revId": "472a70bf3289e1b2ea41e89898f181a0249215d4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6e6161a_45e39898",
+        "filename": "rbh-find/tests/lustre/test_comp.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-26T14:44:32Z",
+      "side": 1,
+      "message": "Since file2 is a mirrored file, I add data to the first part, so the second isn\u0027t an exact copy of the first anymore, and needs a resync. Therefore, Lustre marks the second component as stale",
+      "parentUuid": "7bd639f7_a22a8179",
+      "range": {
+        "startLine": 99,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 23
+      },
+      "revId": "472a70bf3289e1b2ea41e89898f181a0249215d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
