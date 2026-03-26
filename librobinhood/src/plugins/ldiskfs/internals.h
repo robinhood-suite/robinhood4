@@ -115,4 +115,7 @@ parents_lu_fid_from_link(void *link, struct rbh_sstack *sstack);
 bool
 get_fid_from_xattrs(struct rbh_value_map *xattrs, struct lu_fid *fid);
 
+bool
+get_parent_fid_from_xattrs(struct rbh_value_map *xattrs, struct lu_fid *parent_fid);
+
 #endif
