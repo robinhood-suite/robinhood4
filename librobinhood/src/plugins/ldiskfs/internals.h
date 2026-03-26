@@ -80,6 +80,18 @@ const struct lu_fid
 lu_fid_from_lma(void *lma);
 
 /*
+ * Gets the fid of the parent of a file from the value of the trusted.fid
+ * extended attribute.
+ *
+ * The extended attribute is passed as a pointer to its binary data.
+ *
+ * This is useful for ost scanning as `trusted.fid` holds the fid of the parent
+ * file found on mdt.
+ */
+const struct lu_fid
+lu_fid_from_filter_fid(void *fid);
+
+/*
  * Obtain the fid of a file from the extended attributes.
  *
  * Extended attributes are passed as a rbh_value_map as returned by
@@ -90,5 +102,8 @@ lu_fid_from_lma(void *lma);
  */
 bool
 get_fid_from_xattrs(struct rbh_value_map *xattrs, struct lu_fid *fid);
+
+bool
+get_parent_fid_from_xattrs(struct rbh_value_map *xattrs, struct lu_fid *parent_fid);
 
 #endif
