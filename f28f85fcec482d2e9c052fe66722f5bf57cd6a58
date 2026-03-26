@@ -16,6 +16,24 @@
       "message": "Well, no test is found. Also, what is a foreign layout?",
       "revId": "f28f85fcec482d2e9c052fe66722f5bf57cd6a58",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77dfe1a0_e174d9ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-26T13:24:56Z",
+      "side": 1,
+      "message": "It\u0027s a free format layout, can\u0027t tell you much more unfortunately...\nAfter looking at the how to this, I realized this requires much more work than a simple filter, so I\u0027ll abandon the patch instead and we\u0027ll do it another day",
+      "parentUuid": "f6215e1c_60f5ab4a",
+      "revId": "f28f85fcec482d2e9c052fe66722f5bf57cd6a58",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
