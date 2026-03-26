@@ -145,13 +145,54 @@ lu_fid_from_lma(void *lma)
     return res;
 }
 
+struct lu_fid
+lu_fid_from_filter_fid(void *fid)
+{
+
+    struct filter_fid *fid_s;
+    struct lu_fid res;
+
+    fid_s = (void *)fid;
+    res = fid_s->ff_parent;
+
+    // FIDs are in little endian notation on disk so we use the right endianness
+    set_lu_fid_with_right_endianness(&res);
+
+    return res;
+}
+
 bool
 get_fid_from_xattrs(struct rbh_value_map *xattrs, struct lu_fid *fid)
 {
     for(int i = 0; i < xattrs->count; i++) {
         if (!strcmp(xattrs->pairs[i].key, "trusted.lma")) {
-            *fid = lu_fid_from_lma((char *)xattrs->pairs[i].value->string);
-            return true;
+            // precaution check, shouldn't fail if xattrs were initialized using
+            // get_xattrs_from_inode()
+            if (xattrs->pairs[i].value->type == RBH_VT_BINARY) {
+                *fid = lu_fid_from_lma((char *)xattrs->pairs[i].value->string);
+                return true;
+            }
+            break;
+        }
+    }
+    return false;
+}
+
+bool
+get_parent_fid_from_xattrs(struct rbh_value_map *xattrs,
+                           struct lu_fid *parent_fid)
+{
+    void *filter_fid;
+    for(int i = 0; i < xattrs->count; i++) {
+        if (!strcmp(xattrs->pairs[i].key, "trusted.fid")) {
+            // precaution check, souldn't fail if xattrs were initialized using
+            // get_xattrs_from_inode()
+            if (xattrs->pairs[i].value->type == RBH_VT_BINARY) {
+                filter_fid = (void *)xattrs->pairs[i].value->binary.data;
+                *parent_fid = lu_fid_from_filter_fid(filter_fid);
+                return true;
+            }
+            break;
         }
     }
     return false;
