@@ -189,6 +189,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4aed1041_69754450",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-26T10:50:49Z",
+      "side": 1,
+      "message": "In other places we use a custom enum to indicate the outcome in these kind of scenarios, where there are multiple kind of success",
+      "parentUuid": "772560c3_7fcfb165",
+      "range": {
+        "startLine": 344,
+        "startChar": 8,
+        "endLine": 344,
+        "endChar": 26
+      },
+      "revId": "13dfea82d492fa87251d56a36a18010be14a6f7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99c9ef4e_dd815dfe",
