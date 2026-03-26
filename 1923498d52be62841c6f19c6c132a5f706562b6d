@@ -22,6 +22,30 @@
       },
       "revId": "1923498d52be62841c6f19c6c132a5f706562b6d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc13c51a_dc2462fb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-03-26T10:42:41Z",
+      "side": 1,
+      "message": "`remove_parents_below` is a parameter that complements the `remove_empty_parents` parameter. If you want the parent to be recursively removed if they become empty after a deletion, you must define the folder from which deletion stops with `remove_parents_below`, whereas `remove_empty_parents` will only remove the parent file and nothing more.\nFor example : `/mnt/lustre/test/test2/test3/file.txt`\n\nIf the policy deletes file.txt, then with `remove_empty_parents` only `test3` is deleted. However, if you want to delete `test2` but keep `test`, you can set `remove_parents_below` on `/mnt/lustre/test/`",
+      "parentUuid": "7cc42b85_a239bc50",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 16
+      },
+      "revId": "1923498d52be62841c6f19c6c132a5f706562b6d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
