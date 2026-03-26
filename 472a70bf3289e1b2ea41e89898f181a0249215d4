@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bd639f7_a22a8179",
+        "filename": "rbh-find/tests/lustre/test_comp.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-03-26T14:11:26Z",
+      "side": 1,
+      "message": "comment: I suppose that every file has the `init` flag but what cause the `stale` flag to only be given to file2?",
+      "range": {
+        "startLine": 99,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 23
+      },
+      "revId": "472a70bf3289e1b2ea41e89898f181a0249215d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
