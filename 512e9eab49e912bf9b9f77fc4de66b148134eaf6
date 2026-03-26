@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a4548818_e395f6c7",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-26T13:30:32Z",
+      "side": 1,
+      "message": "Mongo works in a way that it will check each part of the array against the requested value. So for instance, if you check that `arr \u003c 3` and `arr \u003d [1, 2, 3]` then the condition will be checked true. So here, if `comp_flags \u003d [init, init | offline, 0]`, then `comp_flags BITS_ANY_SET init` will eval to true because the array contains a value with `init`, same thing for `comp_flags BITS_ANY_SET offline`, it will eval to true because the bits for `offline` are present in the second element of the array.\n\nWe\u0027ve had discussions about whether it\u0027s a good thing it works this way or not, but ultimately it was easier to implement and take advantage of this logic than force something else.",
+      "parentUuid": "24534e52_2c41e90a",
+      "revId": "512e9eab49e912bf9b9f77fc4de66b148134eaf6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c44f90e8_7a1b6cac",
         "filename": "librobinhood/src/plugins/posix/enrichers/lustre/parser.c",
         "patchSetId": 1
@@ -67,6 +85,30 @@
       "writtenOn": "2026-03-18T10:48:56Z",
       "side": 1,
       "message": "style: not in alphabetical order",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 37,
+        "endChar": 40
+      },
+      "revId": "512e9eab49e912bf9b9f77fc4de66b148134eaf6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d2ba7ea_7fc9016a",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/parser.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-26T13:30:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c44f90e8_7a1b6cac",
       "range": {
         "startLine": 36,
         "startChar": 12,
