@@ -295,10 +295,30 @@ get_fid_from_xattrs(struct rbh_value_map *xattrs)
 
     for(i = 0; i < xattrs->count; i++) {
         if (!strcmp(xattrs->pairs[i].key, "trusted.lma")) {
-            ret = lu_fid_from_lma((char *)xattrs->pairs[i].value->string);
+            // precaution check, won't fail if xattrs were initialized using
+            // get_xattrs_from_inode()
+            if (xattrs->pairs[i].value->type == RBH_VT_BINARY) {
+                ret = lu_fid_from_lma((char *)xattrs->pairs[i].value->binary.data);
+            }
             break;
         }
     }
 
     return ret;
+}
+
+bool
+get_parent_fid_from_xattrs(struct rbh_value_map *xattrs,struct lu_fid *parent_fid)
+{
+    for(int i = 0; i < xattrs->count; i++) {
+        if (!strcmp(xattrs->pairs[i].key, "trusted.fid")) {
+            // precaution check, won't fail if xattrs were initialized using
+            // get_xattrs_from_inode()
+            if (xattrs->pairs[i].value->type == RBH_VT_BINARY) {
+                *parent_fid = lu_fid_from_filter_fid((char *)xattrs->pairs[i].value->binary.data);
+                return true;
+            }
+        }
+    }
+    return false;
 }

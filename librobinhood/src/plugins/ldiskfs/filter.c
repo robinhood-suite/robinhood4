@@ -129,7 +129,7 @@ dentry_path(struct rbh_dentry *dentry, struct rbh_dentry *root,
 static struct rbh_fsentry *
 fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
                     struct rbh_dentry *remote_parent_dir,ext2_filsys fs,
-                    struct rbh_sstack *sstack)
+                    struct rbh_sstack *sstack, bool is_mdt)
 {
     struct ext2_inode_large *inode = (struct ext2_inode_large *)dentry->inode;
     struct rbh_value_map inode_xattrs = get_xattrs_from_inode(fs, inode, dentry->ino,
@@ -144,9 +144,15 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
         .value = &path_value,
     };
     struct rbh_fsentry *fsentry;
+    struct lu_fid parent_fid;
     struct rbh_statx statx;
     struct rbh_id *id;
     int save_errno;
+
+    if (!is_mdt)
+        if (get_parent_fid_from_xattrs(&inode_xattrs, &parent_fid))
+            printf("FID of parent file: [%#llx:0x%x:0x%x]\n",
+                   parent_fid.f_seq, parent_fid.f_oid, parent_fid.f_ver);
 
     dentry->fid = get_fid_from_xattrs(&inode_xattrs);
 
@@ -213,7 +219,7 @@ ldiskfs_iter_next(void *iterator)
         fifo_push_child_entries(iter, dentry);
 
     return fsentry_from_dentry(dentry, iter->root, iter->remote_parent_dir,
-                               iter->fs, iter->sstack);
+                               iter->fs, iter->sstack, iter->is_mdt);
 }
 
 static void
