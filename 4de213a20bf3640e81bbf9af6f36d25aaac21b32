@@ -93,6 +93,30 @@
       },
       "revId": "4de213a20bf3640e81bbf9af6f36d25aaac21b32",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d63b28c_54cafbc2",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/parser.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-03-26T14:01:15Z",
+      "side": 1,
+      "message": "Thanks sensei.",
+      "parentUuid": "8ac491ae_d8ee9be7",
+      "range": {
+        "startLine": 48,
+        "startChar": 12,
+        "endLine": 48,
+        "endChar": 13
+      },
+      "revId": "4de213a20bf3640e81bbf9af6f36d25aaac21b32",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
