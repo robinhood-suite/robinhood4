@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e82fb79d_cb6a44d2",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-03-26T09:11:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07a64c56_2b5b04ee",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 5
+      },
+      "revId": "13dfea82d492fa87251d56a36a18010be14a6f7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a1f8161_2f9315a2",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d7d7828_ddce2748",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-03-26T09:11:01Z",
+      "side": 1,
+      "message": "Change made in future patches as discussed",
+      "parentUuid": "9a1f8161_2f9315a2",
+      "range": {
+        "startLine": 80,
+        "startChar": 8,
+        "endLine": 81,
+        "endChar": 63
+      },
+      "revId": "13dfea82d492fa87251d56a36a18010be14a6f7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "522aaba9_7eda4d25",
@@ -60,6 +108,30 @@
       "writtenOn": "2026-03-17T10:53:37Z",
       "side": 1,
       "message": "defect: check errno for failures, if the rmdir failed because the directory is not empty, you can ignore the error, but it the call failed for another reason, it should be signified to the user",
+      "range": {
+        "startLine": 91,
+        "startChar": 12,
+        "endLine": 93,
+        "endChar": 1
+      },
+      "revId": "13dfea82d492fa87251d56a36a18010be14a6f7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b95a4281_fb1ef65b",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-03-26T09:11:01Z",
+      "side": 1,
+      "message": "Change made in future patches as discussed",
+      "parentUuid": "522aaba9_7eda4d25",
       "range": {
         "startLine": 91,
         "startChar": 12,
