@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -154,7 +154,9 @@ usage(const char *backend)
         "Pre URI optional arguments:\n"
         "    -c, --config PATH     the configuration file to use.\n"
         "    -d, --dry-run         displays the command after alias management\n"
-        "    -h, --help            show this message and exit\n"
+        "    -h, --help [backend]  show this message and exit. If 'backend' is\n"
+        "                          provided, show the 'backend''s available\n"
+        "                          filters and directives\n"
         "    -v, --verbose         show additionnal information\n"
         "\n"
         "Post URI optional arguments:\n"
