@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bafe1e5a_b8a5daae",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-27T10:21:09Z",
+      "side": 1,
+      "message": "minor: as discussed, an enum as return value here would be more readable",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 7
+      },
+      "revId": "4e3e947d7ba59ec68726c5587b040a5a977f30db",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7243aee0_813134ef",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-27T10:21:09Z",
+      "side": 1,
+      "message": "style: order",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 34
+      },
+      "revId": "4e3e947d7ba59ec68726c5587b040a5a977f30db",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36c23b53_ba86933c",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-27T10:21:09Z",
+      "side": 1,
+      "message": "style: remove { and }",
+      "range": {
+        "startLine": 175,
+        "startChar": 35,
+        "endLine": 175,
+        "endChar": 36
+      },
+      "revId": "4e3e947d7ba59ec68726c5587b040a5a977f30db",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f8d1d8c_17dc2bed",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-27T10:21:09Z",
+      "side": 1,
+      "message": "style: add { and } for if aswell",
+      "range": {
+        "startLine": 180,
+        "startChar": 12,
+        "endLine": 180,
+        "endChar": 13
+      },
+      "revId": "4e3e947d7ba59ec68726c5587b040a5a977f30db",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f30ede5f_21363852",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-27T10:21:09Z",
+      "side": 1,
+      "message": "style: same",
+      "range": {
+        "startLine": 195,
+        "startChar": 8,
+        "endLine": 195,
+        "endChar": 9
+      },
+      "revId": "4e3e947d7ba59ec68726c5587b040a5a977f30db",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
