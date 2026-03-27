@@ -10,7 +10,13 @@ from rbhpolicy.config.triggers.triggers import (
     Scheduled,
     AlwaysTrigger,
     GlobalSizePercent,
-    GlobalInodePercent
+    GlobalInodePercent,
+    UserFileCount,
+    UserDiskUsage,
+    UserInodeCount,
+    GroupFileCount,
+    GroupDiskUsage,
+    GroupInodeCount,
 )
 from rbhpolicy.config.fileclass import declare_fileclass
 from rbhpolicy.config.policy import declare_policy, Rule
