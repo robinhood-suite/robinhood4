@@ -677,6 +677,7 @@ usage(void)
         "    -n, --no-skip          do not skip errors when synchronizing backends,\n"
         "                           instead stop on the first error.\n"
         "    -o, --one              only consider the root of SOURCE\n"
+        "    --version              print RobinHood 4's version\n"
         "\n"
         "Capability arguments:\n"
         "    -l, --list-capabilities URI|NAME\n"
@@ -858,6 +859,11 @@ main(int argc, char *argv[])
             .name = "dry-run",
             .val = 'd',
         },
+        {
+            .name = "version",
+            .has_arg = no_argument,
+            .val = 'z',
+        },
         {}
     };
     struct rbh_filter_projection projection = {
@@ -883,7 +889,7 @@ main(int argc, char *argv[])
     rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "c:f:hl:on:d", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "c:f:hl:on:dz", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
         case 'c':
@@ -917,6 +923,9 @@ main(int argc, char *argv[])
             break;
         case 'd':
             rbh_display_resolved_argv(NULL, &argc, &argv);
+            return EXIT_SUCCESS;
+        case 'z':
+            rbh_print_version();
             return EXIT_SUCCESS;
         case '?':
         default:

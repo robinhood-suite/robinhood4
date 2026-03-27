@@ -56,7 +56,8 @@ usage(void)
         "    -s, --sync-time SYNC_TIME  instead of checking every entry of the BACKEND,\n"
         "                               only consider entries with a sync_time lesser\n"
         "                               than SYNC_TIME\n"
-        "    -v, --verbose              verbose mode\n";
+        "    -v, --verbose              verbose mode\n"
+        "    --version                  print RobinHood 4's version\n";
 
     printf(message, program_invocation_short_name);
 }
@@ -348,6 +349,11 @@ main(int argc, char *argv[])
             .name = "verbose",
             .val = 'v',
         },
+        {
+            .name = "version",
+            .has_arg = no_argument,
+            .val = 'z',
+        },
         {}
     };
     bool dry_run_mode = false;
@@ -357,7 +363,7 @@ main(int argc, char *argv[])
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "dhs:v", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "dhs:vz", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'd':
             dry_run_mode = true;
@@ -372,6 +378,9 @@ main(int argc, char *argv[])
         case 'v':
             verbose_mode = true;
             break;
+        case 'z':
+            rbh_print_version();
+            return EXIT_SUCCESS;
         case '?':
         default:
             /* getopt_long() prints meaningful error messages itself */

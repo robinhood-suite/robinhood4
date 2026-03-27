@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -53,6 +53,12 @@
 #define xrealloc(ptr, size)             XWRAPPER(realloc, ptr, size)
 #define xreallocarray(ptr, nmemb, size) XWRAPPER(reallocarray, ptr, nmemb, size)
 #define xstrdup_safe(str)               ({ str ? xstrdup(str) : NULL; })
+
+/**
+ * Print RobinHood 4's current version.
+ */
+void
+rbh_print_version();
 
 /**
  * Create a backend from a URI string

@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -96,6 +96,7 @@ usage()
         "    --output OUTPUT      The path where the file will be recreated\n"
         "    -r,--restore         Recreate a deleted entry that has been\n"
         "                         deleted and rebind it to its old content\n"
+        "    --version            print RobinHood 4's version\n"
         "\n"
         "A robinhood URI is built as follows:\n"
         "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n\n";
@@ -132,6 +133,11 @@ main(int argc, char *argv[])
             .has_arg = no_argument,
             .val = 'r',
         },
+        {
+            .name = "version",
+            .has_arg = no_argument,
+            .val = 'z',
+        },
         {}
     };
     struct undelete_context context = { 0 };
@@ -148,7 +154,7 @@ main(int argc, char *argv[])
     rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "c:hlo:r", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "c:hlo:rz", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
         case 'c':
@@ -170,6 +176,9 @@ main(int argc, char *argv[])
         case 'r':
             flags |= RBH_UNDELETE_RESTORE;
             break;
+        case 'z':
+            rbh_print_version();
+            return EXIT_SUCCESS;
         default:
             /* getopt_long() prints meaningful error messages itself */
             exit(EX_USAGE);

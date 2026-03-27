@@ -15,6 +15,12 @@
 #include "robinhood/uri.h"
 #include "robinhood/utils.h"
 
+void
+rbh_print_version()
+{
+    printf("%s %s\n", program_invocation_short_name, RBH_VERSION);
+}
+
 int
 str2int64_t(const char *input, int64_t *result)
 {

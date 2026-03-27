@@ -80,6 +80,7 @@ help()
         "    -m, --mountpoint       Show the mountpoint used as source for\n"
         "                           the last rbh-sync\n"
         "    -s, --size             Show the size of entries collection\n"
+        "    --version              print RobinHood 4's version\n"
         "\n"
         "A robinhood URI is built as follows:\n"
         "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n\n";
@@ -94,6 +95,11 @@ apply_command_options(int argc, char *argv[])
     for (int i = 0; i < argc; i++) {
         if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
             help();
+            exit(0);
+        }
+
+        if (strcmp(argv[i], "--version") == 0) {
+            rbh_print_version();
             exit(0);
         }
 
@@ -135,10 +141,6 @@ main(int _argc, char **_argv)
         {
             .name = "first-sync",
             .val = 'f',
-        },
-        {
-            .name = "help",
-            .val = 'h'
         },
         {
             .name = "last-sync",

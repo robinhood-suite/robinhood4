@@ -80,6 +80,7 @@ usage(void)
         "                    Set a maximum number of changelog to read\n"
         "    -r, --raw       do not enrich changelog records (default)\n"
         "    -v, --verbose   Set the verbose mode\n"
+        "    --version       print RobinHood 4's version\n"
         "    -w, --nb-workers NUMBER\n"
         "                    number of workers to use to enrich and update the destination.\n"
         "\n"
@@ -784,6 +785,11 @@ main(int argc, char *argv[])
             .has_arg = no_argument,
             .val = 'v',
         },
+        {
+            .name = "version",
+            .has_arg = no_argument,
+            .val = 'z',
+        },
         {}
     };
     struct deduplicator_options dedup_opts = {
@@ -802,7 +808,7 @@ main(int argc, char *argv[])
     rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "b:c:d:e:hm:nrvw:", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "b:c:d:e:hm:nrvw:z", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
         case 'b':
@@ -846,6 +852,9 @@ main(int argc, char *argv[])
         case 'v':
             verbose = true;
             break;
+        case 'z':
+            rbh_print_version();
+            return EXIT_SUCCESS;
         case '?':
         default:
             /* getopt_long() prints meaningful error messages itself */
