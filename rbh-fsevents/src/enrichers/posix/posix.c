@@ -853,7 +853,8 @@ no_partial_iter_next(void *iterator)
         const struct rbh_value_pair *pair = &fsevent->xattrs.pairs[i];
 
         if (strcmp(pair->key, "rbh-fsevents") == 0) {
-            error(0, 0, "unexpected partial fsevent detected");
+            error(0, 0,
+                  "cannot update backends with partial fsevents, use '--enrich'");
             /* The reasoning being that partial fsevents are internal to
              * rbh-fsevents and should not leak to backends, where others might
              * be tempted to interpret them.
