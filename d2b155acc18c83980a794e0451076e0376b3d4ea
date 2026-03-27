@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6be905a4_a1032de9",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-27T10:47:08Z",
+      "side": 1,
+      "message": "minor: this shouldn\u0027t be written here but in the caller of this function",
+      "range": {
+        "startLine": 368,
+        "startChar": 45,
+        "endLine": 368,
+        "endChar": 50
+      },
+      "revId": "d2b155acc18c83980a794e0451076e0376b3d4ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3605f75_8992013a",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-27T10:47:08Z",
+      "side": 1,
+      "message": "minor: unnecessary, replace case \u0027p\u0027\u0027s called function with fsentry_relative_path, but no need for anything else",
+      "range": {
+        "startLine": 367,
+        "startChar": 4,
+        "endLine": 369,
+        "endChar": 56
+      },
+      "revId": "d2b155acc18c83980a794e0451076e0376b3d4ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57da4882_71a2cc7d",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/action.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-27T10:47:08Z",
+      "side": 1,
+      "message": "minor: this function should be written the same way as the posix\u0027s one. Moreover, you cannot use the same directive as the posix one, and must find other letters to use, \u0027F\u0027 doesn\u0027t seem taken",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 26
+      },
+      "revId": "d2b155acc18c83980a794e0451076e0376b3d4ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a0c5684_2c5dad1c",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/action.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-27T10:47:08Z",
+      "side": 1,
+      "message": "minor: same, this shouldn\u0027t be written here but in the caller of this function",
+      "range": {
+        "startLine": 36,
+        "startChar": 45,
+        "endLine": 36,
+        "endChar": 48
+      },
+      "revId": "d2b155acc18c83980a794e0451076e0376b3d4ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46570e3d_8f1b6c6f",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/plugin.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-27T10:47:08Z",
+      "side": 1,
+      "message": "suggest: could you add the new directive to lustre\u0027s directive helper ?",
+      "range": {
+        "startLine": 23,
+        "startChar": 5,
+        "endLine": 23,
+        "endChar": 20
+      },
+      "revId": "d2b155acc18c83980a794e0451076e0376b3d4ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30e22024_76c39517",
+        "filename": "librobinhood/src/plugins/posix/enrichers/retention/action.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-27T10:47:08Z",
+      "side": 1,
+      "message": "major: all of this is equal to calling this function with a \u0027%e\u0027 than \u0027%E\u0027",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 5
+      },
+      "revId": "d2b155acc18c83980a794e0451076e0376b3d4ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88020b4c_48eb2cfc",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-27T10:47:08Z",
+      "side": 1,
+      "message": "suggest: you should look at the \u0027fsentry_printf_format\u0027 function in rbh-find, I think you can take advantage of it here to make things easier",
+      "range": {
+        "startLine": 428,
+        "startChar": 8,
+        "endLine": 437,
+        "endChar": 26
+      },
+      "revId": "d2b155acc18c83980a794e0451076e0376b3d4ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
