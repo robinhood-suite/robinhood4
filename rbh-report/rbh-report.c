@@ -158,6 +158,7 @@ usage(const char *backend)
         "                          provided, show the 'backend''s available\n"
         "                          filters and directives\n"
         "    -v, --verbose         show additionnal information\n"
+        "    --version             print RobinHood 4's version\n"
         "\n"
         "Post URI optional arguments:\n"
         "    --alias NAME          specify an alias for the operation.\n"
@@ -271,6 +272,9 @@ get_command_options(int argc, char *argv[], struct command_context *context)
 
         if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0)
             context->verbose = true;
+
+        if (strcmp(argv[i], "--version") == 0)
+            context->version = true;
     }
 }
 
@@ -283,6 +287,11 @@ apply_command_options(struct command_context *context, int argc, char *argv[])
         else
             usage(NULL);
 
+        exit(0);
+    }
+
+    if (context->version) {
+        rbh_print_version();
         exit(0);
     }
 

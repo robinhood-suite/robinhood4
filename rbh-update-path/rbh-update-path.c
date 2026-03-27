@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -147,6 +147,7 @@ usage(void)
         "Optional arguments:\n"
         "   -c, --config PATH       the configuration file to use.\n"
         "   -h, --help              show this message and exit\n"
+        "    --version              print RobinHood 4's version\n"
         "\n"
         "A robinhood URI is built as follows:\n"
         "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n";
@@ -167,6 +168,11 @@ main(int argc, char *argv[])
             .name = "help",
             .val = 'h',
         },
+        {
+            .name = "version",
+            .has_arg = no_argument,
+            .val = 'z',
+        },
         {}
     };
     int rc;
@@ -176,7 +182,7 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:h", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "c:hz", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
             /* already parsed */
@@ -184,6 +190,9 @@ main(int argc, char *argv[])
         case 'h':
             usage();
             return 0;
+        case 'z':
+            rbh_print_version();
+            return EXIT_SUCCESS;
         case '?':
         default:
             /* getopt_long() prints meaningful error messages itself */

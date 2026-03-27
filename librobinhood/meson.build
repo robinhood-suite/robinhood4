@@ -7,6 +7,8 @@
 # Configuration checks
 conf_data = configuration_data()
 
+conf_data.set('RBH_VERSION', '"' + meson.project_version() + '"')
+
 ## Functions
 have_statx = cc.has_function('statx', args: '-D_GNU_SOURCE',
                              prefix: '#include <sys/stat.h>')

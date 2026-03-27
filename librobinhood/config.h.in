@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
+#mesondefine RBH_VERSION
 #mesondefine HAVE_STATX
 #mesondefine HAVE_STX_MNT_ID
 #mesondefine HAVE_STATX_ATTR_MOUNT_ROOT

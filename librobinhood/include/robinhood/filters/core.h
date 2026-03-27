@@ -68,6 +68,7 @@ struct command_context {
     bool helper;
     bool dry_run;
     bool verbose;
+    bool version;
 };
 
 /**
