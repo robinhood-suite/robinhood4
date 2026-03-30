@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bc9181d_bc660d6a",
+        "filename": "rbh-fsevents/src/sources/lustre/source_reader.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-03-30T11:44:43Z",
+      "side": 1,
+      "message": "nit: `free(records-\u003eusername)` is enough",
+      "range": {
+        "startLine": 856,
+        "startChar": 4,
+        "endLine": 857,
+        "endChar": 32
+      },
+      "revId": "d917672bccf489995feb14aaa0cdd659ea3abaa3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
