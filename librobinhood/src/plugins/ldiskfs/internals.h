@@ -109,4 +109,13 @@ get_fid_from_xattrs(struct rbh_value_map *xattrs, struct lu_fid *fid);
 bool
 get_parent_fid_from_xattrs(struct rbh_value_map *xattrs, struct lu_fid *parent_fid);
 
+/*
+ * returns true if the provided name and parent dentry is matching an entry in
+ * the trusted.links extended attribute.
+ */
+bool
+check_name_from_parent_fid(const char *name, struct rbh_dentry *parent,
+                         struct rbh_value_map *xattrs,
+                         struct rbh_sstack *sstack);
+
 #endif
