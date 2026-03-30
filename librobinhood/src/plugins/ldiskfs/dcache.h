@@ -27,6 +27,14 @@ struct rbh_dentry_xattr {
     size_t value_len;
 };
 
+// We store each parent of a dentry with the corresponding name of the dentry.
+// That allows us to avoid a bug where all hardlinks of the same inode
+// are displayed like they are at the same place.
+struct rbh_parent_pair {
+    const char *name;
+    struct rbh_dentry *parent;
+};
+
 struct rbh_dentry {
     ext2_ino_t ino;
     struct ext2_inode *inode;
@@ -35,6 +43,7 @@ struct rbh_dentry {
     struct rbh_dentry *parent;
     struct lu_fid fid;
     GList *children;
+    GQueue *parents; // rbh_parent_pair queue
     GList *xattrs;
 };
 
