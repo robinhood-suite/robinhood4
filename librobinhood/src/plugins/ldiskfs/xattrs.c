@@ -52,10 +52,12 @@ rbh_get_xattrs(char *_name, char *value,size_t value_len,
     pairs = (struct rbh_value_pair *)xattrs->pairs;
     xattr_pair = &pairs[xattrs->count];
 
-    // The system.data extended attribute stores inline data if it does not fit
-    // in the ext4 inode
-    // Lustre does not store metadata in it so we do not need it
-    // and can skip it safely
+    /*
+     * The system.data extended attribute stores inline data if it does not fit
+     * in the ext4 inode
+     * Lustre does not store metadata in it so we do not need it
+     * and can skip it safely
+     */
     if (!strcmp(_name, "system.data"))
         return 0;
 
@@ -276,8 +278,10 @@ parents_lu_fid_from_link(void *link, struct rbh_sstack *sstack)
             goto err;
 
         parent_fid =(struct lu_fid *)pair->value->binary.data;
-        // data is big endian in the xattr
-        // so we change the value to the right endianness
+        /*
+         * data is big endian in the xattr
+         * so we change the value to the right endianness
+         */
         parent_fid->f_seq = be64toh(parent_fid->f_seq);
         parent_fid->f_oid = be32toh(parent_fid->f_oid);
         parent_fid->f_ver = be32toh(parent_fid->f_ver);
@@ -296,8 +300,11 @@ get_fid_from_xattrs(struct rbh_value_map *xattrs, struct lu_fid *fid)
 {
     for(int i = 0; i < xattrs->count; i++) {
         if (!strcmp(xattrs->pairs[i].key, "trusted.lma")) {
-            // precaution check, shouldn't fail if xattrs were initialized using
-            // get_xattrs_from_inode()
+
+            /*
+             * precaution check, shouldn't fail if xattrs were initialized using
+             * get_xattrs_from_inode()
+             */
             if (xattrs->pairs[i].value->type == RBH_VT_BINARY) {
                 *fid = lu_fid_from_lma((char *)xattrs->pairs[i].value->string);
                 return true;
@@ -315,8 +322,10 @@ get_parent_fid_from_xattrs(struct rbh_value_map *xattrs,
     void *filter_fid;
     for(int i = 0; i < xattrs->count; i++) {
         if (!strcmp(xattrs->pairs[i].key, "trusted.fid")) {
-            // precaution check, souldn't fail if xattrs were initialized using
-            // get_xattrs_from_inode()
+            /*
+             * precaution check, souldn't fail if xattrs were initialized using
+             * get_xattrs_from_inode()
+             */
             if (xattrs->pairs[i].value->type == RBH_VT_BINARY) {
                 filter_fid = (void *)xattrs->pairs[i].value->binary.data;
                 *parent_fid = lu_fid_from_filter_fid(filter_fid);
@@ -325,5 +334,52 @@ get_parent_fid_from_xattrs(struct rbh_value_map *xattrs,
             break;
         }
     }
+    return false;
+}
+
+bool
+fids_are_equal(struct lu_fid *fid1, struct lu_fid *fid2)
+{
+    return (fid1->f_seq == fid2->f_seq &&
+            fid1->f_oid == fid2->f_oid &&
+            fid1->f_ver == fid2->f_ver);
+}
+
+bool
+check_name_from_parent_fid(const char *name, struct rbh_dentry *parent,
+                         struct rbh_value_map *xattrs,
+                         struct rbh_sstack *sstack)
+{
+    struct rbh_value_map links = { 0 };
+    struct lu_fid *curr_fid;
+    const char *curr_name;
+
+    for(int i = 0; i < xattrs->count; i++) {
+        if (!strcmp(xattrs->pairs[i].key, "trusted.link")) {
+            links = parents_lu_fid_from_link((void *)xattrs->pairs[i].value->binary.data, sstack);
+            break;
+        }
+    }
+
+    /*
+     * no trusted.link attribute
+     * this is the case for the ROOT directory, as well as for directories
+     * whose contents are on another mdt
+     */
+    if(links.count == 0)
+        return false;
+
+    for(int i = 0; i < links.count; i++) {
+        curr_fid = (struct lu_fid *)(links.pairs[i].value->binary.data);
+        curr_name = links.pairs[i].key;
+        if (!strcmp(curr_name, name) && fids_are_equal(&parent->fid, curr_fid)) {
+            return true;
+        }
+    }
+
+    /*
+     * no corresponding parent in trusted.link extended attribute
+     * happens for files located in REMOTE_PARENT_DIR directory
+     */
     return false;
 }
