@@ -322,3 +322,48 @@ get_parent_fid_from_xattrs(struct rbh_value_map *xattrs,struct lu_fid *parent_fi
     }
     return false;
 }
+
+bool
+compare_fids(struct lu_fid *fid1, struct lu_fid *fid2)
+{
+    return (fid1->f_seq == fid2->f_seq &&
+            fid1->f_oid == fid2->f_oid &&
+            fid1->f_ver == fid2->f_ver);
+}
+
+bool
+check_name_from_parent_fid(const char *name, struct rbh_dentry *parent,
+                         struct rbh_value_map *xattrs,
+                         struct rbh_sstack *sstack)
+{
+    struct rbh_value_map links;
+    struct lu_fid *curr_fid;
+    const char *curr_name;
+    bool link_set = false;
+
+    for(int i = 0; i < xattrs->count; i++) {
+        if (!strcmp(xattrs->pairs[i].key, "trusted.link")) {
+            links = parents_lu_fid_from_link((void *)xattrs->pairs[i].value->binary.data, sstack);
+            link_set = true;
+            break;
+        }
+    }
+
+    // no trusted.link attribute
+    // this is the case for the ROOT directory, as well as for directories
+    // whose contents are on another mdt
+    if(!link_set)
+        return false;
+
+    for(int i = 0; i < links.count; i++) {
+        curr_fid = (struct lu_fid *)(links.pairs[i].value->binary.data);
+        curr_name = links.pairs[i].key;
+        if (!strcmp(curr_name, name) && compare_fids(&parent->fid, curr_fid)) {
+            return true;
+        }
+    }
+
+    // no corresponding parent in trusted.link extended attribute
+    // happens for files located in REMOTE_PARENT_DIR directory
+    return false;
+}
