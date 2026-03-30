@@ -92,6 +92,18 @@ const struct lu_fid
 lu_fid_from_filter_fid(void *fid);
 
 /*
+ * Obtain the fid of the parents of a file from the value of the trusted.link
+ * extended attribute.
+ *
+ * The value is returned as a rbh_value_map that contains the names of all links
+ * refering to a file and the fid of the parents of each of these links.
+ *
+ * The attribute is passed as a pointer to its binary data.
+ */
+const struct rbh_value_map
+parents_lu_fid_from_link(void *link, struct rbh_sstack *sstack);
+
+/*
  * Obtain the fid of a file from the extended attributes.
  *
  * Extended attributes are passed as a rbh_value_map as returned by
@@ -105,5 +117,14 @@ get_fid_from_xattrs(struct rbh_value_map *xattrs, struct lu_fid *fid);
 
 bool
 get_parent_fid_from_xattrs(struct rbh_value_map *xattrs, struct lu_fid *parent_fid);
+
+/*
+ * returns true if the provided name and parent dentry is matching an entry in
+ * the trusted.links extended attribute.
+ */
+bool
+check_name_from_parent_fid(const char *name, struct rbh_dentry *parent,
+                           struct rbh_value_map *xattrs,
+                           struct rbh_sstack *sstack);
 
 #endif

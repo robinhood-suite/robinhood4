@@ -135,6 +135,7 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
     struct rbh_value_map inode_xattrs = get_xattrs_from_inode(fs, inode, dentry->ino,
                                                               sstack);
     struct rbh_value_map ns_xattrs = {0};
+    struct rbh_parent_pair *parent_pair;
     const struct rbh_id *parent_id;
     struct rbh_value path_value = {
         .type = RBH_VT_STRING,
@@ -166,6 +167,10 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
     parent_id = dentry->parent ?
         rbh_id_from_lu_fid(&dentry->parent->fid) :
         &ROOT_ID;
+
+    parent_pair = g_queue_pop_head(dentry->parents);
+    dentry->parent = parent_pair->parent;
+    dentry->name = parent_pair->name;
 
     statx.stx_mask = RBH_STATX_ATIME_SEC | RBH_STATX_CTIME_SEC |
         RBH_STATX_MTIME_SEC | RBH_STATX_INO | RBH_STATX_BLOCKS |
@@ -200,8 +205,12 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
 
     fsentry = rbh_fsentry_new(id, parent_id, dentry->name,  &statx, &ns_xattrs,
                               &inode_xattrs, NULL);
+
     save_errno = errno;
+    if (g_queue_is_empty(dentry->parents))
+        g_queue_free(dentry->parents);
     free((char *)path_value.string);
+    free(parent_pair);
     errno = save_errno;
 
     return fsentry;
@@ -232,6 +241,8 @@ static void
 ldiskfs_iter_destroy(void *iterator)
 {
     struct ldiskfs_iter *iter = iterator;
+
+    g_queue_free(iter->tasks);
 
     rbh_sstack_destroy(iter->sstack);
 

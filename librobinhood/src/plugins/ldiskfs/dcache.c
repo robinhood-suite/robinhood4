@@ -17,6 +17,7 @@ rbh_dentry_new(ext2_ino_t ino)
 
     dentry = xcalloc(sizeof(*dentry), 1);
     dentry->ino = ino;
+    dentry->parents = g_queue_new();
     return dentry;
 }
 
