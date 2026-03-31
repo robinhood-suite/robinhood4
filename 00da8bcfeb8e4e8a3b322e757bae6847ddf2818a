@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e744189b_0b2b2892",
+        "filename": "rbh-policy/tests/test_actions.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-03-31T14:42:31Z",
+      "side": 1,
+      "message": "comment: not sure this is the right fix, maybe investigating which test sets this up, and ensure it cleans it at its end",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 39
+      },
+      "revId": "00da8bcfeb8e4e8a3b322e757bae6847ddf2818a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
