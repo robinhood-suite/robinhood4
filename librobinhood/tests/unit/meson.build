@@ -70,7 +70,7 @@ bash = find_program('bash', disabler: true, required: false)
 if test_mfu
     backend_path_env.prepend('CK_FORK', 'no')
     backend_path_env.prepend('RBH_CONFIG_PATH',
-        meson.current_source_dir() + '../../../utils/tests/test_config.yaml')
+        meson.current_source_dir() + '/../../../utils/tests/test_config.yaml')
     builddir = meson.current_build_dir()
 
     foreach t: ['check_mfu']
