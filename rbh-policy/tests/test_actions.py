@@ -12,6 +12,8 @@ import tempfile
 import shutil
 import subprocess
 
+os.environ.pop("RBH_CONFIG_PATH", None)
+
 build_lib_path = os.environ.get("BUILD_LIB_PATH")
 if not build_lib_path:
     raise RuntimeError("[FATAL] BUILD_LIB_PATH not found in the environment")
