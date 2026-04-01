@@ -8,6 +8,7 @@ librbh_posix_sparse_ext = library(
     'rbh-posix-sparse-ext',
     sources: [
         'plugin.c',
+        'sparse.c',
     ],
     version: librbh_sparse_version, # defined in include/robinhood/backends
     link_with: librobinhood,

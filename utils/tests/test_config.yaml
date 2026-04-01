@@ -27,6 +27,11 @@ backends:
         extends: posix
         enrichers:
             - sparse
+    sparse-mpi:
+        extends: posix
+        iterator: mfu
+        enrichers:
+            - sparse
 
 s3:
     address: 127.0.0.1:9000

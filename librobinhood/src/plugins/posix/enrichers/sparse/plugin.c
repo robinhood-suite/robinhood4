@@ -6,6 +6,7 @@
  */
 
 #include "backends/posix.h"
+#include "sparse_internals.h"
 #include "robinhood/backends/sparse.h"
 #include "robinhood/backends/posix_extension.h"
 #include "robinhood/plugins/backend.h"
@@ -19,4 +20,6 @@ const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, SPARSE) = {
         .max_version = RBH_POSIX_BACKEND_VERSION,
         .common_ops  = NULL,
     },
+    .enrich         = rbh_sparse_enrich,
+    .setup_enricher = rbh_sparse_setup,
 };
