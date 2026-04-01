@@ -6,6 +6,7 @@
 
 subdir('posix')
 subdir('retention')
+subdir('sparse')
 subdir('mongo')
 
 if test_mfu
