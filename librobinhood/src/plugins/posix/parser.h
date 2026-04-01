@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -47,6 +47,7 @@ enum predicate {
     PRED_REGEX,
     PRED_SAMEFILE,
     PRED_SIZE,
+    PRED_SPARSE,
     PRED_TRUE,
     PRED_TYPE,
     PRED_UID,

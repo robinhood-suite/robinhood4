@@ -42,6 +42,7 @@ static const struct rbh_filter_field predicate2filter_field[] = {
     [PRED_PATH]     = {.fsentry = RBH_FP_NAMESPACE_XATTRS, .xattr = "path"},
     [PRED_PERM]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MODE},
     [PRED_SIZE]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_SIZE},
+    [PRED_SPARSE]   = {.fsentry = RBH_FP_INODE_XATTRS, .xattr = "sparseness"},
     [PRED_TYPE]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_TYPE},
     [PRED_UID]      = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_UID},
     [PRED_USER]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_UID},
@@ -844,6 +845,22 @@ xtime2filter(enum predicate predicate, const char *days)
     return timedelta2filter(predicate, TU_DAY, days);
 }
 
+static struct rbh_filter *
+sparse2filter()
+{
+    struct rbh_filter *filter = NULL;
+
+    filter = rbh_filter_compare_uint32_new(RBH_FOP_STRICTLY_LOWER,
+                                           &predicate2filter_field[PRED_SPARSE],
+                                           100);
+
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "sparse2filter");
+
+    return filter;
+}
+
 static bool
 predicate_needs_argument(enum predicate predicate)
 {
@@ -851,6 +868,7 @@ predicate_needs_argument(enum predicate predicate)
     case PRED_EMPTY:
     case PRED_NOGROUP:
     case PRED_NOUSER:
+    case PRED_SPARSE:
         return false;
     default:
         return true;
@@ -952,6 +970,9 @@ rbh_posix_build_filter(const char **argv, int argc, int *index,
         break;
     case PRED_SIZE:
         filter = filesize2filter(argv[++i]);
+        break;
+    case PRED_SPARSE:
+        filter = sparse2filter();
         break;
     case PRED_TYPE:
         filter = rbh_filetype2filter(argv[++i]);
