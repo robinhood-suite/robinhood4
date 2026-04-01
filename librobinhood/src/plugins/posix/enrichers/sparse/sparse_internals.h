@@ -31,4 +31,16 @@ rbh_sparse_enrich(struct entry_info *einfo, uint64_t flags,
                   struct rbh_value_pair *pairs, size_t pairs_count,
                   struct rbh_sstack *values);
 
+/**
+ * The following functions are implementations of the different callbacks of the
+ * `rbh_pe_common_operations` structure. Their documentation is the same as the
+ * one given for the structure's callbacks.
+ */
+enum rbh_parser_token
+rbh_sparse_check_valid_token(const char *token);
+
+struct rbh_filter *
+rbh_sparse_build_filter(const char **argv, int argc, int *index,
+                        bool *need_prefetch);
+
 #endif

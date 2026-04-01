@@ -234,6 +234,10 @@ rbh_posix_check_valid_token(const char *token)
             if (strcmp(&token[3], "ze") == 0)
                 return RBH_TOKEN_PREDICATE;
             break;
+        case 'p':
+            if (strcmp(&token[3], "arse") == 0)
+                return RBH_TOKEN_PREDICATE;
+            break;
         }
         break;
     case 't':
@@ -518,6 +522,10 @@ str2predicate(const char *string)
             if (strcmp(&string[3], "ze") == 0)
                 return PRED_SIZE;
             break;
+        case 'p':
+            if (strcmp(&string[3], "arse") == 0)
+                return PRED_SPARSE;
+            break;
         }
         break;
     case 't':
@@ -622,6 +630,7 @@ static const char *__predicate2str[] = {
     [PRED_REGEX]        = "regex",
     [PRED_SAMEFILE]     = "samefile",
     [PRED_SIZE]         = "size",
+    [PRED_SPARSE]       = "sparse",
     [PRED_TRUE]         = "true",
     [PRED_TYPE]         = "type",
     [PRED_UID]          = "uid",
