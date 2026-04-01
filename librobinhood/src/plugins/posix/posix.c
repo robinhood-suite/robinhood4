@@ -300,6 +300,26 @@ free_ns_data(void)
         rbh_sstack_destroy(xattrs);
 }
 
+int
+set_sparseness_xattr(struct rbh_statx *statx, struct rbh_value_pair *pairs,
+                     struct rbh_sstack *values)
+{
+    int sparseness;
+
+    if (!S_ISREG(statx->stx_mode))
+        return 0;
+
+    if (statx->stx_size)
+        sparseness = (512.0 * statx->stx_blocks / statx->stx_size) * 100;
+    else
+        sparseness = 100;
+
+    if (fill_uint32_pair("sparseness", sparseness, &pairs[0], values))
+        return -1;
+
+    return 1;
+}
+
 void
 build_pair_nb_children(struct rbh_value_pair *pair, int nb_children,
                        int64_t timestamp, bool final,
@@ -381,6 +401,7 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
     struct rbh_id *id;
     ssize_t count = 0;
     int save_errno;
+    int sub_count;
     int fd;
 
     if (pairs == NULL)
@@ -499,6 +520,23 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
 
     ns_xattrs.count = 2;
     ns_xattrs.pairs = ns_pairs;
+
+    sub_count = set_sparseness_xattr(&statxbuf, &pairs[count], values);
+    if (sub_count == -1) {
+        if (errno != ENOMEM) {
+            fprintf(stderr,
+                    "Failed to get sparseness xattrs of '%s': %s (%d)\n",
+                    path->string, strerror(errno), errno);
+            /* Set errno to ESTALE to not stop the iterator for a single
+             * failed entry.
+             */
+            errno = ESTALE;
+        }
+        save_errno = errno;
+        goto out_clear_sstacks;
+    }
+
+    count += sub_count;
 
     if (enrichers != NULL) {
         struct entry_info info = {

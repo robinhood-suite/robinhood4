@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -586,6 +586,37 @@ test_nb_children_two_sync()
         '"xattrs.nb_children.value": 0'
 }
 
+test_sparseness()
+{
+    local file0="non_sparse"
+    local file1="sparse"
+    local file2="empty"
+
+    touch $file0 $file1 $file2
+    bs0=$(stat -c "%o" "$file0")
+    bs1=$(stat -c "%o" "$file1")
+
+    dd oflag=direct conv=notrunc if=/dev/urandom of="$file0" \
+        bs=$bs0 count=4
+
+    dd oflag=direct conv=notrunc if=/dev/urandom of="$file1" \
+        bs=$bs1 count=1
+    dd oflag=direct conv=notrunc if=/dev/urandom of="$file1" \
+        bs=$bs1 count=1 seek=2
+
+    rbh_sync_posix "." "rbh:$db:$testdb"
+
+    local sparse1=$(bc <<< "$(find . -name "$file1" -printf "%S") * 100")
+    sparse1="${sparse1%.*}"
+
+    find_attribute "\"ns.xattrs.path\": \"/$file0\"" \
+        "\"xattrs.sparseness\": 100"
+    find_attribute "\"ns.xattrs.path\": \"/$file1\"" \
+        "\"xattrs.sparseness\": $sparse1"
+    find_attribute "\"ns.xattrs.path\": \"/$file2\"" \
+        "\"xattrs.sparseness\": 100"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -596,7 +627,7 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_symbolic_link test_sync_socket test_sync_fifo
                   test_sync_branch test_continue_sync_on_error
                   test_stop_sync_on_error test_config test_sync_number_children
-                  test_nb_children_two_sync)
+                  test_nb_children_two_sync test_sparseness)
 
 if [[ $WITH_MPI == true ]]; then
     tests+=(test_sync_large_path test_sync_dir_delete_while_mfu_walk)
