@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c845f53d_41ea8c3b",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-01T15:26:56Z",
+      "side": 1,
+      "message": "suggest: sorry but a little more explanation would be nice. If we have to update this code in the future, I would prefer not having to wonder what this condition refers to",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 77
+      },
+      "revId": "79671a82a2fe26f1d8992ffb86131888b35858b7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
