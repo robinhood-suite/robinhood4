@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f88de5e9_ddb11739",
+        "filename": "rbh-policy/tests/lustre/test_actions_lustre.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-01T10:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b794c77_c51fb3c2",
+      "range": {
+        "startLine": 62,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 66
+      },
+      "revId": "dd2652ac9b11d7edb4588d9d13a6f98735c351f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "094f473d_559c01a9",
@@ -60,6 +84,30 @@
       "writtenOn": "2026-03-31T08:35:01Z",
       "side": 1,
       "message": "defect: You need to check that Lustre is available before launching the test. You can check rbh-sync or rbh-find",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 1
+      },
+      "revId": "dd2652ac9b11d7edb4588d9d13a6f98735c351f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "febe314b_73214520",
+        "filename": "rbh-policy/tests/meson.build",
+        "patchSetId": 17
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-01T10:47:40Z",
+      "side": 1,
+      "message": "I already check this in test_actions_lustre.py before running the test in the setUpClass method",
+      "parentUuid": "3d4a60b8_8a73b31c",
       "range": {
         "startLine": 33,
         "startChar": 0,
