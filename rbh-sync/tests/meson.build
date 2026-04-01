@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
 subdir('posix')
+subdir('sparse')
 subdir('db')
 
 if test_lustre
