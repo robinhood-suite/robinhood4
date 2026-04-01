@@ -414,6 +414,16 @@ rbh_posix_fill_entry_info(char *output, int max_length,
                                            backend));
     case 's':
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_size);
+    case 'S': {
+        const struct rbh_value *value = rbh_fsentry_find_inode_xattr(
+            fsentry, "sparseness"
+        );
+
+        if (!value)
+            return 0;
+
+        return snprintf(output, max_length, "%.2f", value->uint32 / 100.0);
+    }
     case 't':
         return snprintf(output, max_length, "%s",
                         time_from_timestamp(&fsentry->statx->stx_mtime.tv_sec)
@@ -496,6 +506,9 @@ rbh_posix_fill_projection(struct rbh_filter_projection *projection,
         break;
     case 's':
         rbh_projection_add(projection, str2filter_field("statx.size"));
+        break;
+    case 'S': // Sparseness
+        rbh_projection_add(projection, str2filter_field("xattrs"));
         break;
     case 't':
     case 'T':
