@@ -7,6 +7,7 @@
 librbh_posix_sparse_ext = library(
     'rbh-posix-sparse-ext',
     sources: [
+        'action.c',
         'filter.c',
         'parser.c',
         'plugin.c',

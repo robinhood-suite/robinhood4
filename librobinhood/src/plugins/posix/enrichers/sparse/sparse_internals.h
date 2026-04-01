@@ -43,4 +43,13 @@ struct rbh_filter *
 rbh_sparse_build_filter(const char **argv, int argc, int *index,
                         bool *need_prefetch);
 
+int
+rbh_sparse_fill_entry_info(char *output, int max_length,
+                           const struct rbh_fsentry *fsentry,
+                           const char *directive, const char *backend);
+
+int
+rbh_sparse_fill_projection(struct rbh_filter_projection *projection,
+                           const char *directive);
+
 #endif
