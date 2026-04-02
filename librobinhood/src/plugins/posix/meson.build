@@ -38,3 +38,4 @@ if build_lustre
 endif
 
 subdir('enrichers/retention')
+subdir('enrichers/sparse')

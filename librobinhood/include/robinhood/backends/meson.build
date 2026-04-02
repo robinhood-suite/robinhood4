@@ -1,5 +1,5 @@
 # This file is part of RobinHood
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -159,6 +159,24 @@ librbh_retention_h = configure_file(input: 'retention.h.in',
 
 install_headers(librbh_retention_h, subdir: 'robinhood/backends')
 
+
+librbh_sparse_conf = configuration_data()
+
+librbh_sparse_conf.set('RBH_SPARSE_PLUGIN_MAJOR', 0)
+librbh_sparse_conf.set('RBH_SPARSE_PLUGIN_MINOR', 0)
+librbh_sparse_conf.set('RBH_SPARSE_PLUGIN_RELEASE', 0)
+
+librbh_sparse_version = '@0@.@1@.@2@'.format(
+    librbh_sparse_conf.get('RBH_SPARSE_PLUGIN_MAJOR'),
+    librbh_sparse_conf.get('RBH_SPARSE_PLUGIN_MINOR'),
+    librbh_sparse_conf.get('RBH_SPARSE_PLUGIN_RELEASE')
+)
+
+librbh_sparse_h = configure_file(input: 'sparse.h.in',
+                                 output: 'sparse.h',
+                                 configuration: librbh_sparse_conf)
+
+install_headers(librbh_sparse_h, subdir: 'robinhood/backends')
 
 
 # S3 MPI extension plugin
