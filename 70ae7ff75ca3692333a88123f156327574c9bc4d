@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8f95bc1_e2277d89",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-02T09:10:26Z",
+      "side": 1,
+      "message": "question: Since you added \"action.delete\", shouldn\u0027t be \"action.delete\" here ?",
+      "range": {
+        "startLine": 61,
+        "startChar": 25,
+        "endLine": 61,
+        "endChar": 33
+      },
+      "revId": "70ae7ff75ca3692333a88123f156327574c9bc4d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

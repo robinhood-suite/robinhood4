@@ -49,6 +49,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a1948260_7ebf2224",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-02T09:10:26Z",
+      "side": 1,
+      "message": "question: I\u0027m wondering whether this function is really necessary. As I understand it, its only purpose is to retrieve either common_ops or the one associated with a specific plugin/extension, and then perform the operation. But it seems we could simply do what we already do in rbh-find: iterate over all common_ops, ignore ENOTSUP, and continue until we find a plugin or extension that implements the operation. For the case where you want to target a specific plugin/extension, you could just add an extra condition.\n\nI am asking this because this function seems fairly complex for something that appears to achieve essentially the same result as what we already do in rbh-find in six lines.",
+      "revId": "90c89cb0b633815dfa97f9b4eda7ba41361cac4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2f5f0af_2d9a59e2",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-02T09:10:26Z",
+      "side": 1,
+      "message": "major: I thought we had also agreed to remove the available_action flag in the plugin/extension, along with apply_action.",
+      "range": {
+        "startLine": 294,
+        "startChar": 32,
+        "endLine": 294,
+        "endChar": 59
+      },
+      "revId": "90c89cb0b633815dfa97f9b4eda7ba41361cac4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6e262d7e_1535402e",
         "filename": "librobinhood/src/policyengine/actions.c",
         "patchSetId": 17
@@ -65,6 +105,29 @@
         "startChar": 8,
         "endLine": 322,
         "endChar": 15
+      },
+      "revId": "90c89cb0b633815dfa97f9b4eda7ba41361cac4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "360e2877_eaac2892",
+        "filename": "rbh-policy/rbhpolicy/config/core_actions.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-02T09:10:26Z",
+      "side": 1,
+      "message": "question: Why add this extra _? ExtActions already exists.",
+      "range": {
+        "startLine": 13,
+        "startChar": 6,
+        "endLine": 13,
+        "endChar": 7
       },
       "revId": "90c89cb0b633815dfa97f9b4eda7ba41361cac4b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
