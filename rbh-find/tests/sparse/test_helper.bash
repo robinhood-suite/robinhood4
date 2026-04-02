@@ -15,14 +15,14 @@ test_dir=$(dirname $(readlink -e $0))
 
 test_helper()
 {
-    rbh_find --help retention ||
-        error "Find's helper with retention extension should have succeeded"
+    rbh_find --help sparse ||
+        error "Find's helper with sparse extension should have succeeded"
 
-    rbh_find --help retention | grep "Retention" ||
-        error "Find's helper with retention extension should have shown retention predicates"
+    rbh_find --help sparse | grep "Sparse" ||
+        error "Find's helper with sparse extension should have shown sparse predicates"
 
-    rbh_find --help retention | grep "POSIX" ||
-        error "Find's helper with retention extension should have shown POSIX predicates"
+    rbh_find --help sparse | grep "POSIX" ||
+        error "Find's helper with sparse extension should have shown POSIX predicates"
 }
 
 ################################################################################

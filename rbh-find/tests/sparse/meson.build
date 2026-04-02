@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
 integration_tests = [
+    'test_helper',
     'test_printf',
     'test_sparse',
 ]

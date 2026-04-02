@@ -55,3 +55,30 @@ rbh_sparse_setup(void)
     // probably to init config
     return 0;
 }
+
+void
+rbh_sparse_helper(__attribute__((unused)) const char *backend,
+                  __attribute__((unused)) struct rbh_config *config,
+                  char **predicate_helper, char **directive_helper)
+{
+    int rc;
+
+    rc = asprintf(predicate_helper,
+        " - Sparse:\n"
+        "   -sparse              filter entries based on if they are sparse.\n"
+        "                        A file is considered sparse if\n"
+        "                        512 * statx->st_blocks / statx->st_size < 1.\n"
+        "                        Empty files are considered non-sparse.\n");
+
+    if (rc == -1)
+        *predicate_helper = NULL;
+
+    rc = asprintf(directive_helper,
+        " - Sparse:\n"
+        "   %%S         File's sparseness. Printed as 512 * st_blocks / st_size.\n"
+        "               A file is considered sparse if the result is less than 1.\n"
+        "               Empty files are considered non-sparse.\n");
+
+    if (rc == -1)
+        *directive_helper = NULL;
+}

@@ -36,6 +36,11 @@ rbh_sparse_enrich(struct entry_info *einfo, uint64_t flags,
  * `rbh_pe_common_operations` structure. Their documentation is the same as the
  * one given for the structure's callbacks.
  */
+void
+rbh_sparse_helper(__attribute__((unused)) const char *backend,
+                  __attribute__((unused)) struct rbh_config *config,
+                  char **predicate_helper, char **directive_helper);
+
 enum rbh_parser_token
 rbh_sparse_check_valid_token(const char *token);
 
