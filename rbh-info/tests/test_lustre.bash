@@ -20,7 +20,7 @@ test_lustre_source()
     local output=$(rbh_info "rbh:$db:$testdb" -b)
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 3)); then
+    if ((n_lines != 4)); then
         error "Three backends should have been registered"
     fi
 
@@ -32,6 +32,9 @@ test_lustre_source()
 
     echo "$output" | grep "retention" ||
         error "The retention extension should have been registered"
+
+    echo "$output" | grep "sparse" ||
+        error "The sparse extension should have been registered"
 }
 
 test_command_backend()

@@ -1,5 +1,5 @@
 # This file is part of RobinHood
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -24,6 +24,7 @@ library_dirs = [
     'posix',
     'posix/enrichers/lustre',
     'posix/enrichers/retention',
+    'posix/enrichers/sparse',
     'posix/iterators/mfu',
     's3',
     'sqlite',
