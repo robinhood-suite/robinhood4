@@ -7,6 +7,7 @@ backends:
         enrichers:
             - retention
             - lustre
+            - sparse
     posix-mpi:
         extends: posix
         iterator: mfu
@@ -22,6 +23,10 @@ backends:
         extends: posix
         enrichers:
             - retention
+    sparse:
+        extends: posix
+        enrichers:
+            - sparse
 
 s3:
     address: 127.0.0.1:9000

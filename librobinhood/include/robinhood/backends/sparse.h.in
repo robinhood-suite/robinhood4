@@ -1,0 +1,34 @@
+/* This file is part of RobinHood
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifier: LGPL-3.0-or-later
+ */
+
+#ifndef ROBINHOOD_SPARSE_POSIX_H
+#define ROBINHOOD_SPARSE_POSIX_H
+
+#include "robinhood/backend.h"
+
+#define RBH_SPARSE_PLUGIN_NAME "sparse"
+
+#mesondefine RBH_SPARSE_PLUGIN_MAJOR
+#mesondefine RBH_SPARSE_PLUGIN_MINOR
+#mesondefine RBH_SPARSE_PLUGIN_RELEASE
+#define RBH_SPARSE_PLUGIN_VERSION RPV(RBH_SPARSE_PLUGIN_MAJOR, \
+                                      RBH_SPARSE_PLUGIN_MINOR, \
+                                      RBH_SPARSE_PLUGIN_RELEASE)
+
+#define RBH_SPARSE_ATTR_FLAG(bits) RBH_ATTR_BACKEND_VALUE(SPARSE, bits)
+
+static inline bool rbh_attr_is_sparse(uint64_t flags)
+{
+    return flags == 0 || RBH_ATTR_BACKEND(flags) == RBH_BI_SPARSE;
+}
+
+enum rbh_sparse_enrich_flag {
+    RBH_SEF_ALL        = 0x1,
+    RBH_SEF_SPARSE     = RBH_ATTR_BACKEND_VALUE(SPARSE),
+};
+
+#endif
