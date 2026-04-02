@@ -22,6 +22,30 @@
       },
       "revId": "79671a82a2fe26f1d8992ffb86131888b35858b7",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd8884b3_0876a051",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-02T13:52:55Z",
+      "side": 1,
+      "message": "Done.\nThis check was added following [this comment](https://review.gerrithub.io/c/robinhood-suite/robinhood4/+/1233209/comment/281f999f_cdc1e29e/).",
+      "parentUuid": "c845f53d_41ea8c3b",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 77
+      },
+      "revId": "79671a82a2fe26f1d8992ffb86131888b35858b7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
