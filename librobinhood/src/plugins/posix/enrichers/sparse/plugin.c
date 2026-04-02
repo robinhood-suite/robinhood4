@@ -12,6 +12,7 @@
 #include "robinhood/plugins/backend.h"
 
 static const struct rbh_pe_common_operations SPARSE_EXTENSION_COMMON_OPS = {
+    .helper = rbh_sparse_helper,
     .check_valid_token = rbh_sparse_check_valid_token,
     .build_filter = rbh_sparse_build_filter,
     .fill_entry_info = rbh_sparse_fill_entry_info,
