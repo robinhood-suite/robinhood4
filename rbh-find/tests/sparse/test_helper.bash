@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -15,14 +15,14 @@ test_dir=$(dirname $(readlink -e $0))
 
 test_helper()
 {
-    rbh_find --help retention ||
-        error "Find's helper with retention extension should have succeeded"
+    rbh_find --help sparse ||
+        error "Find's helper with sparse extension should have succeeded"
 
-    rbh_find --help retention | grep "Retention" ||
-        error "Find's helper with retention extension should have shown retention predicates"
+    rbh_find --help sparse | grep "Sparse" ||
+        error "Find's helper with sparse extension should have shown sparse predicates"
 
-    rbh_find --help retention | grep "POSIX" ||
-        error "Find's helper with retention extension should have shown POSIX predicates"
+    rbh_find --help sparse | grep "POSIX" ||
+        error "Find's helper with sparse extension should have shown POSIX predicates"
 }
 
 ################################################################################
