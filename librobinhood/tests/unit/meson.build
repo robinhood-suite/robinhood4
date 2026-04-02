@@ -1,5 +1,5 @@
 # This file is part of RobinHood
-# Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -45,6 +45,21 @@ foreach t: ['check_retention']
                         librobinhood,
                         librbh_posix,
                         librbh_posix_retention_ext
+                    ],
+                    include_directories: rbh_include,
+                    c_args: '-DHAVE_CONFIG_H'),
+         env: backend_path_env,
+         suite: 'librobinhood')
+endforeach
+
+foreach t: ['check_sparse']
+    test(t,
+         executable(t, t + '.c',
+                    dependencies: [check],
+                    link_with: [
+                        librobinhood,
+                        librbh_posix,
+                        librbh_posix_sparse_ext
                     ],
                     include_directories: rbh_include,
                     c_args: '-DHAVE_CONFIG_H'),
