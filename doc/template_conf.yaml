@@ -48,6 +48,7 @@ backends:
         enrichers:
             - retention
             - lustre
+            - sparse
     posix-mpi:
         extends: posix
         iterator: mfu
@@ -63,6 +64,10 @@ backends:
         extends: posix
         enrichers:
             - retention
+    sparse:
+        extends: posix
+        enrichers:
+            - sparse
 
 # Map containing aliases to define a list of pre-filled parameters that will
 # be put as-is if requested in the tools implementing aliases.
