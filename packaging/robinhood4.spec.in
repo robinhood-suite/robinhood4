@@ -153,6 +153,7 @@ OPTS=""
 %{_libdir}/librbh-mongo.so*
 %{_libdir}/librbh-posix.so*
 %{_libdir}/librbh-posix-retention-ext.so*
+%{_libdir}/librbh-posix-sparse-ext.so*
 %if %{with lustre}
 %{_libdir}/librbh-posix-lustre-ext.so*
 %endif
@@ -203,6 +204,7 @@ OPTS=""
 %{_includedir}/robinhood/backends/posix.h
 %{_includedir}/robinhood/backends/posix_extension.h
 %{_includedir}/robinhood/backends/retention.h
+%{_includedir}/robinhood/backends/sparse.h
 %{_includedir}/robinhood/config.h
 %{_includedir}/robinhood/filter.h
 %{_includedir}/robinhood/filters/core.h
