@@ -116,6 +116,30 @@
       },
       "revId": "dd2652ac9b11d7edb4588d9d13a6f98735c351f0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ebf7380_caeedfc1",
+        "filename": "rbh-policy/tests/meson.build",
+        "patchSetId": 17
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-02T08:43:56Z",
+      "side": 1,
+      "message": "In all rbh4, we are not launching the Lustre tests if we compile without Lustre. I really prefer that you do the check in the meson.build",
+      "parentUuid": "febe314b_73214520",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 1
+      },
+      "revId": "dd2652ac9b11d7edb4588d9d13a6f98735c351f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
