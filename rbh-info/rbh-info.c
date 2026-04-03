@@ -66,6 +66,7 @@ help()
         "    -h, --help            Show this message and exit\n"
         "\n"
         "Post URI optional arguments:\n"
+        "    --all                  Show all available information\n"
         "    -a, --avg-obj-size     Show the average size of objects inside\n"
         "                           a given backend\n"
         "    -b, --backend-source   Show the backend used as source for past\n"
@@ -122,6 +123,10 @@ int
 main(int _argc, char **_argv)
 {
     const struct option LONG_OPTIONS[] = {
+        {
+            .name = "all",
+            .val = 'Z',
+        },
         {
             .name = "avg-obj-size",
             .val = 'a',
@@ -212,6 +217,9 @@ main(int _argc, char **_argv)
             break;
         case 'y':
             flags |= RBH_INFO_LAST_SYNC;
+            break;
+        case 'Z':
+            flags |= RBH_INFO_ALL;
             break;
         default :
             fprintf(stderr, "Unrecognized option\n");
