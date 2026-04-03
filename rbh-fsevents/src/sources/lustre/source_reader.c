@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -521,7 +521,8 @@ build_rename_events(struct changelog_rec *record, struct rbh_id *id,
 static int
 build_hsm_events(struct rbh_id *id, struct rbh_iterator **fsevents_iterator)
 {
-    uint32_t statx_enrich_mask = RBH_STATX_BLOCKS;
+    uint32_t statx_enrich_mask = RBH_STATX_BLOCKS | RBH_STATX_SIZE |
+                                 RBH_STATX_TYPE;
     struct rbh_fsevent *new_events;
 
     new_events = fsevent_list_alloc(4, id);
@@ -595,7 +596,8 @@ build_flrw_events(struct rbh_id *id, struct rbh_iterator **fsevents_iterator)
 {
     uint32_t statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC |
                                  RBH_STATX_MTIME_SEC | RBH_STATX_MTIME_NSEC |
-                                 RBH_STATX_BLOCKS | RBH_STATX_SIZE;
+                                 RBH_STATX_BLOCKS | RBH_STATX_SIZE |
+                                 RBH_STATX_TYPE;
     struct rbh_fsevent *new_events;
 
     new_events = fsevent_list_alloc(2, id);
@@ -625,7 +627,8 @@ static int
 build_resync_events(struct rbh_id *id, struct rbh_iterator **fsevents_iterator)
 {
     uint32_t statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC |
-                                 RBH_STATX_BLOCKS;
+                                 RBH_STATX_BLOCKS | RBH_STATX_SIZE |
+                                 RBH_STATX_TYPE;
     struct rbh_fsevent *new_events;
 
     new_events = fsevent_list_alloc(2, id);
@@ -767,7 +770,7 @@ retry:
     case CL_CLOSE:
     case CL_MTIME:
         statx_enrich_mask |= RBH_STATX_MTIME_SEC | RBH_STATX_MTIME_NSEC |
-                             RBH_STATX_SIZE | RBH_STATX_BLOCKS;
+                             RBH_STATX_SIZE | RBH_STATX_BLOCKS | RBH_STATX_TYPE;
         /* fall through */
     case CL_CTIME:
         statx_enrich_mask |= RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC;
@@ -801,7 +804,7 @@ retry:
     case CL_TRUNC:
         statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC |
                             RBH_STATX_MTIME_SEC | RBH_STATX_MTIME_NSEC |
-                            RBH_STATX_SIZE;
+                            RBH_STATX_SIZE | RBH_STATX_BLOCKS | RBH_STATX_TYPE;
         rc = build_statx_update_event(statx_enrich_mask, id,
                                       &records->fsevents_iterator);
         break;
