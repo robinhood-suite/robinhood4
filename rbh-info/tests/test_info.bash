@@ -54,7 +54,7 @@ test_collection_size()
     local db_size=$(do_db size "$testdb")
     local formated_db_size=$(format_size "$db_size")
 
-    if [ "$rbh_info_size" != "$formated_db_size" ]; then
+    if [[ ! "$rbh_info_size" == *"$formated_db_size"* ]]; then
         error "sizes are not matching. Expected $formated_db_size, got $rbh_info_size"
     fi
 }
@@ -66,7 +66,7 @@ test_collection_count()
     local rbh_info_count=$(rbh_info "rbh:$db:$testdb" -c)
     local db_count=$(do_db count "$testdb")
 
-    if [ "$rbh_info_count" != "$db_count" ]; then
+    if [[ ! "$rbh_info_count" == *"$db_count"* ]]; then
         error "count are not matching"
     fi
 }
@@ -81,7 +81,7 @@ test_collection_avg_obj_size()
     local db_avg_obj_size=$(do_db avgsize "$testdb")
     local formated_avg_obj_size_db=$(format_size "$db_avg_obj_size")
 
-    if [ "$rbh_info_avg_obj_size" != "$formated_avg_obj_size_db" ]; then
+    if [[ ! "$rbh_info_avg_obj_size" == *"$formated_avg_obj_size_db"* ]]; then
         error "average objects size are not matching"
     fi
 }
@@ -95,8 +95,8 @@ test_collection_sync()
     local output=$(rbh_info "rbh:$db:$testdb" "$info_flag")
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 8)); then
-        error "There should be eight infos about posix sync"
+    if ((n_lines != 9)); then
+        error "There should be eight infos about posix sync + 1 line for the header, got '$output'"
     fi
 
     echo "$output" | grep "Start" ||
@@ -161,7 +161,7 @@ test_collection_mountpoint()
 
     local found_mountpoint=$(rbh_info "rbh:$db:$testdb" -m)
 
-    if [ "$found_mountpoint" != "$(pwd)" ]; then
+    if [[ ! "$found_mountpoint" == *"$(pwd)"* ]]; then
         error "Mountpoints don't match, found '$found_mountpoint', expected '$(pwd)'\n"
     fi
 
@@ -171,7 +171,7 @@ test_collection_mountpoint()
 
     do_db drop $testdb-2
 
-    if [ "$found_mountpoint" != "/tmp" ]; then
+    if [[ ! "$found_mountpoint" == *"/tmp"* ]]; then
         error "Mountpoints don't match, found '$found_mountpoint', expected '/tmp'\n"
     fi
 }
@@ -184,13 +184,13 @@ test_command_backend()
 
     local command_backend=$(rbh_info "rbh:$db:$testdb" -B)
 
-    if [ "$command_backend" != "posix" ]; then
+    if [[ ! "$command_backend" == *"posix"* ]]; then
         error "Command backends don't match, found '$command_backend', expected 'posix'\n"
     fi
 
     command_backend=$(rbh_info "rbh:$db:$testdb" --command-backend)
 
-    if [ "$command_backend" != "posix" ]; then
+    if [[ ! "$command_backend" == *"posix"* ]]; then
         error "Command backends don't match, found '$command_backend', expected 'posix'\n"
     fi
 }

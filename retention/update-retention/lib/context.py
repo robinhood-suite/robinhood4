@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # This file is part of RobinHood
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #            alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -28,4 +28,5 @@ class Context():
             delay2days = timedelta(days=delay)
             self.delay = int(datetime.timestamp(dt + delay2days))
 
-        self.mountpoint = exec_check_output(f"rbh-info {uri} -m")
+        mnt = exec_check_output(f"rbh-info {uri} -m")
+        self.mountpoint = mnt[mnt.find('/'):]

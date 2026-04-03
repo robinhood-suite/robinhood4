@@ -30,8 +30,8 @@ test_mpi_file_source()
     local output=$(rbh_info "rbh:$db:$testdb" -b)
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 1)); then
-        error "One backend should have been registered"
+    if ((n_lines != 2)); then
+        error "One backend should have been registered + 1 line for header, got '$output'"
     fi
 
     echo "$output" | grep "mpi-file" ||
@@ -45,13 +45,13 @@ test_command_backend()
 
     local command_backend=$(rbh_info "rbh:$db:$testdb" -B)
 
-    if [ "$command_backend" != "mpi-file" ]; then
+    if [[ ! "$command_backend" == *"mpi-file"* ]]; then
         error "Command backends don't match, found '$command_backend', expected 'mpi-file'\n"
     fi
 
     command_backend=$(rbh_info "rbh:$db:$testdb" --command-backend)
 
-    if [ "$command_backend" != "mpi-file" ]; then
+    if [[ ! "$command_backend" == *"mpi-file"* ]]; then
         error "Command backends don't match, found '$command_backend', expected 'mpi-file'\n"
     fi
 }
