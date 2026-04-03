@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood
-# Copyright (C) 2023 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -26,11 +26,14 @@ test_truncate()
 
     clear_changelogs "$LUSTRE_MDT" "$userid"
 
-    # retrieve the version before the truncate and after, to check there is no
-    # difference between the two except the fields that should be modified
+    # Retrieve the version before the truncate and after, to check there is no
+    # difference between the two except the fields that should be modified.
+    #
+    # XXX: since truncate changes the size without actually writing data, the
+    # number of blocks stays at 0, so the sparseness also changes from this.
     local old_version=$(do_db get "$testdb" \
         '"ns.name":"'$entry'"' \
-        '"statx.mtime":0, "statx.ctime":0, "statx.size":0')
+        '"statx.mtime":0, "statx.ctime":0, "statx.size":0, "xattrs.sparseness":0')
     truncate -s 300 $entry
 
     invoke_rbh-fsevents
@@ -43,10 +46,11 @@ test_truncate()
 
     local updated_version=$(do_db get "$testdb" \
         '"ns.name":"'$entry'"' \
-        '"statx.mtime":0, "statx.ctime":0, "statx.size":0')
+        '"statx.mtime":0, "statx.ctime":0, "statx.size":0, "xattrs.sparseness":0')
 
     if [ "$old_version" != "$updated_version" ]; then
-        error "Truncate modified more than mtime, ctime and size"
+        error "Truncate modified more than mtime, ctime and size (and sparseness), "\
+              "old = '$old_version', updated = '$updated_version'"
     fi
 
     find_attribute '"statx.ctime.sec":NumberLong("'$(statx +%Z "$entry")'")' \

@@ -1,5 +1,5 @@
 # This file is part of RobinHood
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -54,6 +54,7 @@ fsevents_lib = static_library(
         'src/enricher.c',
         'src/enrichers/posix/posix.c',
         'src/enrichers/posix/retention.c',
+        'src/enrichers/posix/sparse.c',
         'src/sources/yaml_file.c',
         'src/sources/file.c',
         'src/sources/hestia.c',

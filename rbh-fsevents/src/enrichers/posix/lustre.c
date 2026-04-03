@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -25,7 +25,6 @@
 #include <robinhood/backends/posix_extension.h>
 #include <robinhood/backends/common.h>
 #include <robinhood/utils.h>
-#include <robinhood/backends/retention.h>
 
 static int
 enrich_path(const char *mount_path, const struct rbh_id *id, const char *name,

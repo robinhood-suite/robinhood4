@@ -426,6 +426,8 @@ posix_extension_enrich(struct enricher *enricher,
                        const struct rbh_fsevent *original,
                        struct rbh_posix_enrich_ctx *ctx)
 {
+    int n_attrs = 0;
+
     if (enricher->n_extensions == 0)
         return 0;
 
@@ -433,27 +435,22 @@ posix_extension_enrich(struct enricher *enricher,
     for (size_t i = 0; i < enricher->n_extensions; i++) {
         enrich_xattr_t ext_enrich =
             enricher->extension_enrichers[i].enrich_xattr;
-        int n_attrs;
+        int subcount;
 
-        n_attrs = ext_enrich(enricher, req, ctx, original);
-        if (n_attrs == -1) {
+        subcount = ext_enrich(enricher, req, ctx, original);
+        if (subcount == -1) {
             if (errno == ENOTSUP)
                 continue;
 
             return -1;
         }
 
-        enricher->fsevent.xattrs.count += n_attrs;
-
-        /* This assumes that only one enricher is interested in a given xattr.
-         * This is currently the case but this assumption may change in the
-         * future.
-         */
-        return n_attrs;
+        enricher->fsevent.xattrs.count += subcount;
+        n_attrs += subcount;
     }
 
     /* xattr not supported by any enricher, no enrichment to do */
-    return 0;
+    return n_attrs;
 }
 
 static int
@@ -765,12 +762,19 @@ setup_enrichers(struct enricher *enricher, const char *type,
         if (!strcmp(name, "lustre")) {
             enricher->extension_enrichers[i].name = "lustre";
 #ifdef HAVE_LUSTRE
-            enricher->extension_enrichers[i].enrich_xattr = lustre_enrich_fsevent;
+            enricher->extension_enrichers[i].enrich_xattr =
+                lustre_enrich_fsevent;
 #endif
             continue;
         } else if (!strcmp(name, "retention")) {
             enricher->extension_enrichers[i].name = "retention";
-            enricher->extension_enrichers[i].enrich_xattr = retention_enrich_fsevent;
+            enricher->extension_enrichers[i].enrich_xattr =
+                retention_enrich_fsevent;
+            continue;
+        } else if (!strcmp(name, "sparse")) {
+            enricher->extension_enrichers[i].name = "sparse";
+            enricher->extension_enrichers[i].enrich_xattr =
+                sparse_enrich_fsevent;
             continue;
         } else {
             error(EXIT_FAILURE, 0,  "Unknown enricher '%s'", name);
