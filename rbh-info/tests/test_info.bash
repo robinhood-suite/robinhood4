@@ -13,6 +13,27 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
+test_all()
+{
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    local output="$(rbh_info "rbh:$db:$testdb" --all)"
+
+    echo "$output" | grep "Bytes"
+    echo "$output" | grep "Plugin"
+    echo "$output" | grep "posix"
+    echo "$output" | grep "1"
+    echo "$output" | grep "sync" | grep "Start"
+    echo "$output" | grep "sync" | grep "Duration"
+    echo "$output" | grep "sync" | grep "End"
+    echo "$output" | grep "sync" | grep "Mountpoint"
+    echo "$output" | grep "sync" | grep "Command"
+    echo "$output" | grep "sync" | grep "Total"
+    echo "$output" | grep "Amount" | grep "converted"
+    echo "$output" | grep "Amount" | grep "skipped"
+    echo "$output" | grep "test_info-test_all"
+}
+
 format_size()
 {
     local size=$1
@@ -178,7 +199,7 @@ test_command_backend()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_collection_size test_collection_count
+declare -a tests=(test_all test_collection_size test_collection_count
                   test_collection_avg_obj_size test_collection_first_sync
                   test_collection_last_sync test_collection_mountpoint
                   test_command_backend)
