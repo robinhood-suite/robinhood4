@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -51,6 +51,12 @@ retention_enrich_fsevent(struct enricher *enricher,
                          const struct enrich_request *req,
                          struct rbh_posix_enrich_ctx *ctx,
                          const struct rbh_fsevent *original);
+
+int
+sparse_enrich_fsevent(struct enricher *enricher,
+                      const struct enrich_request *req,
+                      struct rbh_posix_enrich_ctx *ctx,
+                      const struct rbh_fsevent *original);
 
 struct enricher {
     struct rbh_iterator iterator;
