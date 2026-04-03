@@ -67,7 +67,43 @@ test_sync_gc_run()
         difflines "'/fileA' needs to be deleted" "1 element total to delete"
 }
 
-declare -a tests=(test_basic test_dry_run test_sync_gc_run)
+test_config()
+{
+    local conf_file="conf"
+    local file="test_file"
+
+    mongo_only_test
+
+    touch $file
+
+    echo "---
+ mongo:
+     address: \"mongodb://localhost:27017\"
+---" > $conf_file
+
+    rbh_sync --config $conf_file rbh:posix:. rbh:$db:$testdb
+    find_attribute '"ns.xattrs.path":"/'$file'"'
+
+    rm $file
+
+    echo "---
+ mongo:
+     address: \"mongodb://localhost:12345\"
+---" > $conf_file
+
+    rbh_gc --config $conf_file rbh:$db:$testdb &&
+        error "Sync with invalid server address in config should have failed"
+
+    echo "---
+ mongo:
+     address: \"mongodb://localhost:27017\"
+---" > $conf_file
+
+    rbh_gc --config $conf_file -d "rbh:$db:$testdb" |
+        difflines "'/test_file' needs to be deleted" "1 element total to delete"
+}
+
+declare -a tests=(test_basic test_dry_run test_sync_gc_run test_config)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT

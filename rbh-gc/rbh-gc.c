@@ -14,6 +14,7 @@
 #include <unistd.h>
 
 #include <robinhood.h>
+#include <robinhood/config.h>
 #include <robinhood/open.h>
 
 #ifndef RBH_ITER_CHUNK_SIZE
@@ -51,6 +52,7 @@ usage(void)
         "    BACKEND  a URI describing a robinhood backend\n"
         "\n"
         "Optional arguments:\n"
+        "    -c, --config PATH          the path to a configuration file\n"
         "    -d, --dry-run              displays the list of the absent entries\n"
         "    -h, --help                 print this messsage and exit\n"
         "    -s, --sync-time SYNC_TIME  instead of checking every entry of the BACKEND,\n"
@@ -333,6 +335,11 @@ main(int argc, char *argv[])
 {
     const struct option LONG_OPTIONS[] = {
         {
+            .name = "config",
+            .has_arg = required_argument,
+            .val = 'c',
+        },
+        {
             .name = "dry-run",
             .val = 'd',
         },
@@ -361,10 +368,18 @@ main(int argc, char *argv[])
     int64_t sync_time = -1;
     char *path;
     char c;
+    int rc;
+
+    rc = rbh_config_from_args(argc - 1, argv + 1);
+    if (rc)
+        error(EXIT_FAILURE, errno, "failed to load configuration file");
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "dhs:vz", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "c:dhs:vz", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
+        case 'c':
+            /* already parsed */
+            break;
         case 'd':
             dry_run_mode = true;
             break;
@@ -405,8 +420,11 @@ main(int argc, char *argv[])
     mount_fd = open(path, O_RDONLY | O_CLOEXEC);
     free(path);
     if (mount_fd < 0)
-        error(EXIT_FAILURE, errno, "open: %s", argv[1]);
+        error(EXIT_FAILURE, errno, "Failed to open mountpoint '%s'", path);
 
     gc(dry_run_mode, verbose_mode, sync_time);
+
+    rbh_config_free();
+
     return EXIT_SUCCESS;
 }
