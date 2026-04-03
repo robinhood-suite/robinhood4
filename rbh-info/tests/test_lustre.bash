@@ -21,7 +21,7 @@ test_lustre_source()
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != 4)); then
-        error "Three backends should have been registered"
+        error "Three backends should have been registered + 1 line for header, got '$output'"
     fi
 
     echo "$output" | grep "posix" ||
@@ -45,13 +45,13 @@ test_command_backend()
 
     local command_backend=$(rbh_info "rbh:$db:$testdb" -B)
 
-    if [ "$command_backend" != "lustre" ]; then
+    if [[ ! "$command_backend" == *"lustre"* ]]; then
         error "Command backends don't match, found '$command_backend', expected 'lustre'\n"
     fi
 
     command_backend=$(rbh_info "rbh:$db:$testdb" --command-backend)
 
-    if [ "$command_backend" != "lustre" ]; then
+    if [[ ! "$command_backend" == *"lustre"* ]]; then
         error "Command backends don't match, found '$command_backend', expected 'lustre'\n"
     fi
 }

@@ -22,8 +22,8 @@ test_s3_source()
     local output=$(rbh_info "rbh:mongo:$testdb" -b)
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 7)); then
-        error "One backend and 5 connection parameters should have been printed"
+    if ((n_lines != 8)); then
+        error "One backend and 5 connection parameters should have been printed + 1 line for header, got '$output'"
     fi
 
     echo "$output" | grep "s3" ||
@@ -53,13 +53,13 @@ test_command_backend()
 
     local command_backend=$(rbh_info "rbh:$db:$testdb" -B)
 
-    if [ "$command_backend" != "s3" ]; then
+    if [[ ! "$command_backend" == *"s3"* ]]; then
         error "Command backends don't match, found '$command_backend', expected 's3'\n"
     fi
 
     command_backend=$(rbh_info "rbh:$db:$testdb" --command-backend)
 
-    if [ "$command_backend" != "s3" ]; then
+    if [[ ! "$command_backend" == *"s3"* ]]; then
         error "Command backends don't match, found '$command_backend', expected 's3'\n"
     fi
 }

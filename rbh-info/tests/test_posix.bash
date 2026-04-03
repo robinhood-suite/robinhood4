@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood.
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -20,8 +20,8 @@ test_posix_source()
     local output=$(rbh_info "rbh:$db:$testdb" -b)
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 1)); then
-        error "One backend should have been registered"
+    if ((n_lines != 2)); then
+        error "One backend should have been registered + 1 line for header, got '$output'"
     fi
 
     echo "$output" | grep "posix" ||
@@ -35,8 +35,8 @@ test_retention_source()
     local output=$(rbh_info "rbh:$db:$testdb" -b)
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 2)); then
-        error "Two backends should have been registered"
+    if ((n_lines != 3)); then
+        error "Two backends should have been registered + 1 line for header, got '$output'"
     fi
 
     echo "$output" | grep "posix" ||
