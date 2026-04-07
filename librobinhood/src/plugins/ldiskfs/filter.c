@@ -136,6 +136,8 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
                                                               sstack);
     struct rbh_value_map ns_xattrs = {0};
     struct rbh_parent_pair *parent_pair;
+    __u64 blocks = inode_blocks(inode);
+    __u64 size = EXT2_I_SIZE(inode);
     const struct rbh_id *parent_id;
     struct rbh_value path_value = {
         .type = RBH_VT_STRING,
@@ -168,6 +170,9 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
     dentry->parent = parent_pair->parent;
     dentry->name = parent_pair->name;
 
+    if(is_mdt)
+        get_size_and_blocks_from_xattrs(&size, &blocks, &inode_xattrs);
+
     statx.stx_mask = RBH_STATX_ATIME_SEC | RBH_STATX_CTIME_SEC |
         RBH_STATX_MTIME_SEC | RBH_STATX_INO | RBH_STATX_BLOCKS |
         RBH_STATX_SIZE | RBH_STATX_MODE | RBH_STATX_UID | RBH_STATX_GID;
@@ -178,8 +183,8 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
     statx.stx_gid = inode_gid(*inode);
     statx.stx_mode = inode->i_mode;
     statx.stx_ino = dentry->ino;
-    statx.stx_size = EXT2_I_SIZE(inode);
-    statx.stx_blocks = inode_blocks(inode);
+    statx.stx_size = size;
+    statx.stx_blocks = blocks;
     /* statx.stx_attributes_mask; */
     statx.stx_atime.tv_sec = ext2fs_inode_xtime_get(inode, i_atime);
     statx.stx_atime.tv_nsec = 0;
