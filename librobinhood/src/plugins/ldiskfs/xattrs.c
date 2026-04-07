@@ -368,3 +368,28 @@ check_name_from_parent_fid(const char *name, struct rbh_dentry *parent,
     // happens for files located in REMOTE_PARENT_DIR directory
     return false;
 }
+
+void
+get_size_from_xattrs(__u64 *size, __u64 *blocks, struct rbh_value_map *xattrs)
+{
+    struct lustre_som_attrs *som = NULL;
+    for(int i = 0; i < xattrs->count; i++) {
+        if (!strcmp(xattrs->pairs[i].key, "trusted.som")) {
+            som = (void *)xattrs->pairs[i].value->binary.data;
+            break;
+        }
+    }
+
+    if(som) {
+        // we could cast a warning if lsa_valid is not 1 because that means the
+        // SoM value may be invalid or inaccurate.
+        // However that would send many (possibly 1 per file on the fs) logs
+        // to the user so we just silently skip getting the size if lsa_valid is
+        // set to 0, which means "Unknown or no SoM data" as per
+        // lustre/include/uapi/linux/lustre/lustre_user.h in Lustre source code.
+        if (som->lsa_valid) {
+            *size = som->lsa_size;
+            *blocks = som->lsa_blocks;
+        }
+    }
+}

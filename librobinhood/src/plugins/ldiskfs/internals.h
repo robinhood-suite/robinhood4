@@ -118,4 +118,7 @@ check_name_from_parent_fid(const char *name, struct rbh_dentry *parent,
                          struct rbh_value_map *xattrs,
                          struct rbh_sstack *sstack);
 
+void
+get_size_from_xattrs(__u64 *size, __u64 *blocks, struct rbh_value_map *xattrs);
+
 #endif
