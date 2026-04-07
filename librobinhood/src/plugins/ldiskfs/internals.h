@@ -127,4 +127,11 @@ check_name_from_parent_fid(const char *name, struct rbh_dentry *parent,
                            struct rbh_value_map *xattrs,
                            struct rbh_sstack *sstack);
 
+/*
+ * gets the size and the number of blocks allocated to this file from the lustre
+ * trusted.som extended attribute
+ */
+void
+get_size_and_blocks_from_xattrs(__u64 *size, __u64 *blocks, struct rbh_value_map *xattrs);
+
 #endif
