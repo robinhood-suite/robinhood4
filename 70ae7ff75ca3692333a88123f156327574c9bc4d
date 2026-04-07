@@ -22,6 +22,30 @@
       },
       "revId": "70ae7ff75ca3692333a88123f156327574c9bc4d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dae8fce7_41c40850",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-07T11:51:17Z",
+      "side": 1,
+      "message": "`action` is a Python class. it has attributes like `delete` and `log`, which will serve as aliases, but we will refer to the C code: `common:delete` in this case, or even within the context of this patch: \"\u003cextension\u003e.delete\"",
+      "parentUuid": "b8f95bc1_e2277d89",
+      "range": {
+        "startLine": 61,
+        "startChar": 25,
+        "endLine": 61,
+        "endChar": 33
+      },
+      "revId": "70ae7ff75ca3692333a88123f156327574c9bc4d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }

@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fc4217e_caf5ad45",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-07T11:51:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0a2c5ee_683949a1",
+      "range": {
+        "startLine": 78,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 5
+      },
+      "revId": "90c89cb0b633815dfa97f9b4eda7ba41361cac4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7aeae317_fa069dfb",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-04-02T07:48:46Z",
       "side": 1,
       "message": "nit: else if",
+      "range": {
+        "startLine": 86,
+        "startChar": 12,
+        "endLine": 87,
+        "endChar": 16
+      },
+      "revId": "90c89cb0b633815dfa97f9b4eda7ba41361cac4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "846dc0ca_1903ea5d",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-07T11:51:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7aeae317_fa069dfb",
       "range": {
         "startLine": 86,
         "startChar": 12,
@@ -124,6 +172,30 @@
       "writtenOn": "2026-04-02T07:48:46Z",
       "side": 1,
       "message": "style: define at the start of the block",
+      "range": {
+        "startLine": 321,
+        "startChar": 8,
+        "endLine": 322,
+        "endChar": 15
+      },
+      "revId": "90c89cb0b633815dfa97f9b4eda7ba41361cac4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "641a1873_e1bd0897",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-07T11:51:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e262d7e_1535402e",
       "range": {
         "startLine": 321,
         "startChar": 8,
