@@ -116,7 +116,8 @@ bool
 get_fid_from_xattrs(struct rbh_value_map *xattrs, struct lu_fid *fid);
 
 bool
-get_parent_fid_from_xattrs(struct rbh_value_map *xattrs, struct lu_fid *parent_fid);
+get_parent_fid_from_xattrs(struct rbh_value_map *xattrs,
+                           struct lu_fid *parent_fid);
 
 /*
  * returns true if the provided name and parent dentry is matching an entry in
@@ -126,5 +127,13 @@ bool
 check_name_from_parent_fid(const char *name, struct rbh_dentry *parent,
                            struct rbh_value_map *xattrs,
                            struct rbh_sstack *sstack);
+
+/*
+ * gets the size and the number of blocks allocated to this file from the lustre
+ * trusted.som extended attribute
+ */
+void
+get_size_and_blocks_from_xattrs(__u64 *size, __u64 *blocks,
+                                struct rbh_value_map *xattrs);
 
 #endif
