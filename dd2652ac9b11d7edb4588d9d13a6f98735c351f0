@@ -71,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7583bc5a_fe062ccc",
+        "filename": "rbh-policy/tests/lustre/test_actions_lustre.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-07T09:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "094f473d_559c01a9",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 9
+      },
+      "revId": "dd2652ac9b11d7edb4588d9d13a6f98735c351f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d4a60b8_8a73b31c",
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "In all rbh4, we are not launching the Lustre tests if we compile without Lustre. I really prefer that you do the check in the meson.build",
       "parentUuid": "febe314b_73214520",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 1
+      },
+      "revId": "dd2652ac9b11d7edb4588d9d13a6f98735c351f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0129d4f_a1ba08f5",
+        "filename": "rbh-policy/tests/meson.build",
+        "patchSetId": 17
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-07T09:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ebf7380_caeedfc1",
       "range": {
         "startLine": 33,
         "startChar": 0,
