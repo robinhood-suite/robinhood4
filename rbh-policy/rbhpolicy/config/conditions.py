@@ -81,8 +81,8 @@ class SimpleCondition(LogicalCondition):
             "gt": ">",
             "ge": ">="
         }
-        op_symbol.get(self.operator_name, self.operator_name)
-        return f"{self.key} {op_symbol} {self.value}"
+        op = op_symbol.get(self.operator_name, self.operator_name)
+        return f"{self.key} {op} {self.value}"
 
 class AndCondition(LogicalCondition):
     """Logical AND of two conditions."""
