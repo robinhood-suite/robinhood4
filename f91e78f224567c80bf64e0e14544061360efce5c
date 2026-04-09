@@ -164,6 +164,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c105b82a_26589692",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T11:45:02Z",
+      "side": 1,
+      "message": "defect: should be le32toh here and in the function below aswell",
+      "range": {
+        "startLine": 136,
+        "startChar": 16,
+        "endLine": 136,
+        "endChar": 23
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "61b664a8_0ba4f6f5",
         "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
         "patchSetId": 9
