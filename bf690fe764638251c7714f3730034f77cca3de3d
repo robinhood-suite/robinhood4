@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35b8b836_d11776a6",
+        "filename": "librobinhood/src/plugins/posix/enrichers/sparse/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-09T09:04:40Z",
+      "side": 1,
+      "message": "defect: dunno if the location of the README is incorrect or if the contents are not updated, but this file is the retention one",
+      "revId": "bf690fe764638251c7714f3730034f77cca3de3d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
