@@ -7,6 +7,7 @@
 
 #include <fcntl.h>
 #include <getopt.h>
+#include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,6 +17,7 @@
 #include <robinhood.h>
 #include <robinhood/config.h>
 #include <robinhood/open.h>
+#include <robinhood/utils.h>
 
 #ifndef RBH_ITER_CHUNK_SIZE
 # define RBH_ITER_CHUNK_SIZE (1 << 12)
@@ -84,12 +86,15 @@ struct fsentry2gc_iterator {
 
     struct rbh_iterator *fsentries;
     struct rbh_fsevent delete;
+    const char *mnt_path;
 };
 
 static bool
-still_alive(const struct rbh_id *id)
+still_alive(const struct rbh_id *id, const char *path, const char *mnt_path,
+            uint32_t nlink)
 {
     int fd;
+    int rc;
 
     errno = 0;
 
@@ -98,18 +103,31 @@ still_alive(const struct rbh_id *id)
         /* Something happened, something bad... */
         error(EXIT_FAILURE, errno, "open_by_id_opath");
 
-    if (fd >= 0) {
-        /* The entry still exists somewhere in the filesystem
+    if (fd < 0)
+        /* The entry does not exist, delete it */
+        return false;
+
+    if (close(fd))
+        /* This should never happen */
+        error(EXIT_FAILURE, errno, "unexpected error on close");
+
+    if (nlink > 1) {
+        char buffer[PATH_MAX];
+        /* Verifying the path still exists in case the handle
+         * had multiple hardlinks
          *
-         * Let's not delete it yet.
+         * We cannot use `open_by_id()` for this one, as we need
+         * to directly target the path, so calling `access()` is enough
          */
-        if (close(fd))
-            /* This should never happen */
-            error(EXIT_FAILURE, errno, "unexpected error on close");
-        return true;
+        rc = snprintf(buffer, PATH_MAX, "%s%s", mnt_path, path);
+        if (rc >= PATH_MAX)
+            error(EXIT_FAILURE, errno, "path build failed");
+        if (access(buffer, F_OK))
+            if (errno == ENOENT)
+                return false;
     }
 
-    return false;
+    return true;
 }
 
 static const void *
@@ -126,10 +144,16 @@ fsentry2delete_iter_next(void *iterator)
 
         assert((fsentry->mask & RBH_FP_ID) == RBH_FP_ID);
 
-        if (still_alive(&fsentry->id))
+        if (still_alive(
+            &fsentry->id,
+            rbh_fsentry_find_ns_xattr(fsentry, "path")->string,
+            deletes->mnt_path,
+            fsentry->statx->stx_nlink))
             continue;
 
         deletes->delete.id = fsentry->id;
+        deletes->delete.link.parent_id = &fsentry->parent_id;
+        deletes->delete.link.name = fsentry->name;
         return &deletes->delete;
     }
 
@@ -150,7 +174,11 @@ fsentry2print_iter_next(void *iterator)
 
         assert((fsentry->mask & RBH_FP_ID) == RBH_FP_ID);
 
-        if (still_alive(&fsentry->id))
+        if (still_alive(
+            &fsentry->id,
+            rbh_fsentry_find_ns_xattr(fsentry, "path")->string,
+            prints->mnt_path,
+            fsentry->statx->stx_nlink))
             continue;
 
         return fsentry;
@@ -187,7 +215,7 @@ static const struct rbh_iterator FSENTRY2PRINT_ITERATOR = {
 };
 
 static struct rbh_iterator *
-iter_fsentry2delete(struct rbh_iterator *fsentries)
+iter_fsentry2delete(struct rbh_iterator *fsentries, const char *mnt_path)
 {
     struct fsentry2gc_iterator *deletes;
 
@@ -195,12 +223,14 @@ iter_fsentry2delete(struct rbh_iterator *fsentries)
 
     deletes->iterator = FSENTRY2DELETE_ITERATOR;
     deletes->fsentries = fsentries;
-    deletes->delete.type = RBH_FET_DELETE;
+    deletes->delete.type = RBH_FET_UNLINK;
+    deletes->mnt_path = mnt_path;
+
     return &deletes->iterator;
 }
 
 static struct rbh_iterator *
-iter_fsentry2print(struct rbh_iterator *fsentries)
+iter_fsentry2print(struct rbh_iterator *fsentries, const char *mnt_path)
 {
     struct fsentry2gc_iterator *prints;
 
@@ -208,6 +238,8 @@ iter_fsentry2print(struct rbh_iterator *fsentries)
 
     prints->iterator = FSENTRY2PRINT_ITERATOR;
     prints->fsentries = fsentries;
+    prints->mnt_path = mnt_path;
+
     return &prints->iterator;
 }
 
@@ -243,7 +275,7 @@ print_entries(struct rbh_iterator *iterator)
 }
 
 static void
-gc(bool dry_run_mode, bool verbose_mode, int64_t sync_time)
+gc(char *mnt_path, bool dry_run_mode, bool verbose_mode, int64_t sync_time)
 {
     const struct rbh_filter_options OPTIONS = {
         .verbose = verbose_mode,
@@ -252,8 +284,10 @@ gc(bool dry_run_mode, bool verbose_mode, int64_t sync_time)
         .type = RBH_FOT_PROJECTION,
         .projection = {
             .fsentry_mask = dry_run_mode ?
-                RBH_FP_ID | RBH_FP_NAMESPACE_XATTRS :
-                RBH_FP_ID,
+                RBH_FP_ID | RBH_FP_NAMESPACE_XATTRS | RBH_FP_STATX:
+                RBH_FP_ID | RBH_FP_NAMESPACE_XATTRS | RBH_FP_STATX |
+                    RBH_FP_PARENT_ID | RBH_FP_NAME,
+            .statx_mask = RBH_STATX_NLINK,
         },
     };
     const struct rbh_filter_field *field;
@@ -282,7 +316,7 @@ gc(bool dry_run_mode, bool verbose_mode, int64_t sync_time)
         struct rbh_mut_iterator *chunks;
         struct rbh_iterator *deletes;
 
-        deletes = iter_fsentry2delete(constify);
+        deletes = iter_fsentry2delete(constify, mnt_path);
 
         chunks = rbh_iter_chunkify(deletes, RBH_ITER_CHUNK_SIZE);
         if (chunks == NULL)
@@ -322,7 +356,7 @@ gc(bool dry_run_mode, bool verbose_mode, int64_t sync_time)
     } else {
         struct rbh_iterator *prints;
 
-        prints = iter_fsentry2print(constify);
+        prints = iter_fsentry2print(constify, mnt_path);
         if (print_entries(prints) == -1)
             error(EXIT_FAILURE, errno, "print_entries");
 
@@ -418,12 +452,12 @@ main(int argc, char *argv[])
     path = get_mountpoint_from_source(backend);
 
     mount_fd = open(path, O_RDONLY | O_CLOEXEC);
-    free(path);
     if (mount_fd < 0)
         error(EXIT_FAILURE, errno, "Failed to open mountpoint '%s'", path);
 
-    gc(dry_run_mode, verbose_mode, sync_time);
+    gc(path, dry_run_mode, verbose_mode, sync_time);
 
+    free(path);
     rbh_config_free();
 
     return EXIT_SUCCESS;
