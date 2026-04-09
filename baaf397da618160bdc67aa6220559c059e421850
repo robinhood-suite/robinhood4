@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4fc4a8a_df227008",
+        "filename": "rbh-sync/tests/sparse/test_sparse_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-09T09:22:56Z",
+      "side": 1,
+      "message": "typo: bad year",
+      "range": {
+        "startLine": 4,
+        "startChar": 16,
+        "endLine": 4,
+        "endChar": 20
+      },
+      "revId": "baaf397da618160bdc67aa6220559c059e421850",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
