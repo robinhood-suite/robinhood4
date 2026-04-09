@@ -41,6 +41,13 @@ class BaseTrigger(ABC):
     def __or__(self, other: T) -> T:
         return TriggerOr(self, other)
 
+    def __repr__(self) -> str:
+        attrs = ", ".join(
+                f"{k}={v!r}" for k, v in self.__dict__.items()
+                if not k.startswith('_')
+        )
+        return f"{self.__class__.__name__}({attrs})"
+
     @abstractmethod
     def evaluate(self, context: TriggerContext) -> TriggerDecision:
         raise NotImplementedError
