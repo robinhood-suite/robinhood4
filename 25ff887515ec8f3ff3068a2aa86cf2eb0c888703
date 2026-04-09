@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15d892dd_e65c8ef5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a648e34_2dceb5c6",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 4
+      },
+      "revId": "25ff887515ec8f3ff3068a2aa86cf2eb0c888703",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d2c34fe_05b1e992",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-04-09T11:25:32Z",
       "side": 1,
       "message": "typo: dot before, capital here",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 5
+      },
+      "revId": "25ff887515ec8f3ff3068a2aa86cf2eb0c888703",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cfba75b_203c8a11",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d2c34fe_05b1e992",
       "range": {
         "startLine": 10,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe8368dc_6d1460d3",
+        "filename": "librobinhood/src/plugins/ldiskfs/internals.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1cbdcf6_1cfddff8",
+      "range": {
+        "startLine": 118,
+        "startChar": 17,
+        "endLine": 119,
+        "endChar": 25
+      },
+      "revId": "25ff887515ec8f3ff3068a2aa86cf2eb0c888703",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71684092_7e786acc",
@@ -83,6 +155,30 @@
       "writtenOn": "2026-04-09T11:25:32Z",
       "side": 1,
       "message": "suggest: `fids_are_equal`",
+      "range": {
+        "startLine": 328,
+        "startChar": 0,
+        "endLine": 328,
+        "endChar": 12
+      },
+      "revId": "25ff887515ec8f3ff3068a2aa86cf2eb0c888703",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a02b5087_a58eba33",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71684092_7e786acc",
       "range": {
         "startLine": 328,
         "startChar": 0,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c47e463_8fbdbdc5",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efc3f60d_af6da32e",
+      "range": {
+        "startLine": 353,
+        "startChar": 4,
+        "endLine": 353,
+        "endChar": 7
+      },
+      "revId": "25ff887515ec8f3ff3068a2aa86cf2eb0c888703",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5727be8_31369602",
@@ -129,6 +249,30 @@
       "writtenOn": "2026-04-09T11:25:32Z",
       "side": 1,
       "message": "nit: you could check that `links.pairs \u003d\u003d NULL` or `links.cound \u003d\u003d 0` instead of using another variable here",
+      "range": {
+        "startLine": 356,
+        "startChar": 8,
+        "endLine": 356,
+        "endChar": 16
+      },
+      "revId": "25ff887515ec8f3ff3068a2aa86cf2eb0c888703",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8c87469_06250410",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5727be8_31369602",
       "range": {
         "startLine": 356,
         "startChar": 8,
