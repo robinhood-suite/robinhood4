@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "224f93ad_ca342211",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-09T13:31:57Z",
+      "side": 1,
+      "message": "What is the question? do you want to remove the `open_by_id_opath()` call, and just use the `access()` one?\n\nWe can, but I thought we wanted to use a file handle instead of a path to check data existency?\n\nAnd using only the file handle is not correct to verify the existency of the hardlink.",
+      "parentUuid": "f474ef6f_9b312e02",
+      "range": {
+        "startLine": 122,
+        "startChar": 12,
+        "endLine": 122,
+        "endChar": 18
+      },
+      "revId": "fc6756e24d0183a8969159a8290c157a2389f57c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b37b90a7_48faed74",
         "filename": "rbh-gc/tests/meson.build",
         "patchSetId": 1
@@ -83,6 +107,30 @@
       "writtenOn": "2026-04-09T11:52:08Z",
       "side": 1,
       "message": "comment: doesn\u0027t seem much of a corner case to me, but rather regular usage tbh",
+      "range": {
+        "startLine": 15,
+        "startChar": 4,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "fc6756e24d0183a8969159a8290c157a2389f57c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38ed17ba_b9aee68d",
+        "filename": "rbh-gc/tests/test_extreme_cases.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-09T13:31:57Z",
+      "side": 1,
+      "message": "I can change the name of the file, I can add this to the basic test. I don\u0027t really care.",
+      "parentUuid": "1eec6ec7_06f14aff",
       "range": {
         "startLine": 15,
         "startChar": 4,
