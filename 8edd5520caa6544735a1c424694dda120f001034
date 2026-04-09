@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d24dfc4a_2aeef201",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 19
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T07:16:02Z",
+      "side": 1,
+      "message": "style: define at the start of the function",
+      "range": {
+        "startLine": 78,
+        "startChar": 3,
+        "endLine": 78,
+        "endChar": 16
+      },
+      "revId": "8edd5520caa6544735a1c424694dda120f001034",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b2553ba_07b93a5a",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 19
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T07:16:02Z",
+      "side": 1,
+      "message": "style: should be on the same line",
+      "range": {
+        "startLine": 85,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 8
+      },
+      "revId": "8edd5520caa6544735a1c424694dda120f001034",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d253aa9_1983990f",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 19
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T07:16:02Z",
+      "side": 1,
+      "message": "minor: there\u0027s multiple cases where these two lines are repeated (similar to what is done line 67), move them away for the ifs would be better",
+      "range": {
+        "startLine": 88,
+        "startChar": 12,
+        "endLine": 89,
+        "endChar": 23
+      },
+      "revId": "8edd5520caa6544735a1c424694dda120f001034",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
