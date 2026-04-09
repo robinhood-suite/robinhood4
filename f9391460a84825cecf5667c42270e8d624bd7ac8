@@ -70,6 +70,30 @@
       },
       "revId": "f9391460a84825cecf5667c42270e8d624bd7ac8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41d0cf5d_e0d2023b",
+        "filename": "librobinhood/src/plugins/posix/posix.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T09:30:40Z",
+      "side": 1,
+      "message": "That\u0027s for GNU\u0027s man page, but man 2 stat shows the following in the stat structure: `blkcnt_t  st_blocks;      /* Number of 512B blocks allocated */`\nSo if that\u0027s how the stat structure works, let\u0027s just use it aswell directly.",
+      "parentUuid": "c5884588_ab68f1d3",
+      "range": {
+        "startLine": 313,
+        "startChar": 22,
+        "endLine": 313,
+        "endChar": 25
+      },
+      "revId": "f9391460a84825cecf5667c42270e8d624bd7ac8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
