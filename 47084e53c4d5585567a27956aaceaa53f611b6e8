@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "551d2778_d26a5cf6",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T11:29:04Z",
+      "side": 1,
+      "message": "minor: `get_size_and_blocks_from_xattrs`",
+      "range": {
+        "startLine": 373,
+        "startChar": 0,
+        "endLine": 373,
+        "endChar": 20
+      },
+      "revId": "47084e53c4d5585567a27956aaceaa53f611b6e8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3729d3bd_a7a41582",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T11:29:04Z",
+      "side": 1,
+      "message": "suggest:\n```\nif (!som)\n    return;\n    \n\n/* we could...\n */\nif (som-\u003elsa_valid)\n    ...\n```",
+      "range": {
+        "startLine": 383,
+        "startChar": 4,
+        "endLine": 394,
+        "endChar": 5
+      },
+      "revId": "47084e53c4d5585567a27956aaceaa53f611b6e8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
