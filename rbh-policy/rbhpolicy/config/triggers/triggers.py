@@ -41,6 +41,13 @@ class BaseTrigger(ABC):
     def __or__(self, other: T) -> T:
         return TriggerOr(self, other)
 
+    def __repr__(self) -> str:
+        attrs = ", ".join(
+                f"{k}={v!r}" for k, v in self.__dict__.items()
+                if not k.startswith('_')
+        )
+        return f"{self.__class__.__name__}({attrs})"
+
     @abstractmethod
     def evaluate(self, context: TriggerContext) -> TriggerDecision:
         raise NotImplementedError
@@ -124,6 +131,9 @@ class AlwaysTrigger(BaseTrigger):
             reason="AlwaysTrigger always matches",
         )
 
+    def __str__(self) -> str:
+        return "Always"
+
 class TriggerAnd(BaseTrigger):
     def __init__(self, left: BaseTrigger, right: BaseTrigger):
         self.left = left
@@ -136,6 +146,9 @@ class TriggerAnd(BaseTrigger):
 
         return self.right.evaluate(context)
 
+    def __str__(self) -> str:
+        return f"({str(self.left)} & {str(self.right)})"
+
 class TriggerOr(BaseTrigger):
     def __init__(self, left: BaseTrigger, right: BaseTrigger):
         self.left = left
@@ -147,6 +160,9 @@ class TriggerOr(BaseTrigger):
             return left_decision
 
         return self.right.evaluate(context)
+
+    def __str__(self) -> str:
+        return f"({str(self.left)} | {str(self.right)})"
 
 def normalize_trigger(trigger) -> BaseTrigger:
     if trigger is None:
@@ -200,6 +216,18 @@ class PeriodicTrigger(BaseTrigger):
             raise ValueError("interval_seconds must be positive")
         self.interval_seconds = interval_seconds
 
+    def __str__(self) -> str:
+        s = self.interval_seconds
+        if s % 86400 == 0:
+            fmt = f"{s // 86400}d"
+        elif s % 3600 == 0:
+            fmt = f"{s // 3600}h"
+        elif s % 60 == 0:
+            fmt = f"{s // 60}m"
+        else:
+            fmt = f"{s}s"
+        return f"Periodic {fmt}"
+
     def evaluate(self, context: TriggerContext) -> TriggerDecision:
         # In manual mode, temporal triggers should not block execution
         if context.manual_mode:
@@ -234,6 +262,9 @@ class ScheduledTrigger(BaseTrigger):
 
     def __init__(self, target_datetime: datetime):
         self.target_datetime = target_datetime
+
+    def __str__(self) -> str:
+        return self.target_datetime.strftime("Scheduled %Y-%m-%d %H:%M:%S")
 
     def evaluate(self, context: TriggerContext) -> TriggerDecision:
         if context.manual_mode:
@@ -292,6 +323,9 @@ class _BasePercentTrigger(BaseTrigger):
             raise ValueError(f"invalid operator: {operator}")
         self.threshold = threshold
         self.operator = operator
+
+    def __str__(self) -> str:
+        return f"{self.metric_name} {self.operator} {self.threshold}"
 
     def evaluate(self, context: TriggerContext) -> TriggerDecision:
         provider = capacity_provider_from_filesystem(context.database_uri)
@@ -425,6 +459,11 @@ class DbStatTrigger(BaseTrigger):
         self.stat_field = stat_field
         self.threshold = threshold
         self.operator = operator
+
+    def __str__(self) -> str:
+        match = re.match(r"^([^\[]+)\[(.*)\]$", self.label)
+        metric = f"{match.group(1)}({match.group(2)})" if match else self.label
+        return f"{metric} {self.operator} {self.threshold}"
 
     def evaluate(self, context: TriggerContext) -> TriggerDecision:
         try:
