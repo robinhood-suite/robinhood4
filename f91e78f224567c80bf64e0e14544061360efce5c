@@ -47,6 +47,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15bbee9b_dc61dd48",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02c9189f_13168944",
+      "range": {
+        "startLine": 7,
+        "startChar": 16,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e6cc053_cb2a894c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c744694_9b70f1cd",
+      "range": {
+        "startLine": 7,
+        "startChar": 51,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "367a19ff_2f8e6a80",
@@ -60,6 +108,30 @@
       "writtenOn": "2026-04-09T11:09:22Z",
       "side": 1,
       "message": "typo: rbh_id",
+      "range": {
+        "startLine": 10,
+        "startChar": 43,
+        "endLine": 10,
+        "endChar": 49
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9fb039f_1651d7d0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "367a19ff_2f8e6a80",
       "range": {
         "startLine": 10,
         "startChar": 43,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b4bf921b_ab58727a",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:20Z",
+      "side": 1,
+      "message": "If the retrieval of the FID fails, the dentry-\u003efid value is not affected, thus defaulting to the behaviour implemented previously (which is to use a empty fid to generate the rbh_id).\nI could add a warning if the retrieval of the FID fails as it should not happen for a healthy ldiskfs filesystem.",
+      "parentUuid": "1a40937f_6696c8ef",
+      "range": {
+        "startLine": 151,
+        "startChar": 4,
+        "endLine": 151,
+        "endChar": 42
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "65d3cee2_a580ccde",
         "filename": "librobinhood/src/plugins/ldiskfs/internals.h",
         "patchSetId": 9
@@ -106,6 +202,30 @@
       "writtenOn": "2026-04-09T11:09:22Z",
       "side": 1,
       "message": "typo: double space",
+      "range": {
+        "startLine": 83,
+        "startChar": 7,
+        "endLine": 83,
+        "endChar": 9
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f14c4cb3_0cce75bd",
+        "filename": "librobinhood/src/plugins/ldiskfs/internals.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65d3cee2_a580ccde",
       "range": {
         "startLine": 83,
         "startChar": 7,
@@ -129,6 +249,30 @@
       "writtenOn": "2026-04-09T11:09:22Z",
       "side": 1,
       "message": "doc: missing doc for this function",
+      "range": {
+        "startLine": 106,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 4
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f686a0f_fae5672b",
+        "filename": "librobinhood/src/plugins/ldiskfs/internals.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73b9c418_a212a237",
       "range": {
         "startLine": 106,
         "startChar": 0,
@@ -164,6 +308,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b87353a_3e731ccb",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:20Z",
+      "side": 1,
+      "message": "There seems to be none in the user header.\nThere is one in the source code:\n```\nvoid lustre_lma_swab(struct lustre_mdt_attrs *lma)\n{                                                                                \n#ifdef __BIG_ENDIAN                                                                 \n|   __swab32s(\u0026lma-\u003elma_compat);                                                 \n|   __swab32s(\u0026lma-\u003elma_incompat);                                                  \n|   lustre_swab_lu_fid(\u0026lma-\u003elma_self_fid);                                      \n#endif                                                                           \n}\n```\nThis does the same thing as my code but this would not work in the current code as the `\u003cendian.h\u003e` header I use (which provides `leXXtoh()` functions) defines `__BIG_ENDIAN` and `__LITTLE_ENDIAN` regardless of the cpu architecture, whereas lustre uses `\u003casm/byteorder.h\u003e` which only defines `__BIG_ENDIAN` or `__LITTLE_ENDIAN` depending on the architecture.\nI chose to do this because I believe `leXXtoh()` functions will make the code easier to read.",
+      "parentUuid": "adb84000_c40dcb20",
+      "range": {
+        "startLine": 135,
+        "startChar": 16,
+        "endLine": 135,
+        "endChar": 23
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c105b82a_26589692",
         "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
         "patchSetId": 9
@@ -175,6 +343,30 @@
       "writtenOn": "2026-04-09T11:45:02Z",
       "side": 1,
       "message": "defect: should be le32toh here and in the function below aswell",
+      "range": {
+        "startLine": 136,
+        "startChar": 16,
+        "endLine": 136,
+        "endChar": 23
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abed41d0_5ba0fad3",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c105b82a_26589692",
       "range": {
         "startLine": 136,
         "startChar": 16,
@@ -208,6 +400,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ddbea0c_1bf6149e",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61b664a8_0ba4f6f5",
+      "range": {
+        "startLine": 152,
+        "startChar": 5,
+        "endLine": 157,
+        "endChar": 15
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a0ec274_35b1a7b0",
@@ -221,6 +437,30 @@
       "writtenOn": "2026-04-09T11:09:22Z",
       "side": 1,
       "message": "minor: do not define this function and the one above when they\u0027re not used in this patch",
+      "range": {
+        "startLine": 220,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 24
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "084ad750_4b1bdcc7",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-09T14:44:20Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9a0ec274_35b1a7b0",
       "range": {
         "startLine": 220,
         "startChar": 0,
