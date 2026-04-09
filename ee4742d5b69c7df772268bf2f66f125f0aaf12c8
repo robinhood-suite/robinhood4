@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a08791a5_5b6be2a0",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T11:12:50Z",
+      "side": 1,
+      "message": "minor: debug residue",
+      "range": {
+        "startLine": 155,
+        "startChar": 12,
+        "endLine": 155,
+        "endChar": 18
+      },
+      "revId": "ee4742d5b69c7df772268bf2f66f125f0aaf12c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
