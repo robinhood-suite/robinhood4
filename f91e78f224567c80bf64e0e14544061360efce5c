@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c744694_9b70f1cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T11:09:22Z",
+      "side": 1,
+      "message": "typo: no dot",
+      "range": {
+        "startLine": 7,
+        "startChar": 51,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02c9189f_13168944",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T11:09:22Z",
+      "side": 1,
+      "message": "typo: rbh_id",
+      "range": {
+        "startLine": 7,
+        "startChar": 16,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "367a19ff_2f8e6a80",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T11:09:22Z",
+      "side": 1,
+      "message": "typo: rbh_id",
+      "range": {
+        "startLine": 10,
+        "startChar": 43,
+        "endLine": 10,
+        "endChar": 49
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a40937f_6696c8ef",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T11:09:22Z",
+      "side": 1,
+      "message": "defect: if the if above failed, I wouldn\u0027t expect this to work either, and then the same all the following commands relying on the rbh_id",
+      "range": {
+        "startLine": 151,
+        "startChar": 4,
+        "endLine": 151,
+        "endChar": 42
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65d3cee2_a580ccde",
+        "filename": "librobinhood/src/plugins/ldiskfs/internals.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T11:09:22Z",
+      "side": 1,
+      "message": "typo: double space",
+      "range": {
+        "startLine": 83,
+        "startChar": 7,
+        "endLine": 83,
+        "endChar": 9
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73b9c418_a212a237",
+        "filename": "librobinhood/src/plugins/ldiskfs/internals.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T11:09:22Z",
+      "side": 1,
+      "message": "doc: missing doc for this function",
+      "range": {
+        "startLine": 106,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 4
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adb84000_c40dcb20",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T11:09:22Z",
+      "side": 1,
+      "message": "question: doesn\u0027t Lustre have a function for this translation ?",
+      "range": {
+        "startLine": 135,
+        "startChar": 16,
+        "endLine": 135,
+        "endChar": 23
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61b664a8_0ba4f6f5",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T11:09:22Z",
+      "side": 1,
+      "message": "minor: mutualize this part and the one in the function above",
+      "range": {
+        "startLine": 152,
+        "startChar": 5,
+        "endLine": 157,
+        "endChar": 15
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a0ec274_35b1a7b0",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T11:09:22Z",
+      "side": 1,
+      "message": "minor: do not define this function and the one above when they\u0027re not used in this patch",
+      "range": {
+        "startLine": 220,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 24
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
