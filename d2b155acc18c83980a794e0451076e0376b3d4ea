@@ -238,6 +238,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "82c3d0e7_6dc51035",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/plugin.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-09T07:33:34Z",
+      "side": 1,
+      "message": "Please don\u0027t mark remarks as done is they aren\u0027t :)",
+      "parentUuid": "3d5f00d9_cda111cd",
+      "range": {
+        "startLine": 23,
+        "startChar": 5,
+        "endLine": 23,
+        "endChar": 20
+      },
+      "revId": "d2b155acc18c83980a794e0451076e0376b3d4ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "30e22024_76c39517",
         "filename": "librobinhood/src/plugins/posix/enrichers/retention/action.c",
         "patchSetId": 7
