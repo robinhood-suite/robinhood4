@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b40e866b_bed081f7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 24
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-10T13:26:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90e0d25a_77b03699",
+      "range": {
+        "startLine": 9,
+        "startChar": 68,
+        "endLine": 9,
+        "endChar": 77
+      },
+      "revId": "85320033c91e095fe468bcf5e5df83264a1875f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a59c9435_89277745",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bfd6370_3d12cbe6",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-10T13:26:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a59c9435_89277745",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 94,
+        "endChar": 13
+      },
+      "revId": "85320033c91e095fe468bcf5e5df83264a1875f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7bee7b6b_86c7fbaf",
@@ -60,6 +108,30 @@
       "writtenOn": "2026-04-10T07:45:06Z",
       "side": 1,
       "message": "suggest: put this above _parse_datetime",
+      "range": {
+        "startLine": 122,
+        "startChar": 6,
+        "endLine": 122,
+        "endChar": 21
+      },
+      "revId": "85320033c91e095fe468bcf5e5df83264a1875f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fecc05f_cb90f1f6",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-10T13:26:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bee7b6b_86c7fbaf",
       "range": {
         "startLine": 122,
         "startChar": 6,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "23c09ed5_91c35b40",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-10T13:26:23Z",
+      "side": 1,
+      "message": "Yes, with the daemon part, I think I\u0027ll have to review this behavior, but currently the condition remains true indefinitely after the target date, whereas we would like it to be true only once so that the policy doesn\u0027t re-execute itself continuously after the date.",
+      "parentUuid": "7d84635c_aba1af02",
+      "range": {
+        "startLine": 158,
+        "startChar": 8,
+        "endLine": 159,
+        "endChar": 35
+      },
+      "revId": "85320033c91e095fe468bcf5e5df83264a1875f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "57b5657d_56df416d",
         "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
         "patchSetId": 24
@@ -118,6 +214,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "be623e98_78819c50",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-10T13:26:23Z",
+      "side": 1,
+      "message": "That\u0027s a good idea. When the triggers are ready to be integrated, I\u0027ll create a patch to split them into multiple files and make the code cleaner. I\u0027m not doing it right now to avoid potentially tedious successive rebases.",
+      "parentUuid": "57b5657d_56df416d",
+      "range": {
+        "startLine": 175,
+        "startChar": 4,
+        "endLine": 175,
+        "endChar": 12
+      },
+      "revId": "85320033c91e095fe468bcf5e5df83264a1875f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aecc449a_f7ba8ec5",
         "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
         "patchSetId": 24
@@ -129,6 +249,30 @@
       "writtenOn": "2026-04-10T07:45:06Z",
       "side": 1,
       "message": "question: is this useful ? It\u0027d be to trigger a policy once at a certain date, but what\u0027s the point of that ?",
+      "range": {
+        "startLine": 183,
+        "startChar": 4,
+        "endLine": 183,
+        "endChar": 13
+      },
+      "revId": "85320033c91e095fe468bcf5e5df83264a1875f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f3a8fe1_5f10ba32",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-10T13:26:23Z",
+      "side": 1,
+      "message": "Yes, not very useful in practice, I saw this in Robinhood3\u0027s policyengine. One use case I can see is, for example, knowing you have maintenance and you can then schedule the execution of certain policies for that occasion.",
+      "parentUuid": "aecc449a_f7ba8ec5",
       "range": {
         "startLine": 183,
         "startChar": 4,
