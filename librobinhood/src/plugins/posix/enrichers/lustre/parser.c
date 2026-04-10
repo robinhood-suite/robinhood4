@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -42,6 +42,10 @@ str2lustre_predicate(const char *string)
                 return LPRED_COMPOSITE;
             break;
         }
+        break;
+    case 'e':
+        if (strcmp(&string[2], "xtension-size") == 0)
+            return LPRED_EXTENSION_SIZE;
         break;
     case 'f':
         if (strcmp(&string[2], "id") == 0)
@@ -130,6 +134,7 @@ static const char *__lustre_predicate2str[] = {
     [LPRED_COMP_FLAGS]     = "comp-flags",
     [LPRED_COMP_START]     = "comp-start",
     [LPRED_COMPOSITE]      = "composite",
+    [LPRED_EXTENSION_SIZE] = "extension-size",
     [LPRED_FID]            = "fid",
     [LPRED_HASH_TYPE]      = "hash-type",
     [LPRED_HSM_STATE]      = "hsm-state",

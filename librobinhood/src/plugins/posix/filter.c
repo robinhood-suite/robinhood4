@@ -117,63 +117,9 @@ empty2filter()
 }
 
 static struct rbh_filter *
-filter_uint64_range_new(const struct rbh_filter_field *field, uint64_t start,
-                        uint64_t end)
-{
-    struct rbh_filter *low, *high;
-
-    low = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_GREATER, field, start);
-    if (low == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "rbh_filter_compare_time");
-
-    high = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_LOWER, field, end);
-    if (high == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "rbh_filter_compare_time");
-
-    return rbh_filter_and(low, high);
-}
-
-static struct rbh_filter *
-size2filter(const struct rbh_filter_field *field, const char *_size)
-{
-    struct rbh_filter *filter;
-    uint64_t unit_size;
-    char operator = 0;
-    uint64_t size;
-
-    rbh_get_size_parameters(_size, &operator, &unit_size, &size);
-
-    switch (operator) {
-    case '-':
-        filter = rbh_filter_compare_uint64_new(RBH_FOP_LOWER_OR_EQUAL, field,
-                                               size == 0 ? 0 :
-                                                   (size - 1) * unit_size);
-        break;
-    case '+':
-        filter = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_GREATER, field,
-                                               size * unit_size);
-        break;
-    default:
-        if (size == 0)
-            filter = filter_uint64_range_new(field, 0, unit_size + 1);
-        else
-            filter = filter_uint64_range_new(field, (size - 1) * unit_size,
-                                             size * unit_size + 1);
-    }
-
-    if (filter == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "filter_compare_integer");
-
-    return filter;
-}
-
-static struct rbh_filter *
 filesize2filter(const char *filesize)
 {
-    return size2filter(&predicate2filter_field[PRED_SIZE], filesize);
+    return rbh_size2filter(&predicate2filter_field[PRED_SIZE], filesize);
 }
 
 static struct rbh_filter *
@@ -821,8 +767,9 @@ timedelta2filter(enum predicate predicate, enum time_unit unit,
                           "rbh_filter_compare_time_new");
         break;
     default:
-        filter = filter_uint64_range_new(field, then - TIME_UNIT2SECONDS[unit],
-                                         then);
+        filter = rbh_filter_uint64_range_new(field,
+                                             then - TIME_UNIT2SECONDS[unit],
+                                             then);
         if (filter == NULL)
             error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                           "filter_time_range_new");

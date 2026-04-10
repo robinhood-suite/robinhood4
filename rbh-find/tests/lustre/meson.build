@@ -7,6 +7,7 @@
 integration_tests = [
     'test_comp',
     'test_composite',
+    'test_extension_size',
     'test_fid',
     'test_hash_type',
     'test_hsm_state',
