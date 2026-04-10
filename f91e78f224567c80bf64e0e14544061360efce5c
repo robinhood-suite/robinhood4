@@ -191,6 +191,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05045e81_245f055c",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:09:05Z",
+      "side": 1,
+      "message": "Thanks for the explanation, and yes for a warning, especially since it\u0027s unexpected behaviour",
+      "parentUuid": "b4bf921b_ab58727a",
+      "range": {
+        "startLine": 151,
+        "startChar": 4,
+        "endLine": 151,
+        "endChar": 42
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "65d3cee2_a580ccde",
         "filename": "librobinhood/src/plugins/ldiskfs/internals.h",
         "patchSetId": 9
@@ -320,6 +344,30 @@
       "side": 1,
       "message": "There seems to be none in the user header.\nThere is one in the source code:\n```\nvoid lustre_lma_swab(struct lustre_mdt_attrs *lma)\n{                                                                                \n#ifdef __BIG_ENDIAN                                                                 \n|   __swab32s(\u0026lma-\u003elma_compat);                                                 \n|   __swab32s(\u0026lma-\u003elma_incompat);                                                  \n|   lustre_swab_lu_fid(\u0026lma-\u003elma_self_fid);                                      \n#endif                                                                           \n}\n```\nThis does the same thing as my code but this would not work in the current code as the `\u003cendian.h\u003e` header I use (which provides `leXXtoh()` functions) defines `__BIG_ENDIAN` and `__LITTLE_ENDIAN` regardless of the cpu architecture, whereas lustre uses `\u003casm/byteorder.h\u003e` which only defines `__BIG_ENDIAN` or `__LITTLE_ENDIAN` depending on the architecture.\nI chose to do this because I believe `leXXtoh()` functions will make the code easier to read.",
       "parentUuid": "adb84000_c40dcb20",
+      "range": {
+        "startLine": 135,
+        "startChar": 16,
+        "endLine": 135,
+        "endChar": 23
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5e89da1_5a9fed11",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:09:05Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3b87353a_3e731ccb",
       "range": {
         "startLine": 135,
         "startChar": 16,
@@ -461,6 +509,30 @@
       "side": 1,
       "message": "Acknowledged",
       "parentUuid": "9a0ec274_35b1a7b0",
+      "range": {
+        "startLine": 220,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 24
+      },
+      "revId": "f91e78f224567c80bf64e0e14544061360efce5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ecc27bf_e8000e9d",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:09:05Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "084ad750_4b1bdcc7",
       "range": {
         "startLine": 220,
         "startChar": 0,
