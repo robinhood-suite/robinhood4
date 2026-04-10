@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50718dc3_2fae6d68",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 22
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:22:34Z",
+      "side": 1,
+      "message": "style: too long",
+      "range": {
+        "startLine": 9,
+        "startChar": 64,
+        "endLine": 9,
+        "endChar": 77
+      },
+      "revId": "44b197370a03c5a8fc5dcd04c1e36c0e5a834b30",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7298d5b5_ffc31093",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:22:34Z",
+      "side": 1,
+      "message": "question: can\u0027t this simply be:\n```\nreturn self.left.evaluate(context).matched and self.right.evaluate(context).matched\n``` \n?\n\nWould be easier to read and more \"logical\" (in a programming logic sense)\nSame below aswell",
+      "range": {
+        "startLine": 53,
+        "startChar": 8,
+        "endLine": 57,
+        "endChar": 43
+      },
+      "revId": "44b197370a03c5a8fc5dcd04c1e36c0e5a834b30",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "831255d1_a6651c19",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:22:34Z",
+      "side": 1,
+      "message": "minor: move these above the BaseTrigger class",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 1
+      },
+      "revId": "44b197370a03c5a8fc5dcd04c1e36c0e5a834b30",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
