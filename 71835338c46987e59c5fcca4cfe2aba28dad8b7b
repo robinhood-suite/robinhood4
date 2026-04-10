@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "effa8099_2e999939",
+        "filename": "librobinhood/src/action.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-10T10:14:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d188b0eb_aa4ecf25",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 25
+      },
+      "revId": "71835338c46987e59c5fcca4cfe2aba28dad8b7b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28350cfd_51c89cff",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9acba3ee_ada2fb0d",
+        "filename": "librobinhood/src/action.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-10T10:14:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28350cfd_51c89cff",
+      "range": {
+        "startLine": 259,
+        "startChar": 8,
+        "endLine": 259,
+        "endChar": 37
+      },
+      "revId": "71835338c46987e59c5fcca4cfe2aba28dad8b7b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c315419b_b8d2df04",
@@ -60,6 +108,30 @@
       "writtenOn": "2026-04-10T07:03:39Z",
       "side": 1,
       "message": "question: why the change back ?",
+      "range": {
+        "startLine": 373,
+        "startChar": 24,
+        "endLine": 373,
+        "endChar": 74
+      },
+      "revId": "71835338c46987e59c5fcca4cfe2aba28dad8b7b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06736ae0_33688fbc",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-10T10:14:34Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c315419b_b8d2df04",
       "range": {
         "startLine": 373,
         "startChar": 24,
