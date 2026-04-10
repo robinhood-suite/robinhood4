@@ -44,6 +44,7 @@ struct lustre_file_handle {
 struct iterator_data {
     struct rbh_value *stripe_count;
     struct rbh_value *stripe_size;
+    struct rbh_value *extension_size;
     struct rbh_value *mirror_id;
     struct rbh_value *pattern;
     struct rbh_value *begin;
@@ -54,6 +55,7 @@ struct iterator_data {
     int comp_index;
     int ost_size;
     int ost_idx;
+    bool has_extension;
 };
 
 static __thread struct rbh_value_pair *_inode_xattrs;
@@ -259,11 +261,17 @@ fill_iterator_data(struct llapi_layout *layout,
 {
     char pool_tmp[LOV_MAXPOOLNAME + 1];
     uint64_t stripe_count = 0;
-    bool is_init_or_not_comp;
+    bool get_ost_index;
     uint32_t flags = 0;
     uint64_t tmp = 0;
     int ost_len;
     int rc;
+
+    rc = llapi_layout_comp_flags_get(layout, &flags);
+    if (rc)
+        return -1;
+
+    data->flags[index] = create_uint32_value(flags);
 
     rc = llapi_layout_stripe_count_get(layout, &stripe_count);
     if (rc)
@@ -271,23 +279,37 @@ fill_iterator_data(struct llapi_layout *layout,
 
     data->stripe_count[index] = create_uint64_value(stripe_count);
 
-    rc = llapi_layout_stripe_size_get(layout, &tmp);
-    if (rc)
-        return -1;
+    if (!(flags & LCME_FL_EXTENSION)) {
+        rc = llapi_layout_stripe_size_get(layout, &tmp);
+        if (rc)
+            return -1;
 
-    data->stripe_size[index] = create_uint64_value(tmp);
+        data->stripe_size[index] = create_uint64_value(tmp);
+        if (data->extension_size)
+            data->extension_size[index] = create_uint64_value(0);
+    } else {
+        data->stripe_size[index] = create_uint64_value(0);
+        data->has_extension = true;
+        if (!data->extension_size) {
+            data->extension_size = xmalloc(data->ost_size *
+                                           sizeof(*data->extension_size));
+
+            for (int i = 0; i < index; ++i)
+                data->extension_size[i] = create_uint64_value(0);
+        }
+
+        rc = llapi_layout_extension_size_get(layout, &tmp);
+        if (rc)
+            return -1;
+
+        data->extension_size[index] = create_uint64_value(tmp);
+    }
 
     rc = llapi_layout_pattern_get(layout, &tmp);
     if (rc)
         return -1;
 
     data->pattern[index] = create_uint64_value(tmp);
-
-    rc = llapi_layout_comp_flags_get(layout, &flags);
-    if (rc)
-        return -1;
-
-    data->flags[index] = create_uint32_value(flags);
 
     rc = llapi_layout_pool_name_get(layout, pool_tmp, sizeof(pool_tmp));
     if (rc)
@@ -299,12 +321,13 @@ fill_iterator_data(struct llapi_layout *layout,
         /* XXX we do not yet fetch the OST indexes of directories */
         return 0;
 
-    is_init_or_not_comp = (flags == LCME_FL_INIT ||
-                           !llapi_layout_is_composite(layout));
-    ost_len = (is_init_or_not_comp ? stripe_count : 1);
+    get_ost_index = (flags == LCME_FL_INIT ||
+                     flags == LCME_FL_EXTENSION ||
+                     !llapi_layout_is_composite(layout));
+    ost_len = (get_ost_index ? stripe_count : 1);
 
     iter_data_ost_try_resize(data, ost_len);
-    if (is_init_or_not_comp) {
+    if (get_ost_index) {
         uint64_t i;
 
         for (i = 0; i < stripe_count; ++i) {
@@ -380,8 +403,14 @@ init_iterator_data(struct iterator_data *data, const uint32_t length,
      * We want to fetch 8 attributes: mirror_id, stripe_count, stripe_size,
      * pattern, begin, end, flags, pool.
      *
-     * Additionnaly, we will keep the OSTs of each component in a separate list
-     * because its length isn't fixed.
+     * Additionnaly:
+     *  - we will keep the OSTs of each component in a separate list because its
+     *  length isn't fixed.
+     *  - we similarly keep the extension size of each component in a separate
+     *  list as it is only necessary for extension components, which are not the
+     *  default state (i.e. the user has to request it). Therefore, we can't
+     *  know in advance if a component is an extension, so don't bother
+     *  initializing it here, only when necessary.
      */
     struct rbh_value *arr = xcalloc(nb_xattrs * length, sizeof(*arr));
 
@@ -406,6 +435,7 @@ init_iterator_data(struct iterator_data *data, const uint32_t length,
     data->ost_size = length;
     data->ost_idx = 0;
     data->comp_index = 0;
+    data->has_extension = false;
 }
 
 static int
@@ -427,14 +457,19 @@ xattrs_fill_layout(struct iterator_data *data, int nb_xattrs,
             return -1;
     }
 
-    if (S_ISDIR(mode))
-        /* XXX we do not yet fetch the OST indexes of directories */
-        return subcount;
+    if (data->ost) {
+        rc = fill_sequence_pair("ost", data->ost, data->ost_idx,
+                                &pairs[subcount++], _values);
+        if (rc)
+            return -1;
+    }
 
-    rc = fill_sequence_pair("ost", data->ost, data->ost_idx,
-                            &pairs[subcount++], _values);
-    if (rc)
-        return -1;
+    if (data->has_extension) {
+        rc = fill_sequence_pair("extension_size", data->extension_size,
+                                data->comp_index, &pairs[subcount++], _values);
+        if (rc)
+            return -1;
+    }
 
     return subcount;
 }
