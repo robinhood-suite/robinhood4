@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "446ffbb1_9ba4ec42",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:12:39Z",
+      "side": 1,
+      "message": "nit: no need to mention that here, that\u0027s not an important part of the patch",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 51
+      },
+      "revId": "e5330ddca6c74724d261197636ca51b74d8239d0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dece996f_8092a9fb",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:12:39Z",
+      "side": 1,
+      "message": "nit: `struct rbh_value_map links \u003d { 0 };` works aswell if you want",
+      "range": {
+        "startLine": 353,
+        "startChar": 33,
+        "endLine": 356,
+        "endChar": 6
+      },
+      "revId": "e5330ddca6c74724d261197636ca51b74d8239d0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
