@@ -1,5 +1,5 @@
 # This file is part of RobinHood
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -7,6 +7,7 @@
 integration_tests = [
     'test_comp',
     'test_composite',
+    'test_extension_size',
     'test_fid',
     'test_hash_type',
     'test_hsm_state',

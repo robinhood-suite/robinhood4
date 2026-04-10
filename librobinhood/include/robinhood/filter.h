@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -420,6 +420,22 @@ rbh_filter_compare_map_new(enum rbh_filter_operator op,
                            const struct rbh_value_pair pairs[], size_t count);
 
 /**
+ * Create a filter corresponding to "start < field < end"
+ *
+ * @param field     the field to compare
+ * @param start     the start of the range of the filter
+ * @param end       the end of the range of the filter
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter on success,
+ *                  NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ */
+struct rbh_filter *
+rbh_filter_uint64_range_new(const struct rbh_filter_field *field,
+                            uint64_t start, uint64_t end);
+
+/**
  * Create a comparison filter
  *
  * @param op        the type of comparison to use
@@ -618,6 +634,21 @@ rbh_filetype2filter(const char *filetype);
 void
 rbh_get_size_parameters(const char *_size, char *operator, uint64_t *unit_size,
                         uint64_t *size);
+
+/**
+ * Build a filter from a string representing a size.
+ * If the given value is preceded with a '+' or '-', will filter entries
+ * with \p field greater or lower than \p _size.
+ *
+ * @param field         a field to filter
+ * @param _size         a string representing a uint64_t, optionnally prefixed
+ *                      with either a '+' or '-' sign
+ *
+ * @return              a pointer to a newly allocated struct filter, or NULL on
+ *                      error
+ */
+struct rbh_filter *
+rbh_size2filter(const struct rbh_filter_field *field, const char *_size);
 
 /**
  * Build a filter from a string representing a uint64_t value.
