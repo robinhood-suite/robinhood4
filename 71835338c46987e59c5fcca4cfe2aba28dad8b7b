@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d188b0eb_aa4ecf25",
+        "filename": "librobinhood/src/action.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:03:39Z",
+      "side": 1,
+      "message": "major: I\u0027m sorry, but the function in rbh-find was easier to read and understand than this version, could you use it instead ? Especially regarding code length and depth of the ifs",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 25
+      },
+      "revId": "71835338c46987e59c5fcca4cfe2aba28dad8b7b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28350cfd_51c89cff",
+        "filename": "librobinhood/src/action.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:03:39Z",
+      "side": 1,
+      "message": "suggest: put each of those cases in a separate functions (which was done by the original code)",
+      "range": {
+        "startLine": 259,
+        "startChar": 8,
+        "endLine": 259,
+        "endChar": 37
+      },
+      "revId": "71835338c46987e59c5fcca4cfe2aba28dad8b7b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c315419b_b8d2df04",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:03:39Z",
+      "side": 1,
+      "message": "question: why the change back ?",
+      "range": {
+        "startLine": 373,
+        "startChar": 24,
+        "endLine": 373,
+        "endChar": 74
+      },
+      "revId": "71835338c46987e59c5fcca4cfe2aba28dad8b7b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
