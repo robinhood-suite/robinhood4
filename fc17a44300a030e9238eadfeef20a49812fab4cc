@@ -22,6 +22,30 @@
       },
       "revId": "fc17a44300a030e9238eadfeef20a49812fab4cc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff67336f_07dd9b08",
+        "filename": "rbh-policy/rbhpolicy/config/cpython.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-10T13:26:16Z",
+      "side": 1,
+      "message": "Sure, but that wouldn\u0027t be any more efficient than here, where we call a C function from librobinhood.",
+      "parentUuid": "0e77aeaa_8249c6c2",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 218,
+        "endChar": 24
+      },
+      "revId": "fc17a44300a030e9238eadfeef20a49812fab4cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
