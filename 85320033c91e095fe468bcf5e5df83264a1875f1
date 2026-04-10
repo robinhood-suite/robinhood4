@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90e0d25a_77b03699",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 24
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:45:06Z",
+      "side": 1,
+      "message": "style: too long",
+      "range": {
+        "startLine": 9,
+        "startChar": 68,
+        "endLine": 9,
+        "endChar": 77
+      },
+      "revId": "85320033c91e095fe468bcf5e5df83264a1875f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a59c9435_89277745",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:45:06Z",
+      "side": 1,
+      "message": "nit: directly add months and year, doesn\u0027t take much more to handle it directly",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 94,
+        "endChar": 13
+      },
+      "revId": "85320033c91e095fe468bcf5e5df83264a1875f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bee7b6b_86c7fbaf",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:45:06Z",
+      "side": 1,
+      "message": "suggest: put this above _parse_datetime",
+      "range": {
+        "startLine": 122,
+        "startChar": 6,
+        "endLine": 122,
+        "endChar": 21
+      },
+      "revId": "85320033c91e095fe468bcf5e5df83264a1875f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d84635c_aba1af02",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:45:06Z",
+      "side": 1,
+      "message": "question: won\u0027t this trigger more than once ?",
+      "range": {
+        "startLine": 158,
+        "startChar": 8,
+        "endLine": 159,
+        "endChar": 35
+      },
+      "revId": "85320033c91e095fe468bcf5e5df83264a1875f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57b5657d_56df416d",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:45:06Z",
+      "side": 1,
+      "message": "suggest: separate the kinds of trigger in different files would be nice. For instance having a \"base\" file for the base trigger logic, \"time\" for these, \"space\" for the space used ones...",
+      "range": {
+        "startLine": 175,
+        "startChar": 4,
+        "endLine": 175,
+        "endChar": 12
+      },
+      "revId": "85320033c91e095fe468bcf5e5df83264a1875f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aecc449a_f7ba8ec5",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:45:06Z",
+      "side": 1,
+      "message": "question: is this useful ? It\u0027d be to trigger a policy once at a certain date, but what\u0027s the point of that ?",
+      "range": {
+        "startLine": 183,
+        "startChar": 4,
+        "endLine": 183,
+        "endChar": 13
+      },
+      "revId": "85320033c91e095fe468bcf5e5df83264a1875f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
