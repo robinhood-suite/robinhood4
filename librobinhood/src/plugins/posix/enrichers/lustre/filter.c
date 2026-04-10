@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -40,6 +40,8 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                               .xattr = "comp_flags"},
     [LPRED_COMP_START]     = {.fsentry = RBH_FP_INODE_XATTRS,
                               .xattr = "begin"},
+    [LPRED_EXTENSION_SIZE] = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "extension_size"},
     [LPRED_FID]            = {.fsentry = RBH_FP_INODE_XATTRS,
                               .xattr = "fid"},
     [LPRED_HASH_TYPE]      = {.fsentry = RBH_FP_INODE_XATTRS,
@@ -870,6 +872,18 @@ comp_flags2filter(const char *comp_flags)
     return filter;
 }
 
+static struct rbh_filter *
+extension_size2filter(const char *extension_size)
+{
+    if (!strcmp(extension_size, "0"))
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Invalid extension size requested, cannot have extensions of size 0");
+
+
+    return rbh_size2filter(get_filter_field(LPRED_EXTENSION_SIZE),
+                           extension_size);
+}
+
 static bool
 predicate_has_argument(int predicate)
 {
@@ -910,6 +924,9 @@ rbh_lustre_build_filter(const char **argv, int argc, int *index,
         break;
     case LPRED_COMPOSITE:
         filter = composite2filter();
+        break;
+    case LPRED_EXTENSION_SIZE:
+        filter = extension_size2filter(argv[++i]);
         break;
     case LPRED_FID:
         filter = fid2filter(argv[++i]);
