@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4acce44c_c9dd005b",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-10T06:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cb841af_85229b5f",
+      "range": {
+        "startLine": 117,
+        "startChar": 11,
+        "endLine": 117,
+        "endChar": 15
+      },
+      "revId": "fc6756e24d0183a8969159a8290c157a2389f57c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f474ef6f_9b312e02",
@@ -71,6 +95,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "070474be_a5ad4a11",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-10T06:52:13Z",
+      "side": 1,
+      "message": "Done, a comment was added.",
+      "parentUuid": "224f93ad_ca342211",
+      "range": {
+        "startLine": 122,
+        "startChar": 12,
+        "endLine": 122,
+        "endChar": 18
+      },
+      "revId": "fc6756e24d0183a8969159a8290c157a2389f57c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b37b90a7_48faed74",
@@ -84,6 +132,30 @@
       "writtenOn": "2026-04-09T11:52:08Z",
       "side": 1,
       "message": "nit: `test_corner_cases`",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 23
+      },
+      "revId": "fc6756e24d0183a8969159a8290c157a2389f57c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea1253ae_a88882c2",
+        "filename": "rbh-gc/tests/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-10T06:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b37b90a7_48faed74",
       "range": {
         "startLine": 9,
         "startChar": 5,
@@ -131,6 +203,30 @@
       "side": 1,
       "message": "I can change the name of the file, I can add this to the basic test. I don\u0027t really care.",
       "parentUuid": "1eec6ec7_06f14aff",
+      "range": {
+        "startLine": 15,
+        "startChar": 4,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "fc6756e24d0183a8969159a8290c157a2389f57c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c58556a7_5730a75f",
+        "filename": "rbh-gc/tests/test_extreme_cases.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-10T06:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38ed17ba_b9aee68d",
       "range": {
         "startLine": 15,
         "startChar": 4,
