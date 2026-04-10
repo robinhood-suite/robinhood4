@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -99,8 +99,7 @@ test_comp_flags()
     lfs setstripe -E 1M -S 256k -E 2M -S 1M -E -1 -S 1G file0
     truncate -s 1M "file0"
 
-    # XXX: extension components don't have a stripe size but an extension size
-    #lfs setstripe --extension-size 64M -c 1 -E -1 file1
+    lfs setstripe --extension-size 64M -c 1 -E -1 file1
 
     lfs mirror create -N -Eeof -c2 -o0,1 -N -Eeof -c2 -o1,2 file2
     echo "blob" > file2
@@ -114,9 +113,9 @@ test_comp_flags()
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
     rbh_find "rbh:$db:$testdb" -comp-flags init | sort |
-        difflines "/file0" "/file2" "/file3" "/file4"
-    #rbh_find "rbh:$db:$testdb" -comp-flags extension | sort |
-    #    difflines "/file1"
+        difflines "/file0" "/file1" "/file2" "/file3" "/file4"
+    rbh_find "rbh:$db:$testdb" -comp-flags extension | sort |
+        difflines "/file1"
     rbh_find "rbh:$db:$testdb" -comp-flags stale | sort |
         difflines "/file2"
     rbh_find "rbh:$db:$testdb" -comp-flags nosync | sort |
