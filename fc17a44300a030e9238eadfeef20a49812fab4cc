@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e77aeaa_8249c6c2",
+        "filename": "rbh-policy/rbhpolicy/config/cpython.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-10T07:49:01Z",
+      "side": 1,
+      "message": "question: couldn\u0027t this be done with a call to rbh-info to get the source backends ?",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 218,
+        "endChar": 24
+      },
+      "revId": "fc17a44300a030e9238eadfeef20a49812fab4cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
