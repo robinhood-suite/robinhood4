@@ -114,6 +114,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e23a3169_174ed636",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-10T07:54:24Z",
+      "side": 1,
+      "message": "I had discussed this with Guillaume and we agreed that, unlike rbh-find, \nit was better for the Policy engine to have a deterministic default \nschema for the resolution of actions to be applied.\n\nI\u0027m still going to discuss it with the team again to get more opinions.",
+      "parentUuid": "a1948260_7ebf2224",
+      "revId": "90c89cb0b633815dfa97f9b4eda7ba41361cac4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a2f5f0af_2d9a59e2",
         "filename": "librobinhood/src/policyengine/actions.c",
         "patchSetId": 17
