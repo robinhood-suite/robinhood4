@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ce6023b_7b0b6c5b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 23
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T08:55:57Z",
+      "side": 1,
+      "message": "style: too long",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 2
+      },
+      "revId": "827a94a32958cf96eef97c36251a535fb0389a80",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7334676_684eb3b4",
+        "filename": "librobinhood/src/policyengine/trigger.c",
+        "patchSetId": 23
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T08:55:57Z",
+      "side": 1,
+      "message": "nit: `extract_int` since you also handle int32",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 13
+      },
+      "revId": "827a94a32958cf96eef97c36251a535fb0389a80",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "406b489c_b4d8214e",
+        "filename": "librobinhood/src/policyengine/trigger.c",
+        "patchSetId": 23
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T08:55:57Z",
+      "side": 1,
+      "message": "style: order",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 43
+      },
+      "revId": "827a94a32958cf96eef97c36251a535fb0389a80",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
