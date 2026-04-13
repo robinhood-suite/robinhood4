@@ -164,6 +164,30 @@
       },
       "revId": "bc9604548d66c20ee585bf1da666fdd0861e2f8f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cec61082_c790d081",
+        "filename": "librobinhood/src/action.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T14:27:43Z",
+      "side": 1,
+      "message": "I was thinking more:\n```\nfor (size_t i...) {\n\tif (i + 1 \u003e\u003d length) {\n\t\toutput[i] \u003d format_string[i];\n\t\ttmp_length \u003d 1;\n\t\tgoto finish;\n\t}\n\t\n\tswitch ...\n\t\nfinish:\n\toutput_length +\u003d (size_t)...\n}\n```\n\nI find this easier to read.",
+      "parentUuid": "55466952_f406b17f",
+      "range": {
+        "startLine": 331,
+        "startChar": 12,
+        "endLine": 334,
+        "endChar": 13
+      },
+      "revId": "bc9604548d66c20ee585bf1da666fdd0861e2f8f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
