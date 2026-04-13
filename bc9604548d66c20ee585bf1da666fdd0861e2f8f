@@ -140,6 +140,30 @@
       },
       "revId": "bc9604548d66c20ee585bf1da666fdd0861e2f8f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55466952_f406b17f",
+        "filename": "librobinhood/src/action.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-13T14:09:10Z",
+      "side": 1,
+      "message": "Marked as unresolved.",
+      "parentUuid": "7c5e5979_474d6578",
+      "range": {
+        "startLine": 331,
+        "startChar": 12,
+        "endLine": 334,
+        "endChar": 13
+      },
+      "revId": "bc9604548d66c20ee585bf1da666fdd0861e2f8f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
