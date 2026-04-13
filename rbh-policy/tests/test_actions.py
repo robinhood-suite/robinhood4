@@ -156,6 +156,76 @@ declare_policy(
                             "rbh-policy.py should have failed when 'action' "
                             "is missing from declare_policy")
 
+    def test_log_action_with_rule_and_count_limits(self):
+        """
+        Verify that count limits are respected independently for:
+        - the default action
+        - the rule action
+        """
+
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+
+declare_policy(
+    name = "test_log_count_policy",
+    target = (Type == "f"),
+    action = action.log,
+    parameters = {"format": "path=%P", "count": 4},
+    trigger = Always,
+    rules = [
+        Rule(
+            name = "rule_log_test2",
+            condition = Path == "/filedir/test1/test2/*",
+            action = action.log,
+            parameters = {"format": "rule=%P", "count": 2}
+        )
+    ]
+)
+""")
+
+        result = self._run_policy(config_path, "test_log_count_policy")
+        self.assertEqual(
+            result.returncode, 0,
+            f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+            f"stderr:\n{result.stderr}"
+        )
+
+        output = result.stdout.splitlines()
+
+        # Count logs from the rule
+        rule_logs = [
+            line for line in output
+            if line.startswith("LogAction | rule=")
+        ]
+
+        # Count logs from the default action
+        default_logs = [
+            line for line in output
+            if line.startswith("LogAction | path=")
+        ]
+
+        self.assertEqual(
+            len(rule_logs), 2,
+            f"Expected 2 rule logs, got {len(rule_logs)}"
+        )
+
+        self.assertEqual(
+            len(default_logs), 4,
+            f"Expected 4 default logs, got {len(default_logs)}"
+        )
+
+        # Total logs = 6
+        self.assertEqual(
+            len(rule_logs) + len(default_logs), 6,
+            f"Expected 6 logs total, got {len(rule_logs) + len(default_logs)}"
+        )
+
     def test_delete_file_success(self):
         """
         Verify that the delete action removes a targeted file from the

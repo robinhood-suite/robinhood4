@@ -70,11 +70,13 @@ class RbhDeleteParams(Structure):
     _fields_ = [
         ("remove_empty_parent", c_bool),
         ("remove_parents_below", c_char_p),
+        ("count", ctypes.c_size_t),
     ]
 
 class RbhLogParams(Structure):
     _fields_ = [
         ("format", c_char_p),
+        ("count", ctypes.c_size_t),
     ]
 
 class RbhParamsUnion(Union):
@@ -102,6 +104,15 @@ class RbhPolicy(Structure):
         ("rule_count", ctypes.c_size_t),
     ]
 
+def parse_count(raw):
+    if raw is None:
+        return 0
+    if isinstance(raw, bool) or not isinstance(raw, int):
+        raise TypeError("count parameter must be an integer")
+    if raw < 0:
+        raise ValueError("count parameter must be >= 0")
+    return raw
+
 def make_c_parameters(action: str, params: dict):
     action = action or ""
     verb = action.split(":", 1)[-1]  # "_:delete" -> "delete"
@@ -109,6 +120,7 @@ def make_c_parameters(action: str, params: dict):
     if verb == "delete":
         p = RbhDeleteParams()
         p.remove_empty_parent = bool(params.get("remove_empty_parent", False))
+        p.count = parse_count(params.get("count"))
 
         below = params.get("remove_parents_below")
         p.remove_parents_below = below.encode() if below else None
@@ -117,6 +129,7 @@ def make_c_parameters(action: str, params: dict):
 
     elif verb == "log":
         p = RbhLogParams()
+        p.count = parse_count(params.get("count"))
         log_format = params.get("format")
         p.format = log_format.encode() if log_format else None
         return ("log", p)
