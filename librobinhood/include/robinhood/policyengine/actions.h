@@ -23,6 +23,9 @@ rbh_pe_select_action(const struct rbh_policy *policy,
                      bool has_rule,
                      size_t matched_index);
 
+size_t
+rbh_pe_action_count_limit(const struct rbh_action *action);
+
 int
 rbh_pe_apply_action(const struct rbh_action *action,
                     struct rbh_fsentry *entry,
