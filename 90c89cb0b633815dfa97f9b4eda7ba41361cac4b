@@ -130,6 +130,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0116a828_f2167ee0",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-13T08:33:07Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e23a3169_174ed636",
+      "revId": "90c89cb0b633815dfa97f9b4eda7ba41361cac4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a2f5f0af_2d9a59e2",
