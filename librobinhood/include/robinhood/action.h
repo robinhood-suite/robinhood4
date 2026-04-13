@@ -37,10 +37,12 @@ enum rbh_delete_action_return {
 struct rbh_delete_params {
     bool remove_empty_parent;
     const char *remove_parents_below;
+    size_t count;
 };
 
 struct rbh_log_params {
     const char *format;
+    size_t count;
 };
 
 /**
