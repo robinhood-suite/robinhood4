@@ -189,6 +189,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2df0373_6b130a0a",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T08:07:36Z",
+      "side": 1,
+      "message": "Please put a comment above it then, so that it is not forgotten or the subjet of wasted time trying to find why a policy continuously activates",
+      "parentUuid": "23c09ed5_91c35b40",
+      "range": {
+        "startLine": 158,
+        "startChar": 8,
+        "endLine": 159,
+        "endChar": 35
+      },
+      "revId": "85320033c91e095fe468bcf5e5df83264a1875f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57b5657d_56df416d",
@@ -236,6 +260,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09bcafa8_b5fb72f9",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T08:07:36Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "be623e98_78819c50",
+      "range": {
+        "startLine": 175,
+        "startChar": 4,
+        "endLine": 175,
+        "endChar": 12
+      },
+      "revId": "85320033c91e095fe468bcf5e5df83264a1875f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aecc449a_f7ba8ec5",
@@ -273,6 +321,30 @@
       "side": 1,
       "message": "Yes, not very useful in practice, I saw this in Robinhood3\u0027s policyengine. One use case I can see is, for example, knowing you have maintenance and you can then schedule the execution of certain policies for that occasion.",
       "parentUuid": "aecc449a_f7ba8ec5",
+      "range": {
+        "startLine": 183,
+        "startChar": 4,
+        "endLine": 183,
+        "endChar": 13
+      },
+      "revId": "85320033c91e095fe468bcf5e5df83264a1875f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13debc25_153856c1",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T08:07:36Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7f3a8fe1_5f10ba32",
       "range": {
         "startLine": 183,
         "startChar": 4,
