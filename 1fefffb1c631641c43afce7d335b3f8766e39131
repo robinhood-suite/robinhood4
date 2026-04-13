@@ -68,6 +68,29 @@
       },
       "revId": "1fefffb1c631641c43afce7d335b3f8766e39131",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf99fd5c_6a9c80fb",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/posix_capacity_provider.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T08:31:55Z",
+      "side": 1,
+      "message": "minor: as we discussed, this should be in the posix backend, and each capacity provider should be in their corresponding backend",
+      "range": {
+        "startLine": 72,
+        "startChar": 36,
+        "endLine": 72,
+        "endChar": 59
+      },
+      "revId": "1fefffb1c631641c43afce7d335b3f8766e39131",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
