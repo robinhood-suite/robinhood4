@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fce2ea7_e35b9ab2",
+        "filename": "librobinhood/src/action.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T08:04:46Z",
+      "side": 1,
+      "message": "major: this is just `output[0] \u003d *escape`",
+      "range": {
+        "startLine": 243,
+        "startChar": 3,
+        "endLine": 251,
+        "endChar": 20
+      },
+      "revId": "bc9604548d66c20ee585bf1da666fdd0861e2f8f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1134c2f6_7ae4d19e",
+        "filename": "librobinhood/src/action.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T08:04:46Z",
+      "side": 1,
+      "message": "minor: put this and the same else line 342 above the switch, as it is a general condition, with a goto statement to avoid indentation",
+      "range": {
+        "startLine": 331,
+        "startChar": 12,
+        "endLine": 334,
+        "endChar": 13
+      },
+      "revId": "bc9604548d66c20ee585bf1da666fdd0861e2f8f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
