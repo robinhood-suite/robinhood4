@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa59fed8_1759b7c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T09:05:55Z",
+      "side": 1,
+      "message": "typo: fileclass",
+      "range": {
+        "startLine": 7,
+        "startChar": 46,
+        "endLine": 7,
+        "endChar": 54
+      },
+      "revId": "f60177d0a92dd90d0096cc694cf834b59a43da90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b64728c7_a4329bbe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T09:05:55Z",
+      "side": 1,
+      "message": "minor: no, you actually load the config to know these info, line 44 of rbh-policy.py",
+      "range": {
+        "startLine": 12,
+        "startChar": 8,
+        "endLine": 12,
+        "endChar": 39
+      },
+      "revId": "f60177d0a92dd90d0096cc694cf834b59a43da90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b76be0e9_6a0b9166",
+        "filename": "rbh-policy/rbhpolicy/execution/show.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T09:05:55Z",
+      "side": 1,
+      "message": "defect: all of these should be implemented with the `__str__` method to simplify readability",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 17
+      },
+      "revId": "f60177d0a92dd90d0096cc694cf834b59a43da90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
