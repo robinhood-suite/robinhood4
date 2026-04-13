@@ -3,6 +3,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e5ed3e6_582d4ec0",
+        "filename": "rbh-sync/tests/sparse/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-13T09:11:03Z",
+      "side": 1,
+      "message": "nit: 2026",
+      "range": {
+        "startLine": 2,
+        "startChar": 16,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "baaf397da618160bdc67aa6220559c059e421850",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "670dc7e0_7d178815",
+        "filename": "rbh-sync/tests/sparse/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-13T09:11:03Z",
+      "side": 1,
+      "message": "style: remove empty line",
+      "revId": "baaf397da618160bdc67aa6220559c059e421850",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c4fc4a8a_df227008",
         "filename": "rbh-sync/tests/sparse/test_sparse_db_sync.bash",
         "patchSetId": 2
