@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23d6a34e_e9f994f8",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T09:01:40Z",
+      "side": 1,
+      "message": "comment: we need a better name for these to be explicit about this trigger checking the mirror and GlobalInodePercent checking the system",
+      "range": {
+        "startLine": 604,
+        "startChar": 4,
+        "endLine": 604,
+        "endChar": 19
+      },
+      "revId": "ef98a783a268cdc7831e0deb971d3024b184de9d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
