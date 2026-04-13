@@ -95,6 +95,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94865dfe_bece3655",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T14:28:34Z",
+      "side": 1,
+      "message": "You\u0027re right, forgot about that, my bad",
+      "parentUuid": "706c9f48_70ac5e3d",
+      "range": {
+        "startLine": 53,
+        "startChar": 8,
+        "endLine": 57,
+        "endChar": 43
+      },
+      "revId": "44b197370a03c5a8fc5dcd04c1e36c0e5a834b30",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "831255d1_a6651c19",
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "Why ? To me, it makes more sense to leave them as they are. Especially since it inherits from the BaseTrigger class.\nOtherwise, the Python interpreter won\u0027t recognize the BaseTrigger class, and we\u0027ll have to use the \"ABC\" module. I think that reduces the code\u0027s readability.",
       "parentUuid": "831255d1_a6651c19",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 1
+      },
+      "revId": "44b197370a03c5a8fc5dcd04c1e36c0e5a834b30",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4aa66920_7ee523c2",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T14:28:34Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3d40fd83_9c28b316",
       "range": {
         "startLine": 47,
         "startChar": 0,
