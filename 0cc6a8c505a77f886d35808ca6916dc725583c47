@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bec5482a_a6e62a99",
+        "filename": "rbh-find/tests/sparse/test_helper.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-13T09:21:13Z",
+      "side": 1,
+      "message": "nit: 2026",
+      "range": {
+        "startLine": 4,
+        "startChar": 16,
+        "endLine": 4,
+        "endChar": 20
+      },
+      "revId": "0cc6a8c505a77f886d35808ca6916dc725583c47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
