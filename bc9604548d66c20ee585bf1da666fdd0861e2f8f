@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0332172d_12d91935",
+        "filename": "librobinhood/src/action.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-13T14:08:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fce2ea7_e35b9ab2",
+      "range": {
+        "startLine": 243,
+        "startChar": 3,
+        "endLine": 251,
+        "endChar": 20
+      },
+      "revId": "bc9604548d66c20ee585bf1da666fdd0861e2f8f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a7e11aa_eb7247f0",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82cd8e55_5a712b03",
+        "filename": "librobinhood/src/action.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-13T14:08:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a7e11aa_eb7247f0",
+      "range": {
+        "startLine": 284,
+        "startChar": 4,
+        "endLine": 286,
+        "endChar": 29
+      },
+      "revId": "bc9604548d66c20ee585bf1da666fdd0861e2f8f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1134c2f6_7ae4d19e",
@@ -60,6 +108,30 @@
       "writtenOn": "2026-04-13T08:04:46Z",
       "side": 1,
       "message": "minor: put this and the same else line 342 above the switch, as it is a general condition, with a goto statement to avoid indentation",
+      "range": {
+        "startLine": 331,
+        "startChar": 12,
+        "endLine": 334,
+        "endChar": 13
+      },
+      "revId": "bc9604548d66c20ee585bf1da666fdd0861e2f8f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c5e5979_474d6578",
+        "filename": "librobinhood/src/action.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-13T14:08:47Z",
+      "side": 1,
+      "message": "I see the intent of factoring out the common condition, but I’m not convinced it improves readability here.\n\nMoving the check before the switch requires adding `(format_string[i] \u003d\u003d \u0027%\u0027 || format_string[i] \u003d\u003d \u0027\\\\\u0027)`, which duplicates part of the switch logic and makes the flow a bit harder to follow.\n\nIn this case, the original `else` blocks are very small and local to each case, so they felt more straightforward to me.",
+      "parentUuid": "1134c2f6_7ae4d19e",
       "range": {
         "startLine": 331,
         "startChar": 12,
