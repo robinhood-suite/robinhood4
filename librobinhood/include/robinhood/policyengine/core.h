@@ -23,6 +23,9 @@ struct rbh_action_cache {
     struct rbh_action default_action;
     struct rbh_action *rule_actions;
     size_t rule_count;
+
+    size_t default_count_used;
+    size_t *rule_count_used;
 };
 
 struct rbh_rule {
