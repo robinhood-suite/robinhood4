@@ -133,6 +133,20 @@ rbh_pe_match_rule(const struct rbh_policy *policy,
     return false;
 }
 
+static size_t *
+rbh_pe_action_used_counter(struct rbh_action_cache *cache,
+                           bool has_matched_rule,
+                           size_t matched_index)
+{
+    if (has_matched_rule) {
+        if (matched_index >= cache->rule_count)
+            return NULL;
+        return &cache->rule_count_used[matched_index];
+    }
+
+    return &cache->default_count_used;
+}
+
 int
 rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
                struct rbh_backend *mirror_backend,
@@ -179,6 +193,8 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
         bool has_matched_rule = false;
         struct rbh_fsentry *fresh;
         size_t matched_index = 0;
+        size_t limit;
+        size_t *used;
 
         errno = 0;
         mirror_entry = rbh_mut_iter_next(mirror_iter);
@@ -213,8 +229,20 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
         current_action = rbh_pe_select_action(policy, &action_cache,
                                               has_matched_rule, matched_index);
 
+        /* Count-based limiting */
+        limit = rbh_pe_action_count_limit(&current_action);
+        used = rbh_pe_action_used_counter(&action_cache, has_matched_rule,
+                                          matched_index);
+
+        if (limit > 0 && used && *used >= limit) {
+            free(fresh);
+            continue;
+        }
         rbh_pe_apply_action(&current_action, fresh, mirror_backend, fs_backend,
                             &f_ctx);
+
+        if (limit > 0 && used)
+            (*used)++;
 
         free(fresh);
     }

@@ -119,6 +119,9 @@ rbh_pe_actions_init(const struct rbh_policy *policy,
     cache->default_action = (struct rbh_action){0};
     cache->default_action.type = RBH_ACTION_UNSET;
 
+    cache->default_count_used = 0;
+    cache->rule_count_used = NULL;
+
     cache->rule_count = policy->rule_count;
 
     if (policy->rule_count == 0)
@@ -126,6 +129,9 @@ rbh_pe_actions_init(const struct rbh_policy *policy,
 
     cache->rule_actions = xcalloc(policy->rule_count,
                                   sizeof(*cache->rule_actions));
+
+    cache->rule_count_used = xcalloc(policy->rule_count,
+                                     sizeof(*cache->rule_count_used));
 
     for (size_t i = 0; i < policy->rule_count; i++)
         cache->rule_actions[i].type = RBH_ACTION_UNSET;
@@ -145,7 +151,13 @@ rbh_pe_actions_destroy(struct rbh_action_cache *cache)
     if (cache->rule_actions)
         free(cache->rule_actions);
     cache->rule_actions = NULL;
+
+    if (cache->rule_count_used)
+        free(cache->rule_count_used);
+    cache->rule_count_used = NULL;
+
     cache->rule_count = 0;
+    cache->default_count_used = 0;
 }
 
 /**
@@ -232,6 +244,19 @@ rbh_pe_select_action(const struct rbh_policy *policy,
         cache->default_action = parsed;
     }
     return cache->default_action;
+}
+
+size_t
+rbh_pe_action_count_limit(const struct rbh_action *action)
+{
+    switch (action->type) {
+    case RBH_ACTION_DELETE:
+        return action->params.delete.count;
+    case RBH_ACTION_LOG:
+        return action->params.log.count;
+    default:
+        return 0;
+    }
 }
 
 static const struct rbh_pe_common_operations *
