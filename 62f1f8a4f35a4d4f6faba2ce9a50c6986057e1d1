@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ffa5d99_77e708fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T09:54:44Z",
+      "side": 1,
+      "message": "Nice doc !",
+      "revId": "62f1f8a4f35a4d4f6faba2ce9a50c6986057e1d1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "889e9228_599aaa9e",
+        "filename": "doc/man/source/rbh-policy-conf.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T09:54:44Z",
+      "side": 1,
+      "message": "question: is this necessary since it\u0027s info already available in the database ?",
+      "range": {
+        "startLine": 24,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 40
+      },
+      "revId": "62f1f8a4f35a4d4f6faba2ce9a50c6986057e1d1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89c8b0ed_80b4dbb6",
+        "filename": "doc/man/source/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T09:54:44Z",
+      "side": 1,
+      "message": "minor: please add a line in the description of this page telling people to go to that man page for information about the config format",
+      "range": {
+        "startLine": 66,
+        "startChar": 30,
+        "endLine": 66,
+        "endChar": 48
+      },
+      "revId": "62f1f8a4f35a4d4f6faba2ce9a50c6986057e1d1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
