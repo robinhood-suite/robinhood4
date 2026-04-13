@@ -46,6 +46,30 @@
       },
       "revId": "fc17a44300a030e9238eadfeef20a49812fab4cc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02896775_31808713",
+        "filename": "rbh-policy/rbhpolicy/config/cpython.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T08:17:42Z",
+      "side": 1,
+      "message": "It is because you don\u0027t need any parsing, you just take the first line, and it avoids unnecessarily duplicating code",
+      "parentUuid": "ff67336f_07dd9b08",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 218,
+        "endChar": 24
+      },
+      "revId": "fc17a44300a030e9238eadfeef20a49812fab4cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
