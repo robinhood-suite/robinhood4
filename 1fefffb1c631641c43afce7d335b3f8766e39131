@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90e42875_11b748e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 24
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T08:24:14Z",
+      "side": 1,
+      "message": "style: lines are too long",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "1fefffb1c631641c43afce7d335b3f8766e39131",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e986bfe_1dc076c0",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/posix_capacity_provider.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T08:24:14Z",
+      "side": 1,
+      "message": "question: why the need for the `max` here ?",
+      "range": {
+        "startLine": 37,
+        "startChar": 23,
+        "endLine": 37,
+        "endChar": 28
+      },
+      "revId": "1fefffb1c631641c43afce7d335b3f8766e39131",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ac56661_df141ae8",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/posix_capacity_provider.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-13T08:24:14Z",
+      "side": 1,
+      "message": "minor: similarly to the previous patch, you could simply use a `rbh-info --mountpoint` here, though you need to pass the DB URI around",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 23
+      },
+      "revId": "1fefffb1c631641c43afce7d335b3f8766e39131",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
