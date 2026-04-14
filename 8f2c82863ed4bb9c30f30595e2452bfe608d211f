@@ -93,6 +93,30 @@
       },
       "revId": "8f2c82863ed4bb9c30f30595e2452bfe608d211f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82f73dcd_11d0a805",
+        "filename": "librobinhood/src/plugins/posix/enrichers/sparse/action.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-14T10:28:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "825a1503_74385510",
+      "range": {
+        "startLine": 53,
+        "startChar": 39,
+        "endLine": 53,
+        "endChar": 65
+      },
+      "revId": "8f2c82863ed4bb9c30f30595e2452bfe608d211f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
