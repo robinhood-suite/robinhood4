@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5e42a9c_c0ae74f3",
+        "filename": "librobinhood/src/plugins/posix/enrichers/sparse/action.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-14T10:27:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81912e2a_90b89ac1",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "8f2c82863ed4bb9c30f30595e2452bfe608d211f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87ae7d78_a4cc68dd",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-04-13T09:19:59Z",
       "side": 1,
       "message": "question: I think we can specify to retrieve only the xattrs.sparseness",
+      "range": {
+        "startLine": 53,
+        "startChar": 39,
+        "endLine": 53,
+        "endChar": 65
+      },
+      "revId": "8f2c82863ed4bb9c30f30595e2452bfe608d211f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "825a1503_74385510",
+        "filename": "librobinhood/src/plugins/posix/enrichers/sparse/action.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-14T10:27:21Z",
+      "side": 1,
+      "message": "Looked at the code, yes we can",
+      "parentUuid": "87ae7d78_a4cc68dd",
       "range": {
         "startLine": 53,
         "startChar": 39,
