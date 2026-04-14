@@ -94,6 +94,30 @@
       },
       "revId": "fc17a44300a030e9238eadfeef20a49812fab4cc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b798baf_2f0b976c",
+        "filename": "rbh-policy/rbhpolicy/config/cpython.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-14T08:31:27Z",
+      "side": 1,
+      "message": "Yes the correct way would be to use the API in the same way rbh-info does. I\u0027d rather have that than parsing of the config as you currently do",
+      "parentUuid": "8047e8ab_46f2df38",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 218,
+        "endChar": 24
+      },
+      "revId": "fc17a44300a030e9238eadfeef20a49812fab4cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
