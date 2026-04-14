@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb750db1_ba5abe92",
+        "filename": "librobinhood/src/plugins/posix/enrichers/sparse/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-14T09:53:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4410f829_59c009e7",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "1a30cf2cd812365b6dc664e33f61bc53379f0307",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a2442b2_6a303c83",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-04-13T09:15:52Z",
       "side": 1,
       "message": "nit: 2026",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "1a30cf2cd812365b6dc664e33f61bc53379f0307",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea365982_24e40902",
+        "filename": "librobinhood/src/plugins/posix/enrichers/sparse/parser.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-14T09:53:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a2442b2_6a303c83",
       "range": {
         "startLine": 2,
         "startChar": 17,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f42689ea_7c354980",
+        "filename": "librobinhood/src/plugins/posix/enrichers/sparse/parser.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-14T09:53:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afdfdb15_324c7a2b",
+      "range": {
+        "startLine": 32,
+        "startChar": 3,
+        "endLine": 32,
+        "endChar": 16
+      },
+      "revId": "1a30cf2cd812365b6dc664e33f61bc53379f0307",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "546fd4a8_70e74870",
@@ -83,6 +155,30 @@
       "writtenOn": "2026-04-13T09:15:52Z",
       "side": 1,
       "message": "nit: 2026",
+      "range": {
+        "startLine": 2,
+        "startChar": 16,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "1a30cf2cd812365b6dc664e33f61bc53379f0307",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "228f6a05_c1d57a72",
+        "filename": "rbh-find/tests/sparse/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-14T09:53:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "546fd4a8_70e74870",
       "range": {
         "startLine": 2,
         "startChar": 16,
