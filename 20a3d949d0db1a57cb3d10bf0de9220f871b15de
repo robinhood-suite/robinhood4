@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1c939e7_4fa3eef7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-14T08:33:11Z",
+      "side": 1,
+      "message": "cc -Ilibrobinhood/src/plugins/s3/librbh-s3.so.0.0.0.p -Ilibrobinhood/src/plugins/s3 -I../librobinhood/src/plugins/s3 -Ilibrobinhood -I../librobinhood -Ilibrobinhood/include -I../librobinhood/include -Ilibrobinhood/include/robinhood -I../librobinhood/include/robinhood -fdiagnostics-color\u003dalways -D_FILE_OFFSET_BITS\u003d64 -Wall -Winvalid-pch -Werror -std\u003dc11 -g -D_DEFAULT_SOURCE -D_GNU_SOURCE -Wno-pedantic -O3 -fPIC -DHAVE_CONFIG_H -MD -MQ librobinhood/src/plugins/s3/librbh-s3.so.0.0.0.p/plugin.c.o -MF librobinhood/src/plugins/s3/librbh-s3.so.0.0.0.p/plugin.c.o.d -o librobinhood/src/plugins/s3/librbh-s3.so.0.0.0.p/plugin.c.o -c ../librobinhood/src/plugins/s3/plugin.c\n../librobinhood/src/plugins/s3/plugin.c:23:21: error: initialization of ‘int (*)(struct rbh_backend *, struct rbh_fsentry *, const struct rbh_value_map *)’ from incompatible pointer type ‘int (*)(struct rbh_backend *, struct rbh_fsentry *)’ [-Werror\u003dincompatible-pointer-types]\n     .delete_entry \u003d rbh_s3_delete_entry,\n                     ^~~~~~~~~~~~~~~~~~~\n../librobinhood/src/plugins/s3/plugin.c:23:21: note: (near initialization for ‘S3_BACKEND_PLUGIN_COMMON_OPS.delete_entry’)\ncc1: all warnings being treated as errors",
+      "revId": "20a3d949d0db1a57cb3d10bf0de9220f871b15de",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
