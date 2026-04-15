@@ -36,7 +36,7 @@ START_TEST(rbh_collect_fsentries_test)
     ck_assert_ptr_nonnull(backend);
 
     errno = 0;
-    it = rbh_collect_fsentries(backend, NULL);
+    it = rbh_collect_fsentries(backend, NULL, NULL);
     ck_assert_ptr_nonnull(it);
 
     errno = 0;
@@ -76,7 +76,7 @@ START_TEST(rbh_pe_execute_empty_iter_test)
     mirror_backend = rbh_backend_from_uri(mirror_uri, true);
     ck_assert_ptr_nonnull(mirror_backend);
 
-    mirror_iter = rbh_collect_fsentries(mirror_backend, NULL);
+    mirror_iter = rbh_collect_fsentries(mirror_backend, NULL, NULL);
     ck_assert_ptr_nonnull(mirror_iter);
 
     result = rbh_pe_execute(mirror_iter, mirror_backend, fs_uri, &policy);
