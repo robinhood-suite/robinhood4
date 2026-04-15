@@ -34,7 +34,7 @@ def run(policies):
 
         print(f"[INFO] Executing policy '{name}'")
         rbhfilter = policy._filter
-        iterator, backend = collect_fs_entries(rbhfilter)
+        iterator, backend = collect_fs_entries(rbhfilter, policy)
 
         result = rbh_pe_execute(iterator, backend, policy)
         print(f"[INFO] Policy '{name}' completed")
