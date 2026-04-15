@@ -40,6 +40,11 @@ struct rbh_rule {
     } parameters;
 };
 
+struct rbh_policy_sort {
+    const char *by;
+    bool ascending;
+};
+
 struct rbh_policy {
     const char *name;
     struct rbh_filter *filter;
@@ -53,6 +58,8 @@ struct rbh_policy {
 
     struct rbh_rule *rules;
     size_t rule_count;
+
+    struct rbh_policy_sort sort;
 };
 
 const char *
@@ -65,7 +72,8 @@ void
 rbh_pe_free_backend(struct rbh_backend *backend);
 
 struct rbh_mut_iterator *
-rbh_collect_fsentries(struct rbh_backend *backend, struct rbh_filter *filter);
+rbh_collect_fsentries(struct rbh_backend *backend, struct rbh_filter *filter,
+                      const struct rbh_policy_sort *sort);
 
 int
 rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
