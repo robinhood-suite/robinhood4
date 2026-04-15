@@ -7,6 +7,68 @@
 import re
 from datetime import datetime
 
+policy_sort_keywords = {
+    "LastAccess": "atime",
+    "LastModification": "mtime",
+    "LastChange": "ctime",
+    "CreationDate": "btime",
+    "Size": "size",
+    "Name": "name",
+}
+
+policy_sort_orders = {"asc", "desc"}
+
+def normalize_policy_sort(sort):
+    """Normalize policy sort settings.
+
+    Accepted shapes:
+      - None
+      - {"sort_by": "LastAccess", "sort_order": "asc"}
+
+    Returns:
+      - None if no sort requested
+      - dict with canonical backend field and order:
+                {"sort_by": "atime", "sort_order": "desc"}
+    """
+    if sort is None:
+        return None
+
+    if not isinstance(sort, dict):
+        raise TypeError("sort must be a dict with keys 'sort_by' and "
+                        "optional 'sort_order'")
+
+    allowed = {"sort_by", "sort_order"}
+    extra_keys = set(sort.keys()) - allowed
+    if extra_keys:
+        raise ValueError("sort contains unsupported key(s): "
+                         f"{', '.join(sorted(extra_keys))}")
+
+    if "sort_by" not in sort:
+        raise ValueError("sort.sort_by is required")
+
+    raw_sort_by = sort.get("sort_by")
+    if not isinstance(raw_sort_by, str) or not raw_sort_by.strip():
+        raise ValueError("sort.sort_by must be a non-empty string")
+
+    if raw_sort_by not in policy_sort_keywords:
+        raise ValueError("sort.sort_by must be one of: "
+                         f"{', '.join(policy_sort_keywords.keys())}")
+
+    sort_by = policy_sort_keywords[raw_sort_by]
+
+    sort_order = sort.get("sort_order", "desc")
+    if not isinstance(sort_order, str):
+        raise TypeError("sort.sort_order must be a string")
+
+    if sort_order not in policy_sort_orders:
+        raise ValueError("sort.sort_order must be one of: asc, desc "
+                         "(lowercase)")
+
+    return {
+        "sort_by": sort_by,
+        "sort_order": sort_order,
+    }
+
 def parse_storage_unit(value: str):
     """Parse storage size like '10MB' to find-compatible format."""
     units = {
