@@ -65,6 +65,16 @@ librbh.rbh_trigger_query_stat.argtypes = [rbh_backend_p, rbh_filter_p,
                                           ctypes.c_uint32,
                                           ctypes.POINTER(ctypes.c_int64)]
 
+class RbhPolicySort(Structure):
+    _fields_ = [
+        ("by", c_char_p),
+        ("ascending", c_bool),
+    ]
+
+librbh.rbh_collect_fsentries.restype = rbh_mut_iterator_p
+librbh.rbh_collect_fsentries.argtypes = [rbh_backend_p, rbh_filter_p,
+                                         POINTER(RbhPolicySort)]
+
 class RbhDeleteParams(Structure):
     _fields_ = [
         ("remove_empty_parent", c_bool),
@@ -101,6 +111,7 @@ class RbhPolicy(Structure):
         ("parameters", RbhParamsUnion),
         ("rules", POINTER(RbhRule)),
         ("rule_count", ctypes.c_size_t),
+        ("sort", RbhPolicySort),
     ]
 
 def parse_count(raw):
@@ -170,6 +181,15 @@ def make_c_policy(py_policy):
     c_policy.rules = rules_arr
     c_policy.rule_count = rules_len
 
+    if getattr(py_policy, "sort", None):
+        sort_by = py_policy.sort["sort_by"].encode()
+        c_policy.sort.by = sort_by
+        c_policy._sort_by_keep_alive = sort_by
+        c_policy.sort.ascending = (py_policy.sort["sort_order"] == "asc")
+    else:
+        c_policy.sort.by = None
+        c_policy.sort.ascending = True
+
     return c_policy
 
 def build_filter(args):
@@ -187,14 +207,24 @@ def build_filter(args):
 
     return librbh.build_filter_from_uri(backend.encode(), argv)
 
-def collect_fs_entries(rbhfilter):
+def collect_fs_entries(rbhfilter, policy_obj=None):
     global database
     uri_c = c_char_p(database.encode("utf-8"))
     backend = librbh.rbh_backend_from_uri(uri_c, True)
     if not backend:
         raise RuntimeError("Failed to create backend")
 
-    it = librbh.rbh_collect_fsentries(backend, rbhfilter)
+    sort = None
+    sort_by = None
+
+    if policy_obj is not None and getattr(policy_obj, "sort", None):
+        sort_by = policy_obj.sort["sort_by"].encode()
+        sort_value = RbhPolicySort()
+        sort_value.by = sort_by
+        sort_value.ascending = (policy_obj.sort["sort_order"] == "asc")
+        sort = ctypes.byref(sort_value)
+
+    it = librbh.rbh_collect_fsentries(backend, rbhfilter, sort)
 
     return it, backend
 

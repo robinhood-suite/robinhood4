@@ -20,6 +20,7 @@
 #include "robinhood/policyengine/core.h"
 #include "robinhood/policyengine/actions.h"
 #include "robinhood/filters/core.h"
+#include "robinhood/plugins/common_ops.h"
 #include <robinhood.h>
 
 static const char *
@@ -67,10 +68,49 @@ rbh_backend_get_mountpoint(struct rbh_backend *backend)
                                "mountpoint");
 }
 
+static bool
+rbh_pe_resolve_sort_field(struct rbh_backend *backend,
+                          const char *sort_by,
+                          struct rbh_filter_field *field)
+{
+    struct rbh_value_map *info_map = NULL;
+    struct filters_context f_ctx = {0};
+
+    if (!sort_by || !*sort_by || !field)
+        return false;
+
+    *field = (struct rbh_filter_field){0};
+
+    info_map = rbh_backend_get_info(backend, RBH_INFO_BACKEND_SOURCE);
+    if (!info_map)
+        return false;
+
+    import_plugins(&f_ctx, &info_map, 1);
+
+    for (size_t i = 0; i < f_ctx.info_pe_count; ++i) {
+        const struct rbh_pe_common_operations *ops;
+        struct rbh_filter_field candidate;
+
+        ops = get_common_operations(&f_ctx.info_pe[i]);
+        candidate = rbh_pe_common_ops_sort2field(ops, sort_by);
+        if (candidate.fsentry) {
+            *field = candidate;
+            filters_ctx_finish(&f_ctx);
+            return true;
+        }
+    }
+
+    filters_ctx_finish(&f_ctx);
+    return false;
+}
+
 struct rbh_mut_iterator *
-rbh_collect_fsentries(struct rbh_backend *backend, struct rbh_filter *filter)
+rbh_collect_fsentries(struct rbh_backend *backend,
+                      struct rbh_filter *filter,
+                      const struct rbh_policy_sort *sort)
 {
     struct rbh_mut_iterator *it;
+    struct rbh_filter_sort sort_item = {0};
 
     struct rbh_filter_options options = {
         .skip = 0,
@@ -88,6 +128,26 @@ rbh_collect_fsentries(struct rbh_backend *backend, struct rbh_filter *filter)
             .statx_mask = 0,
         }
     };
+
+    if (sort && sort->by && *sort->by) {
+        struct rbh_filter_field field;
+        const char *sort_by = sort->by;
+
+        if (!rbh_pe_resolve_sort_field(backend, sort_by, &field)) {
+            error(EXIT_FAILURE, EINVAL,
+                  "unknown or unsupported sort field '%s'", sort_by);
+            __builtin_unreachable();
+        }
+
+        sort_item.field = field;
+        sort_item.ascending = sort->ascending;
+        options.sort.items = &sort_item;
+        options.sort.count = 1;
+
+        output.projection.fsentry_mask |= field.fsentry;
+        if (field.fsentry == RBH_FP_STATX)
+            output.projection.statx_mask |= field.statx;
+    }
 
     it = rbh_backend_filter(backend, filter, &options, &output, NULL);
     if (!it)
