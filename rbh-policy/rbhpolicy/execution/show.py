@@ -51,6 +51,11 @@ def show_policies(policy_names=None):
         else:
             print("  Parameters: {}")
 
+        if policy.sort:
+            print("  Sort:")
+            print(f"    sort_by: {policy.sort['sort_by']}")
+            print(f"    sort_order: {policy.sort['sort_order']}")
+
         if policy.rules:
             print("  Rules:")
             for rule in policy.rules:
