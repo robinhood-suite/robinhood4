@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3de3da52_6f27e498",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-16T14:00:09Z",
+      "side": 1,
+      "message": "Yes, but I mean, opening it from the user\u0027s point of view allows them to avoid opening their configuration file and to be able to display representations of their fileclass and policies from the CLI.",
+      "parentUuid": "b64728c7_a4329bbe",
+      "range": {
+        "startLine": 12,
+        "startChar": 8,
+        "endLine": 12,
+        "endChar": 39
+      },
+      "revId": "f60177d0a92dd90d0096cc694cf834b59a43da90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b76be0e9_6a0b9166",
         "filename": "rbh-policy/rbhpolicy/execution/show.py",
         "patchSetId": 4
@@ -60,6 +84,30 @@
       "writtenOn": "2026-04-13T09:05:55Z",
       "side": 1,
       "message": "defect: all of these should be implemented with the `__str__` method to simplify readability",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 17
+      },
+      "revId": "f60177d0a92dd90d0096cc694cf834b59a43da90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1370d95_b81c9702",
+        "filename": "rbh-policy/rbhpolicy/execution/show.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-16T14:00:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b76be0e9_6a0b9166",
       "range": {
         "startLine": 111,
         "startChar": 4,
