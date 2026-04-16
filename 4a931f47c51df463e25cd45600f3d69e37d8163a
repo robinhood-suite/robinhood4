@@ -22,6 +22,30 @@
       },
       "revId": "4a931f47c51df463e25cd45600f3d69e37d8163a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75c20924_053e160f",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-16T10:15:55Z",
+      "side": 1,
+      "message": "No that\u0027s correct:\n - last value is RBH_INFO_AVG_OBJ_SIZE + RBH_INFO_BACKEND_SOURCE + RBH_INFO_COUNT + RBH_INFO_FIRST_SYNC \u003d 1 + 2 + 4 + 8 \u003d 15 \u003d f\n - second to last value is RBH_INFO_LAST_SYNC + RBH_INFO_MOUNTPOINT + RBH_INFO_SIZE \u003d 2 + 4 + 8 \u003d 14 \u003d e\n - third to last \u003d RBH_INFO_COMMAND_BACKEND \u003d 1\n \n\nNow we can discuss whether this enum should be changed or not, and I\u0027m ok with that, but for the --all, since fsevents_source should be better managed (but I didn\u0027t bother doing it for this patch), it\u0027s all values in this enum - RBH_INFO_FSEVENTS_SOURCE, which is the value of RBH_INFO_ALL",
+      "parentUuid": "d266e837_d1fc6148",
+      "range": {
+        "startLine": 266,
+        "startChar": 31,
+        "endLine": 266,
+        "endChar": 42
+      },
+      "revId": "4a931f47c51df463e25cd45600f3d69e37d8163a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
