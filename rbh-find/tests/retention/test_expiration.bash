@@ -231,10 +231,10 @@ test_sort()
     rbh_find "rbh:$db:$testdb" | sort |
         difflines "/" "/$fileA" "/$fileB" "/$fileC" "/$fileD" "/$fileE"
 
-    rbh_find "rbh:$db:$testdb" -sort expiration-date |
+    rbh_find "rbh:$db:$testdb" -sort expiration-date -sort name |
         difflines "/" "/$fileD" "/$fileB" "/$fileA" "/$fileE" "/$fileC"
 
-    rbh_find "rbh:$db:$testdb" -rsort expiration-date |
+    rbh_find "rbh:$db:$testdb" -rsort expiration-date -sort name |
         difflines "/$fileC" "/$fileE" "/$fileA" "/$fileB" "/" "/$fileD"
 }
 
