@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c624d3b8_e7c9711f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 24
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-16T13:59:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90e42875_11b748e1",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "1fefffb1c631641c43afce7d335b3f8766e39131",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e986bfe_1dc076c0",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-04-13T08:24:14Z",
       "side": 1,
       "message": "question: why the need for the `max` here ?",
+      "range": {
+        "startLine": 37,
+        "startChar": 23,
+        "endLine": 37,
+        "endChar": 28
+      },
+      "revId": "1fefffb1c631641c43afce7d335b3f8766e39131",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25d5bd12_737dda83",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/posix_capacity_provider.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-16T13:59:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e986bfe_1dc076c0",
       "range": {
         "startLine": 37,
         "startChar": 23,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5695c90_039f73fb",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/posix_capacity_provider.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-16T13:59:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ac56661_df141ae8",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 23
+      },
+      "revId": "1fefffb1c631641c43afce7d335b3f8766e39131",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf99fd5c_6a9c80fb",
@@ -83,6 +155,30 @@
       "writtenOn": "2026-04-13T08:31:55Z",
       "side": 1,
       "message": "minor: as we discussed, this should be in the posix backend, and each capacity provider should be in their corresponding backend",
+      "range": {
+        "startLine": 72,
+        "startChar": 36,
+        "endLine": 72,
+        "endChar": 59
+      },
+      "revId": "1fefffb1c631641c43afce7d335b3f8766e39131",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60d4e26f_d14d8a45",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/posix_capacity_provider.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-16T13:59:45Z",
+      "side": 1,
+      "message": "I noted this in the ticket, it\u0027s planned, I\u0027ll do it in a future patch.",
+      "parentUuid": "cf99fd5c_6a9c80fb",
       "range": {
         "startLine": 72,
         "startChar": 36,
