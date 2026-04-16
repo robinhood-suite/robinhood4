@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d266e837_d1fc6148",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-16T10:03:53Z",
+      "side": 1,
+      "message": "defect? it seems there is an issue\n\n1. It should be `0x000001ffU` as 10 + 20 + 40 + 80 \u003d f0.\n2. You may need to set `RBH_CAPABILITIES_FLAG` to `0x0000001U` instead, in this case, it will be `0x000003feU`.",
+      "range": {
+        "startLine": 266,
+        "startChar": 31,
+        "endLine": 266,
+        "endChar": 42
+      },
+      "revId": "4a931f47c51df463e25cd45600f3d69e37d8163a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
