@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -21,6 +21,7 @@ static const struct rbh_pe_common_operations LUSTRE_EXTENSION_COMMON_OPS = {
     .build_filter = rbh_lustre_build_filter,
     .undelete = rbh_lustre_undelete,
     .fill_entry_info = rbh_lustre_fill_entry_info,
+    .fill_projection = rbh_lustre_fill_projection,
 };
 
 const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, LUSTRE) = {
