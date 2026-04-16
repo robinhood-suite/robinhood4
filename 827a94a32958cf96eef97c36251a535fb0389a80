@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "01ea04b7_949ff0a1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 23
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-16T13:59:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ce6023b_7b0b6c5b",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 2
+      },
+      "revId": "827a94a32958cf96eef97c36251a535fb0389a80",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7334676_684eb3b4",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "636c5f93_749d50d4",
+        "filename": "librobinhood/src/policyengine/trigger.c",
+        "patchSetId": 23
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-16T13:59:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7334676_684eb3b4",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 13
+      },
+      "revId": "827a94a32958cf96eef97c36251a535fb0389a80",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "406b489c_b4d8214e",
@@ -60,6 +108,30 @@
       "writtenOn": "2026-04-13T08:55:57Z",
       "side": 1,
       "message": "style: order",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 43
+      },
+      "revId": "827a94a32958cf96eef97c36251a535fb0389a80",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f22977d_fa6bf498",
+        "filename": "librobinhood/src/policyengine/trigger.c",
+        "patchSetId": 23
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-16T13:59:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "406b489c_b4d8214e",
       "range": {
         "startLine": 35,
         "startChar": 4,
