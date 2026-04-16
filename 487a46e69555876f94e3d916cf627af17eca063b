@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b267c887_d04ed981",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-16T13:59:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cc7847d_35027173",
+      "range": {
+        "startLine": 239,
+        "startChar": 22,
+        "endLine": 239,
+        "endChar": 30
+      },
+      "revId": "487a46e69555876f94e3d916cf627af17eca063b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7caa06ae_38872972",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-04-13T08:42:54Z",
       "side": 1,
       "message": "nit: I feel like this class and the other one could be mutualized, as the only difference are the 2 fields used for comparison...",
+      "range": {
+        "startLine": 260,
+        "startChar": 6,
+        "endLine": 260,
+        "endChar": 31
+      },
+      "revId": "487a46e69555876f94e3d916cf627af17eca063b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "294ae99e_ec89be64",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/triggers.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-04-16T13:59:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7caa06ae_38872972",
       "range": {
         "startLine": 260,
         "startChar": 6,
