@@ -5,14 +5,17 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
-#include <inttypes.h>
+#include <assert.h>
 #include <stdio.h>
 
 #include <lustre/lustreapi.h>
-#include <robinhood/action.h>
+
 #include <robinhood/backend.h>
+#include <robinhood/fsentry.h>
+#include <robinhood/projection.h>
 #include <robinhood/utils.h>
-#include <robinhood.h>
+
+#include "lustre_internals.h"
 
 int
 rbh_lustre_fill_entry_info(char *output, int max_length,
@@ -22,8 +25,8 @@ rbh_lustre_fill_entry_info(char *output, int max_length,
 {
     const struct lu_fid *fid;
 
-    if (!directive || *directive == '\0')
-        return 0;
+    assert(directive != NULL);
+    assert(*directive != '\0');
 
     switch (*directive) {
     case 'F':
@@ -32,4 +35,22 @@ rbh_lustre_fill_entry_info(char *output, int max_length,
     }
 
     return 0;
+}
+
+int
+rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
+                           const char *directive)
+{
+    assert(directive != NULL);
+    assert(*directive != '\0');
+
+    switch (*directive) {
+    case 'F': // FID
+        rbh_projection_add(projection, str2filter_field("xattrs.fid"));
+        break;
+    default:
+        return 0;
+    }
+
+    return 1;
 }
