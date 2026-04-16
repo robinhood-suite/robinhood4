@@ -70,6 +70,30 @@
       },
       "revId": "4a931f47c51df463e25cd45600f3d69e37d8163a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffa3d5de_5f8ee253",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-16T13:29:53Z",
+      "side": 1,
+      "message": "I\u0027ve been informed by a good friend of mine that this flag is actually unused at all because we use a plugin\u0027s capabilities field to know what it can do. So I\u0027m just gonna remove this enum value altogether",
+      "parentUuid": "ce7add3b_021a1f3f",
+      "range": {
+        "startLine": 266,
+        "startChar": 31,
+        "endLine": 266,
+        "endChar": 42
+      },
+      "revId": "4a931f47c51df463e25cd45600f3d69e37d8163a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
