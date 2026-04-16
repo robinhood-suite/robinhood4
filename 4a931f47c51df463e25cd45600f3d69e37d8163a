@@ -46,6 +46,30 @@
       },
       "revId": "4a931f47c51df463e25cd45600f3d69e37d8163a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce7add3b_021a1f3f",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-16T10:26:03Z",
+      "side": 1,
+      "message": "Yeah, I didn\u0027t read the comment, my bad.\n\nWhy not setting a non-null value for `RBH_CAPABILITIES_FLAG`? Is it a default/none value?, that didn\u0027t seem to be the case before this patch.",
+      "parentUuid": "75c20924_053e160f",
+      "range": {
+        "startLine": 266,
+        "startChar": 31,
+        "endLine": 266,
+        "endChar": 42
+      },
+      "revId": "4a931f47c51df463e25cd45600f3d69e37d8163a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
