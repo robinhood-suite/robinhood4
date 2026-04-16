@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -48,5 +48,9 @@ int
 rbh_lustre_fill_entry_info(char *output, int max_length,
                            const struct rbh_fsentry *entry,
                            const char *directive, const char *backend);
+
+int
+rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
+                           const char *directive);
 
 #endif
