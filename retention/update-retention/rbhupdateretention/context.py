@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # This file is part of RobinHood
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #            alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -9,7 +9,7 @@
 import subprocess
 
 from datetime import datetime, timedelta
-from lib.utils import exec_check_output
+from rbhupdateretention.utils import exec_check_output
 
 class Context():
     """General context of the command"""
