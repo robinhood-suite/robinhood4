@@ -187,6 +187,30 @@
       },
       "revId": "1fefffb1c631641c43afce7d335b3f8766e39131",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e296a8a_c0f03f24",
+        "filename": "rbh-policy/rbhpolicy/config/triggers/posix_capacity_provider.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-20T07:41:27Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "60d4e26f_d14d8a45",
+      "range": {
+        "startLine": 72,
+        "startChar": 36,
+        "endLine": 72,
+        "endChar": 59
+      },
+      "revId": "1fefffb1c631641c43afce7d335b3f8766e39131",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
