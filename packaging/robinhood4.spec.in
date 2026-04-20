@@ -1,6 +1,8 @@
+%global python3_pkgversion 3.9
+
 Name:    robinhood4
-Version: 1.5.0
-Release: 2%{?dist}
+Version: 1.5.1
+Release: 1%{?dist}
 Summary: RobinHood V4 tool suite
 
 Group:   Applications/System
@@ -21,9 +23,6 @@ Source0: %{name}-%{version}.tar.xz
 %bcond_with hestia
 %bcond_with s3
 %bcond_without man
-
-# FIXME to remove when rbhpolicy is correctly packaged
-%define _unpackaged_files_terminate_build 0
 
 Conflicts: robinhood
 
@@ -89,7 +88,7 @@ rbh-update-retention.
 %package devel
 Summary: C API for RobinHood V4 tool suite.
 Conflicts: robinhood
-Requires: robinhood4 == 1.5
+Requires: robinhood4 == 1.5.1
 Requires: pkgconf-pkg-config
 %if %{with lustre}
 #Requires: (lustre-devel or lustre-client < 2.15)
@@ -174,9 +173,16 @@ OPTS=""
 %{_bindir}/rbh-info
 %{_bindir}/rbh-undelete
 %{_bindir}/rbh-update-retention
+/usr/lib/python%{python3_pkgversion}/site-packages/rbhupdateretention/*
 %{_bindir}/rbh-report
+%{_bindir}/rbh-gc
+%{_bindir}/rbh-update-path
+%{_bindir}/rbh-policy
+/usr/lib/python%{python3_pkgversion}/site-packages/rbhpolicy/*
 %if %{with man}
 %{_mandir}/man1/*
+%{_mandir}/man5/*
+%{_mandir}/man7/*
 %endif
 
 %config(noreplace) %{_sysconfdir}/robinhood4.d/default.yaml
@@ -184,6 +190,7 @@ OPTS=""
 %files devel
 %{_libdir}/librobinhood.so
 %{_includedir}/robinhood.h
+%{_includedir}/robinhood/action.h
 %{_includedir}/robinhood/alias.h
 %{_includedir}/robinhood/backend.h
 %{_includedir}/robinhood/backends/common.h
@@ -205,6 +212,7 @@ OPTS=""
 %{_includedir}/robinhood/backends/posix_extension.h
 %{_includedir}/robinhood/backends/retention.h
 %{_includedir}/robinhood/backends/sparse.h
+%{_includedir}/robinhood/backends/ldiskfs.h
 %{_includedir}/robinhood/config.h
 %{_includedir}/robinhood/filter.h
 %{_includedir}/robinhood/filters/core.h
@@ -221,6 +229,9 @@ OPTS=""
 %{_includedir}/robinhood/plugin.h
 %{_includedir}/robinhood/plugins/backend.h
 %{_includedir}/robinhood/plugins/common_ops.h
+%{_includedir}/robinhood/policyengine/actions.h
+%{_includedir}/robinhood/policyengine/core.h
+%{_includedir}/robinhood/policyengine/python.h
 %{_includedir}/robinhood/projection.h
 %{_includedir}/robinhood/queue.h
 %{_includedir}/robinhood/ring.h
@@ -241,6 +252,11 @@ OPTS=""
 ldconfig
 
 %changelog
+* Mon Apr 20 2026 - Yoann Valeri <yoann.valeri@cea.fr> - 1.5.1-1
+- Add missing commands and python modules
+- New Sparse enricher for POSIX
+- Added a --version to all commands
+
 * Wed Mar 25 2026 - Yoann Valeri <yoann.valeri@cea.fr> - 1.5-2
 - Build man pages by default in spec file
 
