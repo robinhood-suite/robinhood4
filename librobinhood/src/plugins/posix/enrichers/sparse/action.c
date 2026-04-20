@@ -19,23 +19,31 @@
 int
 rbh_sparse_fill_entry_info(char *output, int max_length,
                            const struct rbh_fsentry *fsentry,
-                           const char *directive, const char *backend)
+                           const char *format_string, size_t *index,
+                           const char *backend)
 {
     const struct rbh_value *value;
 
     (void) backend;
 
-    assert(directive != NULL);
-    assert(*directive != '\0');
+    assert(format_string != NULL);
+    assert(format_string[*index] == '%');
+    assert(format_string[*index + 1] != '\0');
 
-    switch (*directive) {
+    (*index)++;
+
+    switch (format_string[*index]) {
     case 'S':
         value = rbh_fsentry_find_inode_xattr(fsentry, "sparseness");
-
         if (!value)
-            return 0;
+            return snprintf(output, max_length, "None");
 
         return snprintf(output, max_length, "%.2f", value->uint32 / 100.0);
+    default:
+        /* If we failed to identify the directive, let another plugin/extension
+         * have a go at it
+         */
+        (*index)--;
     }
 
     return 0;
@@ -43,12 +51,13 @@ rbh_sparse_fill_entry_info(char *output, int max_length,
 
 int
 rbh_sparse_fill_projection(struct rbh_filter_projection *projection,
-                           const char *directive)
+                           const char *format_string, size_t *index)
 {
-    assert(directive != NULL);
-    assert(*directive != '\0');
+    assert(format_string != NULL);
+    assert(format_string[*index] == '%');
+    assert(format_string[*index + 1] != '\0');
 
-    switch (*directive) {
+    switch (format_string[*index + 1]) {
     case 'S': // Sparseness
         rbh_projection_add(projection, str2filter_field("xattrs.sparseness"));
         break;
@@ -56,5 +65,6 @@ rbh_sparse_fill_projection(struct rbh_filter_projection *projection,
         return 0;
     }
 
+    (*index)++;
     return 1;
 }

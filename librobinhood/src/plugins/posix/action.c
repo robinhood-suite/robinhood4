@@ -302,18 +302,21 @@ write_base64_ID(const struct rbh_fsentry *fsentry, char *output, int max_length)
 int
 rbh_posix_fill_entry_info(char *output, int max_length,
                           const struct rbh_fsentry *fsentry,
-                          const char *directive, const char *backend)
+                          const char *format_string, size_t *index,
+                          const char *backend)
 {
     char symbolic_mode[11];
     int chars_written;
     const char *name;
     char *path;
 
-    assert(directive != NULL);
-    assert(*directive != '\0');
+    assert(format_string != NULL);
+    assert(format_string[*index] == '%');
+    assert(format_string[*index + 1] != '\0');
 
-    /* For now, consider the directive to be a single character */
-    switch (*directive) {
+    (*index)++;
+
+    switch (format_string[*index]) {
     case 'a':
         return snprintf(output, max_length, "%s",
                         time_from_timestamp(&fsentry->statx->stx_atime.tv_sec)
@@ -398,6 +401,11 @@ rbh_posix_fill_entry_info(char *output, int max_length,
                         type2char(fsentry->statx->stx_mode));
     case '%':
         return snprintf(output, max_length, "%%");
+    default:
+        /* If we failed to identify the directive, let another plugin/extension
+         * have a go at it
+         */
+        (*index)--;
     }
 
     return 0;
@@ -405,12 +413,13 @@ rbh_posix_fill_entry_info(char *output, int max_length,
 
 int
 rbh_posix_fill_projection(struct rbh_filter_projection *projection,
-                          const char *directive)
+                          const char *format_string, size_t *index)
 {
-    assert(directive != NULL);
-    assert(*directive != '\0');
+    assert(format_string != NULL);
+    assert(format_string[*index] == '%');
+    assert(format_string[*index + 1] != '\0');
 
-    switch (*directive) {
+    switch (format_string[*index + 1]) {
     case 'a':
     case 'A':
         rbh_projection_add(projection, str2filter_field("statx.atime.sec"));
@@ -479,5 +488,6 @@ rbh_posix_fill_projection(struct rbh_filter_projection *projection,
         return 0;
     }
 
+    (*index)++;
     return 1;
 }
