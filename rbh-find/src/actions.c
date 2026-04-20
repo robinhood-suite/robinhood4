@@ -282,7 +282,8 @@ validate_format_string(struct find_context *ctx, const char *format_string)
     if (format_string == NULL)
         return -1;
 
-    for (size_t i = 0; i < length; i++) {
+    // If '%' is the last character in the format string, ignore it
+    for (size_t i = 0; i < length - 1; i++) {
         int rc;
 
         if (format_string[i] != '%')
@@ -292,11 +293,12 @@ validate_format_string(struct find_context *ctx, const char *format_string)
             const struct rbh_pe_common_operations *common_ops =
                 get_common_operations(&ctx->f_ctx.info_pe[j]);
 
-            rc = rbh_pe_common_ops_fill_projection(common_ops,
-                                                   &ctx->projection,
-                                                   format_string + i + 1);
+            rc = rbh_pe_common_ops_fill_projection(common_ops, &ctx->projection,
+                                                   format_string, &i);
             if (rc == 1)
                 break;
+            else if (rc == -1)
+                return -1;
         }
 
         /* If no plugin/extension can read the directive, error out */
@@ -304,9 +306,6 @@ validate_format_string(struct find_context *ctx, const char *format_string)
             error(EXIT_FAILURE, ENOTSUP,
                   "format directive '%c' not supported",
                   format_string[i + 1]);
-
-        /* Go over the directive that was just evaluated */
-        i++;
     }
 
     return 0;

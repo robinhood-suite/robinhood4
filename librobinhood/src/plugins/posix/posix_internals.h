@@ -32,118 +32,37 @@ rbh_posix_backend_load_extensions(const struct rbh_backend_plugin *self,
                                   void *backend, const char *type);
 
 /**
- * Show POSIX and its extensions helper, detailling specific predicates and
- * directives.
- *
- * @param backend            the backend specified by user, which may be
- *                           present in \p config, which POSIX may use to fetch
- *                           additionnal helper
- * @param config             the config to use to determine which other
- *                           extensions' helpers should be fetched
- * @param predicate_helper   the output helper for predicates
- * @param directive_helper   the output helper for directives
- *
- * @return                   POSIX and its extension's helper for predicates
- *                           and directives
+ * The following functions are implementations of the different callbacks of the
+ * `rbh_pe_common_operations` structure. Their documentation is the same as the
+ * one given for the structure's callbacks.
  */
 void
 rbh_posix_helper(const char *backend, struct rbh_config *config,
                  char **predicate_helper, char **directive_helper);
 
-/**
- * Check the given token corresponds to a predicate or action known by POSIX
- *
- * @param token   a string that represents a token POSIX should identify
- *
- * @return        RBH_TOKEN_PREDICATE if the token is a predicate
- *                RBH_TOKEN_ACTION if the token is an action
- *                RBH_TOKEN_UNKNOWN if the token is not valid
- *                RBH_TOKEN_ERROR if an error occur and errno is set
- *                appropriately
- */
 enum rbh_parser_token
 rbh_posix_check_valid_token(const char *token);
 
-/**
- * Convert a sort field \p str to a rbh_filter_field.
- *
- * @param string         the -sort argument to convert
- *
- * @return               a rbh_filter_field corresponding to the sort field
- */
 struct rbh_filter_field
 rbh_posix_sort2field(const char *attribute);
 
-/**
- * Create a filter from the given command line arguments and position in that
- * command line
- *
- * @param argv           the list of arguments given to the command
- * @param argc           the number of strings in \p argv
- * @param index          the argument currently being parsed, should be updated
- *                       if necessary to skip optionnal values
- * @param need_prefetch  boolean value set by posix to indicate if a filter
- *                       needs to be completed
- *
- * @return               a pointer to newly allocated struct rbh_filter on
- *                       success, NULL on error and errno is set appropriately
- */
 struct rbh_filter *
 rbh_posix_build_filter(const char **argv, int argc, int *index,
                        bool *need_prefetch);
 
-/**
- * Fill information about an entry according to a given directive into a buffer
- *
- * @param output         an array in which the information can be printed
- *                       according to \p directive. Size of the array should be
- *                       \p max_length
- * @param max_length     size of the \p output array
- * @param fsentry        fsentry to print
- * @param directive      which information about \p fsentry to print
- * @param backend        the backend to print (XXX: may not be necessary)
- *
- * @return               the number of characters written to \p output, -1 on
- *                       error
- */
-int
-rbh_posix_fill_entry_info(char *output, int max_length,
-                          const struct rbh_fsentry *fsentry,
-                          const char *directive, const char *backend);
-
-/**
- * Delete an entry from the plugin
- *
- * @param backend        a pointer to the backend used for deletion
- * @param fsentry        the entry to delete
- * @param params         optional action parameters:
- *                         - "remove_empty_parent" (bool): if true, walk up
- *                           the directory tree and remove empty parent
- *                           directories up to the mount point.
- *                         - "remove_parents_below" (string): relative path
- *                           from the mount point acting as a floor. Empty
- *                           parents are removed only below this path; the
- *                           floor directory itself is never removed.
- *                           Only meaningful when remove_empty_parent is true.
- *
- * @return               0 on success, 1 if at least one parent directory was
- *                       also removed, -1 on error and errno is set
- */
 int
 rbh_posix_delete_entry(struct rbh_backend *backend,
                        struct rbh_fsentry *fsentry,
                        const struct rbh_delete_params *params);
 
-/**
- * Fill the projection to retrieve only the information needed
- *
- * @param projection the projection to fill
- * @param directive  which information to retrieve
- *
- * @return           1 on success, 0 if the directive requested is unknown
- */
+int
+rbh_posix_fill_entry_info(char *output, int max_length,
+                          const struct rbh_fsentry *fsentry,
+                          const char *format_string, size_t *index,
+                          const char *backend);
+
 int
 rbh_posix_fill_projection(struct rbh_filter_projection *projection,
-                          const char *directive);
+                          const char *format_string, size_t *index);
 
 #endif
