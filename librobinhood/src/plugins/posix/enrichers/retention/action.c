@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -63,16 +63,25 @@ write_expires_from_entry(const struct rbh_fsentry *fsentry,
 int
 rbh_retention_fill_entry_info(char *output, int max_length,
                               const struct rbh_fsentry *fsentry,
-                              const char *directive, const char *backend)
+                              const char *format_string, size_t *index,
+                              const char *backend)
 {
-    assert(directive != NULL);
-    assert(*directive != '\0');
+    assert(format_string != NULL);
+    assert(format_string[*index] == '%');
+    assert(format_string[*index + 1] != '\0');
 
-    switch (*directive) {
+    (*index)++;
+
+    switch (format_string[*index]) {
     case 'e':
         return write_expires_from_entry(fsentry, output, max_length);
     case 'E':
         return write_expiration_date_from_entry(fsentry, output, max_length);
+    default:
+        /* If we failed to identify the directive, let another plugin/extension
+         * have a go at it
+         */
+        (*index)--;
     }
 
     return 0;
@@ -80,16 +89,17 @@ rbh_retention_fill_entry_info(char *output, int max_length,
 
 int
 rbh_retention_fill_projection(struct rbh_filter_projection *projection,
-                              const char *directive)
+                              const char *format_string, size_t *index)
 {
     const char *retention_attribute;
     char xattr[1024];
     int rc;
 
-    assert(directive != NULL);
-    assert(*directive != '\0');
+    assert(format_string != NULL);
+    assert(format_string[*index] == '%');
+    assert(format_string[*index + 1] != '\0');
 
-    switch (*directive) {
+    switch (format_string[*index + 1]) {
     case 'e':
         retention_attribute = rbh_config_get_string(XATTR_EXPIRES_KEY,
                                                     "user.expires");
@@ -108,5 +118,6 @@ rbh_retention_fill_projection(struct rbh_filter_projection *projection,
         return 0;
     }
 
+    (*index)++;
     return 1;
 }
