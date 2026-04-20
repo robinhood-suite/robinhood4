@@ -80,21 +80,24 @@ struct rbh_pe_common_operations {
      * Fill information about an entry according to a given directive into a
      * buffer
      *
-     * @param output         an array in which the information can be printed
-     *                       according to \p directive.
-     * @param max_length     available size which can be written in \p output
-     * @param fsentry        fsentry whose info should be filled
-     * @param directive      which information about \p fsentry to fill
-     * @param backend        the backend to print (XXX: may not be necessary)
+     * @param output           an array in which the information can be printed
+     *                         according to \p directive.
+     * @param max_length       available size which can be written in \p output
+     * @param fsentry          fsentry whose info should be filled
+     * @param format_string    the string from which to get the information to
+     *                         fill in \p output
+     * @param index            where to start reading in \p format_string
+     * @param backend          the backend to print (XXX: may not be necessary)
      *
-     * @return               the number of characters written to \p output on
-     *                       success
-     *                       0 if the directive requested is unknown
-     *                       -1 on error
+     * @return                 the number of characters written to \p output on
+     *                         success
+     *                         0 if the directive requested is unknown
+     *                         -1 on error
      */
     int (*fill_entry_info)(char *output, int max_length,
                            const struct rbh_fsentry *fsentry,
-                           const char *directive, const char *backend);
+                           const char *format_string, size_t *index,
+                           const char *backend);
 
     /**
      * Delete an entry from the filesystem or object store.
@@ -116,14 +119,16 @@ struct rbh_pe_common_operations {
     /**
      * Fill the projection to retrieve only the information needed
      *
-     * @param projection the projection to fill
-     * @param directive  which information to retrieve
+     * @param projection       the projection to fill
+     * @param format_string    the string from which to get the information to
+     *                         ask for retrieval
+     * @param index            where to start reading in \p format_string
      *
      * @return           1 on success, 0 if the directive requested is unknown
      *                   -1 on error
      */
     int (*fill_projection)(struct rbh_filter_projection *projection,
-                           const char *directive);
+                           const char *format_string, size_t *index);
 
     /**
     * Undelete an entry from a given backend
@@ -208,12 +213,12 @@ static inline int
 rbh_pe_common_ops_fill_entry_info(
     const struct rbh_pe_common_operations *common_ops,
     char *output, int max_length, const struct rbh_fsentry *fsentry,
-    const char *directive, const char *backend
+    const char *format_string, size_t *index, const char *backend
 )
 {
     if (common_ops && common_ops->fill_entry_info)
         return common_ops->fill_entry_info(output, max_length, fsentry,
-                                            directive, backend);
+                                           format_string, index, backend);
 
     errno = ENOTSUP;
     return -1;
@@ -235,10 +240,11 @@ rbh_pe_common_ops_delete_entry(const struct rbh_pe_common_operations *ops,
 static inline int
 rbh_pe_common_ops_fill_projection(
     const struct rbh_pe_common_operations *common_ops,
-    struct rbh_filter_projection *projection, const char *directive)
+    struct rbh_filter_projection *projection, const char *format_string,
+    size_t *index)
 {
     if (common_ops && common_ops->fill_projection)
-        return common_ops->fill_projection(projection, directive);
+        return common_ops->fill_projection(projection, format_string, index);
 
     errno = ENOTSUP;
     return -1;

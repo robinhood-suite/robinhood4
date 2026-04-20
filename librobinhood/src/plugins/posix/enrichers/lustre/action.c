@@ -20,18 +20,26 @@
 int
 rbh_lustre_fill_entry_info(char *output, int max_length,
                            const struct rbh_fsentry *entry,
-                           const char *directive,
+                           const char *format_string, size_t *index,
                            __attribute__((unused)) const char *backend)
 {
     const struct lu_fid *fid;
 
-    assert(directive != NULL);
-    assert(*directive != '\0');
+    assert(format_string != NULL);
+    assert(format_string[*index] == '%');
+    assert(format_string[*index + 1] != '\0');
 
-    switch (*directive) {
+    (*index)++;
+
+    switch (format_string[*index]) {
     case 'F':
         fid = rbh_lu_fid_from_id(&entry->id);
         return snprintf(output, max_length, DFID, PFID(fid));
+    default:
+        /* If we failed to identify the directive, let another plugin/extension
+         * have a go at it
+         */
+        (*index)--;
     }
 
     return 0;
@@ -39,12 +47,13 @@ rbh_lustre_fill_entry_info(char *output, int max_length,
 
 int
 rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
-                           const char *directive)
+                           const char *format_string, size_t *index)
 {
-    assert(directive != NULL);
-    assert(*directive != '\0');
+    assert(format_string != NULL);
+    assert(format_string[*index] == '%');
+    assert(format_string[*index + 1] != '\0');
 
-    switch (*directive) {
+    switch (format_string[*index + 1]) {
     case 'F': // FID
         rbh_projection_add(projection, str2filter_field("xattrs.fid"));
         break;
@@ -52,5 +61,6 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         return 0;
     }
 
+    (*index)++;
     return 1;
 }

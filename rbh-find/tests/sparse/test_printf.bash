@@ -33,7 +33,7 @@ test_sparseness()
     rbh_sync "rbh:sparse:." "rbh:$db:$testdb"
 
     rbh_find "rbh:$db:$testdb" -printf "%p: '%S'\n" | sort |
-        difflines "/: ''" "/$file0: '1.00'" "/$file1: '0.66'"
+        difflines "/: 'None'" "/$file0: '1.00'" "/$file1: '0.66'"
 }
 
 ################################################################################

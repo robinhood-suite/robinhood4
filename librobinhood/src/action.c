@@ -322,7 +322,8 @@ rbh_action_format_fsentry(const char *format_string,
                     output + output_length,
                     max_length,
                     fsentry,
-                    format_string + i + 1,
+                    format_string,
+                    &i,
                     backend_name
                 );
 
@@ -330,7 +331,6 @@ rbh_action_format_fsentry(const char *format_string,
                     break;
             }
 
-            i++;
             break;
         case '\\':
             tmp_length = rbh_action_print_escape(output + output_length,

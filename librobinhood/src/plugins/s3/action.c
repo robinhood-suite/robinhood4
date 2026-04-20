@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -48,19 +48,23 @@ rbh_s3_delete_entry(struct rbh_backend *backend, struct rbh_fsentry *fsentry,
 int
 rbh_s3_fill_entry_info(char *output, int max_length,
                        const struct rbh_fsentry *fsentry,
-                       const char *directive, const char *backend)
+                       const char *format_string, size_t *index,
+                       const char *backend)
 {
     const struct rbh_value *value;
     char buffer[1024];
 
-    assert(directive != NULL);
-    assert(*directive != '\0');
+    assert(format_string != NULL);
+    assert(format_string[*index] == '%');
+    assert(format_string[*index + 1] != '\0');
 
-    switch(*directive) {
+    (*index)++;
+
+    switch (format_string[*index]) {
     case 'b':
         value = rbh_fsentry_find_inode_xattr(fsentry, "bucket");
         if (value == NULL)
-            return 0;
+            return snprintf(output, max_length, "None");
         return snprintf(output, max_length, "%s", value->string);
     case 'f':
         return snprintf(output, max_length, "%s", fsentry->name);
@@ -82,6 +86,11 @@ rbh_s3_fill_entry_info(char *output, int max_length,
     case 'T':
         return snprintf(output, max_length, "%lu",
                         fsentry->statx->stx_mtime.tv_sec);
+    default:
+        /* If we failed to identify the directive, let another plugin/extension
+         * have a go at it
+         */
+        (*index)--;
     }
 
     return 0;
@@ -89,12 +98,13 @@ rbh_s3_fill_entry_info(char *output, int max_length,
 
 int
 rbh_s3_fill_projection(struct rbh_filter_projection *projection,
-                       const char *directive)
+                       const char *format_string, size_t *index)
 {
-    assert(directive != NULL);
-    assert(*directive != '\0');
+    assert(format_string != NULL);
+    assert(format_string[*index] == '%');
+    assert(format_string[*index + 1] != '\0');
 
-    switch (*directive) {
+    switch (format_string[*index + 1]) {
     case 'b':
         rbh_projection_add(projection, str2filter_field("xattrs.bucket"));
         break;
@@ -114,9 +124,16 @@ rbh_s3_fill_projection(struct rbh_filter_projection *projection,
     case 'T':
         rbh_projection_add(projection, str2filter_field("statx.mtime.sec"));
         break;
+    case '%':
+    case 'H':
+        /* POSIX knows about these directives, but there is nothing to add to
+         * the project in particular
+         */
+        break;
     default:
         return 0;
     }
 
+    (*index)++;
     return 1;
 }
