@@ -14,9 +14,9 @@ import subprocess
 import sys
 
 from datetime import datetime
-from lib.context import Context
-from lib.directory import Directory
-from lib.utils import exec_check_output, exec_popen, rm_tree
+from rbhupdateretention.context import Context
+from rbhupdateretention.directory import Directory
+from rbhupdateretention.utils import exec_check_output, exec_popen, rm_tree
 
 def looks_like_URI(string):
     pattern = re.compile(r"rbh:mongo:[A-Za-z0-9]+", re.IGNORECASE)

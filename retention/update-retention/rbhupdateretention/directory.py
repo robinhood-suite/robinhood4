@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # This file is part of RobinHood
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #            alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -10,7 +10,7 @@ import os
 import subprocess
 
 from datetime import datetime
-from lib.utils import exec_popen, exec_run
+from rbhupdateretention.utils import exec_popen, exec_run
 
 def _set_max_time(directory, line):
     if int(line) > directory.max_time:

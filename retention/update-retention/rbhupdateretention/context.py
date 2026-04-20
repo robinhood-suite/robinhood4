@@ -9,7 +9,7 @@
 import subprocess
 
 from datetime import datetime, timedelta
-from lib.utils import exec_check_output
+from rbhupdateretention.utils import exec_check_output
 
 class Context():
     """General context of the command"""
