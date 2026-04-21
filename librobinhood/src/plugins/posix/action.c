@@ -469,6 +469,12 @@ rbh_posix_fill_projection(struct rbh_filter_projection *projection,
     case 'U':
         rbh_projection_add(projection, str2filter_field("statx.uid"));
         break;
+    case '%':
+    case 'H':
+        /* POSIX knows about these directives, but there is nothing to add to
+         * the project in particular
+         */
+        break;
     default:
         return 0;
     }

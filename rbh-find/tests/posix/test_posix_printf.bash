@@ -13,6 +13,17 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
+test_invalid()
+{
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    # '%Z' is not defined for POSIX, should error out
+    rbh_find "rbh:$db:$testdb" -name file -printf "%Z\n" &&
+        error "'%Z' is unknown for POSIX, should have errored out"
+
+    return 0
+}
+
 test_atime()
 {
     touch -a -d "$(date -d '1 hour')" file
@@ -421,8 +432,8 @@ test_id()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode
-                  test_uid test_gid test_username test_groupname
+declare -a tests=(test_invalid test_atime test_ctime test_mtime test_filename
+                  test_inode test_uid test_gid test_username test_groupname
                   test_backend_name test_size test_type test_symlink
                   test_percent_sign test_blocks test_depth test_device
                   test_dirname test_symbolic_permission test_octal_permission
