@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70f89ad8_3693801c",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-21T09:36:10Z",
+      "side": 1,
+      "message": "I originally used them in this patch but then moved the function where they were used to a later patch, fixed now.",
+      "parentUuid": "a1ccc528_f4f7cc6d",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 2
+      },
+      "revId": "31de36f7601f05cab3610bb4d0f6580fa6b9acee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6cb811b_bcde5b71",
@@ -37,6 +61,24 @@
       "writtenOn": "2026-04-21T07:13:22Z",
       "side": 1,
       "message": "style: remove empty line",
+      "revId": "31de36f7601f05cab3610bb4d0f6580fa6b9acee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba0877b9_e9bec465",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-04-21T09:36:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6cb811b_bcde5b71",
       "revId": "31de36f7601f05cab3610bb4d0f6580fa6b9acee",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
