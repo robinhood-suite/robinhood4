@@ -283,22 +283,30 @@ validate_format_string(struct find_context *ctx, const char *format_string)
         return -1;
 
     for (size_t i = 0; i < length; i++) {
-        if (format_string[i] == '%') {
-            int rc;
+        int rc;
 
-            for (int j = 0; j < ctx->f_ctx.info_pe_count; ++j) {
-                const struct rbh_pe_common_operations *common_ops =
-                    get_common_operations(&ctx->f_ctx.info_pe[j]);
+        if (format_string[i] != '%')
+            continue;
 
-                rc = rbh_pe_common_ops_fill_projection(common_ops,
-                                                       &ctx->projection,
-                                                       format_string + i + 1);
-                if (rc == 1)
-                    break;
-            }
-            /* Go over the directive that was just printed */
-            i++;
+        for (int j = 0; j < ctx->f_ctx.info_pe_count; ++j) {
+            const struct rbh_pe_common_operations *common_ops =
+                get_common_operations(&ctx->f_ctx.info_pe[j]);
+
+            rc = rbh_pe_common_ops_fill_projection(common_ops,
+                                                   &ctx->projection,
+                                                   format_string + i + 1);
+            if (rc == 1)
+                break;
         }
+
+        /* If no plugin/extension can read the directive, error out */
+        if (rc == 0)
+            error(EXIT_FAILURE, ENOTSUP,
+                  "format directive '%c' not supported",
+                  format_string[i + 1]);
+
+        /* Go over the directive that was just evaluated */
+        i++;
     }
 
     return 0;
