@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6540fa24_16a94a69",
+        "filename": "librobinhood/include/robinhood/filter.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-21T12:32:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b80cadd5_47bd7ff9",
+      "range": {
+        "startLine": 432,
+        "startChar": 3,
+        "endLine": 433,
+        "endChar": 78
+      },
+      "revId": "a95261691c3836a8a57e29ef89a6531094b35786",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "917806dc_c33cb86a",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-04-17T09:03:27Z",
       "side": 1,
       "message": "question: Why `/file2` is matched ?",
+      "range": {
+        "startLine": 44,
+        "startChar": 47,
+        "endLine": 44,
+        "endChar": 52
+      },
+      "revId": "a95261691c3836a8a57e29ef89a6531094b35786",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b0e39c7_b31d466d",
+        "filename": "rbh-find/tests/lustre/test_extension_size.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-21T12:32:15Z",
+      "side": 1,
+      "message": "Because I store the extension values as an array if one of the components is an extension. Thus, to keep the correct size, I record the rest of the values as 0. I agree this isn\u0027t perfect behaviour, but with the current way of recording info for Lustre, it is unfortunately the best solution.\n\nThe optimal way of doing things might be to change the way things are recorded for Lustre, and instead of doing one array per metadata component, do one array for components, with each value of that array being an object with all component information. But that\u0027s another endeavour that isn\u0027t necessary for this patch.",
+      "parentUuid": "917806dc_c33cb86a",
       "range": {
         "startLine": 44,
         "startChar": 47,
