@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1ccc528_f4f7cc6d",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-21T07:13:22Z",
+      "side": 1,
+      "message": "question: I didn\u0027t see these structures being used in this patch. Why did you add them?",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 2
+      },
+      "revId": "31de36f7601f05cab3610bb4d0f6580fa6b9acee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6cb811b_bcde5b71",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-21T07:13:22Z",
+      "side": 1,
+      "message": "style: remove empty line",
+      "revId": "31de36f7601f05cab3610bb4d0f6580fa6b9acee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
