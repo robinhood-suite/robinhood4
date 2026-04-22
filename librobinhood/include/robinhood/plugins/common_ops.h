@@ -122,13 +122,21 @@ struct rbh_pe_common_operations {
      * @param projection       the projection to fill
      * @param format_string    the string from which to get the information to
      *                         ask for retrieval
-     * @param index            where to start reading in \p format_string
+     * @param index            where to start reading in \p format_string. The
+     *                         implementation is responsible for modifying the
+     *                         index with the amount of characters read by
+     *                         itself, NOT including the initial '%'.
      *
-     * @return           1 on success, 0 if the directive requested is unknown
-     *                   -1 on error
+     * @return                 RBH_DIRECTIVE_KNOWN if the function knows about
+     *                         the directive at \p format_string[\p index],
+     *                         RBH_DIRECTIVE_UNKNOWN if it doesn't know about
+     *                         it,
+     *                         RBH_DIRECTIVE_ERROR otherwise
      */
-    int (*fill_projection)(struct rbh_filter_projection *projection,
-                           const char *format_string, size_t *index);
+    enum known_directive (*fill_projection)(
+        struct rbh_filter_projection *projection,
+        const char *format_string, size_t *index
+    );
 
     /**
     * Undelete an entry from a given backend
@@ -237,7 +245,7 @@ rbh_pe_common_ops_delete_entry(const struct rbh_pe_common_operations *ops,
     return -1;
 }
 
-static inline int
+static inline enum known_directive
 rbh_pe_common_ops_fill_projection(
     const struct rbh_pe_common_operations *common_ops,
     struct rbh_filter_projection *projection, const char *format_string,

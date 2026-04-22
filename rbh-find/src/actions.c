@@ -274,6 +274,41 @@ open_action_file(struct find_context *ctx, const char *filename)
         error(EXIT_FAILURE, errno, "fopen: %s", filename);
 }
 
+static enum known_directive
+check_basic_directives(struct rbh_filter_projection *projection,
+                       const char *format_string, size_t *index)
+{
+    enum known_directive rc = RBH_DIRECTIVE_KNOWN;
+
+    switch (format_string[*index + 1]) {
+    case 'd': // Depth
+    case 'h': // Directory name
+    case 'p': // Path
+    case 'P': // Path without the start
+        rbh_projection_add(projection, str2filter_field("ns-xattrs"));
+        break;
+    case 'f':
+        rbh_projection_add(projection, str2filter_field("name"));
+        break;
+    case 'I':
+        rbh_projection_add(projection, str2filter_field("id"));
+        break;
+    case '%':
+    case 'H':
+        /* POSIX knows about these directives, but there is nothing to add to
+         * the project in particular
+         */
+        break;
+    default:
+        rc = RBH_DIRECTIVE_UNKNOWN;
+    }
+
+    if (rc == RBH_DIRECTIVE_KNOWN)
+        (*index)++;
+
+    return rc;
+}
+
 static int
 validate_format_string(struct find_context *ctx, const char *format_string)
 {
@@ -284,9 +319,13 @@ validate_format_string(struct find_context *ctx, const char *format_string)
 
     // If '%' is the last character in the format string, ignore it
     for (size_t i = 0; i < length - 1; i++) {
-        int rc;
+        enum known_directive rc;
 
         if (format_string[i] != '%')
+            continue;
+
+        rc = check_basic_directives(&ctx->projection, format_string, &i);
+        if (rc == RBH_DIRECTIVE_KNOWN)
             continue;
 
         for (int j = 0; j < ctx->f_ctx.info_pe_count; ++j) {
@@ -295,14 +334,14 @@ validate_format_string(struct find_context *ctx, const char *format_string)
 
             rc = rbh_pe_common_ops_fill_projection(common_ops, &ctx->projection,
                                                    format_string, &i);
-            if (rc == 1)
+            if (rc == RBH_DIRECTIVE_KNOWN)
                 break;
-            else if (rc == -1)
+            else if (rc == RBH_DIRECTIVE_ERROR)
                 return -1;
         }
 
         /* If no plugin/extension can read the directive, error out */
-        if (rc == 0)
+        if (rc == RBH_DIRECTIVE_UNKNOWN)
             error(EXIT_FAILURE, ENOTSUP,
                   "format directive '%c' not supported",
                   format_string[i + 1]);
