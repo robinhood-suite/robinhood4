@@ -15,6 +15,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <robinhood/action.h>
 #include <robinhood/backend.h>
 #include <robinhood/config.h>
 #include <robinhood/fsentry.h>
@@ -58,7 +59,7 @@ rbh_retention_fill_entry_info(char *output, int max_length,
                               const char *format_string, size_t *index,
                               const char *backend);
 
-int
+enum known_directive
 rbh_retention_fill_projection(struct rbh_filter_projection *projection,
                               const char *format_string, size_t *index);
 

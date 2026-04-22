@@ -131,9 +131,13 @@ rbh_s3_fill_entry_info(char *output, int max_length,
  *                         ask for retrieval
  * @param index            where to start reading in \p format_string
  *
- * @return                 1 on success, 0 if the directive requested is unknown
+ * @return                 RBH_DIRECTIVE_KNOWN if the function knows about
+ *                         the directive at \p format_string[\p index],
+ *                         RBH_DIRECTIVE_UNKNOWN if it doesn't know about
+ *                         it,
+ *                         RBH_DIRECTIVE_ERROR otherwise
  */
-int
+enum known_directive
 rbh_s3_fill_projection(struct rbh_filter_projection *projection,
                        const char *format_string, size_t *index);
 

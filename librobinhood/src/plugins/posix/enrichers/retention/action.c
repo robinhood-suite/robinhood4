@@ -87,26 +87,23 @@ rbh_retention_fill_entry_info(char *output, int max_length,
     return 0;
 }
 
-int
+enum known_directive
 rbh_retention_fill_projection(struct rbh_filter_projection *projection,
                               const char *format_string, size_t *index)
 {
+    enum known_directive rc = RBH_DIRECTIVE_KNOWN;
     const char *retention_attribute;
     char xattr[1024];
-    int rc;
-
-    assert(format_string != NULL);
-    assert(format_string[*index] == '%');
-    assert(format_string[*index + 1] != '\0');
 
     switch (format_string[*index + 1]) {
     case 'e':
         retention_attribute = rbh_config_get_string(XATTR_EXPIRES_KEY,
                                                     "user.expires");
 
-        rc = sprintf(xattr, "xattrs.%s", retention_attribute);
-        if (rc <= 0)
-            return -1;
+        if (sprintf(xattr, "xattrs.%s", retention_attribute) <= 0) {
+            rc = RBH_DIRECTIVE_ERROR;
+            break;
+        }
 
         rbh_projection_add(projection, str2filter_field(xattr));
         break;
@@ -115,9 +112,11 @@ rbh_retention_fill_projection(struct rbh_filter_projection *projection,
                            str2filter_field("xattrs.trusted.expiration_date"));
         break;
     default:
-        return 0;
+        rc = RBH_DIRECTIVE_UNKNOWN;
     }
 
-    (*index)++;
-    return 1;
+    if (rc == RBH_DIRECTIVE_KNOWN)
+        (*index)++;
+
+    return rc;
 }

@@ -96,23 +96,15 @@ rbh_s3_fill_entry_info(char *output, int max_length,
     return 0;
 }
 
-int
+enum known_directive
 rbh_s3_fill_projection(struct rbh_filter_projection *projection,
                        const char *format_string, size_t *index)
 {
-    assert(format_string != NULL);
-    assert(format_string[*index] == '%');
-    assert(format_string[*index + 1] != '\0');
+    enum known_directive rc = RBH_DIRECTIVE_KNOWN;
 
     switch (format_string[*index + 1]) {
     case 'b':
         rbh_projection_add(projection, str2filter_field("xattrs.bucket"));
-        break;
-    case 'f':
-        rbh_projection_add(projection, str2filter_field("name"));
-        break;
-    case 'I':
-        rbh_projection_add(projection, str2filter_field("id"));
         break;
     case 'p':
         rbh_projection_add(projection, str2filter_field("ns-xattrs"));
@@ -124,16 +116,12 @@ rbh_s3_fill_projection(struct rbh_filter_projection *projection,
     case 'T':
         rbh_projection_add(projection, str2filter_field("statx.mtime.sec"));
         break;
-    case '%':
-    case 'H':
-        /* POSIX knows about these directives, but there is nothing to add to
-         * the project in particular
-         */
-        break;
     default:
-        return 0;
+        rc = RBH_DIRECTIVE_UNKNOWN;
     }
 
-    (*index)++;
-    return 1;
+    if (rc == RBH_DIRECTIVE_KNOWN)
+        (*index)++;
+
+    return rc;
 }

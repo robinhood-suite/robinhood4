@@ -411,13 +411,11 @@ rbh_posix_fill_entry_info(char *output, int max_length,
     return 0;
 }
 
-int
+enum known_directive
 rbh_posix_fill_projection(struct rbh_filter_projection *projection,
                           const char *format_string, size_t *index)
 {
-    assert(format_string != NULL);
-    assert(format_string[*index] == '%');
-    assert(format_string[*index + 1] != '\0');
+    enum known_directive rc = RBH_DIRECTIVE_KNOWN;
 
     switch (format_string[*index + 1]) {
     case 'a':
@@ -440,18 +438,12 @@ rbh_posix_fill_projection(struct rbh_filter_projection *projection,
         rbh_projection_add(projection, str2filter_field("statx.dev.minor"));
         rbh_projection_add(projection, str2filter_field("statx.dev.major"));
         break;
-    case 'f':
-        rbh_projection_add(projection, str2filter_field("name"));
-        break;
     case 'g':
     case 'G':
         rbh_projection_add(projection, str2filter_field("statx.gid"));
         break;
     case 'i':
         rbh_projection_add(projection, str2filter_field("statx.ino"));
-        break;
-    case 'I':
-        rbh_projection_add(projection, str2filter_field("id"));
         break;
     case 'l':
         rbh_projection_add(projection, str2filter_field("statx.type"));
@@ -478,16 +470,12 @@ rbh_posix_fill_projection(struct rbh_filter_projection *projection,
     case 'U':
         rbh_projection_add(projection, str2filter_field("statx.uid"));
         break;
-    case '%':
-    case 'H':
-        /* POSIX knows about these directives, but there is nothing to add to
-         * the project in particular
-         */
-        break;
     default:
-        return 0;
+        rc = RBH_DIRECTIVE_UNKNOWN;
     }
 
-    (*index)++;
-    return 1;
+    if (rc == RBH_DIRECTIVE_KNOWN)
+        (*index)++;
+
+    return rc;
 }
