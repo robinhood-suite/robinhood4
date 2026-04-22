@@ -80,24 +80,35 @@ struct rbh_pe_common_operations {
      * Fill information about an entry according to a given directive into a
      * buffer
      *
-     * @param output           an array in which the information can be printed
-     *                         according to \p directive.
-     * @param max_length       available size which can be written in \p output
      * @param fsentry          fsentry whose info should be filled
      * @param format_string    the string from which to get the information to
      *                         fill in \p output
-     * @param index            where to start reading in \p format_string
-     * @param backend          the backend to print (XXX: may not be necessary)
+     * @param index            where to start reading in \p format_string. The
+     *                         implementation is responsible for modifying the
+     *                         index with the amount of characters read by
+     *                         itself, NOT including the initial '%'.
+     * @param output           an array in which the information can be printed
+     *                         according to \p directive.
+     * @param output_length    the current length of \p directive. The
+     *                         implementation is responsible for modifying the
+     *                         output_length with the amount of characters
+     *                         written by itself.
+     * @param max_length       available size which can be written in \p output
+     * @param backend          the backend from which the \p fsentry originates
      *
-     * @return                 the number of characters written to \p output on
-     *                         success
-     *                         0 if the directive requested is unknown
-     *                         -1 on error
+     * @return                 RBH_DIRECTIVE_KNOWN if the function knows about
+     *                         the directive at \p format_string[\p index],
+     *                         RBH_DIRECTIVE_UNKNOWN if it doesn't know about
+     *                         it,
+     *                         RBH_DIRECTIVE_ERROR otherwise
      */
-    int (*fill_entry_info)(char *output, int max_length,
-                           const struct rbh_fsentry *fsentry,
-                           const char *format_string, size_t *index,
-                           const char *backend);
+    enum known_directive (*fill_entry_info)(const struct rbh_fsentry *fsentry,
+                                            const char *format_string,
+                                            size_t *index,
+                                            char *output,
+                                            size_t *output_length,
+                                            int max_length,
+                                            const char *backend);
 
     /**
      * Delete an entry from the filesystem or object store.
@@ -217,16 +228,17 @@ rbh_pe_common_ops_build_filter(
     return NULL;
 }
 
-static inline int
+static inline enum known_directive
 rbh_pe_common_ops_fill_entry_info(
     const struct rbh_pe_common_operations *common_ops,
-    char *output, int max_length, const struct rbh_fsentry *fsentry,
-    const char *format_string, size_t *index, const char *backend
+    const struct rbh_fsentry *fsentry, const char *format_string, size_t *index,
+    char *output, size_t *output_length, int max_length, const char *backend
 )
 {
     if (common_ops && common_ops->fill_entry_info)
-        return common_ops->fill_entry_info(output, max_length, fsentry,
-                                           format_string, index, backend);
+        return common_ops->fill_entry_info(fsentry, format_string, index,
+                                           output, output_length, max_length,
+                                           backend);
 
     errno = ENOTSUP;
     return -1;

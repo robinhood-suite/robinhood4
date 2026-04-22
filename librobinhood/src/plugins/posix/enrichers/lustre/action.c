@@ -17,32 +17,34 @@
 
 #include "lustre_internals.h"
 
-int
-rbh_lustre_fill_entry_info(char *output, int max_length,
-                           const struct rbh_fsentry *entry,
+enum known_directive
+rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
                            const char *format_string, size_t *index,
+                           char *output, size_t *output_length, int max_length,
                            __attribute__((unused)) const char *backend)
 {
+    enum known_directive rc = RBH_DIRECTIVE_KNOWN;
     const struct lu_fid *fid;
+    int tmp_length = 0;
 
-    assert(format_string != NULL);
-    assert(format_string[*index] == '%');
-    assert(format_string[*index + 1] != '\0');
-
-    (*index)++;
-
-    switch (format_string[*index]) {
+    switch (format_string[*index + 1]) {
     case 'F':
-        fid = rbh_lu_fid_from_id(&entry->id);
-        return snprintf(output, max_length, DFID, PFID(fid));
+        fid = rbh_lu_fid_from_id(&fsentry->id);
+        tmp_length = snprintf(output, max_length, DFID, PFID(fid));
+        break;
     default:
-        /* If we failed to identify the directive, let another plugin/extension
-         * have a go at it
-         */
-        (*index)--;
+        rc = RBH_DIRECTIVE_UNKNOWN;
     }
 
-    return 0;
+    if (tmp_length < 0)
+        return RBH_DIRECTIVE_ERROR;
+
+    if (rc == RBH_DIRECTIVE_KNOWN) {
+        *output_length += tmp_length;
+        (*index)++;
+    }
+
+    return rc;
 }
 
 enum known_directive
