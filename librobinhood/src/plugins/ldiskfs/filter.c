@@ -67,7 +67,18 @@ fifo_push_child_entries(struct ldiskfs_iter *iter,
 {
     GList *elem = dentry->children;
     while (elem) {
-        fifo_push(iter, elem->data);
+        /*
+         * skip ROOT/.lustre directory on mdt0
+         * We do not want to iterate over this directory because it is not
+         * present in the lustre file arborescence
+         *
+         * Only mdt0 has iter->root set so we do not have to check the index of
+         * the mdt
+         */
+        if (iter->is_mdt && ((dentry != iter->root) ||
+            (strncmp(((struct rbh_dentry *)elem->data)->name, ".lustre", 8)))) {
+            fifo_push(iter, elem->data);
+        }
         elem = elem->next;
     }
 }
