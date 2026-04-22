@@ -9,7 +9,6 @@
 #define ROBINHOOD_S3_BACKEND_H
 
 #include "robinhood/plugins/backend.h"
-#include "robinhood/action.h"
 #include "robinhood/backend.h"
 #include "robinhood/config.h"
 
@@ -21,19 +20,6 @@
 #define RBH_S3_BACKEND_VERSION RPV(RBH_S3_BACKEND_MAJOR, \
                                    RBH_S3_BACKEND_MINOR, \
                                    RBH_S3_BACKEND_RELEASE)
-
-struct item_data {
-    int64_t length;
-    int64_t current_id;
-    char **list;
-};
-
-struct s3_iterator {
-    struct rbh_mut_iterator iterator;
-    struct rbh_sstack *values;
-    struct item_data bkt_data;
-    struct item_data obj_data;
-};
 
 /**
  * Create a s3 backend
@@ -56,117 +42,9 @@ rbh_s3_backend_new(__attribute__((unused))
                    bool read_only);
 
 /**
- * Check the given token corresponds to a predicate or action known by s3
- *
- * @param token   a string that represents a token s3 should identify
- *
- * @return        RBH_TOKEN_PREDICATE if the token is a predicate
- *                RBH_TOKEN_ACTION if the token is an action
- *                RBH_TOKEN_UNKNOWN if the token is not valid
- *                RBH_TOKEN_ERROR if an error occur and errno is set
- *                appropriately
- */
-enum rbh_parser_token
-rbh_s3_check_valid_token(const char *token);
-
-/**
- * Create a filter from the given command line arguments and position in that
- * command line
- *
- * @param argv           the list of arguments given to the command
- * @param argc           the number of strings in \p argv
- * @param index          the argument currently being parsed, should be updated
- *                       if necessary to skip optional values
- * @param need_prefetch  boolean value set by s3 to indicate if a filter
- *                       needs to be completed
- *
- * @return               a pointer to a newly allocated struct rbh_filter on
- *                       success, NULL on error and errno is set appropriately
- */
-struct rbh_filter *
-rbh_s3_build_filter(const char **argv, int argc, int *index,
-                    bool *need_prefetch);
-
-/**
- * Delete an entry from the plugin
- *
- * @param backend        the backend handling the entry
- * @param params         delete parameters
- * @param fsentry        the entry to delete
- * @param params         delete parameters
- *
- * @return               0 on success, -1 on error and errno is set
- */
-int
-rbh_s3_delete_entry(struct rbh_backend *backend, struct rbh_fsentry *fsentry,
-                    const struct rbh_delete_params *params);
-
-/**
- * Fill information about an entry according to a given directive into a buffer
- *
- * @param output         an array in which the information can be printed
- *                       according to \p directive. Size of the array should be
- *                       \p max_length
- * @param max_length     size of the \p output array
- * @param fsentry        fsentry to print
- * @param format_string  the string from which to get the information to
- *                       fill in \p output
- * @param index          where to start reading in \p format_string
- * @param backend        the backend to print (XXX: may not be necessary)
- *
- * @return               the number of characters written to \p output, -1 on
- *                       error
- */
-int
-rbh_s3_fill_entry_info(char *output, int max_length,
-                       const struct rbh_fsentry *fsentry,
-                       const char *format_string, size_t *index,
-                       const char *backend);
-
-/**
- * Fill the projection to retrieve only the information needed
- *
- * @param projection       the projection to fill
- * @param format_string    the string from which to get the information to
- *                         ask for retrieval
- * @param index            where to start reading in \p format_string
- *
- * @return                 RBH_DIRECTIVE_KNOWN if the function knows about
- *                         the directive at \p format_string[\p index],
- *                         RBH_DIRECTIVE_UNKNOWN if it doesn't know about
- *                         it,
- *                         RBH_DIRECTIVE_ERROR otherwise
- */
-enum known_directive
-rbh_s3_fill_projection(struct rbh_filter_projection *projection,
-                       const char *format_string, size_t *index);
-
-/**
- * Show S3 specific predicates and directives.
- *
- * @param predicate_helper   the output helper for predicates
- * @param directive_helper   the output helper for directives
- *
- * @return                   S3 helper for predicates and directives
- */
-void
-rbh_s3_helper(__attribute__((unused)) const char *backend,
-              __attribute__((unused)) struct rbh_config *config,
-              char **predicate_helper, char **directive_helper);
-
-/**
  * Release the memory associated with the plugin
  */
 void
 rbh_s3_plugin_destroy();
-
-/**
- * Release the memory associated with the iterator
- */
-void
-s3_iter_destroy(void *iterator);
-
-int
-rbh_s3_plugin_init(struct rbh_backend_plugin_init_arg *arg);
 
 #endif
