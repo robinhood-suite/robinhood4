@@ -18,6 +18,7 @@
 #include "robinhood/utils.h"
 
 #include "s3_wrapper.h"
+#include "s3_internals.h"
 
 int
 rbh_s3_delete_entry(struct rbh_backend *backend, struct rbh_fsentry *fsentry,
