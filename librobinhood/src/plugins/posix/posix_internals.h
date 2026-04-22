@@ -55,10 +55,10 @@ rbh_posix_delete_entry(struct rbh_backend *backend,
                        struct rbh_fsentry *fsentry,
                        const struct rbh_delete_params *params);
 
-int
-rbh_posix_fill_entry_info(char *output, int max_length,
-                          const struct rbh_fsentry *fsentry,
+enum known_directive
+rbh_posix_fill_entry_info(const struct rbh_fsentry *fsentry,
                           const char *format_string, size_t *index,
+                          char *output, size_t *output_length, int max_length,
                           const char *backend);
 
 enum known_directive

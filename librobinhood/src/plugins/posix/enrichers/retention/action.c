@@ -60,31 +60,37 @@ write_expires_from_entry(const struct rbh_fsentry *fsentry,
         return snprintf(output, max_length, "%s", value->string);
 }
 
-int
-rbh_retention_fill_entry_info(char *output, int max_length,
-                              const struct rbh_fsentry *fsentry,
+enum known_directive
+rbh_retention_fill_entry_info(const struct rbh_fsentry *fsentry,
                               const char *format_string, size_t *index,
-                              const char *backend)
+                              char *output, size_t *output_length,
+                              int max_length,
+                              __attribute__((unused)) const char *backend)
 {
-    assert(format_string != NULL);
-    assert(format_string[*index] == '%');
-    assert(format_string[*index + 1] != '\0');
+    enum known_directive rc = RBH_DIRECTIVE_KNOWN;
+    int tmp_length = 0;
 
-    (*index)++;
-
-    switch (format_string[*index]) {
+    switch (format_string[*index + 1]) {
     case 'e':
-        return write_expires_from_entry(fsentry, output, max_length);
+        tmp_length = write_expires_from_entry(fsentry, output, max_length);
+        break;
     case 'E':
-        return write_expiration_date_from_entry(fsentry, output, max_length);
+        tmp_length = write_expiration_date_from_entry(fsentry, output,
+                                                      max_length);
+        break;
     default:
-        /* If we failed to identify the directive, let another plugin/extension
-         * have a go at it
-         */
-        (*index)--;
+        rc = RBH_DIRECTIVE_UNKNOWN;
     }
 
-    return 0;
+    if (tmp_length < 0)
+        return RBH_DIRECTIVE_ERROR;
+
+    if (rc == RBH_DIRECTIVE_KNOWN) {
+        *output_length += tmp_length;
+        (*index)++;
+    }
+
+    return rc;
 }
 
 enum known_directive
