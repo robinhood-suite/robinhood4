@@ -53,7 +53,6 @@ rbh_s3_fill_entry_info(char *output, int max_length,
                        const char *backend)
 {
     const struct rbh_value *value;
-    char buffer[1024];
 
     assert(format_string != NULL);
     assert(format_string[*index] == '%');
@@ -67,15 +66,6 @@ rbh_s3_fill_entry_info(char *output, int max_length,
         if (value == NULL)
             return snprintf(output, max_length, "None");
         return snprintf(output, max_length, "%s", value->string);
-    case 'f':
-        return snprintf(output, max_length, "%s", fsentry->name);
-    case 'H':
-        return snprintf(output, max_length, "%s", backend);
-    case 'I':
-        if (base64_encode(buffer, fsentry->id.data, fsentry->id.size) == 0)
-            return -1;
-
-        return snprintf(output, max_length, "%s", buffer);
     case 'p':
         return snprintf(output, max_length, "%s",
                         rbh_fsentry_find_ns_xattr(fsentry, "path")->string);
