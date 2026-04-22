@@ -288,17 +288,6 @@ remove_start_point(const char *path, const char *backend)
     return &path[branch_len + 2];
 }
 
-static int
-write_base64_ID(const struct rbh_fsentry *fsentry, char *output, int max_length)
-{
-    char buffer[1024]; // More than enough to hold the converted ID
-
-    if (base64_encode(buffer, fsentry->id.data, fsentry->id.size) == 0)
-        return -1;
-
-    return snprintf(output, max_length, "%s", buffer);
-}
-
 int
 rbh_posix_fill_entry_info(char *output, int max_length,
                           const struct rbh_fsentry *fsentry,
@@ -338,8 +327,6 @@ rbh_posix_fill_entry_info(char *output, int max_length,
         return snprintf(output, max_length, "%lu",
                         makedev(fsentry->statx->stx_dev_major,
                                 fsentry->statx->stx_dev_minor));
-    case 'f':
-        return snprintf(output, max_length, "%s", fsentry->name);
     case 'g':
         name = get_group_name(fsentry->statx->stx_gid);
         if (name)
@@ -353,12 +340,8 @@ rbh_posix_fill_entry_info(char *output, int max_length,
         chars_written = snprintf(output, max_length, "%s", dirname(path));
         free(path);
         return chars_written;
-    case 'H':
-        return snprintf(output, max_length, "%s", backend);
     case 'i':
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_ino);
-    case 'I':
-        return write_base64_ID(fsentry, output, max_length);
     case 'l':
         if (!S_ISLNK(fsentry->statx->stx_mode))
             return 0;
@@ -399,8 +382,6 @@ rbh_posix_fill_entry_info(char *output, int max_length,
     case 'y':
         return snprintf(output, max_length, "%c",
                         type2char(fsentry->statx->stx_mode));
-    case '%':
-        return snprintf(output, max_length, "%%");
     default:
         /* If we failed to identify the directive, let another plugin/extension
          * have a go at it

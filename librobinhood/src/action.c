@@ -270,6 +270,54 @@ rbh_action_print_regular_char(char *output, int max_length,
     return sublength;
 }
 
+static int
+write_base64_ID(const struct rbh_fsentry *fsentry, char *output, int max_length)
+{
+    char buffer[1024]; // More than enough to hold the converted ID
+
+    if (base64_encode(buffer, fsentry->id.data, fsentry->id.size) == 0)
+        return -1;
+
+    return snprintf(output, max_length, "%s", buffer);
+}
+
+static enum known_directive
+fill_basic_entry_info(const struct rbh_fsentry *fsentry,
+                      const char *format_string, size_t *index,
+                      char *output, size_t *output_length, size_t max_length,
+                      const char *backend)
+{
+    enum known_directive rc = RBH_DIRECTIVE_KNOWN;
+    int tmp_length = 0;
+
+    switch (format_string[*index + 1]) {
+    case 'f':
+        tmp_length = snprintf(output, max_length, "%s", fsentry->name);
+        break;
+    case 'H':
+        tmp_length = snprintf(output, max_length, "%s", backend);
+        break;
+    case 'I':
+        tmp_length = write_base64_ID(fsentry, output, max_length);
+        break;
+    case '%':
+        tmp_length = snprintf(output, max_length, "%%");
+        break;
+    default:
+        rc = RBH_DIRECTIVE_UNKNOWN;
+    }
+
+    if (tmp_length < 0)
+        return RBH_DIRECTIVE_ERROR;
+
+    if (rc == RBH_DIRECTIVE_KNOWN) {
+        *output_length += tmp_length;
+        (*index)++;
+    }
+
+    return rc;
+}
+
 int
 rbh_action_format_fsentry(const char *format_string,
                           const struct filters_context *f_ctx,
@@ -293,6 +341,7 @@ rbh_action_format_fsentry(const char *format_string,
     max_length = (int)output_size;
 
     for (size_t i = 0; i < length; i++) {
+        enum known_directive rc;
         int tmp_length = 0;
 
         if (i + 1 >= length) {
@@ -303,11 +352,17 @@ rbh_action_format_fsentry(const char *format_string,
 
         switch (format_string[i]) {
         case '%':
-            if (format_string[i + 1] == '%') {
-                output[output_length] = '%';
-                tmp_length = 1;
-                i++;
+            rc = fill_basic_entry_info(fsentry, format_string, &i,
+                                       output + output_length,
+                                       &output_length, max_length,
+                                       backend_name);
+            if (rc == RBH_DIRECTIVE_KNOWN) {
+                tmp_length = 0;
+                max_length = output_size - output_length;
+
                 break;
+            } else if (rc == RBH_DIRECTIVE_ERROR) {
+                return -1;
             }
 
             for (size_t j = 0; j < f_ctx->info_pe_count; ++j) {
