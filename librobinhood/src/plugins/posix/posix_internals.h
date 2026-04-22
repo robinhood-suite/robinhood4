@@ -61,7 +61,7 @@ rbh_posix_fill_entry_info(char *output, int max_length,
                           const char *format_string, size_t *index,
                           const char *backend);
 
-int
+enum known_directive
 rbh_posix_fill_projection(struct rbh_filter_projection *projection,
                           const char *format_string, size_t *index);
 

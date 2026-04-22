@@ -17,6 +17,16 @@ struct filters_context;
 struct rbh_fsentry;
 
 /**
+ * Different output of the `fill_projection` function of a plugin/extension
+ * common ops.
+ */
+enum known_directive {
+    RBH_DIRECTIVE_ERROR,
+    RBH_DIRECTIVE_KNOWN,
+    RBH_DIRECTIVE_UNKNOWN
+};
+
+/**
  * Types of actions supported by the policy engine.
  */
 enum rbh_action_type {
