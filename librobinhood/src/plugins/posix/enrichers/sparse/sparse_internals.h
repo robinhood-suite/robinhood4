@@ -49,11 +49,11 @@ struct rbh_filter *
 rbh_sparse_build_filter(const char **argv, int argc, int *index,
                         bool *need_prefetch);
 
-int
-rbh_sparse_fill_entry_info(char *output, int max_length,
-                           const struct rbh_fsentry *fsentry,
+enum known_directive
+rbh_sparse_fill_entry_info(const struct rbh_fsentry *fsentry,
                            const char *format_string, size_t *index,
-                           const char *backend);
+                           char *output, size_t *output_length, int max_length,
+                           __attribute__((unused)) const char *backend);
 
 enum known_directive
 rbh_sparse_fill_projection(struct rbh_filter_projection *projection,

@@ -45,11 +45,11 @@ struct rbh_fsentry *
 rbh_lustre_undelete(void *backend, const char *path,
                     struct rbh_fsentry *fsentry);
 
-int
-rbh_lustre_fill_entry_info(char *output, int max_length,
-                           const struct rbh_fsentry *entry,
+enum known_directive
+rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
                            const char *format_string, size_t *index,
-                           const char *backend);
+                           char *output, size_t *output_length, int max_length,
+                           __attribute__((unused)) const char *backend);
 
 enum known_directive
 rbh_lustre_fill_projection(struct rbh_filter_projection *projection,

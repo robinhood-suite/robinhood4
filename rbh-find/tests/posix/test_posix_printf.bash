@@ -249,7 +249,7 @@ test_symlink()
 
     # %l for files other than symlink return an empty string
     rbh_find "rbh:$db:$testdb" -name file -printf "%l\n" |
-        difflines ""
+        difflines "None"
 
     rbh_find "rbh:$db:$testdb" -name slink -printf "%l\n" |
         difflines "file"

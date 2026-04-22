@@ -243,89 +243,120 @@ symbolic_permission(char *symbolic_mode, mode_t mode)
     symbolic_mode[10] = 0;
 }
 
-int
-rbh_posix_fill_entry_info(char *output, int max_length,
-                          const struct rbh_fsentry *fsentry,
+enum known_directive
+rbh_posix_fill_entry_info(const struct rbh_fsentry *fsentry,
                           const char *format_string, size_t *index,
+                          char *output, size_t *output_length, int max_length,
                           const char *backend)
 {
+    enum known_directive rc = RBH_DIRECTIVE_KNOWN;
     char symbolic_mode[11];
+    int tmp_length = 0;
     const char *name;
 
-    assert(format_string != NULL);
-    assert(format_string[*index] == '%');
-    assert(format_string[*index + 1] != '\0');
-
-    (*index)++;
-
-    switch (format_string[*index]) {
+    switch (format_string[*index + 1]) {
     case 'a':
-        return snprintf(output, max_length, "%s",
-                        time_from_timestamp(&fsentry->statx->stx_atime.tv_sec)
-                        );
+        tmp_length = snprintf(
+            output, max_length,
+            "%s", time_from_timestamp(&fsentry->statx->stx_atime.tv_sec)
+        );
+        break;
     case 'A':
-        return snprintf(output, max_length, "%lu",
-                        fsentry->statx->stx_atime.tv_sec);
+        tmp_length = snprintf(output, max_length,
+                              "%lu", fsentry->statx->stx_atime.tv_sec);
+        break;
     case 'b':
-        return snprintf(output, max_length, "%lu", fsentry->statx->stx_blocks);
+        tmp_length = snprintf(output, max_length,
+                              "%lu", fsentry->statx->stx_blocks);
+        break;
     case 'c':
-        return snprintf(output, max_length, "%s",
-                        time_from_timestamp(&fsentry->statx->stx_ctime.tv_sec)
-                        );
+        tmp_length = snprintf(
+            output, max_length,
+            "%s", time_from_timestamp(&fsentry->statx->stx_ctime.tv_sec)
+        );
+        break;
     case 'D':
-        return snprintf(output, max_length, "%lu",
-                        makedev(fsentry->statx->stx_dev_major,
-                                fsentry->statx->stx_dev_minor));
+        tmp_length = snprintf(output, max_length,
+                              "%lu", makedev(fsentry->statx->stx_dev_major,
+                                             fsentry->statx->stx_dev_minor));
+        break;
     case 'g':
         name = get_group_name(fsentry->statx->stx_gid);
-        if (name)
-            return snprintf(output, max_length, "%s", name);
+        if (name) {
+            tmp_length = snprintf(output, max_length, "%s", name);
+            break;
+        }
 
         __attribute__((fallthrough));
     case 'G':
-        return snprintf(output, max_length, "%u", fsentry->statx->stx_gid);
+        tmp_length = snprintf(output, max_length,
+                              "%u", fsentry->statx->stx_gid);
+        break;
     case 'i':
-        return snprintf(output, max_length, "%lu", fsentry->statx->stx_ino);
+        tmp_length = snprintf(output, max_length,
+                              "%lu", fsentry->statx->stx_ino);
+        break;
     case 'l':
         if (!S_ISLNK(fsentry->statx->stx_mode))
-            return 0;
-        return snprintf(output, max_length, "%s", fsentry->symlink);
+            tmp_length = snprintf(output, max_length, "None");
+        else
+            tmp_length = snprintf(output, max_length, "%s", fsentry->symlink);
+        break;
     case 'm':
-        return snprintf(output, max_length, "%o",
-                        fsentry->statx->stx_mode & 0777);
+        tmp_length = snprintf(output, max_length, "%o",
+                              fsentry->statx->stx_mode & 0777);
+        break;
     case 'M':
         symbolic_permission(symbolic_mode, fsentry->statx->stx_mode);
-        return snprintf(output, max_length, "%s", symbolic_mode);
+        tmp_length = snprintf(output, max_length, "%s", symbolic_mode);
+        break;
     case 'n':
-        return snprintf(output, max_length, "%d", fsentry->statx->stx_nlink);
+        tmp_length = snprintf(output, max_length,
+                              "%d", fsentry->statx->stx_nlink);
+        break;
     case 's':
-        return snprintf(output, max_length, "%lu", fsentry->statx->stx_size);
+        tmp_length = snprintf(output, max_length,
+                              "%lu", fsentry->statx->stx_size);
+        break;
     case 't':
-        return snprintf(output, max_length, "%s",
-                        time_from_timestamp(&fsentry->statx->stx_mtime.tv_sec)
-                        );
+        tmp_length = snprintf(
+            output, max_length,
+            "%s", time_from_timestamp(&fsentry->statx->stx_mtime.tv_sec)
+        );
+        break;
     case 'T':
-        return snprintf(output, max_length, "%lu",
-                        fsentry->statx->stx_mtime.tv_sec);
+        tmp_length = snprintf(output, max_length,
+                              "%lu", fsentry->statx->stx_mtime.tv_sec);
+        break;
     case 'u':
         name = get_user_name(fsentry->statx->stx_uid);
-        if (name)
-            return snprintf(output, max_length, "%s", name);
+        if (name) {
+            tmp_length = snprintf(output, max_length, "%s", name);
+            break;
+        }
 
         __attribute__((fallthrough));
     case 'U':
-        return snprintf(output, max_length, "%u", fsentry->statx->stx_uid);
+        tmp_length = snprintf(output, max_length,
+                              "%u", fsentry->statx->stx_uid);
+        break;
     case 'y':
-        return snprintf(output, max_length, "%c",
-                        type2char(fsentry->statx->stx_mode));
+        tmp_length = snprintf(output, max_length,
+                              "%c", type2char(fsentry->statx->stx_mode));
+        break;
     default:
-        /* If we failed to identify the directive, let another plugin/extension
-         * have a go at it
-         */
-        (*index)--;
+        rc = RBH_DIRECTIVE_UNKNOWN;
     }
 
-    return 0;
+    if (tmp_length < 0)
+        return RBH_DIRECTIVE_ERROR;
+
+    if (rc == RBH_DIRECTIVE_KNOWN) {
+        *output_length += tmp_length;
+        (*index)++;
+    }
+
+    return rc;
 }
 
 enum known_directive
