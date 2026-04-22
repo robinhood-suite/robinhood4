@@ -311,14 +311,8 @@ rbh_action_format_fsentry(const char *format_string,
             }
 
             for (size_t j = 0; j < f_ctx->info_pe_count; ++j) {
-                const struct rbh_pe_common_operations *ops;
-
-                ops = get_common_operations(&f_ctx->info_pe[j]);
-                if (!ops || !ops->fill_entry_info)
-                    continue;
-
                 tmp_length = rbh_pe_common_ops_fill_entry_info(
-                    ops,
+                    get_common_operations(&f_ctx->info_pe[j]),
                     output + output_length,
                     max_length,
                     fsentry,

@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <stdint.h>
 
+#include <robinhood/action.h>
 #include <robinhood/filter.h>
 
 struct entry_info;
@@ -50,7 +51,7 @@ rbh_lustre_fill_entry_info(char *output, int max_length,
                            const char *format_string, size_t *index,
                            const char *backend);
 
-int
+enum known_directive
 rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
                            const char *format_string, size_t *index);
 
