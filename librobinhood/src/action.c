@@ -7,6 +7,7 @@
 
 #include <error.h>
 #include <errno.h>
+#include <libgen.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -270,6 +271,124 @@ rbh_action_print_regular_char(char *output, int max_length,
     return sublength;
 }
 
+static int
+write_base64_ID(const struct rbh_fsentry *fsentry, char *output, int max_length)
+{
+    char buffer[1024]; // More than enough to hold the converted ID
+
+    if (base64_encode(buffer, fsentry->id.data, fsentry->id.size) == 0)
+        return -1;
+
+    return snprintf(output, max_length, "%s", buffer);
+}
+
+static int
+depth_from_path(const char *path)
+{
+    int count = 0;
+
+    if (path[0] == '/' && path[1] == 0)
+        return 0;
+
+    for (int i = 0; path[i]; i++)
+        if (path[i] == '/')
+            count++;
+
+    return count;
+}
+
+static const char *
+remove_start_point(const char *path, const char *backend)
+{
+    size_t branch_len;
+    char *branch;
+
+    if (*path == '/' && *(path + 1) == 0)
+        return "";
+
+    // Get the branch point which is after the #
+    branch = strchr(backend, '#');
+
+    // If there is no branch, return the path without the '/'
+    if (branch == NULL)
+        return &path[1];
+
+    // There is a branch for the find
+    branch++;
+    branch_len = strlen(branch);
+
+    /* If the path after the branch is empty, it corresponds to the branch point
+     * so we return an empty string.
+     */
+    if (path[branch_len + 1] == 0)
+        return "";
+
+    // Otherwise return the path after the branch and the '/'
+    return &path[branch_len + 2];
+}
+
+static enum known_directive
+fill_basic_entry_info(const struct rbh_fsentry *fsentry,
+                      const char *format_string, size_t *index,
+                      char *output, size_t *output_length, size_t max_length,
+                      const char *backend)
+{
+    enum known_directive rc = RBH_DIRECTIVE_KNOWN;
+    int tmp_length = 0;
+    char *path;
+
+    switch (format_string[*index + 1]) {
+    case 'd':
+        tmp_length = snprintf(
+            output, max_length, "%d",
+            depth_from_path(rbh_fsentry_find_ns_xattr(fsentry, "path")->string)
+        );
+        break;
+    case 'f':
+        tmp_length = snprintf(output, max_length, "%s", fsentry->name);
+        break;
+    case 'h':
+        path = xstrdup(rbh_fsentry_find_ns_xattr(fsentry, "path")->string);
+        tmp_length = snprintf(output, max_length, "%s", dirname(path));
+        free(path);
+        break;
+    case 'H':
+        tmp_length = snprintf(output, max_length, "%s", backend);
+        break;
+    case 'I':
+        tmp_length = write_base64_ID(fsentry, output, max_length);
+        break;
+    case 'p':
+        tmp_length = snprintf(output, max_length, "%s",
+                              rbh_fsentry_find_ns_xattr(fsentry,
+                                                        "path")->string);
+        break;
+    case 'P':
+        tmp_length = snprintf(
+            output, max_length, "%s",
+            remove_start_point(rbh_fsentry_find_ns_xattr(fsentry,
+                                                         "path")->string,
+                               backend)
+        );
+        break;
+    case '%':
+        tmp_length = snprintf(output, max_length, "%%");
+        break;
+    default:
+        rc = RBH_DIRECTIVE_UNKNOWN;
+    }
+
+    if (tmp_length < 0)
+        return RBH_DIRECTIVE_ERROR;
+
+    if (rc == RBH_DIRECTIVE_KNOWN) {
+        *output_length += tmp_length;
+        (*index)++;
+    }
+
+    return rc;
+}
+
 int
 rbh_action_format_fsentry(const char *format_string,
                           const struct filters_context *f_ctx,
@@ -293,6 +412,7 @@ rbh_action_format_fsentry(const char *format_string,
     max_length = (int)output_size;
 
     for (size_t i = 0; i < length; i++) {
+        enum known_directive rc;
         int tmp_length = 0;
 
         if (i + 1 >= length) {
@@ -303,11 +423,17 @@ rbh_action_format_fsentry(const char *format_string,
 
         switch (format_string[i]) {
         case '%':
-            if (format_string[i + 1] == '%') {
-                output[output_length] = '%';
-                tmp_length = 1;
-                i++;
+            rc = fill_basic_entry_info(fsentry, format_string, &i,
+                                       output + output_length,
+                                       &output_length, max_length,
+                                       backend_name);
+            if (rc == RBH_DIRECTIVE_KNOWN) {
+                tmp_length = 0;
+                max_length = output_size - output_length;
+
                 break;
+            } else if (rc == RBH_DIRECTIVE_ERROR) {
+                return -1;
             }
 
             for (size_t j = 0; j < f_ctx->info_pe_count; ++j) {

@@ -223,21 +223,6 @@ type2char(uint16_t mode)
         return 'U';
 }
 
-static int
-depth_from_path(const char *path)
-{
-    int count = 0;
-
-    if (path[0] == '/' && path[1] == 0)
-        return 0;
-
-    for (int i = 0; path[i]; i++)
-        if (path[i] == '/')
-            count++;
-
-    return count;
-}
-
 static void
 symbolic_permission(char *symbolic_mode, mode_t mode)
 {
@@ -258,47 +243,6 @@ symbolic_permission(char *symbolic_mode, mode_t mode)
     symbolic_mode[10] = 0;
 }
 
-static const char *
-remove_start_point(const char *path, const char *backend)
-{
-    size_t branch_len;
-    char *branch;
-
-    if (*path == '/' && *(path + 1) == 0)
-        return "";
-
-    // Get the branch point which is after the #
-    branch = strchr(backend, '#');
-
-    // If there is no branch, return the path without the '/'
-    if (branch == NULL)
-        return &path[1];
-
-    // There is a branch for the find
-    branch++;
-    branch_len = strlen(branch);
-
-    /* If the path after the branch is empty, it corresponds to the branch point
-     * so we return an empty string.
-     */
-    if (path[branch_len + 1] == 0)
-        return "";
-
-    // Otherwise return the path after the branch and the '/'
-    return &path[branch_len + 2];
-}
-
-static int
-write_base64_ID(const struct rbh_fsentry *fsentry, char *output, int max_length)
-{
-    char buffer[1024]; // More than enough to hold the converted ID
-
-    if (base64_encode(buffer, fsentry->id.data, fsentry->id.size) == 0)
-        return -1;
-
-    return snprintf(output, max_length, "%s", buffer);
-}
-
 int
 rbh_posix_fill_entry_info(char *output, int max_length,
                           const struct rbh_fsentry *fsentry,
@@ -306,9 +250,7 @@ rbh_posix_fill_entry_info(char *output, int max_length,
                           const char *backend)
 {
     char symbolic_mode[11];
-    int chars_written;
     const char *name;
-    char *path;
 
     assert(format_string != NULL);
     assert(format_string[*index] == '%');
@@ -330,16 +272,10 @@ rbh_posix_fill_entry_info(char *output, int max_length,
         return snprintf(output, max_length, "%s",
                         time_from_timestamp(&fsentry->statx->stx_ctime.tv_sec)
                         );
-    case 'd':
-        return snprintf(output, max_length, "%d",
-                        depth_from_path(rbh_fsentry_find_ns_xattr(
-                                                    fsentry, "path")->string));
     case 'D':
         return snprintf(output, max_length, "%lu",
                         makedev(fsentry->statx->stx_dev_major,
                                 fsentry->statx->stx_dev_minor));
-    case 'f':
-        return snprintf(output, max_length, "%s", fsentry->name);
     case 'g':
         name = get_group_name(fsentry->statx->stx_gid);
         if (name)
@@ -348,17 +284,8 @@ rbh_posix_fill_entry_info(char *output, int max_length,
         __attribute__((fallthrough));
     case 'G':
         return snprintf(output, max_length, "%u", fsentry->statx->stx_gid);
-    case 'h':
-        path = xstrdup(rbh_fsentry_find_ns_xattr(fsentry, "path")->string);
-        chars_written = snprintf(output, max_length, "%s", dirname(path));
-        free(path);
-        return chars_written;
-    case 'H':
-        return snprintf(output, max_length, "%s", backend);
     case 'i':
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_ino);
-    case 'I':
-        return write_base64_ID(fsentry, output, max_length);
     case 'l':
         if (!S_ISLNK(fsentry->statx->stx_mode))
             return 0;
@@ -371,14 +298,6 @@ rbh_posix_fill_entry_info(char *output, int max_length,
         return snprintf(output, max_length, "%s", symbolic_mode);
     case 'n':
         return snprintf(output, max_length, "%d", fsentry->statx->stx_nlink);
-    case 'p':
-        return snprintf(output, max_length, "%s",
-                        rbh_fsentry_find_ns_xattr(fsentry, "path")->string);
-    case 'P':
-        return snprintf(output, max_length, "%s",
-                        remove_start_point(rbh_fsentry_find_ns_xattr(
-                                                       fsentry, "path")->string,
-                                           backend));
     case 's':
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_size);
     case 't':
@@ -399,8 +318,6 @@ rbh_posix_fill_entry_info(char *output, int max_length,
     case 'y':
         return snprintf(output, max_length, "%c",
                         type2char(fsentry->statx->stx_mode));
-    case '%':
-        return snprintf(output, max_length, "%%");
     default:
         /* If we failed to identify the directive, let another plugin/extension
          * have a go at it
