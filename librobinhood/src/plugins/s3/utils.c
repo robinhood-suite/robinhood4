@@ -1,5 +1,5 @@
 /* This file is part of RobinHood
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -16,13 +16,13 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "robinhood/backends/s3.h"
 #include "robinhood/config.h"
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
 #include "robinhood/utils.h"
 
 #include "s3_wrapper.h"
+#include "s3_internals.h"
 
 char *
 get_next_object(struct s3_iterator *s3_iter)
