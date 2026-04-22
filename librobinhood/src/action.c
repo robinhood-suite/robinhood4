@@ -437,20 +437,29 @@ rbh_action_format_fsentry(const char *format_string,
             }
 
             for (size_t j = 0; j < f_ctx->info_pe_count; ++j) {
-                tmp_length = rbh_pe_common_ops_fill_entry_info(
+                rc = rbh_pe_common_ops_fill_entry_info(
                     get_common_operations(&f_ctx->info_pe[j]),
-                    output + output_length,
-                    max_length,
                     fsentry,
                     format_string,
                     &i,
-                    backend_name
+                    output + output_length,
+                    &output_length,
+                    max_length,
+                    backend
                 );
 
-                if (tmp_length > 0)
+                if (rc == RBH_DIRECTIVE_KNOWN)
                     break;
+                else if (rc == RBH_DIRECTIVE_ERROR)
+                    return -1;
             }
 
+            /**
+             * The projection step should have found unknown directives, so here
+             * there should always be a plugin or extension that can read the
+             * directives.
+             */
+            assert(rc == RBH_DIRECTIVE_KNOWN);
             break;
         case '\\':
             tmp_length = rbh_action_print_escape(output + output_length,

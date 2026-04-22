@@ -247,9 +247,9 @@ test_symlink()
 
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    # %l for files other than symlink return an empty string
+    # %l for files other than symlink return "None"
     rbh_find "rbh:$db:$testdb" -name file -printf "%l\n" |
-        difflines ""
+        difflines "None"
 
     rbh_find "rbh:$db:$testdb" -name slink -printf "%l\n" |
         difflines "file"
