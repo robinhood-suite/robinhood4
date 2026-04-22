@@ -16,37 +16,38 @@
 
 #include "sparse_internals.h"
 
-int
-rbh_sparse_fill_entry_info(char *output, int max_length,
-                           const struct rbh_fsentry *fsentry,
+enum known_directive
+rbh_sparse_fill_entry_info(const struct rbh_fsentry *fsentry,
                            const char *format_string, size_t *index,
-                           const char *backend)
+                           char *output, size_t *output_length, int max_length,
+                           __attribute__((unused)) const char *backend)
 {
+    enum known_directive rc = RBH_DIRECTIVE_KNOWN;
     const struct rbh_value *value;
+    int tmp_length = 0;
 
-    (void) backend;
-
-    assert(format_string != NULL);
-    assert(format_string[*index] == '%');
-    assert(format_string[*index + 1] != '\0');
-
-    (*index)++;
-
-    switch (format_string[*index]) {
+    switch (format_string[*index + 1]) {
     case 'S':
         value = rbh_fsentry_find_inode_xattr(fsentry, "sparseness");
         if (!value)
-            return snprintf(output, max_length, "None");
-
-        return snprintf(output, max_length, "%.2f", value->uint32 / 100.0);
+            tmp_length = snprintf(output, max_length, "None");
+        else
+            tmp_length = snprintf(output, max_length,
+                                  "%.2f", value->uint32 / 100.0);
+        break;
     default:
-        /* If we failed to identify the directive, let another plugin/extension
-         * have a go at it
-         */
-        (*index)--;
+        rc = RBH_DIRECTIVE_UNKNOWN;
     }
 
-    return 0;
+    if (tmp_length < 0)
+        return RBH_DIRECTIVE_ERROR;
+
+    if (rc == RBH_DIRECTIVE_KNOWN) {
+        *output_length += tmp_length;
+        (*index)++;
+    }
+
+    return rc;
 }
 
 enum known_directive
