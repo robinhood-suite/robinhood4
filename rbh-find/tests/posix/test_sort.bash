@@ -35,7 +35,7 @@ test_sort()
     )
 
     echo "blob" > file1
-    echo "blob" > file2
+    echo "blobby" > file2
     echo "something" > file3
 
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
@@ -43,7 +43,11 @@ test_sort()
     rbh_find "rbh:$db:$testdb" -sort size |
         difflines "/file1" "/file2" "/file3" "/"
     rbh_find "rbh:$db:$testdb" -rsort size |
-        difflines "/" "/file3" "/file1" "/file2"
+        difflines "/" "/file3" "/file2" "/file1"
+
+    # Put the same content as file1 in file2 for the next tests
+    echo "blob" > file2
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     rbh_find "rbh:$db:$testdb" -sort size -sort ino |
         difflines "${path[0]}" "${path[1]}" "/file3" "/"
