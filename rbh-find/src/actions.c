@@ -317,16 +317,24 @@ validate_format_string(struct find_context *ctx, const char *format_string)
     if (format_string == NULL)
         return -1;
 
-    // If '%' is the last character in the format string, ignore it
-    for (size_t i = 0; i < length - 1; i++) {
+    for (size_t i = 0; i < length; i++) {
         enum known_directive rc;
 
         if (format_string[i] != '%')
             continue;
 
+        if (i + 1 >= length)
+            error(EXIT_FAILURE, ENOTSUP,
+                  "missing directive for '%%' at end of string");
+
         rc = check_basic_directives(&ctx->projection, format_string, &i);
         if (rc == RBH_DIRECTIVE_KNOWN)
             continue;
+
+        if (format_string[i + 1] == RBH_NON_STANDARD_DIRECTIVE &&
+            i + 3 >= length)
+            error(EXIT_FAILURE, ENOTSUP,
+                  "requested non-standard directive '%%R' but no category and/or directive was provided");
 
         for (int j = 0; j < ctx->f_ctx.info_pe_count; ++j) {
             const struct rbh_pe_common_operations *common_ops =
@@ -343,8 +351,9 @@ validate_format_string(struct find_context *ctx, const char *format_string)
         /* If no plugin/extension can read the directive, error out */
         if (rc == RBH_DIRECTIVE_UNKNOWN)
             error(EXIT_FAILURE, ENOTSUP,
-                  "format directive '%c' not supported",
-                  format_string[i + 1]);
+                  "format directive '%c%c%c' not supported",
+                  format_string[i + 1], format_string[i + 2],
+                  format_string[i + 3]);
     }
 
     return 0;

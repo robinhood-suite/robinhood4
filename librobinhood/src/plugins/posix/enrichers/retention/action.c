@@ -16,6 +16,8 @@
 
 #include "retention_internals.h"
 
+#define RBH_RETENTION_DIRECTIVE 'R'
+
 static int
 write_expiration_date_from_entry(const struct rbh_fsentry *fsentry,
                                  char *output, int max_length)
@@ -70,7 +72,11 @@ rbh_retention_fill_entry_info(const struct rbh_fsentry *fsentry,
     enum known_directive rc = RBH_DIRECTIVE_KNOWN;
     int tmp_length = 0;
 
-    switch (format_string[*index + 1]) {
+    if (format_string[*index + 1] != RBH_NON_STANDARD_DIRECTIVE ||
+        format_string[*index + 2] != RBH_RETENTION_DIRECTIVE)
+        return RBH_DIRECTIVE_UNKNOWN;
+
+    switch (format_string[*index + 3]) {
     case 'e':
         tmp_length = write_expires_from_entry(fsentry, output, max_length);
         break;
@@ -87,7 +93,7 @@ rbh_retention_fill_entry_info(const struct rbh_fsentry *fsentry,
 
     if (rc == RBH_DIRECTIVE_KNOWN) {
         *output_length += tmp_length;
-        (*index)++;
+        *index += 3;
     }
 
     return rc;
@@ -101,7 +107,11 @@ rbh_retention_fill_projection(struct rbh_filter_projection *projection,
     const char *retention_attribute;
     char xattr[1024];
 
-    switch (format_string[*index + 1]) {
+    if (format_string[*index + 1] != RBH_NON_STANDARD_DIRECTIVE ||
+        format_string[*index + 2] != RBH_RETENTION_DIRECTIVE)
+        return RBH_DIRECTIVE_UNKNOWN;
+
+    switch (format_string[*index + 3]) {
     case 'e':
         retention_attribute = rbh_config_get_string(XATTR_EXPIRES_KEY,
                                                     "user.expires");
@@ -122,7 +132,7 @@ rbh_retention_fill_projection(struct rbh_filter_projection *projection,
     }
 
     if (rc == RBH_DIRECTIVE_KNOWN)
-        (*index)++;
+        *index += 3;
 
     return rc;
 }

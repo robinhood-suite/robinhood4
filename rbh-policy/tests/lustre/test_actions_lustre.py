@@ -134,7 +134,7 @@ declare_policy(
     name = "test_lustre_log_policy",
     target = (Type == "f"),
     action = lustre.log,
-    parameters = {"format": "path=%P, fid=%F"},
+    parameters = {"format": "path=%P, fid=%RLf"},
     trigger = 'Periodic("10m")'
 )
 """)
