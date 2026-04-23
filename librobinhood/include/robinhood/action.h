@@ -16,6 +16,9 @@
 struct filters_context;
 struct rbh_fsentry;
 
+// Indicator for directives that are not supported by GNU's find
+#define RBH_NON_STANDARD_DIRECTIVE 'R'
+
 /**
  * Different output of the `fill_projection` function of a plugin/extension
  * common ops.
