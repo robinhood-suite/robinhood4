@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -64,7 +64,7 @@ test_size()
 
     rbh_sync "rbh:s3:" "rbh:$db:$testdb"
 
-    local s=$(rbh_find "rbh:$db:$testdb" -name obj -printf "%s\n")
+    local s=$(rbh_find "rbh:$db:$testdb" -name obj -printf "%3s\n")
     local size=$(stat -c %s obj)
 
     if [[ $s != $size ]]; then
@@ -120,7 +120,7 @@ test_bucket()
 
     rbh_sync "rbh:s3:" "rbh:$db:$testdb"
 
-    rbh_find "rbh:$db:$testdb" -printf "%b\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%3b\n" | sort |
         difflines "bucket1" "bucket2"
 }
 

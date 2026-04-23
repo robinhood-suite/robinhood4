@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -33,8 +33,8 @@ test_printf()
 
     rbh_sync "rbh:retention:." "rbh:$db:$testdb"
 
-    check_printf_project "%e\n" '"xattrs.user.expires" : true'
-    check_printf_project "%E\n" '"xattrs.trusted.expiration_date" : true'
+    check_printf_project "%Ee\n" '"xattrs.user.expires" : true'
+    check_printf_project "%EE\n" '"xattrs.trusted.expiration_date" : true'
 
     do_db drop $testdb
 
@@ -49,8 +49,8 @@ backends:
 
     rbh_sync --config $conf_file "rbh:retention:." "rbh:$db:$testdb"
 
-    check_printf_project "%e\n" '"xattrs.user.blob" : true' $conf_file
-    check_printf_project "%E\n" '"xattrs.trusted.expiration_date" : true' \
+    check_printf_project "%Ee\n" '"xattrs.user.blob" : true' $conf_file
+    check_printf_project "%EE\n" '"xattrs.trusted.expiration_date" : true' \
         $conf_file
 }
 

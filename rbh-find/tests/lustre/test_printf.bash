@@ -24,7 +24,7 @@ test_fid()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:$db:$testdb" -printf "%p: '%F'\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%Rf'\n" | sort |
         difflines "/: '$root_fid'" "/blob/blob: '$blob_blob_fid'" \
                   "/blob: '$blob_fid'"
 
