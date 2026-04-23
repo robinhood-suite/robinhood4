@@ -170,11 +170,11 @@ test_printf_expiration_info()
     expA="$(date -d "@$((expA + timeA))" "+%a %b %e %T %Y")"
     local expB="$(date -d "@$timeB" "+%a %b %e %T %Y")"
 
-    rbh_find "rbh:$db:$testdb" -printf "%p %E\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p %RRE\n" | sort |
         difflines "/ None" "/$fileA $expA" "/$fileB $expB" "/$fileC Inf" \
                   "/$fileD None"
 
-    rbh_find "rbh:$db:$testdb" -printf "%p %e\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p %RRe\n" | sort |
         difflines "/ None" "/$fileA $timeA" "/$fileB $timeB" "/$fileC $timeC" \
                   "/$fileD None"
 }
@@ -204,7 +204,7 @@ backends:
 
     rbh_sync --config $conf_file "rbh:retention:$dir" "rbh:$db:$testdb"
 
-    rbh_find --config $conf_file "rbh:$db:$testdb" -printf "%p %e\n" | sort |
+    rbh_find --config $conf_file "rbh:$db:$testdb" -printf "%p %RRe\n" | sort |
         difflines "/ None" "/$fileA 42" "/$fileB None"
 }
 

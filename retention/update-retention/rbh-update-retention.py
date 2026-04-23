@@ -148,7 +148,7 @@ def main(args=None):
     context = Context(args.uri, args.config, args.delay, args.delete)
     command = (f"rbh-find -c {str(context.config)} {context.uri} "
                f"-type d -expired-at {str(context.delay)} "
-                "-sort expiration-date -printf %p|%e|%E|%I\\n")
+                "-sort expiration-date -printf %p|%RRe|%RRE|%I\\n")
     exec_popen(command, check_directory_expirancy, context)
 
     if not context.found_expired_dir:

@@ -17,6 +17,8 @@
 
 #include "lustre_internals.h"
 
+#define RBH_LUSTRE_DIRECTIVE 'L'
+
 enum known_directive
 rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
                            const char *format_string, size_t *index,
@@ -27,8 +29,12 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
     const struct lu_fid *fid;
     int tmp_length = 0;
 
-    switch (format_string[*index + 1]) {
-    case 'F':
+    if (format_string[*index + 1] != RBH_NON_STANDARD_DIRECTIVE ||
+        format_string[*index + 2] != RBH_LUSTRE_DIRECTIVE)
+        return RBH_DIRECTIVE_UNKNOWN;
+
+    switch (format_string[*index + 3]) {
+    case 'f':
         fid = rbh_lu_fid_from_id(&fsentry->id);
         tmp_length = snprintf(output, max_length, DFID, PFID(fid));
         break;
@@ -41,7 +47,7 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
 
     if (rc == RBH_DIRECTIVE_KNOWN) {
         *output_length += tmp_length;
-        (*index)++;
+        *index += 3;
     }
 
     return rc;
@@ -53,8 +59,12 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
 {
     enum known_directive rc = RBH_DIRECTIVE_KNOWN;
 
-    switch (format_string[*index + 1]) {
-    case 'F': // FID
+    if (format_string[*index + 1] != RBH_NON_STANDARD_DIRECTIVE ||
+        format_string[*index + 2] != RBH_LUSTRE_DIRECTIVE)
+        return RBH_DIRECTIVE_UNKNOWN;
+
+    switch (format_string[*index + 3]) {
+    case 'f': // FID
         rbh_projection_add(projection, str2filter_field("xattrs.fid"));
         break;
     default:
@@ -62,7 +72,7 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
     }
 
     if (rc == RBH_DIRECTIVE_KNOWN)
-        (*index)++;
+        *index += 3;
 
     return rc;
 }
