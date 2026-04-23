@@ -231,44 +231,43 @@ rbh_action_exec_command(const char *cmd_str, const char *path)
     return rc;
 }
 
-static int
-rbh_action_print_escape(char *output, int max_length, const char *escape)
+static void
+rbh_action_print_escape(char *output, size_t *output_length,
+                        const char *format_string, size_t *index)
 {
-    assert(escape != NULL);
-    assert(*escape != '\0');
-
-    (void) max_length;
-
     /* For now, consider the escape to be a single character */
-    switch (*escape) {
+    switch (format_string[*index + 1]) {
     case 'n':
         *output = '\n';
-        return 1;
+        break;
     default:
         error(EXIT_FAILURE, ENOTSUP, "format escape not supported");
     }
 
-    __builtin_unreachable();
+    (*output_length)++;
+    (*index)++;
 }
 
-static int
-rbh_action_print_regular_char(char *output, int max_length,
-                              const char *format_string)
+static void
+rbh_action_print_regular_char(char *output, size_t *output_length,
+                              int max_length, const char *format_string,
+                              size_t *index)
 {
     int sublength = 0;
 
-    assert(format_string != NULL);
-    assert(*format_string != '\0');
-
-    while (format_string[sublength] != '%' &&
-           format_string[sublength] != '\\' &&
-           format_string[sublength] != '\0' &&
+    while (format_string[*index + sublength] != '%' &&
+           format_string[*index + sublength] != '\\' &&
+           format_string[*index + sublength] != '\0' &&
            sublength < max_length) {
-        output[sublength] = format_string[sublength];
+        output[sublength] = format_string[*index + sublength];
         sublength++;
     }
 
-    return sublength;
+    /* Do not put the index at the irregular character itself, or it might get
+     * skipped.
+     */
+    *index += sublength - 1;
+    *output_length += sublength;
 }
 
 static int
@@ -413,11 +412,9 @@ rbh_action_format_fsentry(const char *format_string,
 
     for (size_t i = 0; i < length; i++) {
         enum known_directive rc;
-        int tmp_length = 0;
 
         if (i + 1 >= length) {
             output[output_length] = format_string[i];
-            tmp_length = 1;
             goto finish;
         }
 
@@ -427,14 +424,12 @@ rbh_action_format_fsentry(const char *format_string,
                                        output + output_length,
                                        &output_length, max_length,
                                        backend_name);
-            if (rc == RBH_DIRECTIVE_KNOWN) {
-                tmp_length = 0;
-                max_length = output_size - output_length;
-
+            if (rc == RBH_DIRECTIVE_KNOWN)
                 break;
-            } else if (rc == RBH_DIRECTIVE_ERROR) {
-                return -1;
-            }
+            else if (rc == RBH_DIRECTIVE_ERROR)
+                error(EXIT_FAILURE, EINVAL,
+                      "Failed to print info corresponding to directive '%c' for entry '%s'",
+                      format_string[i], fsentry->name);
 
             for (size_t j = 0; j < f_ctx->info_pe_count; ++j) {
                 rc = rbh_pe_common_ops_fill_entry_info(
@@ -451,7 +446,9 @@ rbh_action_format_fsentry(const char *format_string,
                 if (rc == RBH_DIRECTIVE_KNOWN)
                     break;
                 else if (rc == RBH_DIRECTIVE_ERROR)
-                    return -1;
+                    error(EXIT_FAILURE, EINVAL,
+                          "Failed to print info corresponding to directive '%c' for entry '%s'",
+                          format_string[i], fsentry->name);
             }
 
             /**
@@ -462,33 +459,18 @@ rbh_action_format_fsentry(const char *format_string,
             assert(rc == RBH_DIRECTIVE_KNOWN);
             break;
         case '\\':
-            tmp_length = rbh_action_print_escape(output + output_length,
-                                                 max_length,
-                                                 format_string + i + 1);
-            i++;
+            rbh_action_print_escape(output + output_length, &output_length,
+                                    format_string,  &i);
             break;
         default:
-            tmp_length = rbh_action_print_regular_char(output + output_length,
-                                                       max_length,
-                                                       format_string + i);
-            i += (size_t)tmp_length - 1;
+            rbh_action_print_regular_char(output + output_length,
+                                          &output_length, max_length,
+                                          format_string, &i);
             break;
         }
 
 finish:
-
-        if (tmp_length < 0) {
-            errno = EINVAL;
-            return -1;
-        }
-
-        output_length += (size_t)tmp_length;
-        max_length -= tmp_length;
-
-        if (max_length <= 0) {
-            output_length = output_size - 1;
-            break;
-        }
+        max_length = output_size - output_length;
     }
 
     output[output_length] = '\0';
