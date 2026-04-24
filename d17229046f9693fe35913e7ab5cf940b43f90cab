@@ -22,6 +22,30 @@
       },
       "revId": "d17229046f9693fe35913e7ab5cf940b43f90cab",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7f7b4dc_5c296a2c",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-24T12:34:43Z",
+      "side": 1,
+      "message": "As discussed, to me the path was a filesystem notion, and not a robinhood one, so it didn\u0027t make sense to add it here. However, we decided that the burden on all plugins to have every entry have a path wasn\u0027t much, and rbh-find requires a path by default anyway, so let\u0027s simplify this aswell.\n\nAdded path-related directives here, though I\u0027m still a bit hesitant on the size, even though a similar point can be made... It\u0027s easy to change anyway, so we\u0027ll talk about it again later.",
+      "parentUuid": "c1a00fdc_b7b50230",
+      "range": {
+        "startLine": 284,
+        "startChar": 4,
+        "endLine": 289,
+        "endChar": 14
+      },
+      "revId": "d17229046f9693fe35913e7ab5cf940b43f90cab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
