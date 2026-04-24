@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78a00875_a30c6dd3",
+        "filename": "librobinhood/src/action.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-24T08:08:35Z",
+      "side": 1,
+      "message": "question: Idem, why not \u0027p\u0027 and \u0027s\u0027 directives ?",
+      "revId": "444be7e11bbffb240d3da96959f7b2844f985e7a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
