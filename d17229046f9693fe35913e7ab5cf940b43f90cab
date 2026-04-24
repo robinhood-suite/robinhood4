@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1a00fdc_b7b50230",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-24T08:04:15Z",
+      "side": 1,
+      "message": "question: Why only \u0027f\u0027 and \u0027I\u0027, and not \u0027p\u0027 and \u0027s\u0027, which S3 and POSIX also have in common?",
+      "range": {
+        "startLine": 284,
+        "startChar": 4,
+        "endLine": 289,
+        "endChar": 14
+      },
+      "revId": "d17229046f9693fe35913e7ab5cf940b43f90cab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
