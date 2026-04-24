@@ -16,6 +16,24 @@
       "message": "defect: max_length is never updated with \u0027%...\u0027 as tmp_length is always 0 for this case",
       "revId": "a72ace052c64df2c776f02e65fda90cbb8a17fdc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3979ebb3_e9ca128a",
+        "filename": "librobinhood/src/action.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-24T08:18:54Z",
+      "side": 1,
+      "message": "Nevermind, done in the next patch",
+      "parentUuid": "0bca56a1_33f26415",
+      "revId": "a72ace052c64df2c776f02e65fda90cbb8a17fdc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
