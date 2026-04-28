@@ -57,11 +57,27 @@ test_ost()
                   "/c: '[0, 2, 3, -1]'"
 }
 
+test_pfid()
+{
+    mkdir blob
+    touch blob/blob
+
+    local root_fid="$(lfs path2fid .)"
+    local blob_fid="$(lfs path2fid blob)"
+    local blob_blob_fid="$(lfs path2fid blob/blob)"
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLp'\n" | sort |
+        difflines "/: 'None'" "/blob/blob: '$blob_fid'" \
+                  "/blob: '$root_fid'"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_fid test_gen test_ost)
+declare -a tests=(test_fid test_gen test_ost test_pfid)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
