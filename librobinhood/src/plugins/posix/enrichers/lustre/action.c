@@ -107,6 +107,14 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         value = rbh_fsentry_find_inode_xattr(fsentry, "ost");
         tmp_length = snprintf_value_array("ost", output, max_length, value);
         break;
+    case 'p': // parent FID
+        if (fsentry->parent_id.size == 0) {
+            tmp_length = snprintf(output, max_length, "None");
+            break;
+        }
+        fid = rbh_lu_fid_from_id(&fsentry->parent_id);
+        tmp_length = snprintf(output, max_length, DFID, PFID(fid));
+        break;
     default:
         rc = RBH_DIRECTIVE_UNKNOWN;
     }
@@ -134,13 +142,16 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
 
     switch (format_string[*index + 3]) {
     case 'f': // FID
-        rbh_projection_add(projection, str2filter_field("xattrs.fid"));
+        rbh_projection_add(projection, str2filter_field("id"));
         break;
     case 'g': // generation
         rbh_projection_add(projection, str2filter_field("xattrs.gen"));
         break;
     case 'o': // OSTs
         rbh_projection_add(projection, str2filter_field("xattrs.ost"));
+        break;
+    case 'p': // Parent FID
+        rbh_projection_add(projection, str2filter_field("parent-id"));
         break;
     default:
         rc = RBH_DIRECTIVE_UNKNOWN;
