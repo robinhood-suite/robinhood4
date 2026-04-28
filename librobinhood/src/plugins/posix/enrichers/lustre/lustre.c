@@ -198,6 +198,17 @@ create_uint64_value(uint64_t integer)
 }
 
 static inline struct rbh_value
+create_int64_value(uint64_t integer)
+{
+    struct rbh_value val = {
+        .type = RBH_VT_INT64,
+        .int64 = integer,
+    };
+
+    return val;
+}
+
+static inline struct rbh_value
 create_uint32_value(uint32_t integer)
 {
     struct rbh_value val = {
@@ -314,10 +325,10 @@ fill_iterator_data(struct llapi_layout *layout,
             else if (rc)
                 return rc;
 
-            data->ost[data->ost_idx++] = create_uint64_value(tmp);
+            data->ost[data->ost_idx++] = create_int64_value(tmp);
         }
     } else {
-        data->ost[data->ost_idx++] = create_uint64_value(-1);
+        data->ost[data->ost_idx++] = create_int64_value(-1);
     }
 
     return 0;
