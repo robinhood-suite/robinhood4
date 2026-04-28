@@ -44,11 +44,24 @@ test_gen()
         difflines "/: 'None'" "/a: '0'" "/b: '1'" "/c: '2'" "/d: '6'"
 }
 
+test_ost()
+{
+    lfs setstripe -o 1 a
+    lfs setstripe -i 0 -E 1M -c 2 -S 256k -E -1 -c 2 -S 512k b
+    lfs setstripe -E 1M -o 0,2,3 -c 3 -S 256k -E -1 -c 2 -S 512k c
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLo'\n" | sort |
+        difflines "/: 'None'" "/a: '[1]'" "/b: '[0, 1, -1]'" \
+                  "/c: '[0, 2, 3, -1]'"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_fid test_gen)
+declare -a tests=(test_fid test_gen test_ost)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
