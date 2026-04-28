@@ -19,6 +19,25 @@
 
 #define RBH_LUSTRE_DIRECTIVE 'L'
 
+static int
+snprintf_value(const char *name, char *output, int max_length,
+               const struct rbh_value *value)
+{
+    if (value == NULL)
+        return snprintf(output, max_length, "None");
+
+    switch (value->type) {
+    case RBH_VT_INT32:
+        return snprintf(output, max_length, "%d", value->int32);
+    default:
+        break;
+    }
+
+    error(EXIT_FAILURE, EINVAL, "unexpected type in fsentry for value '%s': %d",
+          name, value->type);
+    __builtin_unreachable();
+}
+
 enum known_directive
 rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
                            const char *format_string, size_t *index,
@@ -26,6 +45,7 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
                            __attribute__((unused)) const char *backend)
 {
     enum known_directive rc = RBH_DIRECTIVE_KNOWN;
+    const struct rbh_value *value;
     const struct lu_fid *fid;
     int tmp_length = 0;
 
@@ -34,9 +54,13 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         return RBH_DIRECTIVE_UNKNOWN;
 
     switch (format_string[*index + 3]) {
-    case 'f':
+    case 'f': // FID
         fid = rbh_lu_fid_from_id(&fsentry->id);
         tmp_length = snprintf(output, max_length, DFID, PFID(fid));
+        break;
+    case 'g': // generation
+        value = rbh_fsentry_find_inode_xattr(fsentry, "gen");
+        tmp_length = snprintf_value("gen", output, max_length, value);
         break;
     default:
         rc = RBH_DIRECTIVE_UNKNOWN;
@@ -66,6 +90,9 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
     switch (format_string[*index + 3]) {
     case 'f': // FID
         rbh_projection_add(projection, str2filter_field("xattrs.fid"));
+        break;
+    case 'g': // generation
+        rbh_projection_add(projection, str2filter_field("xattrs.gen"));
         break;
     default:
         rc = RBH_DIRECTIVE_UNKNOWN;

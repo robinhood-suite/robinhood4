@@ -27,14 +27,28 @@ test_fid()
     rbh_find "rbh:$db:$testdb" -printf "%p: '%RLf'\n" | sort |
         difflines "/: '$root_fid'" "/blob/blob: '$blob_blob_fid'" \
                   "/blob: '$blob_fid'"
+}
 
+test_gen()
+{
+    touch a
+    lfs setstripe -E -1 -c 2 -S 256k b
+    lfs setstripe -E 1M -c 1 -S 256k -E -1 -c 2 -S 512k c
+    lfs setstripe -E 1M -c 1 -E 2M -c 2 \
+                  -E 4M -c 3 -E 8M -c 4 \
+                  -E 16M -c 5 -E -1 -c 6 d
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLg'\n" | sort |
+        difflines "/: 'None'" "/a: '0'" "/b: '1'" "/c: '2'" "/d: '6'"
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_fid)
+declare -a tests=(test_fid test_gen)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
