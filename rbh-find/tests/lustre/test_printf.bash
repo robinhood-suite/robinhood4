@@ -73,11 +73,31 @@ test_pfid()
                   "/blob: '$root_fid'"
 }
 
+test_stripe_count()
+{
+    touch a
+    lfs setstripe -E -1 -c 2 -S 256k b
+    lfs setstripe -E 1M -c 1 -S 256k -E -1 -c 2 -S 512k c
+    lfs setstripe -E 1M -c 1 -E 2M -c 2 \
+                  -E 4M -c 3 -E 8M -c 4 \
+                  -E 16M -c 5 -E -1 -c 6 d
+    lfs mkdir e
+    lfs setstripe -c 7 e
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    # No idea why 'd' has these stripe count, but it's what Lustre shows with
+    # a getstripe too so ...
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLc'\n" | sort |
+        difflines "/: 'None'" "/a: '[1]'" "/b: '[2]'" "/c: '[1, 2]'" \
+                  "/d: '[1, 1, 2, 4, 5, 6]'" "/e: '[7]'"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_fid test_gen test_ost test_pfid)
+declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
