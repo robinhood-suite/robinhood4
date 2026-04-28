@@ -62,7 +62,7 @@ Build and install with meson_ and ninja_:
 
 .. code:: bash
 
-    meson builddir
+    meson setup --prefix="/usr" builddir
     ninja -C builddir
     sudo ninja -C builddir install
 
