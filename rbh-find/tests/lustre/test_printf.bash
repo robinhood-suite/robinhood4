@@ -93,11 +93,32 @@ test_stripe_count()
                   "/d: '[1, 1, 2, 4, 5, 6]'" "/e: '[7]'"
 }
 
+test_stripe_size()
+{
+    touch a
+    lfs setstripe -E -1 -c 2 -S 256k b
+    lfs setstripe -E 1M -c 1 -S 256k -E -1 -c 2 -S 512k c
+    lfs setstripe -E 1M -S 128k -E 2M -S 256k \
+                  -E 4M -S 512k -E 8M -S 1M \
+                  -E 16M -S 2M -E -1 -S 4M d
+    lfs mkdir e
+    lfs setstripe -S 16M e
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLs'\n" | sort |
+        difflines "/: 'None'" "/a: '[1048576]'" "/b: '[262144]'" \
+                  "/c: '[262144, 524288]'" \
+                  "/d: '[131072, 262144, 524288, 1048576, 2097152, 4194304]'" \
+                  "/e: '[16777216]'"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count)
+declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
+                  test_stripe_size)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
