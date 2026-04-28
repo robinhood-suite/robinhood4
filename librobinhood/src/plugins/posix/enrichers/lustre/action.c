@@ -120,6 +120,11 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         fid = rbh_lu_fid_from_id(&fsentry->parent_id);
         tmp_length = snprintf(output, max_length, DFID, PFID(fid));
         break;
+    case 's': // stripe size
+        value = rbh_fsentry_find_inode_xattr(fsentry, "stripe_size");
+        tmp_length = snprintf_value_array("stripe_size", output, max_length,
+                                          value);
+        break;
     default:
         rc = RBH_DIRECTIVE_UNKNOWN;
     }
@@ -160,6 +165,9 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         break;
     case 'p': // Parent FID
         rbh_projection_add(projection, str2filter_field("parent-id"));
+        break;
+    case 's': // stripe size
+        rbh_projection_add(projection, str2filter_field("xattrs.stripe_size"));
         break;
     default:
         rc = RBH_DIRECTIVE_UNKNOWN;
