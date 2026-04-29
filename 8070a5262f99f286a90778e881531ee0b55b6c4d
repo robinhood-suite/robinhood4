@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2692ad2d_912b271a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-29T08:47:18Z",
+      "side": 1,
+      "message": "It\u0027s also missing the tests",
+      "revId": "8070a5262f99f286a90778e881531ee0b55b6c4d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18b4962b_fed20cbd",
+        "filename": "rbh-policy/rbhpolicy/execution/show.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-29T08:47:18Z",
+      "side": 1,
+      "message": "defect: `policy_sort_keywords` doesn\u0027t exists",
+      "range": {
+        "startLine": 13,
+        "startChar": 34,
+        "endLine": 13,
+        "endChar": 63
+      },
+      "revId": "8070a5262f99f286a90778e881531ee0b55b6c4d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
