@@ -49,7 +49,7 @@ backend_path_env_for_mpi_tests.set('WITH_MPI', 'true')
 subdir('mongo')
 subdir('posix')
 
-if get_option('lustre').enabled()
+if build_ldiskfs
   subdir('ldiskfs')
 endif
 

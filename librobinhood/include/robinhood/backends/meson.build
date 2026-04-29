@@ -80,23 +80,25 @@ if build_lustre
 
     install_headers(librbh_lustre_h, subdir: 'robinhood/backends')
 
-    librbh_ldiskfs_conf = configuration_data()
+    if build_ldiskfs
+        librbh_ldiskfs_conf = configuration_data()
 
-    librbh_ldiskfs_conf.set('RBH_LDISKFS_BACKEND_MAJOR', 1)
-    librbh_ldiskfs_conf.set('RBH_LDISKFS_BACKEND_MINOR', 0)
-    librbh_ldiskfs_conf.set('RBH_LDISKFS_BACKEND_RELEASE', 0)
+        librbh_ldiskfs_conf.set('RBH_LDISKFS_BACKEND_MAJOR', 1)
+        librbh_ldiskfs_conf.set('RBH_LDISKFS_BACKEND_MINOR', 0)
+        librbh_ldiskfs_conf.set('RBH_LDISKFS_BACKEND_RELEASE', 0)
 
-    librbh_ldiskfs_version = '@0@.@1@.@2@'.format(
-        librbh_ldiskfs_conf.get('RBH_LDISKFS_BACKEND_MAJOR'),
-        librbh_ldiskfs_conf.get('RBH_LDISKFS_BACKEND_MINOR'),
-        librbh_ldiskfs_conf.get('RBH_LDISKFS_BACKEND_RELEASE')
-    )
+        librbh_ldiskfs_version = '@0@.@1@.@2@'.format(
+            librbh_ldiskfs_conf.get('RBH_LDISKFS_BACKEND_MAJOR'),
+            librbh_ldiskfs_conf.get('RBH_LDISKFS_BACKEND_MINOR'),
+            librbh_ldiskfs_conf.get('RBH_LDISKFS_BACKEND_RELEASE')
+        )
 
-    librbh_ldiskfs_h = configure_file(input: 'ldiskfs.h.in',
-                                      output: 'ldiskfs.h',
-                                      configuration: librbh_ldiskfs_conf)
+        librbh_ldiskfs_h = configure_file(input: 'ldiskfs.h.in',
+                                          output: 'ldiskfs.h',
+                                          configuration: librbh_ldiskfs_conf)
 
-    install_headers(librbh_ldiskfs_h, subdir: 'robinhood/backends')
+        install_headers(librbh_ldiskfs_h, subdir: 'robinhood/backends')
+    endif
 endif
 
 # S3 backend
