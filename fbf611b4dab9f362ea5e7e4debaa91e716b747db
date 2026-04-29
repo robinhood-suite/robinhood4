@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "472e67b2_58dc1ea0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-29T12:51:41Z",
+      "side": 1,
+      "message": "Why this change? In case multiple backends want to differ their behavior for one directive? Are admins ok with that?",
+      "revId": "fbf611b4dab9f362ea5e7e4debaa91e716b747db",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
