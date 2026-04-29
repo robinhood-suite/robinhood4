@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b82a54f1_abfbd9e5",
+        "filename": "librobinhood/src/policyengine/trigger.c",
+        "patchSetId": 31
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-04-29T08:23:16Z",
+      "side": 1,
+      "message": "sugest: You could also add the accumulator as a function parameter to allow for more complex queries.",
+      "range": {
+        "startLine": 44,
+        "startChar": 32,
+        "endLine": 44,
+        "endChar": 41
+      },
+      "revId": "3f521a99b1ee934562d4a9b39c6adf23acd2eea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
