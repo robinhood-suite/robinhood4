@@ -16,9 +16,14 @@ struct xattr_iter_data {
     struct rbh_sstack *sstack;
 };
 
+#ifdef LUSTRE_VERSION_E2FSPROGS_XATTRS_ITERATE
 int
 rbh_get_xattrs(char *_name, char *value,size_t value_len,
-               ext2_ino_t inode_num, void *_data)
+               __attribute__((unused)) ext2_ino_t inode_num, void *_data)
+#else
+int
+rbh_get_xattrs(char *_name, char *value,size_t value_len, void *_data)
+#endif
 {
     struct xattr_iter_data *data = _data;
     struct rbh_value_pair *xattr_pair;
@@ -26,8 +31,6 @@ rbh_get_xattrs(char *_name, char *value,size_t value_len,
     struct rbh_value_pair *pairs;
     char *name;
     int rc;
-
-    (void) inode_num;
 
     xattrs = data->values;
     pairs = (struct rbh_value_pair *)xattrs->pairs;

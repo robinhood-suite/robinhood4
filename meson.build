@@ -40,6 +40,7 @@ miniyaml = dependency('miniyaml', version: '>=0.0.0')
 
 build_lustre = false
 test_lustre = false
+build_ldiskfs = false
 
 if get_option('lustre').enabled()
     liblustre = dependency('lustre', disabler: true, required: false)
@@ -53,6 +54,10 @@ if get_option('lustre').enabled()
         test_lustre = true
     else
         message('"check_lustre" failed, do not run Lustre specific tests')
+    endif
+
+    if get_option('ldiskfs').enabled()
+        build_ldiskfs = true
     endif
 else
     liblustre = disabler()
