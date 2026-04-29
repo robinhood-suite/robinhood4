@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "664c491a_a36cb6a6",
+        "filename": "librobinhood/src/action.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-29T12:41:05Z",
+      "side": 1,
+      "message": "comment: I trust you on that one; not sure about what you call regular and irregular characters here",
+      "range": {
+        "startLine": 266,
+        "startChar": 4,
+        "endLine": 270,
+        "endChar": 32
+      },
+      "revId": "d573d4aefb0bac3a49629aeba2c7268c1b15cd69",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
