@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4f062a5_ab6cc167",
+        "filename": "librobinhood/include/robinhood/action.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-29T12:17:21Z",
+      "side": 1,
+      "message": "question: why an enum and not macros?",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 2
+      },
+      "revId": "c4203e283e06f9a908440e2dfd35ccbc9783a557",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "740b0a6d_5dc4da07",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-29T12:17:21Z",
+      "side": 1,
+      "message": "nit: as it seems to be a common directive, kind of strange to talk about POSIX here",
+      "range": {
+        "startLine": 298,
+        "startChar": 11,
+        "endLine": 298,
+        "endChar": 16
+      },
+      "revId": "c4203e283e06f9a908440e2dfd35ccbc9783a557",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
