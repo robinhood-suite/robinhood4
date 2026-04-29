@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4661eced_243d2bc2",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-29T11:58:04Z",
+      "side": 1,
+      "message": "question: why do we need to add them? the test does not work if they are not in the switch case?",
+      "range": {
+        "startLine": 474,
+        "startChar": 8,
+        "endLine": 476,
+        "endChar": 11
+      },
+      "revId": "e361df9a1f38b523bcf46fb5a90dd14bb17038df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
