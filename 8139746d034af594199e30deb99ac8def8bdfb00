@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30cd2080_820ffef9",
+        "filename": "rbh-find/tests/posix/test_posix_printf.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-04-29T12:35:28Z",
+      "side": 1,
+      "message": "nit: so not an empty string anymore?",
+      "range": {
+        "startLine": 250,
+        "startChar": 45,
+        "endLine": 250,
+        "endChar": 60
+      },
+      "revId": "8139746d034af594199e30deb99ac8def8bdfb00",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
