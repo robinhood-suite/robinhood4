@@ -7,7 +7,7 @@
 project(
     'robinhood4',
     'c', 'cpp',
-    version: '1.5.1',
+    version: '1.5.2',
     license: 'LGPL3.0-or-later',
     default_options: [
         'werror=true',
