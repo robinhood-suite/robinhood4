@@ -16,6 +16,24 @@
       "message": "Why this change? In case multiple backends want to differ their behavior for one directive? Are admins ok with that?",
       "revId": "fbf611b4dab9f362ea5e7e4debaa91e716b747db",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1469e9f7_302b78fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-30T15:36:25Z",
+      "side": 1,
+      "message": "Yes exactly, since we will have many backends with directives, and POSIX already takes a lot of characters, single-character directives will create a lot of conflitcs. So to fix this, I changed it to the RBH3 way, which is to have a special character before the directive. RBH3 used \u0027R\u0027 for special directives, but since we have more than one potentiel backend, even one letter could produce conflicts, so in accord with the admins, we decided to have \u0027R\u0027 to indicate a robinhood directive, a character for the category, and the directive.",
+      "parentUuid": "472e67b2_58dc1ea0",
+      "revId": "fbf611b4dab9f362ea5e7e4debaa91e716b747db",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
