@@ -22,6 +22,30 @@
       },
       "revId": "d573d4aefb0bac3a49629aeba2c7268c1b15cd69",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0890d9ec_e95a6d6c",
+        "filename": "librobinhood/src/action.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-30T15:31:18Z",
+      "side": 1,
+      "message": "\u0027irregular\u0027 here meant something that isn\u0027t \u0027%\u0027, \u0027\\\u0027 or \u0027\\0\u0027. Did not bother much because it was going to be changed anyway in a following patch",
+      "parentUuid": "664c491a_a36cb6a6",
+      "range": {
+        "startLine": 266,
+        "startChar": 4,
+        "endLine": 270,
+        "endChar": 32
+      },
+      "revId": "d573d4aefb0bac3a49629aeba2c7268c1b15cd69",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
