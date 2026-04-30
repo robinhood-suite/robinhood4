@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ef59f269_e0a91bcb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-30T15:17:24Z",
+      "side": 1,
+      "message": "Because IMO, since I\u0027m giving the whole string to the functions, and not simply the directives, it\u0027s not really exact to say that. But I don\u0027t really care that much tbh, so if you want me to change the argument\u0027s name to \u0027directives\u0027, I can do that",
+      "parentUuid": "e9009ed0_012838a5",
+      "revId": "0a6007280f1872f03ee43e576b20566f12bb4809",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9595450e_9358f452",
         "filename": "librobinhood/include/robinhood/backends/s3.h.in",
         "patchSetId": 1
@@ -31,6 +49,30 @@
       "writtenOn": "2026-04-29T12:10:30Z",
       "side": 1,
       "message": "minor: need to modify this, not mandatorily a directive",
+      "range": {
+        "startLine": 134,
+        "startChar": 50,
+        "endLine": 134,
+        "endChar": 59
+      },
+      "revId": "0a6007280f1872f03ee43e576b20566f12bb4809",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5aa0afc_c7100d31",
+        "filename": "librobinhood/include/robinhood/backends/s3.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-30T15:17:24Z",
+      "side": 1,
+      "message": "Changed in the \u0027directive: update every \u0027fill_entry_info\u0027 function\u0027 patch",
+      "parentUuid": "9595450e_9358f452",
       "range": {
         "startLine": 134,
         "startChar": 50,
@@ -54,6 +96,30 @@
       "writtenOn": "2026-04-29T12:10:30Z",
       "side": 1,
       "message": "minor: same here",
+      "range": {
+        "startLine": 94,
+        "startChar": 40,
+        "endLine": 94,
+        "endChar": 49
+      },
+      "revId": "0a6007280f1872f03ee43e576b20566f12bb4809",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6fceea3_a9bb419c",
+        "filename": "librobinhood/include/robinhood/plugins/common_ops.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-04-30T15:17:24Z",
+      "side": 1,
+      "message": "Changed in the \u0027directive: update every \u0027fill_entry_info\u0027 function\u0027 patch",
+      "parentUuid": "f1bcfac6_959ad2c1",
       "range": {
         "startLine": 94,
         "startChar": 40,
