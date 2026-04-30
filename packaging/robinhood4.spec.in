@@ -1,7 +1,7 @@
 %global python3_pkgversion 3.9
 
 Name:    robinhood4
-Version: 1.5.1
+Version: 1.5.2
 Release: 1%{?dist}
 Summary: RobinHood V4 tool suite
 
@@ -158,6 +158,7 @@ OPTS=""
 %{_libdir}/librbh-posix-sparse-ext.so*
 %if %{with lustre}
 %{_libdir}/librbh-posix-lustre-ext.so*
+%{_libdir}/librbh-ldiskfs.so*
 %endif
 %if %{with mfu}
 %{_libdir}/librbh-posix-mfu-ext.so*
@@ -254,6 +255,10 @@ OPTS=""
 ldconfig
 
 %changelog
+* Thu Apr 30 2026 - Yoann Valeri <yoann.valeri@cea.fr> - 1.5.2-1
+- Add ldiskfs as available backend
+- Fix issue with in map searching
+
 * Mon Apr 20 2026 - Yoann Valeri <yoann.valeri@cea.fr> - 1.5.1-1
 - Add missing commands and python modules
 - New Sparse enricher for POSIX
