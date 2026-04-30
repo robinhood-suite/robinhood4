@@ -589,7 +589,7 @@ fill_sequence_pair(const char *key, struct rbh_value *values, uint64_t length,
 }
 
 static const struct rbh_value *
-_rbh_map_find(const struct rbh_value_map *map, const char *key)
+get_value_in_map(const struct rbh_value_map *map, const char *key)
 {
     for (size_t i = 0; i < map->count; i++)
         if (!strcmp(map->pairs[i].key, key))
@@ -598,35 +598,33 @@ _rbh_map_find(const struct rbh_value_map *map, const char *key)
     return NULL;
 }
 
+static const struct rbh_value *
+_rbh_map_find(const struct rbh_value_map *map, char *key)
+{
+    const struct rbh_value *value = NULL;
+    char *subkey;
+
+    subkey = strchr(key, '.');
+    if (subkey == NULL)
+        return get_value_in_map(map, key);
+
+    *subkey = '\0';
+    value = get_value_in_map(map, key);
+    if (value == NULL || value->type != RBH_VT_MAP)
+        return NULL;
+
+    map = &value->map;
+    return _rbh_map_find(map, subkey + 1);
+}
+
 const struct rbh_value *
 rbh_map_find(const struct rbh_value_map *map, const char *key_to_find)
 {
-    const struct rbh_value *value = NULL;
-    char *key = xstrdup(key_to_find);
-    char *subkey;
-    char *next;
+    const struct rbh_value *value;
+    char *key;
 
-    subkey = strtok(key, ".");
-
-    while (subkey != NULL) {
-        next = strtok(NULL, ".");
-
-        if (next != NULL) {
-            value = rbh_map_find(map, subkey);
-            if (value == NULL || value->type != RBH_VT_MAP) {
-                free(key);
-                return NULL;
-            }
-
-            map = &value->map;
-        } else {
-            value = _rbh_map_find(map, subkey);
-            break;
-        }
-
-        subkey = next;
-    }
-
+    key = xstrdup(key_to_find);
+    value = _rbh_map_find(map, key);
     free(key);
 
     return value;
