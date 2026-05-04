@@ -79,6 +79,28 @@ snprintf_value_array(const char *name, char *output, int max_length,
     return snprintf(output, max_length, "%s", array);
 }
 
+static int
+snprintf_hash_type(char *output, int max_length, const struct rbh_value *value)
+{
+    if (value == NULL || value->type != RBH_VT_INT32)
+        return snprintf(output, max_length, "None");
+
+    switch (value->int32) {
+    case LMV_HASH_TYPE_ALL_CHARS:
+        return snprintf(output, max_length, "all_char");
+    case LMV_HASH_TYPE_FNV_1A_64:
+        return snprintf(output, max_length, "fnv_1a_64");
+    case LMV_HASH_TYPE_CRUSH:
+        return snprintf(output, max_length, "crush");
+    case LMV_HASH_TYPE_CRUSH2:
+        return snprintf(output, max_length, "crush2");
+    default:
+        return snprintf(output, max_length, "unknown");
+    }
+
+    __builtin_unreachable();
+}
+
 enum known_directive
 rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
                            const char *format_string, size_t *index,
@@ -107,6 +129,10 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
     case 'g': // generation
         value = rbh_fsentry_find_inode_xattr(fsentry, "gen");
         tmp_length = snprintf_value("gen", output, max_length, value);
+        break;
+    case 'h': // hash type
+        value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_hash");
+        tmp_length = snprintf_hash_type(output, max_length, value);
         break;
     case 'o': // OSTs
         value = rbh_fsentry_find_inode_xattr(fsentry, "ost");
@@ -159,6 +185,9 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         break;
     case 'g': // generation
         rbh_projection_add(projection, str2filter_field("xattrs.gen"));
+        break;
+    case 'h': // hash type
+        rbh_projection_add(projection, str2filter_field("xattrs.mdt_hash"));
         break;
     case 'o': // OSTs
         rbh_projection_add(projection, str2filter_field("xattrs.ost"));

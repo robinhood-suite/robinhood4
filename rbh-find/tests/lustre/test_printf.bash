@@ -113,12 +113,36 @@ test_stripe_size()
                   "/e: '[16777216]'"
 }
 
+test_hash_type()
+{
+    lfs mkdir -i 1 "test_mdt_hash1"
+    lfs migrate -v -m 0 -H all_char "test_mdt_hash1"
+
+    lfs mkdir -i 1 "test_mdt_hash2"
+    lfs migrate -v -m 0 -H fnv_1a_64 "test_mdt_hash2"
+
+    lfs mkdir -i 1 "test_mdt_hash3"
+    lfs migrate -v -m 0 -H crush "test_mdt_hash3"
+
+    lfs mkdir -i 1 "test_mdt_hash4"
+    lfs migrate -v -m 0 -H crush2 "test_mdt_hash4"
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: %RLh\n" | sort |
+        difflines "/: None" \
+                  "/test_mdt_hash1: all_char" \
+                  "/test_mdt_hash2: fnv_1a_64" \
+                  "/test_mdt_hash3: crush" \
+                  "/test_mdt_hash4: crush2"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
-                  test_stripe_size)
+                  test_stripe_size test_hash_type)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
