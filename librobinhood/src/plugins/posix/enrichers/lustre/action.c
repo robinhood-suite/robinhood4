@@ -33,6 +33,12 @@ snprintf_value(const char *name, char *output, int max_length,
         return snprintf(output, max_length, "%ld", value->int64);
     case RBH_VT_STRING:
         return snprintf(output, max_length, "%s", value->string);
+    case RBH_VT_SEQUENCE:
+        /* If we try to print a sequence without going through
+         * 'snprintf_value_array' first, we instead print the size of the
+         * sequence.
+         */
+        return snprintf(output, max_length, "%lu", value->sequence.count);
     default:
         break;
     }
@@ -103,6 +109,24 @@ snprintf_hash_type(char *output, int max_length, const struct rbh_value *value)
     __builtin_unreachable();
 }
 
+static int
+snprintf_ost_count(char *output, int max_length, const struct rbh_value *value)
+{
+    long i;
+
+    if (value == NULL ||
+        value->type != RBH_VT_SEQUENCE ||
+        value->sequence.count == 0 ||
+        value->sequence.values[0].type != RBH_VT_INT64)
+        return snprintf(output, max_length, "None");
+
+    for (i = value->sequence.count - 1;
+         i >= 0 && value->sequence.values[i].int64 == -1;
+         --i);
+
+    return snprintf(output, max_length, "%ld", i + 1);
+}
+
 enum known_directive
 rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
                            const char *format_string, size_t *index,
@@ -123,6 +147,15 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         value = rbh_fsentry_find_inode_xattr(fsentry, "stripe_count");
         tmp_length = snprintf_value_array("stripe_count", output, max_length,
                                           value);
+        break;
+    case 'C': // OST or MDT count
+        if (S_ISDIR(fsentry->statx->stx_mode)) {
+            value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_count");
+            tmp_length = snprintf_value("mdt_count", output, max_length, value);
+        } else {
+            value = rbh_fsentry_find_inode_xattr(fsentry, "ost");
+            tmp_length = snprintf_ost_count(output, max_length, value);
+        }
         break;
     case 'f': // FID
         fid = rbh_lu_fid_from_id(&fsentry->id);
@@ -189,6 +222,12 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
     switch (format_string[*index + 3]) {
     case 'c': // stripe count
         rbh_projection_add(projection, str2filter_field("xattrs.stripe_count"));
+        break;
+    case 'C': // OST or MDT count
+        rbh_projection_add(projection, str2filter_field("statx.mode"));
+        rbh_projection_add(projection, str2filter_field("statx.type"));
+        rbh_projection_add(projection, str2filter_field("xattrs.ost"));
+        rbh_projection_add(projection, str2filter_field("xattrs.mdt_count"));
         break;
     case 'f': // FID
         rbh_projection_add(projection, str2filter_field("id"));

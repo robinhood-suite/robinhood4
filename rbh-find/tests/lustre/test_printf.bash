@@ -170,12 +170,36 @@ test_project_id()
         difflines "/: 0" "/project_1: 1" "/project_2: 2" "/vanilla: 0"
 }
 
+test_ost_mdt_count()
+{
+
+    lfs mkdir -c 1 dir1
+    lfs mkdir -c 2 dir2
+    lfs mkdir -c 3 dir3
+
+    lfs setstripe -o 1 a
+    lfs setstripe -i 0 -E 1M -c 2 -S 256k -E -1 -c 2 -S 512k b
+    lfs setstripe -E 1M -o 0,2,3 -c 3 -S 256k -E -1 -c 2 -S 512k c
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: %RLC\n" | sort |
+        difflines "/: 1" \
+                  "/a: 1" \
+                  "/b: 2" \
+                  "/c: 3" \
+                  "/dir1: 1" \
+                  "/dir2: 2" \
+                  "/dir3: 3"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
-                  test_stripe_size test_hash_type test_pool test_project_id)
+                  test_stripe_size test_hash_type test_pool test_project_id
+                  test_ost_mdt_count)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
