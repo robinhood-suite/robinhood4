@@ -22,6 +22,30 @@
       },
       "revId": "3f521a99b1ee934562d4a9b39c6adf23acd2eea2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efb1459a_e463074c",
+        "filename": "librobinhood/src/policyengine/trigger.c",
+        "patchSetId": 31
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-05-04T14:24:05Z",
+      "side": 1,
+      "message": "Good suggestion. For now, the only accumulators used by existing triggers are COUNT and SUM, so the current API is sufficient. If future triggers require MIN/MAX/AVG, the accumulator parameter can be added at that time but I don\u0027t see a use case for it at the moment.",
+      "parentUuid": "b82a54f1_abfbd9e5",
+      "range": {
+        "startLine": 44,
+        "startChar": 32,
+        "endLine": 44,
+        "endChar": 41
+      },
+      "revId": "3f521a99b1ee934562d4a9b39c6adf23acd2eea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
