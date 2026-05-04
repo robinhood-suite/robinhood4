@@ -155,12 +155,27 @@ test_pool()
                   "/pool_file: [test_pool1, , test_pool2]"
 }
 
+test_project_id()
+{
+    touch "project_1"
+    touch "project_2"
+    touch "vanilla"
+
+    lfs project -p 1 "project_1"
+    lfs project -p 2 "project_2"
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: %RLI\n" | sort |
+        difflines "/: 0" "/project_1: 1" "/project_2: 2" "/vanilla: 0"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
-                  test_stripe_size test_hash_type test_pool)
+                  test_stripe_size test_hash_type test_pool test_project_id)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
