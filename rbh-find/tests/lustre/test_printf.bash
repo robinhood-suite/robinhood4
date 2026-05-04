@@ -137,12 +137,30 @@ test_hash_type()
                   "/test_mdt_hash4: crush2"
 }
 
+test_pool()
+{
+    local file="pool_file"
+    local file2="pool_file2"
+
+    lfs setstripe -E 1M -p "test_pool1" -E 2G -p ""  -E -1 -p "test_pool2" \
+        "$file"
+    truncate -s 2M "$file"
+    lfs setstripe -p "test_pool3" "$file2"
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: %RLP\n" | sort |
+        difflines "/: None" \
+                  "/pool_file2: [test_pool3]" \
+                  "/pool_file: [test_pool1, , test_pool2]"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
-                  test_stripe_size test_hash_type)
+                  test_stripe_size test_hash_type test_pool)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"

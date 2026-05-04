@@ -31,6 +31,8 @@ snprintf_value(const char *name, char *output, int max_length,
         return snprintf(output, max_length, "%d", value->int32);
     case RBH_VT_INT64:
         return snprintf(output, max_length, "%ld", value->int64);
+    case RBH_VT_STRING:
+        return snprintf(output, max_length, "%s", value->string);
     default:
         break;
     }
@@ -146,6 +148,10 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         fid = rbh_lu_fid_from_id(&fsentry->parent_id);
         tmp_length = snprintf(output, max_length, DFID, PFID(fid));
         break;
+    case 'P': // pool
+        value = rbh_fsentry_find_inode_xattr(fsentry, "pool");
+        tmp_length = snprintf_value_array("pool", output, max_length, value);
+        break;
     case 's': // stripe size
         value = rbh_fsentry_find_inode_xattr(fsentry, "stripe_size");
         tmp_length = snprintf_value_array("stripe_size", output, max_length,
@@ -194,6 +200,9 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         break;
     case 'p': // Parent FID
         rbh_projection_add(projection, str2filter_field("parent-id"));
+        break;
+    case 'P': // pool
+        rbh_projection_add(projection, str2filter_field("xattrs.pool"));
         break;
     case 's': // stripe size
         rbh_projection_add(projection, str2filter_field("xattrs.stripe_size"));
