@@ -263,6 +263,19 @@ test_comp_flags()
                   "/file4: '[init|prefer, 0]'"
 }
 
+test_extension_size()
+{
+    lfs setstripe --extension-size 64M -c 1 -E -1 file1
+    lfs setstripe --extension-size 256M -c 1 -E -1 file2
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLe'\n" | sort |
+        difflines "/: 'None'" \
+                  "/file1: '[0, 67108864]'" \
+                  "/file2: '[0, 268435456]'"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -270,7 +283,7 @@ test_comp_flags()
 declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
                   test_stripe_size test_hash_type test_pool test_project_id
                   test_ost_mdt_count test_mdt_index test_layout_pattern
-                  test_comp_flags)
+                  test_comp_flags test_extension_size)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
