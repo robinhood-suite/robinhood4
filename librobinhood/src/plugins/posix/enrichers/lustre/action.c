@@ -36,6 +36,8 @@ snprintf_layout_pattern(const char *name, char *output, int max_length,
     int64_t entry_pattern;
     int tmp_length = 0;
 
+    (void) name;
+
     if (value == NULL || value->type != RBH_VT_INT64)
         return snprintf(output, max_length, "None");
 
@@ -50,6 +52,44 @@ snprintf_layout_pattern(const char *name, char *output, int max_length,
         tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
                                cpatterns[i]);
         entry_pattern ^= ipatterns[i];
+        if (entry_pattern)
+            tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
+                                   "|");
+    }
+
+    if (entry_pattern)
+        return tmp_length + snprintf(output + tmp_length,
+                                     max_length - tmp_length,
+                                     "unknown");
+
+    return tmp_length;
+}
+
+static int
+snprintf_comp_flags(const char *name, char *output, int max_length,
+                    const struct rbh_value *value)
+{
+    int64_t entry_pattern;
+    int tmp_length = 0;
+    (void) name;
+
+    if (value == NULL || value->type != RBH_VT_INT32)
+        return snprintf(output, max_length, "None");
+
+    entry_pattern = value->int32;
+    if (entry_pattern == 0)
+        return snprintf(output, max_length, "0");
+
+    for (int i = 0; i < ARRAY_SIZE(comp_flags_table); i++) {
+        enum lov_comp_md_entry_flags comp_flag = comp_flags_table[i].cfn_flag;
+        const char *comp_name = comp_flags_table[i].cfn_name;
+
+        if (!(value->int32 & comp_flag))
+            continue;
+
+        tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
+                               comp_name);
+        entry_pattern ^= comp_flag;
         if (entry_pattern)
             tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
                                    "|");
@@ -222,6 +262,11 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         value = rbh_fsentry_find_inode_xattr(fsentry, "project_id");
         tmp_length = snprintf_value("project_id", output, max_length, value);
         break;
+    case 'l': // component flags
+        value = rbh_fsentry_find_inode_xattr(fsentry, "comp_flags");
+        tmp_length = snprintf_value_array("comp_flags", output, max_length,
+                                          value, &snprintf_comp_flags);
+        break;
     case 'o': // OSTs
         value = rbh_fsentry_find_inode_xattr(fsentry, "ost");
         tmp_length = snprintf_value_array("ost", output, max_length, value,
@@ -299,6 +344,9 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         break;
     case 'I': // project ID
         rbh_projection_add(projection, str2filter_field("xattrs.project_id"));
+        break;
+    case 'l': // component flags
+        rbh_projection_add(projection, str2filter_field("xattrs.comp_flags"));
         break;
     case 'o': // OSTs
         rbh_projection_add(projection, str2filter_field("xattrs.ost"));

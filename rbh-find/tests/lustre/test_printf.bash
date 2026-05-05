@@ -236,13 +236,41 @@ test_layout_pattern()
                   "/released: '[raid0|released]'"
 }
 
+test_comp_flags()
+{
+    lfs setstripe -E 1M -S 256k -E 2M -S 1M -E -1 -S 1G file0
+    truncate -s 1M "file0"
+
+    lfs setstripe --extension-size 64M -c 1 -E -1 file1
+
+    lfs mirror create -N -Eeof -c2 -o0,1 -N -Eeof -c2 -o1,2 file2
+    echo "blob" > file2
+
+    lfs setstripe -E 1M -S 256k -E 2M -S 1M -E -1 -S 1G file3
+    lfs setstripe --comp-set -I 1 --comp-flags=nosync file3
+
+    lfs setstripe -E 1M -S 256k -E -1 -S 1M file4
+    lfs setstripe --comp-set -I 1 --comp-flags=prefer file4
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLl'\n" | sort |
+        difflines "/: 'None'" \
+                  "/file0: '[init, init, 0]'" \
+                  "/file1: '[init, extension]'" \
+                  "/file2: '[init, init|stale]'" \
+                  "/file3: '[init|nosync, nosync, nosync]'" \
+                  "/file4: '[init|prefer, 0]'"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
                   test_stripe_size test_hash_type test_pool test_project_id
-                  test_ost_mdt_count test_mdt_index test_layout_pattern)
+                  test_ost_mdt_count test_mdt_index test_layout_pattern
+                  test_comp_flags)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
