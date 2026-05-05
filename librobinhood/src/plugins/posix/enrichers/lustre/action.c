@@ -169,6 +169,10 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_hash");
         tmp_length = snprintf_hash_type(output, max_length, value);
         break;
+    case 'i': // MDT index
+        value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_index");
+        tmp_length = snprintf_value("mdt_index", output, max_length, value);
+        break;
     case 'I': // project ID
         value = rbh_fsentry_find_inode_xattr(fsentry, "project_id");
         tmp_length = snprintf_value("project_id", output, max_length, value);
@@ -237,6 +241,9 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         break;
     case 'h': // hash type
         rbh_projection_add(projection, str2filter_field("xattrs.mdt_hash"));
+        break;
+    case 'i': // mdt index
+        rbh_projection_add(projection, str2filter_field("xattrs.mdt_index"));
         break;
     case 'I': // project ID
         rbh_projection_add(projection, str2filter_field("xattrs.project_id"));
