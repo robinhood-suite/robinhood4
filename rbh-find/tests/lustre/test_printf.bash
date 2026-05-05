@@ -214,13 +214,35 @@ test_mdt_index()
                   "/file2: 0"
 }
 
+test_layout_pattern()
+{
+    lfs setstripe -L raid0 -c 1 raid0
+    lfs setstripe -L raid0 -c 1 .
+    lfs setstripe -L mdt -E 1M mdt
+
+    lfs setstripe -C 5 overstriped
+
+    touch released
+    archive_file released
+    lfs hsm_release released
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLt'\n" | sort |
+        difflines "/: '[raid0]'" \
+                  "/mdt: '[mdt]'" \
+                  "/overstriped: '[overstriped]'" \
+                  "/raid0: '[raid0]'" \
+                  "/released: '[raid0|released]'"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
                   test_stripe_size test_hash_type test_pool test_project_id
-                  test_ost_mdt_count test_mdt_index)
+                  test_ost_mdt_count test_mdt_index test_layout_pattern)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
