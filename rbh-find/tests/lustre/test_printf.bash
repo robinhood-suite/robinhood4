@@ -193,13 +193,34 @@ test_ost_mdt_count()
                   "/dir3: 3"
 }
 
+test_mdt_index()
+{
+    lfs setdirstripe -i 0 root
+
+    cd root
+    lfs mkdir -i 1 dir1
+    lfs setdirstripe -i 2 dir2
+
+    touch dir1/file1
+    touch file2
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: %RLi\n" | sort |
+        difflines "/: 0" \
+                  "/dir1/file1: 1" \
+                  "/dir1: 1" \
+                  "/dir2: 2" \
+                  "/file2: 0"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
                   test_stripe_size test_hash_type test_pool test_project_id
-                  test_ost_mdt_count)
+                  test_ost_mdt_count test_mdt_index)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
