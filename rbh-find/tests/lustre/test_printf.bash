@@ -293,6 +293,51 @@ test_comp_start_end()
                   "/file: '[1048576, 536870912, -1]'"
 }
 
+test_hsm_state()
+{
+    touch "none"
+
+    touch "archived"
+    archive_file "archived"
+
+    touch released
+    archive_file released
+    lfs hsm_release released
+
+    touch dirty
+    archive_file dirty
+    lfs hsm_set --dirty dirty
+
+    touch lost
+    archive_file lost
+    lfs hsm_set --lost lost
+
+    touch norelease
+    archive_file norelease
+    lfs hsm_set --norelease norelease
+
+    touch noarchive
+    archive_file noarchive
+    lfs hsm_set --noarchive noarchive
+
+    touch both
+    archive_file both
+    lfs hsm_set --norelease --noarchive both
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLH'\n" | sort |
+        difflines "/: 'None'" \
+                  "/archived: 'exists|archived'" \
+                  "/both: 'exists|archived|norelease|noarchive'" \
+                  "/dirty: 'exists|dirty|archived'" \
+                  "/lost: 'exists|archived|lost'" \
+                  "/noarchive: 'exists|archived|noarchive'" \
+                  "/none: 'None'" \
+                  "/norelease: 'exists|archived|norelease'" \
+                  "/released: 'exists|released|archived'"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -300,7 +345,8 @@ test_comp_start_end()
 declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
                   test_stripe_size test_hash_type test_pool test_project_id
                   test_ost_mdt_count test_mdt_index test_layout_pattern
-                  test_comp_flags test_extension_size test_comp_start_end)
+                  test_comp_flags test_extension_size test_comp_start_end
+                  test_hsm_state)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"

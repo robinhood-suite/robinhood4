@@ -173,6 +173,47 @@ snprintf_value_array(const char *name, char *output, int max_length,
 }
 
 static int
+snprintf_hsm_state(char *output, int max_length, const struct rbh_value *value)
+{
+    int64_t istates[] = {
+        HS_EXISTS, HS_DIRTY, HS_RELEASED, HS_ARCHIVED, HS_NORELEASE,
+        HS_NOARCHIVE, HS_LOST
+    };
+    char *cstates[] = {
+        "exists", "dirty", "released", "archived", "norelease",
+        "noarchive", "lost"
+    };
+    int64_t entry_hsm_state;
+    int tmp_length = 0;
+
+    if (value == NULL || value->type != RBH_VT_INT32)
+        return snprintf(output, max_length, "None");
+
+    entry_hsm_state = value->int32;
+    if (entry_hsm_state == 0)
+        return snprintf(output, max_length, "None");
+
+    for (int i = 0; i < ARRAY_SIZE(istates); i++) {
+        if (!(value->int32 & istates[i]))
+            continue;
+
+        tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
+                               cstates[i]);
+        entry_hsm_state ^= istates[i];
+        if (entry_hsm_state)
+            tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
+                                   "|");
+    }
+
+    if (entry_hsm_state)
+        return tmp_length + snprintf(output + tmp_length,
+                                     max_length - tmp_length,
+                                     "unknown");
+
+    return tmp_length;
+}
+
+static int
 snprintf_hash_type(char *output, int max_length, const struct rbh_value *value)
 {
     if (value == NULL || value->type != RBH_VT_INT32)
@@ -269,6 +310,10 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_hash");
         tmp_length = snprintf_hash_type(output, max_length, value);
         break;
+    case 'H': // HSM state
+        value = rbh_fsentry_find_inode_xattr(fsentry, "hsm_state");
+        tmp_length = snprintf_hsm_state(output, max_length, value);
+        break;
     case 'i': // MDT index
         value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_index");
         tmp_length = snprintf_value("mdt_index", output, max_length, value);
@@ -363,6 +408,9 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         break;
     case 'h': // hash type
         rbh_projection_add(projection, str2filter_field("xattrs.mdt_hash"));
+        break;
+    case 'H': // hsm state
+        rbh_projection_add(projection, str2filter_field("xattrs.hsm_state"));
         break;
     case 'i': // mdt index
         rbh_projection_add(projection, str2filter_field("xattrs.mdt_index"));
