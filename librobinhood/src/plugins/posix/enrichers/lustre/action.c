@@ -19,6 +19,50 @@
 
 #define RBH_LUSTRE_DIRECTIVE 'L'
 
+typedef int (*snprintf_value_t)(const char *name, char *output,
+                                int max_length, const struct rbh_value *value);
+
+static int
+snprintf_layout_pattern(const char *name, char *output, int max_length,
+                        const struct rbh_value *value)
+{
+    /* Lustre has two ways to signify a file has a raid0 pattern, either
+     * its pattern is 0 == LLAPI_LAYOUT_RAID0 == 0x00000000ULL or its
+     * pattern is 1 == LOV_PATTERN_RAID0 == 0x001. So we have to check for both.
+     */
+    int64_t ipatterns[] = {LOV_PATTERN_RAID0, LLAPI_LAYOUT_MDT,
+                       LLAPI_LAYOUT_OVERSTRIPING, LOV_PATTERN_F_RELEASED};
+    char *cpatterns[] = {"raid0", "mdt", "overstriped", "released"};
+    int64_t entry_pattern;
+    int tmp_length = 0;
+
+    if (value == NULL || value->type != RBH_VT_INT64)
+        return snprintf(output, max_length, "None");
+
+    entry_pattern = value->int64;
+    if (entry_pattern == LLAPI_LAYOUT_RAID0)
+        return snprintf(output, max_length, "raid0");
+
+    for (int i = 0; i < sizeof(ipatterns) / sizeof(ipatterns[0]); ++i) {
+        if (!(value->int64 & ipatterns[i]))
+            continue;
+
+        tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
+                               cpatterns[i]);
+        entry_pattern ^= ipatterns[i];
+        if (entry_pattern)
+            tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
+                                   "|");
+    }
+
+    if (entry_pattern)
+        return tmp_length + snprintf(output + tmp_length,
+                                     max_length - tmp_length,
+                                     "unknown");
+
+    return tmp_length;
+}
+
 static int
 snprintf_value(const char *name, char *output, int max_length,
                const struct rbh_value *value)
@@ -50,7 +94,8 @@ snprintf_value(const char *name, char *output, int max_length,
 
 static int
 snprintf_value_array(const char *name, char *output, int max_length,
-                     const struct rbh_value *value)
+                     const struct rbh_value *value,
+                     snprintf_value_t print_value)
 {
     char array[128];
     size_t size;
@@ -64,8 +109,8 @@ snprintf_value_array(const char *name, char *output, int max_length,
     index = 1;
 
     for (int i = 0; i < value->sequence.count; ++i) {
-        int tmp_length = snprintf_value(name, array + index, size - index,
-                                        &value->sequence.values[i]);
+        int tmp_length = print_value(name, array + index, size - index,
+                                     &value->sequence.values[i]);
 
         if (tmp_length < 0)
             return -1;
@@ -146,7 +191,7 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
     case 'c': // stripe count
         value = rbh_fsentry_find_inode_xattr(fsentry, "stripe_count");
         tmp_length = snprintf_value_array("stripe_count", output, max_length,
-                                          value);
+                                          value, &snprintf_value);
         break;
     case 'C': // OST or MDT count
         if (S_ISDIR(fsentry->statx->stx_mode)) {
@@ -179,7 +224,8 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         break;
     case 'o': // OSTs
         value = rbh_fsentry_find_inode_xattr(fsentry, "ost");
-        tmp_length = snprintf_value_array("ost", output, max_length, value);
+        tmp_length = snprintf_value_array("ost", output, max_length, value,
+                                          &snprintf_value);
         break;
     case 'p': // parent FID
         if (fsentry->parent_id.size == 0) {
@@ -191,12 +237,18 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         break;
     case 'P': // pool
         value = rbh_fsentry_find_inode_xattr(fsentry, "pool");
-        tmp_length = snprintf_value_array("pool", output, max_length, value);
+        tmp_length = snprintf_value_array("pool", output, max_length, value,
+                                          &snprintf_value);
         break;
     case 's': // stripe size
         value = rbh_fsentry_find_inode_xattr(fsentry, "stripe_size");
         tmp_length = snprintf_value_array("stripe_size", output, max_length,
-                                          value);
+                                          value, &snprintf_value);
+        break;
+    case 't': // layout pattern
+        value = rbh_fsentry_find_inode_xattr(fsentry, "pattern");
+        tmp_length = snprintf_value_array("layout_pattern", output, max_length,
+                                          value, snprintf_layout_pattern);
         break;
     default:
         rc = RBH_DIRECTIVE_UNKNOWN;
@@ -259,6 +311,9 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         break;
     case 's': // stripe size
         rbh_projection_add(projection, str2filter_field("xattrs.stripe_size"));
+        break;
+    case 't': // layout pattern
+        rbh_projection_add(projection, str2filter_field("xattrs.pattern"));
         break;
     default:
         rc = RBH_DIRECTIVE_UNKNOWN;
