@@ -164,8 +164,10 @@ xattrs_get_project_id(int fd, struct rbh_value_pair *pairs, int available_pairs)
     int subcount = 0;
     int rc;
 
-    if (S_ISLNK(mode))
-        /* Links do not have a project ID */
+    if (!S_ISREG(mode) && !S_ISDIR(mode))
+        /* no project ID to fetch for links, block device, character device,
+         * fifo and socket
+         */
         return 0;
 
     if (available_pairs < 1)

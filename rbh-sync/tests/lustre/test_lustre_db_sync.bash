@@ -233,6 +233,11 @@ test_project_id()
     sudo lfs project -p 1 "project_1"
     sudo lfs project -p 2 "project_2"
 
+    ln -s "vanilla" "vanilla_slink"
+    mknod block b 1 2
+    mknod fifo p
+    mknod char c 1 2
+
     rbh_sync_lustre "." "rbh:$db:$testdb"
 
     find_attribute '"xattrs.project_id":1' \
@@ -241,6 +246,19 @@ test_project_id()
                    '"ns.xattrs.path": "/project_2"'
     find_attribute '"xattrs.project_id":0' \
                    '"ns.xattrs.path": "/vanilla"'
+
+    find_attribute '"ns.xattrs.path": "/vanilla_slink"'
+    ! find_attribute '"xattrs.project_id":0' \
+                     '"ns.xattrs.path": "/vanilla_slink"'
+    find_attribute '"ns.xattrs.path": "/block"'
+    ! find_attribute '"xattrs.project_id":0' \
+                     '"ns.xattrs.path": "/block"'
+    find_attribute '"ns.xattrs.path": "/fifo"'
+    ! find_attribute '"xattrs.project_id":0' \
+                     '"ns.xattrs.path": "/fifo"'
+    find_attribute '"ns.xattrs.path": "/char"'
+    ! find_attribute '"xattrs.project_id":0' \
+                     '"ns.xattrs.path": "/char"'
 }
 
 # TODO: test with other flags
