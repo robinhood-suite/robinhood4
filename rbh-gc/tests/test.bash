@@ -67,6 +67,19 @@ test_sync_gc_run()
         difflines "'/fileA' needs to be deleted" "1 element total to delete"
 }
 
+test_filter()
+{
+    dd oflag=direct if=/dev/urandom of=fileA bs=512k count=1
+    dd oflag=direct if=/dev/urandom of=fileB bs=512k count=4
+
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    rm fileA fileB
+
+    rbh_gc -d "rbh:$db:$testdb" -size +1M |
+        difflines "'/fileB' needs to be deleted" "1 element total to delete"
+}
+
 test_config()
 {
     local conf_file="conf"
@@ -103,7 +116,7 @@ test_config()
         difflines "'/test_file' needs to be deleted" "1 element total to delete"
 }
 
-declare -a tests=(test_basic test_dry_run test_sync_gc_run test_config)
+declare -a tests=(test_basic test_dry_run test_sync_gc_run test_filter test_config)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
