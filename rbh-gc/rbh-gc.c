@@ -16,6 +16,7 @@
 
 #include <robinhood.h>
 #include <robinhood/config.h>
+#include <robinhood/filters/parser.h>
 #include <robinhood/open.h>
 #include <robinhood/utils.h>
 
@@ -275,7 +276,8 @@ print_entries(struct rbh_iterator *iterator)
 }
 
 static void
-gc(char *mnt_path, bool dry_run_mode, bool verbose_mode, int64_t sync_time)
+gc(char *mnt_path, bool dry_run_mode, bool verbose_mode, int64_t sync_time,
+   struct rbh_filter *filter)
 {
     const struct rbh_filter_options OPTIONS = {
         .verbose = verbose_mode,
@@ -290,25 +292,41 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode, int64_t sync_time)
             .statx_mask = RBH_STATX_NLINK,
         },
     };
-    const struct rbh_filter_field *field;
     struct rbh_mut_iterator *fsentries;
-    struct rbh_filter *filter = NULL;
+    const struct rbh_filter *AND_FILTERS[2];
+    struct rbh_filter and_filter = {
+        .op = RBH_FOP_AND,
+        .logical = {
+            .filters = AND_FILTERS,
+            .count = sizeof(AND_FILTERS) / sizeof(*AND_FILTERS)
+        }
+    };
+    struct rbh_filter *_filter = NULL;
     struct rbh_iterator *constify;
 
-    field = str2filter_field("ns-xattrs.sync_time");
-
     if (sync_time >= 0) {
-        filter = rbh_filter_compare_int64_new(RBH_FOP_STRICTLY_LOWER, field,
-                                              sync_time);
-        if (filter == NULL)
+        const struct rbh_filter_field *field;
+
+        field = str2filter_field("ns-xattrs.sync_time");
+        _filter = rbh_filter_compare_int64_new(RBH_FOP_STRICTLY_LOWER, field,
+                                               sync_time);
+        if (_filter == NULL)
             error(EXIT_FAILURE, errno, "sync_time2filter");
+
+        if (filter == NULL) {
+            filter = _filter;
+        } else {
+            AND_FILTERS[0] = filter;
+            AND_FILTERS[1] = _filter;
+            filter = &and_filter;
+        }
     }
 
     fsentries = rbh_backend_filter(backend, filter, &OPTIONS, &OUTPUT, NULL);
     if (fsentries == NULL)
         error(EXIT_FAILURE, errno, "rbh_backend_filter");
 
-    free(filter);
+    free(_filter);
 
     constify = rbh_iter_constify(fsentries);
 
@@ -365,88 +383,95 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode, int64_t sync_time)
 }
 
 int
-main(int argc, char *argv[])
+main(int _argc, char *_argv[])
 {
-    const struct option LONG_OPTIONS[] = {
-        {
-            .name = "config",
-            .has_arg = required_argument,
-            .val = 'c',
-        },
-        {
-            .name = "dry-run",
-            .val = 'd',
-        },
-        {
-            .name = "help",
-            .val = 'h',
-        },
-        {
-            .name = "sync-time",
-            .val = 's',
-            .has_arg = required_argument,
-        },
-        {
-            .name = "verbose",
-            .val = 'v',
-        },
-        {
-            .name = "version",
-            .has_arg = no_argument,
-            .val = 'z',
-        },
-        {}
-    };
+    struct rbh_filter_options options = {0};
+    struct filters_context f_ctx = {0};
+    struct rbh_value_map *info_map;
     bool dry_run_mode = false;
     bool verbose_mode = false;
+    struct rbh_filter *filter;
     int64_t sync_time = -1;
+    int others_count = 0;
+    char **others = NULL;
+    int index = 1;
+    char **argv;
     char *path;
-    char c;
+    int argc;
     int rc;
 
-    rc = rbh_config_from_args(argc - 1, argv + 1);
+    argc = _argc - 1;
+    argv = &_argv[1];
+
+    rc = rbh_config_from_args(argc, argv);
     if (rc)
         error(EXIT_FAILURE, errno, "failed to load configuration file");
 
+    others = xmalloc(sizeof(char*) * argc);
+
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "c:dhs:vz", LONG_OPTIONS, NULL)) != -1) {
-        switch (c) {
-        case 'c':
-            /* already parsed */
-            break;
-        case 'd':
-            dry_run_mode = true;
-            break;
-        case 'h':
+    for (int i = 0; i < argc; ++i) {
+        char *arg = argv[i];
+
+        if (strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0) {
             usage();
-            return 0;
-        case 's':
-            if (str2int64_t(optarg, &sync_time))
-                error(EXIT_FAILURE, errno, "str2int64_t");
-            break;
-        case 'v':
-            verbose_mode = true;
-            break;
-        case 'z':
+            return EXIT_SUCCESS;
+
+        } else if (strcmp(arg, "--version") == 0 || strcmp(arg, "-z") == 0) {
             rbh_print_version();
             return EXIT_SUCCESS;
-        case '?':
-        default:
-            /* getopt_long() prints meaningful error messages itself */
-            exit(EX_USAGE);
+
+        } else if (strcmp(arg, "--config") == 0 || strcmp(arg, "-c") == 0) {
+            /* already parsed */
+            ++i;
+
+        } else if (strcmp(arg, "--dry-run") == 0 || strcmp(arg, "-d") == 0) {
+            dry_run_mode = true;
+
+        } else if (strcmp(arg, "--sync-time") == 0 || strcmp(arg, "-s") == 0) {
+            if (i + 1 >= argc)
+                error(EXIT_FAILURE, EINVAL, "Missing argument for %s", arg);
+
+            if (str2int64_t(argv[++i], &sync_time))
+                error(EXIT_FAILURE, errno, "str2int64_t");
+
+        } else if (strcmp(arg, "--verbose") == 0 || strcmp(arg, "-v") == 0) {
+            verbose_mode = true;
+
+        } else {
+            others[others_count++] = arg;
         }
     }
 
-    argc -= optind;
-    argv += optind;
+    argc = others_count;
+    argv = others;
 
     if (argc < 1)
         error(EX_USAGE, 0, "not enough arguments");
-    if (argc > 1)
-        error(EX_USAGE, 0, "unexpected argument: %s", argv[1]);
+    if (!rbh_is_uri(argv[0]))
+        error(EX_USAGE, 0, "there is a filter before the URI: (%s)", argv[0]);
 
     /* Parse BACKEND */
     backend = rbh_backend_from_uri(argv[0], false);
+
+    /* Retrieve source BACKEND */
+    info_map = rbh_backend_get_info(backend, RBH_INFO_BACKEND_SOURCE);
+    if (info_map == NULL)
+        error(EXIT_FAILURE, errno,
+              "Failed to retrieve the source backends from URI '%s', aborting",
+              argv[0]);
+
+    import_plugins(&f_ctx, &info_map, 1);
+    f_ctx.need_prefetch = false;
+    f_ctx.argc = argc;
+    f_ctx.argv = argv;
+
+    filter = parse_expression(&f_ctx, &index, NULL, NULL, NULL, NULL);
+    if (index != f_ctx.argc)
+        error(EX_USAGE, 0, "you have too many ')'");
+
+    if (f_ctx.need_prefetch && complete_rbh_filter(filter, backend, &options))
+        error(EXIT_FAILURE, errno, "Failed to complete filters");
 
     /* Retrieve mountpoint */
     path = get_mountpoint_from_source(backend);
@@ -455,7 +480,7 @@ main(int argc, char *argv[])
     if (mount_fd < 0)
         error(EXIT_FAILURE, errno, "Failed to open mountpoint '%s'", path);
 
-    gc(path, dry_run_mode, verbose_mode, sync_time);
+    gc(path, dry_run_mode, verbose_mode, sync_time, filter);
 
     free(path);
     rbh_config_free();
