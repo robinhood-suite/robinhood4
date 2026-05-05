@@ -242,6 +242,11 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
             tmp_length = snprintf_ost_count(output, max_length, value);
         }
         break;
+    case 'e': // extension size
+        value = rbh_fsentry_find_inode_xattr(fsentry, "extension_size");
+        tmp_length = snprintf_value_array("extension_size", output, max_length,
+                                          value, &snprintf_value);
+        break;
     case 'f': // FID
         fid = rbh_lu_fid_from_id(&fsentry->id);
         tmp_length = snprintf(output, max_length, DFID, PFID(fid));
@@ -329,6 +334,10 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         rbh_projection_add(projection, str2filter_field("statx.type"));
         rbh_projection_add(projection, str2filter_field("xattrs.ost"));
         rbh_projection_add(projection, str2filter_field("xattrs.mdt_count"));
+        break;
+    case 'e': // FID
+        rbh_projection_add(projection,
+                           str2filter_field("xattrs.extension_size"));
         break;
     case 'f': // FID
         rbh_projection_add(projection, str2filter_field("id"));
