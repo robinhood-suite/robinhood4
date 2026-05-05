@@ -228,6 +228,11 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         return RBH_DIRECTIVE_UNKNOWN;
 
     switch (format_string[*index + 3]) {
+    case 'b': // component begin
+        value = rbh_fsentry_find_inode_xattr(fsentry, "begin");
+        tmp_length = snprintf_value_array("begin", output, max_length, value,
+                                          &snprintf_value);
+        break;
     case 'c': // stripe count
         value = rbh_fsentry_find_inode_xattr(fsentry, "stripe_count");
         tmp_length = snprintf_value_array("stripe_count", output, max_length,
@@ -326,6 +331,9 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         return RBH_DIRECTIVE_UNKNOWN;
 
     switch (format_string[*index + 3]) {
+    case 'b': // component begin
+        rbh_projection_add(projection, str2filter_field("xattrs.begin"));
+        break;
     case 'c': // stripe count
         rbh_projection_add(projection, str2filter_field("xattrs.stripe_count"));
         break;
