@@ -375,9 +375,11 @@ consumer_get_iterator(struct rbh_list_node *list)
 }
 
 static void
-signal_shutdown(void)
+signal_shutdown(pthread_cond_t *signal)
 {
     atomic_store(&should_stop, true);
+    if (signal)
+        pthread_cond_signal(signal);
 }
 
 struct consumer_info {
@@ -386,6 +388,9 @@ struct consumer_info {
     pthread_mutex_t mutex_list;
     pthread_cond_t signal_list;
     struct sink *sink;
+    bool working;
+    pthread_mutex_t *mutex_available_for_work;
+    pthread_cond_t *signal_available_for_work;
     int id;
 };
 
@@ -401,6 +406,9 @@ consumer_thread(void *arg) {
         printf("Starting enricher/update thread: %d\n", cinfo->id);
 
     while (!atomic_load(&should_stop)) {
+        cinfo->working = false;
+        pthread_cond_signal(cinfo->signal_available_for_work);
+
         pthread_mutex_lock(&cinfo->mutex_list);
         while (rbh_list_empty(cinfo->list) && !done_producing &&
                !atomic_load(&should_stop))
@@ -413,13 +421,15 @@ consumer_thread(void *arg) {
             break;
         }
 
+        cinfo->working = true;
         node = consumer_get_iterator(cinfo->list);
         pthread_mutex_unlock(&cinfo->mutex_list);
 
         if (verbose) {
             rc = clock_gettime(CLOCK_REALTIME, &start);
             if (rc) {
-                fprintf(stderr, "Enricher/update thread %d failed to get start time\n",
+                fprintf(stderr,
+                        "Enricher/update thread %d failed to get start time\n",
                         cinfo->id);
                 rbh_iter_destroy(node->enricher);
                 free(node);
@@ -436,7 +446,8 @@ consumer_thread(void *arg) {
         if (verbose) {
             rc = clock_gettime(CLOCK_REALTIME, &end);
             if (rc) {
-                fprintf(stderr, "Enricher/update thread %d failed to get end time\n",
+                fprintf(stderr,
+                        "Enricher/update thread %d failed to get end time\n",
                         cinfo->id);
                 rbh_iter_destroy(node->enricher);
                 free(node);
@@ -459,7 +470,7 @@ consumer_thread(void *arg) {
     if (errno == ENODATA)
         return NULL;
 
-    signal_shutdown();
+    signal_shutdown(cinfo->signal_available_for_work);
 
     if (errno == 0)
         fprintf(stderr, "Enricher/update thread %d: unexpected exit status 0\n",
@@ -486,7 +497,9 @@ init_consumer_list()
 static void
 setup_producer_consumers(struct rbh_mut_iterator **deduplicator,
                          struct deduplicator_options *dedup_opts,
-                         pthread_t **consumers, struct consumer_info **cinfos)
+                         pthread_t **consumers, struct consumer_info **cinfos,
+                         pthread_mutex_t *mutex_available_for_work,
+                         pthread_cond_t *signal_available_for_work)
 {
     *deduplicator = deduplicator_new(dedup_opts->batch_size, source,
                                      nb_workers);
@@ -505,6 +518,9 @@ setup_producer_consumers(struct rbh_mut_iterator **deduplicator,
         pthread_mutex_init(&cinfo->mutex_list, NULL);
         pthread_cond_init(&cinfo->signal_list, NULL);
         cinfo->sink = sink[i];
+        cinfo->working = false;
+        cinfo->mutex_available_for_work = mutex_available_for_work;
+        cinfo->signal_available_for_work = signal_available_for_work;
         cinfo->id = i;
 
         cinfo->list = init_consumer_list();
@@ -516,11 +532,24 @@ setup_producer_consumers(struct rbh_mut_iterator **deduplicator,
     }
 }
 
+static bool
+consumer_available_for_work(struct consumer_info *cinfos)
+{
+    for (int i = 0; i < nb_workers; ++i)
+        if (!cinfos[i].working)
+            return true;
+
+    return false;
+}
+
 /* Producer loop */
 static int
 producer_thread(struct rbh_mut_iterator *deduplicator,
                 struct enrich_iter_builder *builder, bool allow_partials,
-                struct consumer_info *cinfos, struct timespec *total_read)
+                struct consumer_info *cinfos,
+                pthread_mutex_t *mutex_available_for_work,
+                pthread_cond_t *signal_available_for_work,
+                struct timespec *total_read)
 {
     struct rbh_mut_iterator *batch = NULL;
     struct sub_batch *sub_batch;
@@ -532,13 +561,21 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
         rc = clock_gettime(CLOCK_REALTIME, &start);
         if (rc) {
             fprintf(stderr, "Failed to get start time\n");
-            signal_shutdown();
+            signal_shutdown(NULL);
             return rc;
         }
     }
 
     for (batch = rbh_mut_iter_next(deduplicator); batch != NULL;
          batch = rbh_mut_iter_next(deduplicator)) {
+
+        pthread_mutex_lock(mutex_available_for_work);
+        while (!consumer_available_for_work(cinfos) &&
+               !atomic_load(&should_stop)) {
+            pthread_cond_wait(signal_available_for_work,
+                              mutex_available_for_work);
+        }
+        pthread_mutex_unlock(mutex_available_for_work);
 
         for (sub_batch = rbh_mut_iter_next(batch); sub_batch != NULL;
              sub_batch = rbh_mut_iter_next(batch)) {
@@ -555,7 +592,7 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
 
             if (sub_batch->fsevents == NULL) {
                 fprintf(stderr, "Failed to create enricher iterator\n");
-                signal_shutdown();
+                signal_shutdown(NULL);
                 rbh_mut_iter_destroy(batch);
                 return -1;
             }
@@ -566,6 +603,7 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
             pthread_cond_signal(&cinfos[sub_batch->index].signal_list);
             pthread_mutex_unlock(&cinfos[sub_batch->index].mutex_list);
         }
+
         rbh_mut_iter_destroy(batch);
         batch_id++;
     }
@@ -577,7 +615,7 @@ end:
         rc = clock_gettime(CLOCK_REALTIME, &end);
         if (rc) {
             fprintf(stderr, "Failed to get end time\n");
-            signal_shutdown();
+            signal_shutdown(NULL);
             return rc;
         }
 
@@ -588,7 +626,7 @@ end:
         fprintf(stderr, "Could not get the next batch of fsevents\n");
 
     if (errno != ENODATA) {
-        signal_shutdown();
+        signal_shutdown(NULL);
         return -1;
     }
 
@@ -626,21 +664,32 @@ feed(struct sink **sink, struct source *source,
      struct deduplicator_options *dedup_opts)
 {
     struct rbh_mut_iterator *deduplicator = NULL;
+    pthread_mutex_t mutex_available_for_work;
+    pthread_cond_t signal_available_for_work;
     struct consumer_info *cinfos = NULL;
     struct timespec total_enrich = {0};
     struct timespec total_read = {0};
     pthread_t *consumers = NULL;
     int rc = 0;
 
+    pthread_mutex_init(&mutex_available_for_work, NULL);
+    pthread_cond_init(&signal_available_for_work, NULL);
+
     /* Setup the producer and consumers */
-    setup_producer_consumers(&deduplicator, dedup_opts, &consumers, &cinfos);
+    setup_producer_consumers(&deduplicator, dedup_opts, &consumers, &cinfos,
+                             &mutex_available_for_work,
+                             &signal_available_for_work);
 
     /* Launch the producer loop */
     rc = producer_thread(deduplicator, builder, allow_partials, cinfos,
+                         &mutex_available_for_work, &signal_available_for_work,
                          &total_read);
 
     /* Cleanup the producer and consumers */
     cleanup_producer_consumers(deduplicator, cinfos, consumers, &total_enrich);
+
+    pthread_cond_destroy(&signal_available_for_work);
+    pthread_mutex_destroy(&mutex_available_for_work);
 
     /* Check if an error occured in the enricher/update threads */
     if (rc == 0 && atomic_load(&should_stop))
