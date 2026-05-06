@@ -276,6 +276,43 @@ snprintf_flags_mirror_state(char *output, int max_length,
     __builtin_unreachable();
 }
 
+static int
+snprintf_hash_flags(char *output, int max_length, const struct rbh_value *value)
+{
+    int64_t iflags[] = {
+        LMV_HASH_FLAG_FIXED, LMV_HASH_FLAG_MERGE, LMV_HASH_FLAG_SPLIT,
+        LMV_HASH_FLAG_LOST_LMV, LMV_HASH_FLAG_BAD_TYPE, LMV_HASH_FLAG_MIGRATION
+    };
+    char *cflags[] = {
+        "fixed", "merge", "split", "lost_lmv", "bad_type", "migration"
+    };
+    int64_t entry_hash_flags;
+    int tmp_length = 0;
+
+    if (value == NULL || value->type != RBH_VT_INT32 || value->int32 == 0)
+        return snprintf(output, max_length, "None");
+
+    entry_hash_flags = value->int32;
+    for (int i = 0; i < ARRAY_SIZE(iflags); i++) {
+        if (!(value->int32 & iflags[i]))
+            continue;
+
+        tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
+                               cflags[i]);
+        entry_hash_flags ^= iflags[i];
+        if (entry_hash_flags)
+            tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
+                                   "|");
+    }
+
+    if (entry_hash_flags)
+        return tmp_length + snprintf(output + tmp_length,
+                                     max_length - tmp_length,
+                                     "unknown");
+
+    return tmp_length;
+}
+
 enum known_directive
 rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
                            const char *format_string, size_t *index,
@@ -337,6 +374,10 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
     case 'g': // generation
         value = rbh_fsentry_find_inode_xattr(fsentry, "gen");
         tmp_length = snprintf_value("gen", output, max_length, value);
+        break;
+    case 'G': // MDT hash flags
+        value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_hash_flags");
+        tmp_length = snprintf_hash_flags(output, max_length, value);
         break;
     case 'h': // hash type
         value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_hash");
@@ -465,6 +506,10 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         break;
     case 'g': // generation
         rbh_projection_add(projection, str2filter_field("xattrs.gen"));
+        break;
+    case 'G': // MDT hash flags
+        rbh_projection_add(projection,
+                           str2filter_field("xattrs.mdt_hash_flags"));
         break;
     case 'h': // hash type
         rbh_projection_add(projection, str2filter_field("xattrs.mdt_hash"));
