@@ -436,6 +436,31 @@ test_mirror_count()
                   "/file: 'None'"
 }
 
+test_component_count()
+{
+    touch a
+    lfs setstripe -E -1 -c 2 -S 256k b
+    lfs setstripe -E 1M -c 1 -S 256k -E -1 -c 2 -S 512k c
+    lfs setstripe -E 1M -S 128k -E 2M -S 256k \
+                  -E 4M -S 512k -E 8M -S 1M \
+                  -E 16M -S 2M -E -1 -S 4M d
+    lfs mkdir e
+    lfs mirror create -N2 f
+    lfs mirror create -N3 g
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLT'\n" | sort |
+        difflines "/: 'None'" \
+                  "/a: '1'" \
+                  "/b: '1'" \
+                  "/c: '2'" \
+                  "/d: '6'" \
+                  "/e: 'None'" \
+                  "/f: '2'" \
+                  "/g: '3'"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -445,7 +470,7 @@ declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
                   test_ost_mdt_count test_mdt_index test_layout_pattern
                   test_comp_flags test_extension_size test_comp_start_end
                   test_hsm_state test_hsm_archive_id test_flags test_magic
-                  test_mirror_state test_mirror_count)
+                  test_mirror_state test_mirror_count test_component_count)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
