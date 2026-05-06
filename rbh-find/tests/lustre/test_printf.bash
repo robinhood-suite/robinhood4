@@ -377,6 +377,28 @@ test_flags()
                   "/test_flags: '$(get_flags test_flags)'"
 }
 
+test_magic()
+{
+    lfs mkdir dir
+
+    lfs setstripe -o 1 a
+    lfs setstripe -i 0 -E 1M -c 2 -S 256k -E -1 -c 2 -S 512k b
+    lfs setstripe -E 1M -o 0,2,3 -c 3 -S 256k -E -1 -c 2 -S 512k c
+
+    lfs mirror create -N -Eeof -c2 -o0,1 -N -Eeof -c2 -o1,2 file
+    echo "blob" > file
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLm'\n" | sort |
+        difflines "/: 'None'" \
+                  "/a: 'LOV_USER_MAGIC_V1'" \
+                  "/b: 'LOV_USER_MAGIC_COMP_V1'" \
+                  "/c: 'LOV_USER_MAGIC_COMP_V1'" \
+                  "/dir: 'None'" \
+                  "/file: 'LOV_USER_MAGIC_COMP_V1'"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -385,7 +407,7 @@ declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
                   test_stripe_size test_hash_type test_pool test_project_id
                   test_ost_mdt_count test_mdt_index test_layout_pattern
                   test_comp_flags test_extension_size test_comp_start_end
-                  test_hsm_state test_hsm_archive_id test_flags)
+                  test_hsm_state test_hsm_archive_id test_flags test_magic)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
