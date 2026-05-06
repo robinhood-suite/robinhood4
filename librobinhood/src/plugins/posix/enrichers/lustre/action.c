@@ -363,6 +363,10 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         value = rbh_fsentry_find_inode_xattr(fsentry, "magic");
         tmp_length = snprintf_value("magic", output, max_length, value);
         break;
+    case 'M': // mirror_count
+        value = rbh_fsentry_find_inode_xattr(fsentry, "mirror_count");
+        tmp_length = snprintf_value("mirror_count", output, max_length, value);
+        break;
     case 'o': // OSTs
         value = rbh_fsentry_find_inode_xattr(fsentry, "ost");
         tmp_length = snprintf_value_array("ost", output, max_length, value,
@@ -470,6 +474,9 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         break;
     case 'm': // magic number
         rbh_projection_add(projection, str2filter_field("xattrs.magic"));
+        break;
+    case 'M': // mirror count
+        rbh_projection_add(projection, str2filter_field("xattrs.mirror_count"));
         break;
     case 'o': // OSTs
         rbh_projection_add(projection, str2filter_field("xattrs.ost"));
