@@ -403,6 +403,11 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         value = rbh_fsentry_find_inode_xattr(fsentry, "comp_count");
         tmp_length = snprintf_value("comp_count", output, max_length, value);
         break;
+    case 'X': // child MDT index
+        value = rbh_fsentry_find_inode_xattr(fsentry, "child_mdt_idx");
+        tmp_length = snprintf_value_array("child_mdt_idx", output, max_length,
+                                          value, snprintf_value);
+        break;
     default:
         rc = RBH_DIRECTIVE_UNKNOWN;
     }
@@ -502,6 +507,10 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         break;
     case 'T': // component count
         rbh_projection_add(projection, str2filter_field("xattrs.comp_count"));
+        break;
+    case 'X': // child MDT index
+        rbh_projection_add(projection,
+                           str2filter_field("xattrs.child_mdt_idx"));
         break;
     default:
         rc = RBH_DIRECTIVE_UNKNOWN;

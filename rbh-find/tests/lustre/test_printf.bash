@@ -461,6 +461,43 @@ test_component_count()
                   "/g: '3'"
 }
 
+test_child_mdt_index()
+{
+    local mdt_count=$(lfs mdts | grep "MDT.*UUID" | wc -l)
+
+    mkdir "test_mdt_index0"
+    lfs migrate -m 0 "test_mdt_index0"
+
+    local mdt_indexes0="$(lfs getdirstripe -m 'test_mdt_index0')"
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLX'\n" | sort |
+        difflines "/: 'None'" \
+                  "/test_mdt_index0: '[$mdt_indexes0]'"
+
+    if [[ $mdt_count -ge 2 ]]; then
+        mkdir "test_mdt_index1"
+        lfs migrate -m 1 "test_mdt_index1"
+
+        # use MDT 0 and $mdt_count - 1 to stripe the content of the dir
+        lfs mkdir -c 2 test_mdt_index2
+
+        local mdt_indexes1="$(lfs getdirstripe -m 'test_mdt_index1')"
+        local mdt_indexes2="$(lfs getdirstripe 'test_mdt_index2' |
+                              tail -n +3 | awk '{print $1}' |
+                              xargs | tr ' ' ',' | sed 's/,/, /g')"
+
+        rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+        rbh_find "rbh:$db:$testdb" -printf "%p: '%RLX'\n" | sort |
+            difflines "/: 'None'" \
+                      "/test_mdt_index0: '[$mdt_indexes0]'" \
+                      "/test_mdt_index1: '[$mdt_indexes1]'" \
+                      "/test_mdt_index2: '[$mdt_indexes2]'"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -470,7 +507,8 @@ declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
                   test_ost_mdt_count test_mdt_index test_layout_pattern
                   test_comp_flags test_extension_size test_comp_start_end
                   test_hsm_state test_hsm_archive_id test_flags test_magic
-                  test_mirror_state test_mirror_count test_component_count)
+                  test_mirror_state test_mirror_count test_component_count
+                  test_child_mdt_index)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
