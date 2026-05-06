@@ -253,6 +253,28 @@ snprintf_ost_count(char *output, int max_length, const struct rbh_value *value)
     return snprintf(output, max_length, "%ld", i + 1);
 }
 
+static int
+snprintf_flags(char *output, int max_length, const struct rbh_value *value)
+{
+    if (value == NULL || value->type != RBH_VT_INT32)
+        return snprintf(output, max_length, "None");
+
+    switch (value->int32) {
+    case LCM_FL_NONE:
+        return snprintf(output, max_length, "None");
+    case LCM_FL_RDONLY:
+        return snprintf(output, max_length, "ro");
+    case LCM_FL_WRITE_PENDING:
+        return snprintf(output, max_length, "wp");
+    case LCM_FL_SYNC_PENDING:
+        return snprintf(output, max_length, "sp");
+    default:
+        return snprintf(output, max_length, "unknown");
+    }
+
+    __builtin_unreachable();
+}
+
 enum known_directive
 rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
                            const char *format_string, size_t *index,
@@ -306,6 +328,10 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
     case 'f': // FID
         fid = rbh_lu_fid_from_id(&fsentry->id);
         tmp_length = snprintf(output, max_length, DFID, PFID(fid));
+        break;
+    case 'F': // flags
+        value = rbh_fsentry_find_inode_xattr(fsentry, "flags");
+        tmp_length = snprintf_flags(output, max_length, value);
         break;
     case 'g': // generation
         value = rbh_fsentry_find_inode_xattr(fsentry, "gen");
@@ -411,6 +437,9 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         break;
     case 'f': // FID
         rbh_projection_add(projection, str2filter_field("id"));
+        break;
+    case 'F': // flags
+        rbh_projection_add(projection, str2filter_field("xattrs.flags"));
         break;
     case 'g': // generation
         rbh_projection_add(projection, str2filter_field("xattrs.gen"));
