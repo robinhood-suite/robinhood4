@@ -562,7 +562,6 @@ test_mdt_index_dir()
         find_attribute '"xattrs.mdt_index":'$mdt_indexes \
                        '"ns.xattrs.path":"/test_mdt_index1"'
 
-        mdt_stripe=$(lfs getdirstripe -c 'test_mdt_index2')
         # Retrieve the last two stripe count lines of the getdirstripe output,
         # as getdirstripe -m will only show the first one, and create an array
         # with these values
