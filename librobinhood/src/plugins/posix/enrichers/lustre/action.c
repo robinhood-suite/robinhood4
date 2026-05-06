@@ -22,42 +22,31 @@
 typedef int (*snprintf_value_t)(const char *name, char *output,
                                 int max_length, const struct rbh_value *value);
 
+struct key_value {
+    int64_t key;
+    char *value;
+};
+
 static int
-snprintf_layout_pattern(const char *name, char *output, int max_length,
-                        const struct rbh_value *value)
+snprintf_key_values(char *output, int max_length,
+                    struct key_value *key_values, int size, int64_t input)
 {
-    /* Lustre has two ways to signify a file has a raid0 pattern, either
-     * its pattern is 0 == LLAPI_LAYOUT_RAID0 == 0x00000000ULL or its
-     * pattern is 1 == LOV_PATTERN_RAID0 == 0x001. So we have to check for both.
-     */
-    int64_t ipatterns[] = {LOV_PATTERN_RAID0, LLAPI_LAYOUT_MDT,
-                       LLAPI_LAYOUT_OVERSTRIPING, LOV_PATTERN_F_RELEASED};
-    char *cpatterns[] = {"raid0", "mdt", "overstriped", "released"};
-    int64_t entry_pattern;
     int tmp_length = 0;
 
-    (void) name;
-
-    if (value == NULL || value->type != RBH_VT_INT64)
-        return snprintf(output, max_length, "None");
-
-    entry_pattern = value->int64;
-    if (entry_pattern == LLAPI_LAYOUT_RAID0)
-        return snprintf(output, max_length, "raid0");
-
-    for (int i = 0; i < sizeof(ipatterns) / sizeof(ipatterns[0]); ++i) {
-        if (!(value->int64 & ipatterns[i]))
+    for (int i = 0; i < size && input; ++i) {
+        if (!(input & key_values[i].key))
             continue;
 
         tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
-                               cpatterns[i]);
-        entry_pattern ^= ipatterns[i];
-        if (entry_pattern)
+                               key_values[i].value);
+
+        input ^= key_values[i].key;
+        if (input)
             tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
                                    "|");
     }
 
-    if (entry_pattern)
+    if (input)
         return tmp_length + snprintf(output + tmp_length,
                                      max_length - tmp_length,
                                      "unknown");
@@ -66,41 +55,94 @@ snprintf_layout_pattern(const char *name, char *output, int max_length,
 }
 
 static int
-snprintf_comp_flags(const char *name, char *output, int max_length,
-                    const struct rbh_value *value)
+snprintf_layout_pattern(__attribute__((unused)) const char *name, char *output,
+                        int max_length, const struct rbh_value *value)
 {
-    int64_t entry_pattern;
-    int tmp_length = 0;
-    (void) name;
+    /* Lustre has two ways to signify a file has a raid0 pattern, either
+     * its pattern is 0 == LLAPI_LAYOUT_RAID0 == 0x00000000ULL or its
+     * pattern is 1 == LOV_PATTERN_RAID0 == 0x001. So we have to check for both.
+     */
+    struct key_value key_values[] = {
+        { LOV_PATTERN_RAID0, "raid0" },
+        { LLAPI_LAYOUT_MDT, "mdt" },
+        { LLAPI_LAYOUT_OVERSTRIPING, "overstriped" },
+        { LOV_PATTERN_F_RELEASED, "released" }
+    };
 
+    if (value == NULL || value->type != RBH_VT_INT64)
+        return snprintf(output, max_length, "None");
+
+    if (value->int64 == LLAPI_LAYOUT_RAID0)
+        return snprintf(output, max_length, "raid0");
+
+    return snprintf_key_values(output, max_length, key_values,
+                               ARRAY_SIZE(key_values), value->int64);
+}
+
+static int
+snprintf_hsm_state(char *output, int max_length, const struct rbh_value *value)
+{
+    struct key_value key_values[] = {
+        { HS_EXISTS, "exists" },
+        { HS_DIRTY, "dirty" },
+        { HS_RELEASED, "released" },
+        { HS_ARCHIVED, "archived" },
+        { HS_NORELEASE, "norelease" },
+        { HS_NOARCHIVE, "noarchive" },
+        { HS_LOST, "lost" },
+    };
+
+    if (value == NULL || value->type != RBH_VT_INT32 || value->int32 == 0)
+        return snprintf(output, max_length, "None");
+
+    return snprintf_key_values(output, max_length, key_values,
+                               ARRAY_SIZE(key_values), value->int32);
+}
+
+static int
+snprintf_hash_flags(char *output, int max_length, const struct rbh_value *value)
+{
+    struct key_value key_values[] = {
+        { LMV_HASH_FLAG_FIXED, "fixed" },
+        { LMV_HASH_FLAG_MERGE, "merge" },
+        { LMV_HASH_FLAG_SPLIT, "split" },
+        { LMV_HASH_FLAG_LOST_LMV, "lost_lmv" },
+        { LMV_HASH_FLAG_BAD_TYPE, "bad_type" },
+        { LMV_HASH_FLAG_MIGRATION, "migration" },
+    };
+
+    if (value == NULL || value->type != RBH_VT_INT32 || value->int32 == 0)
+        return snprintf(output, max_length, "None");
+
+    return snprintf_key_values(output, max_length, key_values,
+                               ARRAY_SIZE(key_values), value->int32);
+}
+
+static int
+snprintf_comp_flags(__attribute__((unused)) const char *name, char *output,
+                    int max_length, const struct rbh_value *value)
+{
     if (value == NULL || value->type != RBH_VT_INT32)
         return snprintf(output, max_length, "None");
 
-    entry_pattern = value->int32;
-    if (entry_pattern == 0)
+    if (value->int32 == 0)
         return snprintf(output, max_length, "0");
 
-    for (int i = 0; i < ARRAY_SIZE(comp_flags_table); i++) {
-        enum lov_comp_md_entry_flags comp_flag = comp_flags_table[i].cfn_flag;
-        const char *comp_name = comp_flags_table[i].cfn_name;
+    /* At the time of writing this, the 'comp_flags_table' and its associated
+     * structure looks like this:
+     *      static const struct comp_flag_name {
+     *          enum lov_comp_md_entry_flags cfn_flag;
+     *          const char *cfn_name;
+     *      } comp_flags_table[];
+     *
+     * Which is the exact same size as our own struct key_value, so we do a
+     * little trick and simply cast the table as our structure.
+     */
 
-        if (!(value->int32 & comp_flag))
-            continue;
-
-        tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
-                               comp_name);
-        entry_pattern ^= comp_flag;
-        if (entry_pattern)
-            tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
-                                   "|");
-    }
-
-    if (entry_pattern)
-        return tmp_length + snprintf(output + tmp_length,
-                                     max_length - tmp_length,
-                                     "unknown");
-
-    return tmp_length;
+    return snprintf_key_values(output, max_length,
+                               (struct key_value *) comp_flags_table,
+                               ARRAY_SIZE(comp_flags_table),
+                               value->int32);
 }
 
 static int
@@ -173,47 +215,6 @@ snprintf_value_array(const char *name, char *output, int max_length,
 }
 
 static int
-snprintf_hsm_state(char *output, int max_length, const struct rbh_value *value)
-{
-    int64_t istates[] = {
-        HS_EXISTS, HS_DIRTY, HS_RELEASED, HS_ARCHIVED, HS_NORELEASE,
-        HS_NOARCHIVE, HS_LOST
-    };
-    char *cstates[] = {
-        "exists", "dirty", "released", "archived", "norelease",
-        "noarchive", "lost"
-    };
-    int64_t entry_hsm_state;
-    int tmp_length = 0;
-
-    if (value == NULL || value->type != RBH_VT_INT32)
-        return snprintf(output, max_length, "None");
-
-    entry_hsm_state = value->int32;
-    if (entry_hsm_state == 0)
-        return snprintf(output, max_length, "None");
-
-    for (int i = 0; i < ARRAY_SIZE(istates); i++) {
-        if (!(value->int32 & istates[i]))
-            continue;
-
-        tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
-                               cstates[i]);
-        entry_hsm_state ^= istates[i];
-        if (entry_hsm_state)
-            tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
-                                   "|");
-    }
-
-    if (entry_hsm_state)
-        return tmp_length + snprintf(output + tmp_length,
-                                     max_length - tmp_length,
-                                     "unknown");
-
-    return tmp_length;
-}
-
-static int
 snprintf_hash_type(char *output, int max_length, const struct rbh_value *value)
 {
     if (value == NULL || value->type != RBH_VT_INT32)
@@ -274,43 +275,6 @@ snprintf_flags_mirror_state(char *output, int max_length,
     }
 
     __builtin_unreachable();
-}
-
-static int
-snprintf_hash_flags(char *output, int max_length, const struct rbh_value *value)
-{
-    int64_t iflags[] = {
-        LMV_HASH_FLAG_FIXED, LMV_HASH_FLAG_MERGE, LMV_HASH_FLAG_SPLIT,
-        LMV_HASH_FLAG_LOST_LMV, LMV_HASH_FLAG_BAD_TYPE, LMV_HASH_FLAG_MIGRATION
-    };
-    char *cflags[] = {
-        "fixed", "merge", "split", "lost_lmv", "bad_type", "migration"
-    };
-    int64_t entry_hash_flags;
-    int tmp_length = 0;
-
-    if (value == NULL || value->type != RBH_VT_INT32 || value->int32 == 0)
-        return snprintf(output, max_length, "None");
-
-    entry_hash_flags = value->int32;
-    for (int i = 0; i < ARRAY_SIZE(iflags); i++) {
-        if (!(value->int32 & iflags[i]))
-            continue;
-
-        tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
-                               cflags[i]);
-        entry_hash_flags ^= iflags[i];
-        if (entry_hash_flags)
-            tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
-                                   "|");
-    }
-
-    if (entry_hash_flags)
-        return tmp_length + snprintf(output + tmp_length,
-                                     max_length - tmp_length,
-                                     "unknown");
-
-    return tmp_length;
 }
 
 enum known_directive
