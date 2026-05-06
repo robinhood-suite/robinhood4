@@ -399,6 +399,10 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         tmp_length = snprintf_value_array("layout_pattern", output, max_length,
                                           value, snprintf_layout_pattern);
         break;
+    case 'T': // component count
+        value = rbh_fsentry_find_inode_xattr(fsentry, "comp_count");
+        tmp_length = snprintf_value("comp_count", output, max_length, value);
+        break;
     default:
         rc = RBH_DIRECTIVE_UNKNOWN;
     }
@@ -495,6 +499,9 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         break;
     case 't': // layout pattern
         rbh_projection_add(projection, str2filter_field("xattrs.pattern"));
+        break;
+    case 'T': // component count
+        rbh_projection_add(projection, str2filter_field("xattrs.comp_count"));
         break;
     default:
         rc = RBH_DIRECTIVE_UNKNOWN;
