@@ -351,6 +351,32 @@ test_hsm_archive_id()
                   "/archive-id-1: '$id_1'"
 }
 
+get_flags()
+{
+    local entry="$1"
+
+    local flags=$(lfs getstripe -v "$entry" | grep "lcm_flags" | \
+                  cut -d ':' -f2 | xargs)
+    # Taken from linux/lustre/lustre_user.h, structure lov_comp_md_flags
+    flags="${flags//0/None}"
+    flags="${flags//ro/1}"
+    flags="${flags//wp/2}"
+    flags="${flags//sp/3}"
+
+    echo "$flags"
+}
+
+test_flags()
+{
+    lfs setstripe -E 1k -c 2 -E -1 -c -1 "test_flags"
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLF'\n" | sort |
+        difflines "/: 'None'" \
+                  "/test_flags: '$(get_flags test_flags)'"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -359,7 +385,7 @@ declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
                   test_stripe_size test_hash_type test_pool test_project_id
                   test_ost_mdt_count test_mdt_index test_layout_pattern
                   test_comp_flags test_extension_size test_comp_start_end
-                  test_hsm_state test_hsm_archive_id)
+                  test_hsm_state test_hsm_archive_id test_flags)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
