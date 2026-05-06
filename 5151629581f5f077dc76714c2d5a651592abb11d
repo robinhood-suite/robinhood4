@@ -46,6 +46,30 @@
       },
       "revId": "5151629581f5f077dc76714c2d5a651592abb11d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8152b58b_62a46f56",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/action.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-06T10:49:30Z",
+      "side": 1,
+      "message": "Acknowledged\n\nYes, you can easily add the i/cpattern to the structures and loop through it, and thus discard your special case.",
+      "parentUuid": "073d4681_79e06fc6",
+      "range": {
+        "startLine": 30,
+        "startChar": 27,
+        "endLine": 30,
+        "endChar": 45
+      },
+      "revId": "5151629581f5f077dc76714c2d5a651592abb11d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
