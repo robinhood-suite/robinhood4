@@ -498,6 +498,21 @@ test_child_mdt_index()
     fi
 }
 
+test_mdt_hash_flags()
+{
+    lfs mkdir -i 1 dir
+    lfs migrate -v -m 0 -H all_char dir
+    lfs mkdir -i 1 dir2
+    lfs migrate -v -m 0 -H crush --clear-fixed dir2
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLG'\n" | sort |
+        difflines "/: 'None'" \
+                  "/dir2: 'None'" \
+                  "/dir: 'fixed'"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -508,7 +523,7 @@ declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
                   test_comp_flags test_extension_size test_comp_start_end
                   test_hsm_state test_hsm_archive_id test_flags test_magic
                   test_mirror_state test_mirror_count test_component_count
-                  test_child_mdt_index)
+                  test_child_mdt_index test_mdt_hash_flags)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
