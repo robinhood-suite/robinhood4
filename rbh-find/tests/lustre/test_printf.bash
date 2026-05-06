@@ -399,6 +399,28 @@ test_magic()
                   "/file: 'LOV_USER_MAGIC_COMP_V1'"
 }
 
+test_mirror_state()
+{
+    lfs mirror create -N2 file
+
+    lfs mirror create -N3 file2
+    echo "foo" > file2
+
+    # Should have nothing as it's not a mirrored file
+    lfs setstripe -E 1M -c 1 -S 256k -E 512M -c 2 -S 512k -E -1 -c -1 -S 1024k \
+        "file_comp"
+    truncate -s 1M "file_comp"
+    echo "foo" > file_comp
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLS'\n" | sort |
+        difflines "/: 'None'" \
+                  "/file2: 'wp'" \
+                  "/file: 'ro'" \
+                  "/file_comp: 'None'"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -407,7 +429,8 @@ declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
                   test_stripe_size test_hash_type test_pool test_project_id
                   test_ost_mdt_count test_mdt_index test_layout_pattern
                   test_comp_flags test_extension_size test_comp_start_end
-                  test_hsm_state test_hsm_archive_id test_flags test_magic)
+                  test_hsm_state test_hsm_archive_id test_flags test_magic
+                  test_mirror_state)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"

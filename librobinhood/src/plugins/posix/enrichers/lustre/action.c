@@ -254,7 +254,8 @@ snprintf_ost_count(char *output, int max_length, const struct rbh_value *value)
 }
 
 static int
-snprintf_flags(char *output, int max_length, const struct rbh_value *value)
+snprintf_flags_mirror_state(char *output, int max_length,
+                            const struct rbh_value *value)
 {
     if (value == NULL || value->type != RBH_VT_INT32)
         return snprintf(output, max_length, "None");
@@ -331,7 +332,7 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         break;
     case 'F': // flags
         value = rbh_fsentry_find_inode_xattr(fsentry, "flags");
-        tmp_length = snprintf_flags(output, max_length, value);
+        tmp_length = snprintf_flags_mirror_state(output, max_length, value);
         break;
     case 'g': // generation
         value = rbh_fsentry_find_inode_xattr(fsentry, "gen");
@@ -384,6 +385,10 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         value = rbh_fsentry_find_inode_xattr(fsentry, "stripe_size");
         tmp_length = snprintf_value_array("stripe_size", output, max_length,
                                           value, &snprintf_value);
+        break;
+    case 'S': // mirror state
+        value = rbh_fsentry_find_inode_xattr(fsentry, "mirror_state");
+        tmp_length = snprintf_flags_mirror_state(output, max_length, value);
         break;
     case 't': // layout pattern
         value = rbh_fsentry_find_inode_xattr(fsentry, "pattern");
@@ -477,6 +482,9 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         break;
     case 's': // stripe size
         rbh_projection_add(projection, str2filter_field("xattrs.stripe_size"));
+        break;
+    case 'S': // mirror state
+        rbh_projection_add(projection, str2filter_field("xattrs.mirror_state"));
         break;
     case 't': // layout pattern
         rbh_projection_add(projection, str2filter_field("xattrs.pattern"));
