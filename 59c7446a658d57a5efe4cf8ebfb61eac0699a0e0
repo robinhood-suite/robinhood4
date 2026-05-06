@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c744608_4b7bae22",
+        "filename": "rbh-policy/rbhpolicy/config/cpython.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-05-06T07:54:55Z",
+      "side": 1,
+      "message": "sugest: You can only check `not isinstance(raw, int)`",
+      "range": {
+        "startLine": 112,
+        "startChar": 7,
+        "endLine": 112,
+        "endChar": 57
+      },
+      "revId": "59c7446a658d57a5efe4cf8ebfb61eac0699a0e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
