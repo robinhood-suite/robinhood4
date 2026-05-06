@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d95c48ee_a4ea8047",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-05-06T09:01:31Z",
+      "side": 1,
+      "message": "defect: If a consumer has an error, you need to wake up the producer, otherwise he will wait indefinitely.",
+      "revId": "f553e471b5a8863e17d5221b294d15666248839b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba18bd42_21ba4bed",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-05-06T09:01:31Z",
+      "side": 1,
+      "message": "defect: You need to check if `should_stop` is true otherwise the producer will wait here indefinitely if a consumer has an error",
+      "revId": "f553e471b5a8863e17d5221b294d15666248839b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec3bdbfa_5f7cda9d",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-05-06T09:01:31Z",
+      "side": 1,
+      "message": "major: They should be destroyed after cleanup_producer_consumers to ensure that the consumer threads are stopped. Otherwise, they may use it after it has already been destroyed.",
+      "range": {
+        "startLine": 684,
+        "startChar": 3,
+        "endLine": 685,
+        "endChar": 53
+      },
+      "revId": "f553e471b5a8863e17d5221b294d15666248839b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
