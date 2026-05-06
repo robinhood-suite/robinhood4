@@ -46,6 +46,30 @@
       },
       "revId": "3f521a99b1ee934562d4a9b39c6adf23acd2eea2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea9df7d4_08048e0c",
+        "filename": "librobinhood/src/policyengine/trigger.c",
+        "patchSetId": 31
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-05-06T07:33:39Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "efb1459a_e463074c",
+      "range": {
+        "startLine": 44,
+        "startChar": 32,
+        "endLine": 44,
+        "endChar": 41
+      },
+      "revId": "3f521a99b1ee934562d4a9b39c6adf23acd2eea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
