@@ -421,6 +421,21 @@ test_mirror_state()
                   "/file_comp: 'None'"
 }
 
+test_mirror_count()
+{
+    touch file
+    lfs mirror create -N2 file2
+    lfs mirror create -N3 file3
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLM'\n" | sort |
+        difflines "/: 'None'" \
+                  "/file2: '2'" \
+                  "/file3: '3'" \
+                  "/file: 'None'"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -430,7 +445,7 @@ declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
                   test_ost_mdt_count test_mdt_index test_layout_pattern
                   test_comp_flags test_extension_size test_comp_start_end
                   test_hsm_state test_hsm_archive_id test_flags test_magic
-                  test_mirror_state)
+                  test_mirror_state test_mirror_count)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
