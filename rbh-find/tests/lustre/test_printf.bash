@@ -338,6 +338,19 @@ test_hsm_state()
                   "/released: 'exists|released|archived'"
 }
 
+test_hsm_archive_id()
+{
+    touch "archive-id-1"
+    archive_file "archive-id-1"
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    local id_1=$(lfs hsm_state "archive-id-1" | cut -d ':' -f3)
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLa'\n" | sort |
+        difflines "/: 'None'" \
+                  "/archive-id-1: '$id_1'"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -346,7 +359,7 @@ declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
                   test_stripe_size test_hash_type test_pool test_project_id
                   test_ost_mdt_count test_mdt_index test_layout_pattern
                   test_comp_flags test_extension_size test_comp_start_end
-                  test_hsm_state)
+                  test_hsm_state test_hsm_archive_id)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"

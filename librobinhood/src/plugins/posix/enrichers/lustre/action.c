@@ -269,6 +269,11 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         return RBH_DIRECTIVE_UNKNOWN;
 
     switch (format_string[*index + 3]) {
+    case 'a': // HSM archive id
+        value = rbh_fsentry_find_inode_xattr(fsentry, "hsm_archive_id");
+        tmp_length = snprintf_value("hsm_archive_id", output, max_length,
+                                    value);
+        break;
     case 'b': // component begin
         value = rbh_fsentry_find_inode_xattr(fsentry, "begin");
         tmp_length = snprintf_value_array("begin", output, max_length, value,
@@ -381,6 +386,10 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         return RBH_DIRECTIVE_UNKNOWN;
 
     switch (format_string[*index + 3]) {
+    case 'a': // HSM archive id
+        rbh_projection_add(projection,
+                           str2filter_field("xattrs.hsm_archive_id"));
+        break;
     case 'b': // component begin
         rbh_projection_add(projection, str2filter_field("xattrs.begin"));
         break;
