@@ -237,8 +237,29 @@ rbh_action_print_escape(char *output, size_t *output_length,
 {
     /* For now, consider the escape to be a single character */
     switch (format_string[*index + 1]) {
+    case 'b':
+        *output = '\b';
+        break;
+    case 'f':
+        *output = '\f';
+        break;
     case 'n':
         *output = '\n';
+        break;
+    case 'r':
+        *output = '\r';
+        break;
+    case 't':
+        *output = '\t';
+        break;
+    case 'v':
+        *output = '\v';
+        break;
+    case '0':
+        *output = '\0';
+        break;
+    case '\\':
+        *output = '\\';
         break;
     default:
         error(EXIT_FAILURE, ENOTSUP, "format escape not supported");
