@@ -172,7 +172,6 @@ test_project_id()
 
 test_ost_mdt_count()
 {
-
     lfs mkdir -c 1 dir1
     lfs mkdir -c 2 dir2
     lfs mkdir -c 3 dir3
@@ -183,14 +182,23 @@ test_ost_mdt_count()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:$db:$testdb" -printf "%p: %RLC\n" | sort |
-        difflines "/: 1" \
-                  "/a: 1" \
-                  "/b: 2" \
-                  "/c: 3" \
-                  "/dir1: 1" \
-                  "/dir2: 2" \
-                  "/dir3: 3"
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLO'\n" | sort |
+        difflines "/: 'None'" \
+                  "/a: '1'" \
+                  "/b: '2'" \
+                  "/c: '3'" \
+                  "/dir1: 'None'" \
+                  "/dir2: 'None'" \
+                  "/dir3: 'None'"
+
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLI'\n" | sort |
+        difflines "/: '1'" \
+                  "/a: 'None'" \
+                  "/b: 'None'" \
+                  "/c: 'None'" \
+                  "/dir1: '1'" \
+                  "/dir2: '2'" \
+                  "/dir3: '3'"
 }
 
 test_mdt_index()
@@ -270,7 +278,7 @@ test_extension_size()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLe'\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLx'\n" | sort |
         difflines "/: 'None'" \
                   "/file1: '[0, 67108864]'" \
                   "/file2: '[0, 268435456]'"
@@ -288,7 +296,7 @@ test_comp_start_end()
         difflines "/: 'None'" \
                   "/file: '[0, 1048576, 536870912]'"
 
-    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLE'\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLe'\n" | sort |
         difflines "/: 'None'" \
                   "/file: '[1048576, 536870912, -1]'"
 }
