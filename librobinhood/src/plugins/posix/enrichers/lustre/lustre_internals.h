@@ -15,6 +15,8 @@
 #include <robinhood/filter.h>
 
 struct entry_info;
+struct rbh_config;
+struct rbh_filter_projection;
 struct rbh_value_pair;
 struct rbh_sstack;
 

@@ -21,6 +21,7 @@ librbh_posix_lustre_ext = library(
     sources: [
         'action.c',
         'filter.c',
+        'helper.c',
         'lustre.c',
         'parser.c',
         'plugin.c',

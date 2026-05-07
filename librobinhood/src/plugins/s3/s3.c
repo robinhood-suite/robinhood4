@@ -400,15 +400,11 @@ rbh_s3_helper(__attribute__((unused)) const char *backend,
         *predicate_helper = NULL;
 
     rc = asprintf(directive_helper,
-        " - S3:\n"
-        "   %%b         Object's bucket.\n"
-        "   %%f         Object's name.\n"
-        "   %%H         Backend's name.\n"
-        "   %%I         Object's ID.\n"
-        "   %%p         Object's path.\n"
-        "   %%s         Object's size.\n"
-        "   %%t         Object's mtime in ctime format.\n"
-        "   %%T         Object's mtime timestamp.\n");
+        " - S3, directive category '3':\n"
+        "   %%R3b       Object's bucket.\n"
+        "   %%R3s       Object's size.\n"
+        "   %%R3t       Object's mtime in ctime format.\n"
+        "   %%R3T       Object's mtime timestamp.\n");
 
     if (rc == -1)
         *directive_helper = NULL;

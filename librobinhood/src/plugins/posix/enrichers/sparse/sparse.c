@@ -74,10 +74,10 @@ rbh_sparse_helper(__attribute__((unused)) const char *backend,
         *predicate_helper = NULL;
 
     rc = asprintf(directive_helper,
-        " - Sparse:\n"
-        "   %%S         File's sparseness. Printed as 512 * st_blocks / st_size.\n"
-        "               A file is considered sparse if the result is less than 1.\n"
-        "               Empty files are considered non-sparse.\n");
+        "  - Sparse, directive category 'S':\n"
+        "    %%RLS      File's sparseness. Printed as 512 * st_blocks / st_size.\n"
+        "              A file is considered sparse if the result is less than 1.\n"
+        "              Empty files are considered non-sparse.\n");
 
     if (rc == -1)
         *directive_helper = NULL;

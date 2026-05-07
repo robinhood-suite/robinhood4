@@ -15,10 +15,10 @@ test_dir=$(dirname $(readlink -e $0))
 
 test_helper_invalid()
 {
-    rbh_find --help | grep "POSIX" &&
+    rbh_find --help | grep "- POSIX:" &&
         error "Find's helper without argument shouldn't have given POSIX's helper"
 
-    rbh_find --help rbh:mongo:blob | grep "POSIX" &&
+    rbh_find --help rbh:mongo:blob | grep "- POSIX:" &&
         error "Find's helper without argument shouldn't have given POSIX's helper"
 
     rbh_find --help non_existing_backend &&

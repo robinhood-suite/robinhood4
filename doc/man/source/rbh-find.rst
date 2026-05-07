@@ -74,6 +74,12 @@ actions:
 
 Similarly to predicates, directives for the `-[f]printf` action are on a
 per-backend basis, so use `rbh-find`'s helper to know the available directives.
+However, POSIX native directives are written as they are in GNU's find, but
+other backend directives should be written with a starting 'R', then the
+backend's specific directive category, then the directive itself.
+
+For instance, '%RLf' will print the FID of a Lustre entry, while '%RRE' will
+print the expiration date of an entry.
 
 GNU-Find actions VS rbh-find actions
 ------------------------------------
