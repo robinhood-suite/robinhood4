@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82bc77e2_ad430cf0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-07T11:04:01Z",
+      "side": 1,
+      "message": "Seems ok to me.",
+      "revId": "eafccca469a5c6753b2fed27dc9bdb26cf6b1f10",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
