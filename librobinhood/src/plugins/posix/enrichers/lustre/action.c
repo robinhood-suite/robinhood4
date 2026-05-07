@@ -293,20 +293,15 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         return RBH_DIRECTIVE_UNKNOWN;
 
     switch (format_string[*index + 3]) {
-    case 'a': // HSM archive id
-        value = rbh_fsentry_find_inode_xattr(fsentry, "hsm_archive_id");
-        tmp_length = snprintf_value("hsm_archive_id", output, max_length,
-                                    value);
-        break;
     case 'b': // component begin
         value = rbh_fsentry_find_inode_xattr(fsentry, "begin");
         tmp_length = snprintf_value_array("begin", output, max_length, value,
                                           &snprintf_value);
         break;
-    case 'c': // stripe count
-        value = rbh_fsentry_find_inode_xattr(fsentry, "stripe_count");
-        tmp_length = snprintf_value_array("stripe_count", output, max_length,
-                                          value, &snprintf_value);
+    case 'c': // component flags
+        value = rbh_fsentry_find_inode_xattr(fsentry, "comp_flags");
+        tmp_length = snprintf_value_array("comp_flags", output, max_length,
+                                          value, &snprintf_comp_flags);
         break;
     case 'C': // OST or MDT count
         if (S_ISDIR(fsentry->statx->stx_mode)) {
@@ -317,7 +312,15 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
             tmp_length = snprintf_ost_count(output, max_length, value);
         }
         break;
-    case 'e': // extension size
+    case 'd': // MDT hash flags
+        value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_hash_flags");
+        tmp_length = snprintf_hash_flags(output, max_length, value);
+        break;
+    case 'D': // MDT hash type
+        value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_hash");
+        tmp_length = snprintf_hash_type(output, max_length, value);
+        break;
+    case 'e': // component extension size
         value = rbh_fsentry_find_inode_xattr(fsentry, "extension_size");
         tmp_length = snprintf_value_array("extension_size", output, max_length,
                                           value, &snprintf_value);
@@ -331,21 +334,22 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         fid = rbh_lu_fid_from_id(&fsentry->id);
         tmp_length = snprintf(output, max_length, DFID, PFID(fid));
         break;
-    case 'F': // flags
+    case 'F': // parent FID
+        if (fsentry->parent_id.size == 0) {
+            tmp_length = snprintf(output, max_length, "None");
+            break;
+        }
+        fid = rbh_lu_fid_from_id(&fsentry->parent_id);
+        tmp_length = snprintf(output, max_length, DFID, PFID(fid));
+        break;
+    case 'g': // flags
         value = rbh_fsentry_find_inode_xattr(fsentry, "flags");
         tmp_length = snprintf_flags_mirror_state(output, max_length, value);
         break;
-    case 'g': // generation
-        value = rbh_fsentry_find_inode_xattr(fsentry, "gen");
-        tmp_length = snprintf_value("gen", output, max_length, value);
-        break;
-    case 'G': // MDT hash flags
-        value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_hash_flags");
-        tmp_length = snprintf_hash_flags(output, max_length, value);
-        break;
-    case 'h': // hash type
-        value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_hash");
-        tmp_length = snprintf_hash_type(output, max_length, value);
+    case 'h': // HSM archive id
+        value = rbh_fsentry_find_inode_xattr(fsentry, "hsm_archive_id");
+        tmp_length = snprintf_value("hsm_archive_id", output, max_length,
+                                    value);
         break;
     case 'H': // HSM state
         value = rbh_fsentry_find_inode_xattr(fsentry, "hsm_state");
@@ -355,35 +359,30 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_index");
         tmp_length = snprintf_value("mdt_index", output, max_length, value);
         break;
-    case 'I': // project ID
-        value = rbh_fsentry_find_inode_xattr(fsentry, "project_id");
-        tmp_length = snprintf_value("project_id", output, max_length, value);
-        break;
-    case 'l': // component flags
-        value = rbh_fsentry_find_inode_xattr(fsentry, "comp_flags");
-        tmp_length = snprintf_value_array("comp_flags", output, max_length,
-                                          value, &snprintf_comp_flags);
-        break;
-    case 'm': // magic number
-        value = rbh_fsentry_find_inode_xattr(fsentry, "magic");
-        tmp_length = snprintf_value("magic", output, max_length, value);
+    case 'm': // mirror state
+        value = rbh_fsentry_find_inode_xattr(fsentry, "mirror_state");
+        tmp_length = snprintf_flags_mirror_state(output, max_length, value);
         break;
     case 'M': // mirror_count
         value = rbh_fsentry_find_inode_xattr(fsentry, "mirror_count");
         tmp_length = snprintf_value("mirror_count", output, max_length, value);
+        break;
+    case 'n': // generation
+        value = rbh_fsentry_find_inode_xattr(fsentry, "gen");
+        tmp_length = snprintf_value("gen", output, max_length, value);
+        break;
+    case 'N': // magic number
+        value = rbh_fsentry_find_inode_xattr(fsentry, "magic");
+        tmp_length = snprintf_value("magic", output, max_length, value);
         break;
     case 'o': // OSTs
         value = rbh_fsentry_find_inode_xattr(fsentry, "ost");
         tmp_length = snprintf_value_array("ost", output, max_length, value,
                                           &snprintf_value);
         break;
-    case 'p': // parent FID
-        if (fsentry->parent_id.size == 0) {
-            tmp_length = snprintf(output, max_length, "None");
-            break;
-        }
-        fid = rbh_lu_fid_from_id(&fsentry->parent_id);
-        tmp_length = snprintf(output, max_length, DFID, PFID(fid));
+    case 'p': // project ID
+        value = rbh_fsentry_find_inode_xattr(fsentry, "project_id");
+        tmp_length = snprintf_value("project_id", output, max_length, value);
         break;
     case 'P': // pool
         value = rbh_fsentry_find_inode_xattr(fsentry, "pool");
@@ -395,11 +394,12 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         tmp_length = snprintf_value_array("stripe_size", output, max_length,
                                           value, &snprintf_value);
         break;
-    case 'S': // mirror state
-        value = rbh_fsentry_find_inode_xattr(fsentry, "mirror_state");
-        tmp_length = snprintf_flags_mirror_state(output, max_length, value);
+    case 'S': // stripe count
+        value = rbh_fsentry_find_inode_xattr(fsentry, "stripe_count");
+        tmp_length = snprintf_value_array("stripe_count", output, max_length,
+                                          value, &snprintf_value);
         break;
-    case 't': // layout pattern
+    case 't': // component pattern
         value = rbh_fsentry_find_inode_xattr(fsentry, "pattern");
         tmp_length = snprintf_value_array("layout_pattern", output, max_length,
                                           value, snprintf_layout_pattern);
@@ -439,15 +439,11 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         return RBH_DIRECTIVE_UNKNOWN;
 
     switch (format_string[*index + 3]) {
-    case 'a': // HSM archive id
-        rbh_projection_add(projection,
-                           str2filter_field("xattrs.hsm_archive_id"));
-        break;
     case 'b': // component begin
         rbh_projection_add(projection, str2filter_field("xattrs.begin"));
         break;
-    case 'c': // stripe count
-        rbh_projection_add(projection, str2filter_field("xattrs.stripe_count"));
+    case 'c': // component flags
+        rbh_projection_add(projection, str2filter_field("xattrs.comp_flags"));
         break;
     case 'C': // OST or MDT count
         rbh_projection_add(projection, str2filter_field("statx.mode"));
@@ -455,7 +451,14 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
         rbh_projection_add(projection, str2filter_field("xattrs.ost"));
         rbh_projection_add(projection, str2filter_field("xattrs.mdt_count"));
         break;
-    case 'e': // FID
+    case 'd': // MDT hash flags
+        rbh_projection_add(projection,
+                           str2filter_field("xattrs.mdt_hash_flags"));
+        break;
+    case 'D': // MDT hash type
+        rbh_projection_add(projection, str2filter_field("xattrs.mdt_hash"));
+        break;
+    case 'e': // component extension size
         rbh_projection_add(projection,
                            str2filter_field("xattrs.extension_size"));
         break;
@@ -465,42 +468,39 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
     case 'f': // FID
         rbh_projection_add(projection, str2filter_field("id"));
         break;
-    case 'F': // flags
+    case 'F': // Parent FID
+        rbh_projection_add(projection, str2filter_field("parent-id"));
+        break;
+    case 'g': // flags
         rbh_projection_add(projection, str2filter_field("xattrs.flags"));
         break;
-    case 'g': // generation
-        rbh_projection_add(projection, str2filter_field("xattrs.gen"));
-        break;
-    case 'G': // MDT hash flags
+    case 'h': // HSM archive id
         rbh_projection_add(projection,
-                           str2filter_field("xattrs.mdt_hash_flags"));
+                           str2filter_field("xattrs.hsm_archive_id"));
         break;
-    case 'h': // hash type
-        rbh_projection_add(projection, str2filter_field("xattrs.mdt_hash"));
-        break;
-    case 'H': // hsm state
+    case 'H': // HSM state
         rbh_projection_add(projection, str2filter_field("xattrs.hsm_state"));
         break;
-    case 'i': // mdt index
+    case 'i': // MDT index
         rbh_projection_add(projection, str2filter_field("xattrs.mdt_index"));
         break;
-    case 'I': // project ID
-        rbh_projection_add(projection, str2filter_field("xattrs.project_id"));
-        break;
-    case 'l': // component flags
-        rbh_projection_add(projection, str2filter_field("xattrs.comp_flags"));
-        break;
-    case 'm': // magic number
-        rbh_projection_add(projection, str2filter_field("xattrs.magic"));
+    case 'm': // mirror state
+        rbh_projection_add(projection, str2filter_field("xattrs.mirror_state"));
         break;
     case 'M': // mirror count
         rbh_projection_add(projection, str2filter_field("xattrs.mirror_count"));
         break;
+    case 'n': // generation
+        rbh_projection_add(projection, str2filter_field("xattrs.gen"));
+        break;
+    case 'N': // magic number
+        rbh_projection_add(projection, str2filter_field("xattrs.magic"));
+        break;
     case 'o': // OSTs
         rbh_projection_add(projection, str2filter_field("xattrs.ost"));
         break;
-    case 'p': // Parent FID
-        rbh_projection_add(projection, str2filter_field("parent-id"));
+    case 'p': // project ID
+        rbh_projection_add(projection, str2filter_field("xattrs.project_id"));
         break;
     case 'P': // pool
         rbh_projection_add(projection, str2filter_field("xattrs.pool"));
@@ -508,10 +508,10 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
     case 's': // stripe size
         rbh_projection_add(projection, str2filter_field("xattrs.stripe_size"));
         break;
-    case 'S': // mirror state
-        rbh_projection_add(projection, str2filter_field("xattrs.mirror_state"));
+    case 'S': // stripe count
+        rbh_projection_add(projection, str2filter_field("xattrs.stripe_count"));
         break;
-    case 't': // layout pattern
+    case 't': // component pattern
         rbh_projection_add(projection, str2filter_field("xattrs.pattern"));
         break;
     case 'T': // component count

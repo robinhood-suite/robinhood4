@@ -40,7 +40,7 @@ test_gen()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLg'\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLn'\n" | sort |
         difflines "/: 'None'" "/a: '0'" "/b: '1'" "/c: '2'" "/d: '6'"
 }
 
@@ -68,7 +68,7 @@ test_pfid()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLp'\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLF'\n" | sort |
         difflines "/: 'None'" "/blob/blob: '$blob_fid'" \
                   "/blob: '$root_fid'"
 }
@@ -88,7 +88,7 @@ test_stripe_count()
 
     # No idea why 'd' has these stripe count, but it's what Lustre shows with
     # a getstripe too so ...
-    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLc'\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLS'\n" | sort |
         difflines "/: 'None'" "/a: '[1]'" "/b: '[2]'" "/c: '[1, 2]'" \
                   "/d: '[1, 1, 2, 4, 5, 6]'" "/e: '[7]'"
 }
@@ -113,7 +113,7 @@ test_stripe_size()
                   "/e: '[16777216]'"
 }
 
-test_hash_type()
+test_mdt_hash_type()
 {
     lfs mkdir -i 1 "test_mdt_hash1"
     lfs migrate -v -m 0 -H all_char "test_mdt_hash1"
@@ -129,7 +129,7 @@ test_hash_type()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:$db:$testdb" -printf "%p: %RLh\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p: %RLD\n" | sort |
         difflines "/: None" \
                   "/test_mdt_hash1: all_char" \
                   "/test_mdt_hash2: fnv_1a_64" \
@@ -166,7 +166,7 @@ test_project_id()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:$db:$testdb" -printf "%p: %RLI\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p: %RLp\n" | sort |
         difflines "/: 0" "/project_1: 1" "/project_2: 2" "/vanilla: 0"
 }
 
@@ -214,7 +214,7 @@ test_mdt_index()
                   "/file2: 0"
 }
 
-test_layout_pattern()
+test_component_pattern()
 {
     lfs setstripe -L raid0 -c 1 raid0
     lfs setstripe -L raid0 -c 1 .
@@ -254,7 +254,7 @@ test_comp_flags()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLl'\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLc'\n" | sort |
         difflines "/: 'None'" \
                   "/file0: '[init, init, 0]'" \
                   "/file1: '[init, extension]'" \
@@ -346,7 +346,7 @@ test_hsm_archive_id()
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
     local id_1=$(lfs hsm_state "archive-id-1" | cut -d ':' -f3)
-    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLa'\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLh'\n" | sort |
         difflines "/: 'None'" \
                   "/archive-id-1: '$id_1'"
 }
@@ -372,7 +372,7 @@ test_flags()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLF'\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLg'\n" | sort |
         difflines "/: 'None'" \
                   "/test_flags: '$(get_flags test_flags)'"
 }
@@ -390,7 +390,7 @@ test_magic()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLm'\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLN'\n" | sort |
         difflines "/: 'None'" \
                   "/a: 'LOV_USER_MAGIC_V1'" \
                   "/b: 'LOV_USER_MAGIC_COMP_V1'" \
@@ -414,7 +414,7 @@ test_mirror_state()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLS'\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLm'\n" | sort |
         difflines "/: 'None'" \
                   "/file2: 'wp'" \
                   "/file: 'ro'" \
@@ -507,7 +507,7 @@ test_mdt_hash_flags()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLG'\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p: '%RLd'\n" | sort |
         difflines "/: 'None'" \
                   "/dir2: 'None'" \
                   "/dir: 'fixed'"
@@ -518,8 +518,8 @@ test_mdt_hash_flags()
 ################################################################################
 
 declare -a tests=(test_fid test_gen test_ost test_pfid test_stripe_count
-                  test_stripe_size test_hash_type test_pool test_project_id
-                  test_ost_mdt_count test_mdt_index test_layout_pattern
+                  test_stripe_size test_mdt_hash_type test_pool test_project_id
+                  test_ost_mdt_count test_mdt_index test_component_pattern
                   test_comp_flags test_extension_size test_comp_start_end
                   test_hsm_state test_hsm_archive_id test_flags test_magic
                   test_mirror_state test_mirror_count test_component_count
