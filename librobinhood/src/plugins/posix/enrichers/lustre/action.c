@@ -19,8 +19,17 @@
 
 #define RBH_LUSTRE_DIRECTIVE 'L'
 
-typedef int (*snprintf_value_t)(const char *name, char *output,
+struct directive_option;
+
+typedef int (*snprintf_value_t)(struct directive_option *option, char *output,
                                 int max_length, const struct rbh_value *value);
+
+struct directive_option {
+    enum rbh_fsentry_property property;
+    const char *name;
+    snprintf_value_t primary_print_function;
+    snprintf_value_t secondary_print_function;
+};
 
 struct key_value {
     int64_t key;
@@ -55,8 +64,9 @@ snprintf_key_values(char *output, int max_length,
 }
 
 static int
-snprintf_layout_pattern(__attribute__((unused)) const char *name, char *output,
-                        int max_length, const struct rbh_value *value)
+snprintf_layout_pattern(__attribute__((unused)) struct directive_option *option,
+                        char *output, int max_length,
+                        const struct rbh_value *value)
 {
     /* Lustre has two ways to signify a file has a raid0 pattern, either
      * its pattern is 0 == LLAPI_LAYOUT_RAID0 == 0x00000000ULL or its
@@ -80,7 +90,8 @@ snprintf_layout_pattern(__attribute__((unused)) const char *name, char *output,
 }
 
 static int
-snprintf_hsm_state(char *output, int max_length, const struct rbh_value *value)
+snprintf_hsm_state(__attribute__((unused)) struct directive_option *option,
+                   char *output, int max_length, const struct rbh_value *value)
 {
     struct key_value key_values[] = {
         { HS_EXISTS, "exists" },
@@ -100,7 +111,8 @@ snprintf_hsm_state(char *output, int max_length, const struct rbh_value *value)
 }
 
 static int
-snprintf_hash_flags(char *output, int max_length, const struct rbh_value *value)
+snprintf_hash_flags(__attribute__((unused)) struct directive_option *option,
+                    char *output, int max_length, const struct rbh_value *value)
 {
     struct key_value key_values[] = {
         { LMV_HASH_FLAG_FIXED, "fixed" },
@@ -119,8 +131,8 @@ snprintf_hash_flags(char *output, int max_length, const struct rbh_value *value)
 }
 
 static int
-snprintf_comp_flags(__attribute__((unused)) const char *name, char *output,
-                    int max_length, const struct rbh_value *value)
+snprintf_comp_flags(__attribute__((unused)) struct directive_option *option,
+                    char *output, int max_length, const struct rbh_value *value)
 {
     if (value == NULL || value->type != RBH_VT_INT32)
         return snprintf(output, max_length, "None");
@@ -146,7 +158,7 @@ snprintf_comp_flags(__attribute__((unused)) const char *name, char *output,
 }
 
 static int
-snprintf_value(const char *name, char *output, int max_length,
+snprintf_value(struct directive_option *option, char *output, int max_length,
                const struct rbh_value *value)
 {
     if (value == NULL)
@@ -170,14 +182,14 @@ snprintf_value(const char *name, char *output, int max_length,
     }
 
     error(EXIT_FAILURE, EINVAL, "unexpected type in fsentry for value '%s': %d",
-          name, value->type);
+          option->name, value->type);
     __builtin_unreachable();
 }
 
 static int
-snprintf_value_array(const char *name, char *output, int max_length,
-                     const struct rbh_value *value,
-                     snprintf_value_t print_value)
+snprintf_value_array(__attribute__((unused)) struct directive_option *option,
+                     char *output, int max_length,
+                     const struct rbh_value *value)
 {
     char array[128];
     size_t size;
@@ -191,8 +203,9 @@ snprintf_value_array(const char *name, char *output, int max_length,
     index = 1;
 
     for (int i = 0; i < value->sequence.count; ++i) {
-        int tmp_length = print_value(name, array + index, size - index,
-                                     &value->sequence.values[i]);
+        int tmp_length = option->secondary_print_function(
+            option, array + index, size - index, &value->sequence.values[i]
+        );
 
         if (tmp_length < 0)
             return -1;
@@ -215,7 +228,8 @@ snprintf_value_array(const char *name, char *output, int max_length,
 }
 
 static int
-snprintf_hash_type(char *output, int max_length, const struct rbh_value *value)
+snprintf_hash_type(__attribute__((unused)) struct directive_option *option,
+                   char *output, int max_length, const struct rbh_value *value)
 {
     if (value == NULL || value->type != RBH_VT_INT32)
         return snprintf(output, max_length, "None");
@@ -237,7 +251,8 @@ snprintf_hash_type(char *output, int max_length, const struct rbh_value *value)
 }
 
 static int
-snprintf_ost_count(char *output, int max_length, const struct rbh_value *value)
+snprintf_ost_count(__attribute__((unused)) struct directive_option *option,
+                   char *output, int max_length, const struct rbh_value *value)
 {
     long i;
 
@@ -255,8 +270,10 @@ snprintf_ost_count(char *output, int max_length, const struct rbh_value *value)
 }
 
 static int
-snprintf_flags_mirror_state(char *output, int max_length,
-                            const struct rbh_value *value)
+snprintf_flags_mirror_state(
+    __attribute__((unused)) struct directive_option *option,
+    char *output, int max_length, const struct rbh_value *value
+)
 {
     if (value == NULL || value->type != RBH_VT_INT32)
         return snprintf(output, max_length, "None");
@@ -277,6 +294,75 @@ snprintf_flags_mirror_state(char *output, int max_length,
     __builtin_unreachable();
 }
 
+static struct directive_option lustre_directive_table['z' - 'A' + 1] = {
+    { 0 }, // 'A'
+    { 0 }, // 'B'
+    { 0 }, // 'C'
+    { RBH_FP_INODE_XATTRS, "mdt_hash", snprintf_hash_type }, // 'D'
+    { 0 }, // 'E'
+    { RBH_FP_PARENT_ID, NULL }, // 'F'
+    { 0 }, // 'G'
+    { RBH_FP_INODE_XATTRS, "hsm_state", snprintf_hsm_state }, // 'H'
+    { RBH_FP_INODE_XATTRS, "mdt_count", snprintf_value }, // 'I'
+    { 0 }, // 'J'
+    { 0 }, // 'K'
+    { 0 }, // 'L'
+    { RBH_FP_INODE_XATTRS, "mirror_count", snprintf_value }, // 'M'
+    { RBH_FP_INODE_XATTRS, "magic", snprintf_value }, // 'N'
+    { RBH_FP_INODE_XATTRS, "ost", snprintf_ost_count }, // 'O'
+    { RBH_FP_INODE_XATTRS, "pool",
+        snprintf_value_array, snprintf_value }, // 'P'
+    { 0 }, // 'Q'
+    { 0 }, // 'R'
+    { RBH_FP_INODE_XATTRS, "stripe_count",
+        snprintf_value_array, snprintf_value }, // 'S'
+    { RBH_FP_INODE_XATTRS, "comp_count", snprintf_value }, // 'T'
+    { 0 }, // 'U'
+    { 0 }, // 'V'
+    { 0 }, // 'W'
+    { RBH_FP_INODE_XATTRS, "child_mdt_idx",
+        snprintf_value_array, snprintf_value }, // 'X'
+    { 0 }, // 'Y'
+    { 0 }, // 'Z'
+    { 0 }, // '['
+    { 0 }, // '\'
+    { 0 }, // ']'
+    { 0 }, // '^'
+    { 0 }, // '_'
+    { 0 }, // '`'
+    { 0 }, // 'a'
+    { RBH_FP_INODE_XATTRS, "begin",
+        snprintf_value_array, snprintf_value }, // 'b'
+    { RBH_FP_INODE_XATTRS, "comp_flags",
+        snprintf_value_array, snprintf_comp_flags }, // 'c'
+    { RBH_FP_INODE_XATTRS, "mdt_hash_flags", snprintf_hash_flags }, // 'd'
+    { RBH_FP_INODE_XATTRS, "end", snprintf_value_array, snprintf_value }, // 'e'
+    { RBH_FP_ID, NULL }, // 'f'
+    { RBH_FP_INODE_XATTRS, "flags", snprintf_flags_mirror_state }, // 'g'
+    { RBH_FP_INODE_XATTRS, "hsm_archive_id", snprintf_value }, // 'h'
+    { RBH_FP_INODE_XATTRS, "mdt_index", snprintf_value }, // 'i'
+    { 0 }, // 'j'
+    { 0 }, // 'k'
+    { 0 }, // 'l'
+    { RBH_FP_INODE_XATTRS, "mirror_state", snprintf_flags_mirror_state }, // 'm'
+    { RBH_FP_INODE_XATTRS, "gen", snprintf_value }, // 'n'
+    { RBH_FP_INODE_XATTRS, "ost", snprintf_value_array, snprintf_value }, // 'o'
+    { RBH_FP_INODE_XATTRS, "project_id", snprintf_value }, // 'p'
+    { 0 }, // 'q'
+    { 0 }, // 'r'
+    { RBH_FP_INODE_XATTRS, "stripe_size",
+        snprintf_value_array, snprintf_value }, // 's'
+    { RBH_FP_INODE_XATTRS, "pattern",
+        snprintf_value_array, snprintf_layout_pattern }, // 't'
+    { 0 }, // 'u'
+    { 0 }, // 'v'
+    { 0 }, // 'w'
+    { RBH_FP_INODE_XATTRS, "extension_size",
+        snprintf_value_array, snprintf_value }, // 'x'
+    { 0 }, // 'y'
+    { 0 }, // 'z'
+};
+
 enum known_directive
 rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
                            const char *format_string, size_t *index,
@@ -284,57 +370,23 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
                            __attribute__((unused)) const char *backend)
 {
     enum known_directive rc = RBH_DIRECTIVE_KNOWN;
+    struct directive_option *option;
     const struct rbh_value *value;
     const struct lu_fid *fid;
     int tmp_length = 0;
 
     if (format_string[*index + 1] != RBH_NON_STANDARD_DIRECTIVE ||
-        format_string[*index + 2] != RBH_LUSTRE_DIRECTIVE)
+        format_string[*index + 2] != RBH_LUSTRE_DIRECTIVE ||
+        format_string[*index + 3] < 'A' || format_string[*index + 3] > 'z')
         return RBH_DIRECTIVE_UNKNOWN;
 
-    switch (format_string[*index + 3]) {
-    case 'b': // component begin
-        value = rbh_fsentry_find_inode_xattr(fsentry, "begin");
-        tmp_length = snprintf_value_array("begin", output, max_length, value,
-                                          &snprintf_value);
-        break;
-    case 'c': // component flags
-        value = rbh_fsentry_find_inode_xattr(fsentry, "comp_flags");
-        tmp_length = snprintf_value_array("comp_flags", output, max_length,
-                                          value, &snprintf_comp_flags);
-        break;
-    case 'C': // OST or MDT count
-        if (S_ISDIR(fsentry->statx->stx_mode)) {
-            value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_count");
-            tmp_length = snprintf_value("mdt_count", output, max_length, value);
-        } else {
-            value = rbh_fsentry_find_inode_xattr(fsentry, "ost");
-            tmp_length = snprintf_ost_count(output, max_length, value);
-        }
-        break;
-    case 'd': // MDT hash flags
-        value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_hash_flags");
-        tmp_length = snprintf_hash_flags(output, max_length, value);
-        break;
-    case 'D': // MDT hash type
-        value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_hash");
-        tmp_length = snprintf_hash_type(output, max_length, value);
-        break;
-    case 'e': // component extension size
-        value = rbh_fsentry_find_inode_xattr(fsentry, "extension_size");
-        tmp_length = snprintf_value_array("extension_size", output, max_length,
-                                          value, &snprintf_value);
-        break;
-    case 'E': // component end
-        value = rbh_fsentry_find_inode_xattr(fsentry, "end");
-        tmp_length = snprintf_value_array("end", output, max_length, value,
-                                          &snprintf_value);
-        break;
-    case 'f': // FID
+    option = &lustre_directive_table[format_string[*index + 3] - 'A'];
+    switch (option->property) {
+    case RBH_FP_ID:
         fid = rbh_lu_fid_from_id(&fsentry->id);
         tmp_length = snprintf(output, max_length, DFID, PFID(fid));
         break;
-    case 'F': // parent FID
+    case RBH_FP_PARENT_ID:
         if (fsentry->parent_id.size == 0) {
             tmp_length = snprintf(output, max_length, "None");
             break;
@@ -342,76 +394,10 @@ rbh_lustre_fill_entry_info(const struct rbh_fsentry *fsentry,
         fid = rbh_lu_fid_from_id(&fsentry->parent_id);
         tmp_length = snprintf(output, max_length, DFID, PFID(fid));
         break;
-    case 'g': // flags
-        value = rbh_fsentry_find_inode_xattr(fsentry, "flags");
-        tmp_length = snprintf_flags_mirror_state(output, max_length, value);
-        break;
-    case 'h': // HSM archive id
-        value = rbh_fsentry_find_inode_xattr(fsentry, "hsm_archive_id");
-        tmp_length = snprintf_value("hsm_archive_id", output, max_length,
-                                    value);
-        break;
-    case 'H': // HSM state
-        value = rbh_fsentry_find_inode_xattr(fsentry, "hsm_state");
-        tmp_length = snprintf_hsm_state(output, max_length, value);
-        break;
-    case 'i': // MDT index
-        value = rbh_fsentry_find_inode_xattr(fsentry, "mdt_index");
-        tmp_length = snprintf_value("mdt_index", output, max_length, value);
-        break;
-    case 'm': // mirror state
-        value = rbh_fsentry_find_inode_xattr(fsentry, "mirror_state");
-        tmp_length = snprintf_flags_mirror_state(output, max_length, value);
-        break;
-    case 'M': // mirror_count
-        value = rbh_fsentry_find_inode_xattr(fsentry, "mirror_count");
-        tmp_length = snprintf_value("mirror_count", output, max_length, value);
-        break;
-    case 'n': // generation
-        value = rbh_fsentry_find_inode_xattr(fsentry, "gen");
-        tmp_length = snprintf_value("gen", output, max_length, value);
-        break;
-    case 'N': // magic number
-        value = rbh_fsentry_find_inode_xattr(fsentry, "magic");
-        tmp_length = snprintf_value("magic", output, max_length, value);
-        break;
-    case 'o': // OSTs
-        value = rbh_fsentry_find_inode_xattr(fsentry, "ost");
-        tmp_length = snprintf_value_array("ost", output, max_length, value,
-                                          &snprintf_value);
-        break;
-    case 'p': // project ID
-        value = rbh_fsentry_find_inode_xattr(fsentry, "project_id");
-        tmp_length = snprintf_value("project_id", output, max_length, value);
-        break;
-    case 'P': // pool
-        value = rbh_fsentry_find_inode_xattr(fsentry, "pool");
-        tmp_length = snprintf_value_array("pool", output, max_length, value,
-                                          &snprintf_value);
-        break;
-    case 's': // stripe size
-        value = rbh_fsentry_find_inode_xattr(fsentry, "stripe_size");
-        tmp_length = snprintf_value_array("stripe_size", output, max_length,
-                                          value, &snprintf_value);
-        break;
-    case 'S': // stripe count
-        value = rbh_fsentry_find_inode_xattr(fsentry, "stripe_count");
-        tmp_length = snprintf_value_array("stripe_count", output, max_length,
-                                          value, &snprintf_value);
-        break;
-    case 't': // component pattern
-        value = rbh_fsentry_find_inode_xattr(fsentry, "pattern");
-        tmp_length = snprintf_value_array("layout_pattern", output, max_length,
-                                          value, snprintf_layout_pattern);
-        break;
-    case 'T': // component count
-        value = rbh_fsentry_find_inode_xattr(fsentry, "comp_count");
-        tmp_length = snprintf_value("comp_count", output, max_length, value);
-        break;
-    case 'X': // child MDT index
-        value = rbh_fsentry_find_inode_xattr(fsentry, "child_mdt_idx");
-        tmp_length = snprintf_value_array("child_mdt_idx", output, max_length,
-                                          value, snprintf_value);
+    case RBH_FP_INODE_XATTRS:
+        value = rbh_fsentry_find_inode_xattr(fsentry, option->name);
+        tmp_length = option->primary_print_function(option, output, max_length,
+                                                    value);
         break;
     default:
         rc = RBH_DIRECTIVE_UNKNOWN;
@@ -433,93 +419,29 @@ rbh_lustre_fill_projection(struct rbh_filter_projection *projection,
                            const char *format_string, size_t *index)
 {
     enum known_directive rc = RBH_DIRECTIVE_KNOWN;
+    struct directive_option *option;
+    char str_filter_field[64];
 
     if (format_string[*index + 1] != RBH_NON_STANDARD_DIRECTIVE ||
-        format_string[*index + 2] != RBH_LUSTRE_DIRECTIVE)
+        format_string[*index + 2] != RBH_LUSTRE_DIRECTIVE ||
+        format_string[*index + 3] < 'A' || format_string[*index + 3] > 'z')
         return RBH_DIRECTIVE_UNKNOWN;
 
-    switch (format_string[*index + 3]) {
-    case 'b': // component begin
-        rbh_projection_add(projection, str2filter_field("xattrs.begin"));
-        break;
-    case 'c': // component flags
-        rbh_projection_add(projection, str2filter_field("xattrs.comp_flags"));
-        break;
-    case 'C': // OST or MDT count
-        rbh_projection_add(projection, str2filter_field("statx.mode"));
-        rbh_projection_add(projection, str2filter_field("statx.type"));
-        rbh_projection_add(projection, str2filter_field("xattrs.ost"));
-        rbh_projection_add(projection, str2filter_field("xattrs.mdt_count"));
-        break;
-    case 'd': // MDT hash flags
-        rbh_projection_add(projection,
-                           str2filter_field("xattrs.mdt_hash_flags"));
-        break;
-    case 'D': // MDT hash type
-        rbh_projection_add(projection, str2filter_field("xattrs.mdt_hash"));
-        break;
-    case 'e': // component extension size
-        rbh_projection_add(projection,
-                           str2filter_field("xattrs.extension_size"));
-        break;
-    case 'E': // component end
-        rbh_projection_add(projection, str2filter_field("xattrs.end"));
-        break;
-    case 'f': // FID
+    option = &lustre_directive_table[format_string[*index + 3] - 'A'];
+    if (!option->property)
+        return RBH_DIRECTIVE_UNKNOWN;
+
+    switch (option->property) {
+    case RBH_FP_ID:
         rbh_projection_add(projection, str2filter_field("id"));
         break;
-    case 'F': // Parent FID
+    case RBH_FP_PARENT_ID:
         rbh_projection_add(projection, str2filter_field("parent-id"));
         break;
-    case 'g': // flags
-        rbh_projection_add(projection, str2filter_field("xattrs.flags"));
-        break;
-    case 'h': // HSM archive id
-        rbh_projection_add(projection,
-                           str2filter_field("xattrs.hsm_archive_id"));
-        break;
-    case 'H': // HSM state
-        rbh_projection_add(projection, str2filter_field("xattrs.hsm_state"));
-        break;
-    case 'i': // MDT index
-        rbh_projection_add(projection, str2filter_field("xattrs.mdt_index"));
-        break;
-    case 'm': // mirror state
-        rbh_projection_add(projection, str2filter_field("xattrs.mirror_state"));
-        break;
-    case 'M': // mirror count
-        rbh_projection_add(projection, str2filter_field("xattrs.mirror_count"));
-        break;
-    case 'n': // generation
-        rbh_projection_add(projection, str2filter_field("xattrs.gen"));
-        break;
-    case 'N': // magic number
-        rbh_projection_add(projection, str2filter_field("xattrs.magic"));
-        break;
-    case 'o': // OSTs
-        rbh_projection_add(projection, str2filter_field("xattrs.ost"));
-        break;
-    case 'p': // project ID
-        rbh_projection_add(projection, str2filter_field("xattrs.project_id"));
-        break;
-    case 'P': // pool
-        rbh_projection_add(projection, str2filter_field("xattrs.pool"));
-        break;
-    case 's': // stripe size
-        rbh_projection_add(projection, str2filter_field("xattrs.stripe_size"));
-        break;
-    case 'S': // stripe count
-        rbh_projection_add(projection, str2filter_field("xattrs.stripe_count"));
-        break;
-    case 't': // component pattern
-        rbh_projection_add(projection, str2filter_field("xattrs.pattern"));
-        break;
-    case 'T': // component count
-        rbh_projection_add(projection, str2filter_field("xattrs.comp_count"));
-        break;
-    case 'X': // child MDT index
-        rbh_projection_add(projection,
-                           str2filter_field("xattrs.child_mdt_idx"));
+    case RBH_FP_INODE_XATTRS:
+        if (sprintf(str_filter_field, "xattrs.%s", option->name) < 0)
+            return RBH_DIRECTIVE_ERROR;
+        rbh_projection_add(projection, str2filter_field(str_filter_field));
         break;
     default:
         rc = RBH_DIRECTIVE_UNKNOWN;
