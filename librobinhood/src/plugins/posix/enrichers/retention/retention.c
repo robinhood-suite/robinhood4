@@ -309,5 +309,12 @@ rbh_retention_helper(__attribute__((unused)) const char *backend,
     if (rc == -1)
         *predicate_helper = NULL;
 
-    *directive_helper = NULL;
+     rc = asprintf(directive_helper,
+         "  - Retention, directive category 'R':\n"
+         "    %%RRe         Retention attribute as set by the user\n"
+         "    %%RRE         Expiration date\n"
+     );
+
+     if (rc == -1)
+         *directive_helper = NULL;
 }
