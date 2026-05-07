@@ -22,6 +22,30 @@
       },
       "revId": "82162711abe3e1fb3f91b33c37e84fdeac4787bc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebaddca6_31a62c95",
+        "filename": "librobinhood/src/plugins/posix/enrichers/sparse/sparse.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-05-07T13:50:11Z",
+      "side": 1,
+      "message": "So, funny thing is: it is not aligned in the source code but it is in the helper, because the `%%` line 78 counts as 2 characters here but a single one in the terminal. So if I align it here, the helper is misaligned, and that irks me more than having the misalignment here",
+      "parentUuid": "6453786c_95b66408",
+      "range": {
+        "startLine": 79,
+        "startChar": 23,
+        "endLine": 80,
+        "endChar": 64
+      },
+      "revId": "82162711abe3e1fb3f91b33c37e84fdeac4787bc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
