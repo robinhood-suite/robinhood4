@@ -1318,14 +1318,20 @@ rbh_posix_helper(const char *type, struct rbh_config *config,
     if (rc == -1)
         goto err;
 
-    if (ext_directive_helper[0] != '\0') {
-        if (asprintf(directive_helper, "%s", ext_directive_helper) == -1) {
-            free(*predicate_helper);
-            goto err;
-        }
-    } else {
-        *directive_helper = NULL;
-    }
+    rc = asprintf(directive_helper,
+        "  - POSIX: *Are listed only the differences between GNU's find and\n"
+        "            rbh-find's POSIX directives*:\n"
+        "    %%Ak    not implemented, 'A' will show access time as a timestamp\n"
+        "    %%S     not implemented in POSIX, available in the 'sparseness' extension\n"
+        "    %%Tk    not implemented, 'T' will show modify time as a timestamp\n"
+        "    Not implemented:\n"
+        "    %%Ck   %%k     %%Y    %%Z\n"
+        "%s%s",
+        ext_directive_helper[0] != '\0' ? "\n" : "",
+        ext_directive_helper[0] != '\0' ? ext_directive_helper : ""
+    );
+    if (rc == -1)
+        goto err;
 
     free(posix);
 
