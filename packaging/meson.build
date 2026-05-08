@@ -14,12 +14,15 @@ configure_file(
 
 build_options = configuration_data()
 
+build_options.set('version', meson.project_version())
 build_options.set('ldiskfs', get_option('ldiskfs').enabled())
 build_options.set('lustre', get_option('lustre').enabled())
-build_options.set('mfu', get_option('mfu').enabled())
-build_options.set('version', meson.project_version())
 build_options.set('man', get_option('man').enabled())
+build_options.set('mfu', get_option('mfu').enabled())
+build_options.set('mongo', get_option('mongo').enabled())
+build_options.set('mpi', get_option('mpi').enabled())
 build_options.set('s3', get_option('s3').enabled())
+build_options.set('selinux', get_option('selinux').enabled())
 
 configure_file(
     input: 'build_options.sh.in',
