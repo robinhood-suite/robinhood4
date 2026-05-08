@@ -12,91 +12,52 @@ Source0: %{name}-%{version}.tar.xz
 
 # build options    || .rpmmacros options || change to default action
 # =================  ====================  ===========================
-# --without lustre ||   %%_with_lustre 0 || remove lustre as dependency
-# --with mfu       ||   %%_with_mfu 1    || force libmfu as dependency
-# --with hestia    ||   %%_with_hestia 1 || force hestia as dependency
-# --with s3        ||   %%_with_s3 1     || force s3 as dependency
-# --without man    ||   %%_with_man 0    || don't build man pages
+# --with hestia    || %%_with_hestia 1   || build hestia plugin
+# --with ldiskfs   || %%_with_ldiskfs 1  || build ldiskfs plugin
+# --without lustre || %%_with_lustre 0   || don't build lustre extension
+# --without man    || %%_with_man 0      || don't build man pages
+# --with mfu       || %%_with_mfu 1      || build mfu plugin and extension
+# --without mongo  || %%_with_mongo 0    || don't build mongo plugin
+# --with s3        || %%_with_s3 1       || build s3 plugin
 
-%bcond_without lustre
-%bcond_with mfu
 %bcond_with hestia
-%bcond_with s3
+%bcond_with ldiskfs
+%bcond_without lustre
 %bcond_without man
+%bcond_with mfu
+%bcond_without mongo
+%bcond_with s3
 
 Conflicts: robinhood
 
-Requires: mongo-c-driver-libs
-# The MongoDB dependency can be found here: https://repo.mongodb.org/yum/redhat/
-Requires: (mongodb-org or mongodb)
 Requires: miniyaml
 Requires: python39
-Requires: python39-yaml
-
-%if %{with lustre}
-Requires: lustre-client
-%endif
-
-%if %{with mfu}
-Requires: openmpi
-Requires: libmfu
-%endif
-
-%if %{with hestia}
-Requires: hestia
-%endif
-
-%if %{with s3}
-Requires: aws-cpp-sdk-s3
-%endif
+Requires: python3-yaml
 
 BuildRequires: meson
 BuildRequires: gcc
-BuildRequires: mongo-c-driver-devel
 BuildRequires: jansson-devel
 BuildRequires: check-devel
 BuildRequires: glib2-devel
 BuildRequires: libuuid-devel
-%if %{with lustre}
-# Should be the following line, but there is currently an issue with repository
-# priority and yum that makes it so that lustre-client is always used if
-# available, completely ignoring lustre-devel
-#BuildRequires: (lustre-devel or lustre-client < 2.15)
-BuildRequires: lustre-devel
-%endif
 BuildRequires: libyaml-devel
 BuildRequires: pkgconf-pkg-config
 BuildRequires: miniyaml-devel
 BuildRequires: python39
-BuildRequires: python39-rpm-macros
-BuildRequires: python39-devel
-
-%if %{with hestia}
-BuildRequires: hestia-devel
-%endif
-
-%if %{with mfu}
-BuildRequires: openmpi-devel
-BuildRequires: libmfu-devel
-%endif
-%if %{with man}
+BuildRequires: python3-rpm-macros
+BuildRequires: python3-devel
 BuildRequires: python3-sphinx
-%endif
 
 %description
-The robinhood4 tools necessary for the retention feature. Includes librobinhood
-with the Lustre backend, rbh-sync, rbh-find, rbh-fsevents and
-rbh-update-retention.
+The RobinHood4 tool suite. Includes librobinhood and the POSIX plugin, rbh-sync,
+rbh-fsevents, rbh-find, rbh-report, rbh-info, rbh-gc, rbh-update-path,
+rbh-undelete, rbh-update-retention and rbh-policy.
 
 %package devel
 Summary: C API for RobinHood V4 tool suite.
 Conflicts: robinhood
-Requires: robinhood4 == 1.5.1
+Requires: robinhood4 == 1.5.2
 Requires: pkgconf-pkg-config
-%if %{with lustre}
-#Requires: (lustre-devel or lustre-client < 2.15)
-Requires: lustre-devel
-%endif
 
 %description devel
 This package contains header files and libraries to use the robinhood4 tool
@@ -109,15 +70,204 @@ Summary: Userland tools for RobinHood V4 tool suite.
 This package contains the rbh-retention tool for usage by regular (non-admin)
 users.
 
+%if %{with hestia}
+%package hestia
+Summary: Hestia plugin for the RobinHood V4 tool suite
+Requires: robinhood4 == 1.5.2
+Requires: hestia
+BuildRequires: hestia-devel
+
+%description hestia
+The Hestia plugin for the RobinHood V4 tool suite, usable by rbh-sync and
+rbh-fsevents.
+
+%package hestia-devel
+Summary: C API of the Ldiskfs plugin for the RobinHood V4 tool suite
+Requires: robinhood4-devel
+Requires: robinhood4-hestia
+Requires: hestia-devel
+
+%description hestia-devel
+This package contains header files and libraries to use the Hestia plugin from
+a C program.
+%endif
+
+%if %{with ldiskfs}
+%package ldiskfs
+Summary: Ldiskfs plugin for the RobinHood V4 tool suite
+Requires: robinhood4 == 1.5.2
+Requires: lustre-client
+BuildRequires: lustre-devel
+
+%description ldiskfs
+The ldiskfs plugin for the RobinHood V4 tool suite, usable by rbh-sync.
+
+%package ldiskfs-devel
+Summary: C API of the Ldiskfs plugin for the RobinHood V4 tool suite
+Requires: robinhood4-devel
+Requires: robinhood4-ldiskfs
+Requires: lustre-devel
+
+%description ldiskfs-devel
+This package contains header files and libraries to use the ldiskfs plugin from
+a C program.
+%endif
+
+%if %{with mfu}
+%package mfu
+Summary: MPI-File-Utils plugin and POSIX extension for the RobinHood V4 tool suite
+Requires: robinhood4 == 1.5.2
+Requires: openmpi
+Requires: libmfu
+BuildRequires: openmpi-devel
+BuildRequires: libmfu-devel
+
+%description mfu
+The MPI-File plugin and MFU extension for POSIX for the RobinHood V4 tool suite,
+usable by rbh-sync and rbh-find.
+
+%package mfu-devel
+Summary: C API of the MPI-File-Utils plugin and POSIX extension for the RobinHood V4 tool suite
+Requires: robinhood4-devel
+Requires: robinhood4-mfu
+Requires: openmpi-devel
+Requires: libmfu-devel
+
+%description mfu-devel
+This package contains header files and libraries to use the mpi-file plugin and
+MFU extension for POSIX from a C program.
+%endif
+
+%if %{with mongo}
+%package mongo
+Summary: MongoDB plugin for the RobinHood V4 tool suite
+Requires: robinhood4 == 1.5.2
+Requires: mongo-c-driver-libs
+# The MongoDB dependency can be found here: https://repo.mongo.org/yum/redhat/
+Requires: (mongo-org or mongo)
+BuildRequires: mongo-c-driver-devel
+
+%description mongo
+The MongoDB plugin for the RobinHood V4 tool suite, usable by all tools.
+
+%package mongo-devel
+Summary: C API of the MongoDB plugin for the RobinHood V4 tool suite
+Requires: robinhood4-devel
+Requires: robinhood4-mongo
+Requires: mongo-c-driver-devel
+
+%description mongo-devel
+This package contains header files and libraries to use the MongoDB plugin from
+a C program.
+%endif
+
+%if %{with lustre}
+%package posix-lustre
+Summary: Lustre extension of the POSIX plugin for the RobinHood V4 tool suite
+Requires: robinhood4 == 1.5.2
+Requires: lustre-client
+# Should be the following line, but there is currently an issue with repository
+# priority and yum that makes it so that lustre-client is always used if
+# available, completely ignoring lustre-devel
+#BuildRequires: (lustre-devel or lustre-client < 2.15)
+BuildRequires: lustre-devel
+
+%description posix-lustre
+The Lustre plugin for POSIX for the RobinHood V4 tool suite, usable by multiple
+tools.
+
+%package posix-lustre-devel
+Summary: C API of the lustre extension of the POSIX plugin for the RobinHood V4 tool suite
+Requires: robinhood4-devel
+Requires: robinhood4-posix-lustre
+#Requires: (lustre-devel or lustre-client < 2.15)
+Requires: lustre-devel
+
+%description posix-lustre-devel
+This package contains header files and libraries to use the Lustre extension
+for POSIX from a C program.
+%endif
+
+%package posix-retention
+Summary: Retention extension of the POSIX plugin for the RobinHood V4 tool suite
+Requires: robinhood4 == 1.5.2
+
+%description posix-retention
+The Retention plugin for POSIX for the RobinHood V4 tool suite, usable by
+multiple tools.
+
+%package posix-retention-devel
+Summary: C API of the retention extension of the POSIX plugin for the RobinHood V4 tool suite
+Requires: robinhood4-devel
+Requires: robinhood4-posix-retention
+
+%description posix-retention-devel
+This package contains header files and libraries to use the Retention extension
+for POSIX from a C program.
+
+%package posix-sparse
+Summary: Sparse extension of the POSIX plugin for the RobinHood V4 tool suite
+Requires: robinhood4 == 1.5.2
+
+%description posix-sparse
+The Sparse plugin for POSIX for the RobinHood V4 tool suite, usable by rbh-sync
+and rbh-find.
+
+%package posix-sparse-devel
+Summary: C API of the sparse extension of the POSIX plugin for the RobinHood V4 tool suite
+Requires: robinhood4-devel
+Requires: robinhood4-posix-sparse
+
+%description posix-sparse-devel
+This package contains header files and libraries to use the Sparse extension
+for POSIX from a C program.
+
+%if %{with s3}
+%package s3
+Summary: S3 plugin for the RobinHood V4 tool suite
+Requires: robinhood4 == 1.5.2
+Requires: aws-cpp-sdk-s3
+
+%description s3
+The S3 plugin for the RobinHood V4 tool suite, usable by rbh-sync and rbh-find.
+
+%package s3-devel
+Summary: C API of the S3 plugin for the RobinHood V4 tool suite
+Requires: robinhood4-devel
+Requires: robinhood4-s3
+
+%description s3-devel
+This package contains header files and libraries to use the S3 plugin from a C
+program.
+%endif
+
 %prep
 %autosetup
 
 %build
 OPTS=""
+%if %{with hestia}
+    OPTS+="-Dhestia=enabled "
+%else
+    OPTS+="-Dhestia=disabled "
+%endif
+
+%if %{with ldiskfs}
+    OPTS+="-Dldiskfs=enabled "
+%else
+    OPTS+="-Dldiskfs=disabled "
+%endif
+
 %if %{with lustre}
     OPTS+="-Dlustre=enabled "
 %else
     OPTS+="-Dlustre=disabled "
+%endif
+
+%if %{with man}
+    OPTS+="-Dman=enabled "
+%else
+    OPTS+="-Dman=disabled "
 %endif
 
 %if %{with mfu}
@@ -126,22 +276,16 @@ OPTS=""
     OPTS+="-Dmfu=disabled "
 %endif
 
-%if %{with hestia}
-    OPTS+="-Dhestia=enabled "
+%if %{with mongo}
+    OPTS+="-Dmongo=enabled "
 %else
-    OPTS+="-Dhestia=disabled "
+    OPTS+="-Dmongo=disabled "
 %endif
 
 %if %{with s3}
     OPTS+="-Ds3=enabled "
 %else
     OPTS+="-Ds3=disabled "
-%endif
-
-%if %{with man}
-    OPTS+="-Dman=enabled "
-%else
-    OPTS+="-Dman=disabled "
 %endif
 
 %meson $OPTS
@@ -152,30 +296,14 @@ OPTS=""
 
 %files
 %{_libdir}/librobinhood.so*
-%{_libdir}/librbh-mongo.so*
 %{_libdir}/librbh-posix.so*
-%{_libdir}/librbh-posix-retention-ext.so*
-%{_libdir}/librbh-posix-sparse-ext.so*
-%if %{with lustre}
-%{_libdir}/librbh-posix-lustre-ext.so*
-%{_libdir}/librbh-ldiskfs.so*
-%endif
-%if %{with mfu}
-%{_libdir}/librbh-posix-mfu-ext.so*
-%{_libdir}/librbh-mpi-file.so*
-%endif
-%if %{with hestia}
-%{_libdir}/librbh-hestia.so*
-%endif
-%if %{with s3}
-%{_libdir}/librbh-s3.so*
-%endif
 %{_libdir}/pkgconfig/robinhood.pc
 %{_bindir}/rbh-sync
 %{_bindir}/rbh-find
-%{_bindir}/rbh-fsevents
 %{_bindir}/rbh-info
+%if %{with lustre}
 %{_bindir}/rbh-undelete
+%endif
 %{_bindir}/rbh-update-retention
 %{python3_sitelib}/rbhupdateretention/*
 %{_bindir}/rbh-report
@@ -197,25 +325,8 @@ OPTS=""
 %{_includedir}/robinhood/alias.h
 %{_includedir}/robinhood/backend.h
 %{_includedir}/robinhood/backends/common.h
-%if %{with hestia}
-%{_includedir}/robinhood/backends/hestia.h
-%endif
-%if %{with lustre}
-%{_includedir}/robinhood/backends/lustre.h
-%endif
-%if %{with mfu}
-%{_includedir}/robinhood/backends/mfu.h
-%{_includedir}/robinhood/backends/mpi_file.h
-%endif
-%if %{with s3}
-%{_includedir}/robinhood/backends/s3.h
-%endif
-%{_includedir}/robinhood/backends/mongo.h
 %{_includedir}/robinhood/backends/posix.h
 %{_includedir}/robinhood/backends/posix_extension.h
-%{_includedir}/robinhood/backends/retention.h
-%{_includedir}/robinhood/backends/sparse.h
-%{_includedir}/robinhood/backends/ldiskfs.h
 %{_includedir}/robinhood/config.h
 %{_includedir}/robinhood/filter.h
 %{_includedir}/robinhood/filters/core.h
@@ -235,6 +346,7 @@ OPTS=""
 %{_includedir}/robinhood/policyengine/actions.h
 %{_includedir}/robinhood/policyengine/core.h
 %{_includedir}/robinhood/policyengine/python.h
+%{_includedir}/robinhood/policyengine/trigger.h
 %{_includedir}/robinhood/projection.h
 %{_includedir}/robinhood/queue.h
 %{_includedir}/robinhood/ring.h
@@ -250,6 +362,68 @@ OPTS=""
 %files client-retention
 %{_bindir}/rbh-retention
 %config(noreplace) %{_sysconfdir}/robinhood4.d/default.yaml
+
+%if %{with hestia}
+%files hestia
+%{_libdir}/librbh-hestia.so*
+
+%files hestia-devel
+%{_includedir}/robinhood/backends/hestia.h
+%endif
+
+%if %{with ldiskfs}
+%files ldiskfs
+%{_libdir}/librbh-ldiskfs.so*
+
+%files ldiskfs-devel
+%{_includedir}/robinhood/backends/ldiskfs.h
+%endif
+
+%if %{with mfu}
+%files mfu
+%{_libdir}/librbh-posix-mfu-ext.so*
+%{_libdir}/librbh-mpi-file.so*
+
+%files mfu-devel
+%{_includedir}/robinhood/backends/mfu.h
+%{_includedir}/robinhood/backends/mpi_file.h
+%endif
+
+%if %{with mongo}
+%files mongo
+%{_libdir}/librbh-mongo.so*
+
+%files mongo-devel
+%{_includedir}/robinhood/backends/mongo.h
+%endif
+
+%if %{with lustre}
+%files posix-lustre
+%{_libdir}/librbh-posix-lustre-ext.so*
+
+%files posix-lustre-devel
+%{_includedir}/robinhood/backends/lustre.h
+%endif
+
+%files posix-retention
+%{_libdir}/librbh-posix-retention-ext.so*
+
+%files posix-retention-devel
+%{_includedir}/robinhood/backends/retention.h
+
+%files posix-sparse
+%{_libdir}/librbh-posix-sparse-ext.so*
+
+%files posix-sparse-devel
+%{_includedir}/robinhood/backends/sparse.h
+
+%if %{with s3}
+%files s3
+%{_libdir}/librbh-s3.so*
+
+%files s3-devel
+%{_includedir}/robinhood/backends/s3.h
+%endif
 
 %post
 ldconfig
