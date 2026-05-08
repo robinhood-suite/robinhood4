@@ -7,6 +7,8 @@
 VERSION=@version@
 BUILD_LDISKFS=@ldiskfs@
 BUILD_LUSTRE=@lustre@
-BUILD_MFU=@mfu@
 BUILD_MAN=@man@
+BUILD_MFU=@mfu@
+BUILD_MONGO=@mongo@
+BUILD_MPI=@mpi@
 BUILD_S3=@s3@
