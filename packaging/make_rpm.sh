@@ -25,11 +25,17 @@ fi
 if [ "$BUILD_LUSTRE" == "False" ]; then
     opts+="--without lustre "
 fi
+if [ "$BUILD_MAN" == "False" ]; then
+    opts+="--without man "
+fi
 if [ "$BUILD_MFU" == "True" ]; then
     opts+="--with mfu "
 fi
-if [ "$BUILD_MAN" == "True" ]; then
-    opts+="--with man "
+if [ "$BUILD_MONGO" == "False" ]; then
+    opts+="--without mongo "
+fi
+if [ "$BUILD_S3" == "True" ]; then
+    opts+="--with s3 "
 fi
 if [ "$BUILD_S3" == "True" ]; then
     opts+="--with s3 "
