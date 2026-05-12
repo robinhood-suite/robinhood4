@@ -19,6 +19,9 @@
 #include <ext2fs/ext2fs.h>
 #include <lustre/lustre_user.h>
 
+#include "robinhood/backends/posix_extension.h"
+#include "robinhood/backends/lustre.h"
+
 #include "dcache.h"
 
 #define ldiskfs_error(fmt, ...) \
@@ -27,6 +30,15 @@
                                  __VA_ARGS__);                 \
         false;                                                 \
     })
+
+// used to allocate memory for the rbh_value_map inode_xattr
+// holds the maximum number of elements we want to put in inode_xattrs in
+// addition to the extended attributes found on the disk
+// increase value if you want to add more elements in inode_xattrs
+#define INODE_XATTR_COUNT (1 << 6)
+
+const struct rbh_backend_plugin *posix_plugin;
+const struct rbh_posix_extension *lustre_extension;
 
 struct ldiskfs_backend {
     struct rbh_backend backend;
@@ -43,6 +55,7 @@ struct ldiskfs_iter {
     struct rbh_dentry *root;
     struct rbh_dentry *remote_parent_dir;
     struct rbh_dentry *current;
+    const struct rbh_filter_options *options;
     ext2_filsys fs;
     GQueue *tasks;
     GList *current_dir;
@@ -66,9 +79,10 @@ scan_target(struct ldiskfs_backend *backend);
 bool
 set_target_type_and_index(ext2_filsys fs, struct ldiskfs_iter *iter);
 
-struct rbh_value_map
+int
 get_xattrs_from_inode(ext2_filsys fs, struct ext2_inode_large *inode,
-                      ext2_ino_t ino, struct rbh_sstack *sstack);
+                      struct rbh_value_map *xattrs, ext2_ino_t ino,
+                      struct rbh_sstack *sstack);
 
 /*
  * Gets the lustre fid of a file from the value of the trusted.lma
