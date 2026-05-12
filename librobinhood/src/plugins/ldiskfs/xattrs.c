@@ -76,19 +76,20 @@ rbh_get_xattrs(char *_name, char *value,size_t value_len, void *_data)
     return 0;
 }
 
-struct rbh_value_map
+int
 get_xattrs_from_inode(ext2_filsys fs, struct ext2_inode_large *inode,
-                      ext2_ino_t ino, struct rbh_sstack *sstack)
+                      struct rbh_value_map *xattrs, ext2_ino_t ino,
+                      struct rbh_sstack *sstack)
 {
-    struct rbh_value_map default_ret = {0};
     struct ext2_xattr_handle *handle;
     struct rbh_value_pair *pairs;
+    struct rbh_value_map ret_map;
     struct xattr_iter_data data;
-    struct rbh_value_map ret;
+    int total_count;
     errcode_t err;
     size_t count;
 
-    data.values = &ret;
+    data.values = &ret_map;
     data.sstack = sstack;
 
     err = ext2fs_xattrs_open(fs, ino, &handle);
@@ -103,10 +104,14 @@ get_xattrs_from_inode(ext2_filsys fs, struct ext2_inode_large *inode,
     if (err)
         goto err2;
 
-    pairs = rbh_sstack_alloc(sstack, NULL, count * sizeof(struct rbh_value_pair));
+    total_count = count + INODE_XATTR_COUNT;
 
-    ret.count = 0;
-    ret.pairs = pairs;
+    pairs = rbh_sstack_alloc(sstack, NULL,
+                             total_count *
+                             sizeof(struct rbh_value_pair));
+
+    ret_map.count = 0;
+    ret_map.pairs = pairs;
 
     // we don't change any xattr value so the return value will always be 0
     ext2fs_xattrs_iterate(handle, &rbh_get_xattrs, &data);
@@ -115,15 +120,17 @@ get_xattrs_from_inode(ext2_filsys fs, struct ext2_inode_large *inode,
     if (err)
         goto err;
 
-    return ret;
+    *xattrs = ret_map;
+
+    return total_count;
 
 err2:
     ext2fs_xattrs_close(&handle);
 
 err:
-    rbh_backend_error_printf("Failed to read extended attributes of inode %d",
-                            ino);
-    return default_ret;
+    fprintf(stderr, "Failed to read extended attributes of inode %d", ino);
+
+    return 0;
 }
 
 // use right endianness for attributes of struct lu_fid
@@ -248,7 +255,8 @@ parents_lu_fid_from_link(void *link, struct rbh_sstack *sstack)
     }
 
     if(link_header->leh_magic != LINK_EA_MAGIC) {
-        rbh_backend_error_printf("Extended attribute trusted.links has invalid magic number");
+        fprintf(stderr,
+                "Extended attribute trusted.links has invalid magic number");
         goto err;
     }
 
@@ -357,7 +365,9 @@ check_name_from_parent_fid(const char *name, struct rbh_dentry *parent,
 
     for(int i = 0; i < xattrs->count; i++) {
         if (!strcmp(xattrs->pairs[i].key, "trusted.link")) {
-            links = parents_lu_fid_from_link((void *)xattrs->pairs[i].value->binary.data, sstack);
+            links = parents_lu_fid_from_link(
+                (void *)xattrs->pairs[i].value->binary.data,
+                sstack);
             break;
         }
     }
@@ -400,12 +410,14 @@ get_size_and_blocks_from_xattrs(__u64 *size, __u64 *blocks,
     if(!som)
         return;
 
-    // we could cast a warning if lsa_valid is not 1 because that means the
-    // SoM value may be invalid or inaccurate.
-    // However that would send many (possibly 1 per file on the fs) logs
-    // to the user so we just silently skip getting the size if lsa_valid is
-    // set to 0, which means "Unknown or no SoM data" as per
-    // lustre/include/uapi/linux/lustre/lustre_user.h in Lustre source code.
+    /*
+     * we could cast a warning if lsa_valid is not 1 because that means the
+     * SoM value may be invalid or inaccurate.
+     * However that would send many (possibly 1 per file on the fs) logs
+     * to the user so we just silently skip getting the size if lsa_valid is
+     * set to 0, which means "Unknown or no SoM data" as per
+     * lustre/include/uapi/linux/lustre/lustre_user.h in Lustre source code.
+     */
     if (som->lsa_valid) {
         *size = som->lsa_size;
         *blocks = som->lsa_blocks;
