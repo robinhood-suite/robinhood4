@@ -35,6 +35,8 @@ enum rbh_lustre_enrich_flags {
     RBH_LEF_STRIPE_COUNT   = 0x04,
     RBH_LEF_STRIPE_SIZE    = 0x08,
     RBH_LEF_STRIPE_PATTERN = 0x10,
+    // used by the ldiskfs backend to access functions from the lustre enricher
+    RBH_LEF_LDISKFS        = 0x20,
     RBH_LEF_ALL_NOFID      = (RBH_LEF_ALL & ~RBH_LEF_FID),
 };
 
