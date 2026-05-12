@@ -142,12 +142,10 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
                     struct rbh_sstack *sstack, bool is_mdt)
 {
     struct ext2_inode_large *inode = (struct ext2_inode_large *)dentry->inode;
-    struct rbh_value_map inode_xattrs = get_xattrs_from_inode(fs, inode,
-                                                              dentry->ino,
-                                                              sstack);
     struct rbh_value_map ns_xattrs = {0};
     struct rbh_parent_pair *parent_pair;
     __u64 blocks = inode_blocks(inode);
+    struct rbh_value_map inode_xattrs;
     __u64 size = EXT2_I_SIZE(inode);
     const struct rbh_id *parent_id;
     struct rbh_value path_value = {
@@ -160,26 +158,44 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
     struct rbh_fsentry *fsentry;
     struct lu_fid parent_fid;
     struct rbh_statx statx;
+    struct entry_info info;
+    int inode_xattrs_size;
     struct lu_fid fid;
     struct rbh_id *id;
     int save_errno;
+    // lustre enricher needs a file descriptor to work
+    int fd = 0;
 
-    if (!is_mdt)
-        // isn't used for now but will be in a future change
-        get_parent_fid_from_xattrs(&inode_xattrs, &parent_fid);
 
-    if (get_fid_from_xattrs(&inode_xattrs, &fid))
-       dentry->fid = fid;
-    else
+    inode_xattrs_size = get_xattrs_from_inode(fs, inode, &inode_xattrs,
+                                              dentry->ino, sstack);
+
+
+    if (!is_mdt) {
+        if (get_parent_fid_from_xattrs(&inode_xattrs, &parent_fid))
+            fill_binary_pair("parent_fid", &parent_fid, sizeof(struct lu_fid),
+                             (struct rbh_value_pair *)
+                             &inode_xattrs.pairs[inode_xattrs.count++], sstack);
+    }
+
+    if (get_fid_from_xattrs(&inode_xattrs, &fid)) {
+        dentry->fid = fid;
+        fill_binary_pair("fid", &fid, sizeof(struct lu_fid),
+                         (struct rbh_value_pair *)
+                         &inode_xattrs.pairs[inode_xattrs.count++], sstack);
+    } else {
         fprintf(stderr,
                 "Retrieval of FID of file '%s' using extended attributes failed. "
                 "Are you sure this is a healthy ldiskfs filesystem ?\n",
                 dentry->name);
+    }
 
     id = rbh_id_from_lu_fid(&dentry->fid);
+
     parent_id = dentry->parent ?
         rbh_id_from_lu_fid(&dentry->parent->fid) :
         &ROOT_ID;
+
 
     parent_pair = g_queue_pop_head(dentry->parents);
     dentry->parent = parent_pair->parent;
@@ -218,6 +234,16 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
     ns_xattrs.count = 1;
     ns_xattrs.pairs = &path;
     path_value.string = dentry_path(dentry, root, remote_parent_dir);
+
+    info.fd = &fd;
+    info.inode_xattrs = (struct rbh_value_pair *)inode_xattrs.pairs;
+    info.inode_xattrs_count = &(inode_xattrs.count);
+    info.statx = &statx;
+    inode_xattrs.count += lustre_extension->enrich(&info,
+                        RBH_ATTR_BACKEND_VALUE(LUSTRE) + RBH_LEF_LDISKFS,
+                        (void *)inode_xattrs.pairs +
+                        (sizeof(struct rbh_value_pair) * inode_xattrs.count),
+                        inode_xattrs_size - inode_xattrs.count, sstack);
 
     fsentry = rbh_fsentry_new(id, parent_id, dentry->name,  &statx, &ns_xattrs,
                               &inode_xattrs, NULL);

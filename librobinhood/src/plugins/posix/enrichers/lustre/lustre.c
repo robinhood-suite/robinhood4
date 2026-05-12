@@ -629,9 +629,9 @@ static int
 xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
 {
     struct iterator_data data = { .comp_index = 0 };
+    struct lov_user_md *lum = NULL;
     struct llapi_layout *layout;
     uint16_t mirror_count = 0;
-    struct lov_user_md *lum;
     int required_pairs = 0;
     int save_errno = 0;
     /**
@@ -658,7 +658,25 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
     if (available_pairs < required_pairs)
         return -1;
 
-    lum = (struct lov_user_md *) get_lov_user_md(fd);
+    /*
+     * the ldiskfs backend calls the lustre enricher with fd = 0
+     * if called from the ldiskfs backend, check for presence of trusted.lov
+     * extended attribute
+     * this should not cause problems as this function is never called with
+     * stdin as the file descriptor
+     * might require refactoring if we want another backend to call this
+     * function
+     */
+    if (fd) {
+        lum = (struct lov_user_md *) get_lov_user_md(fd);
+    } else {
+        for(int i = 0; i < *_inode_xattrs_count; i++) {
+            if (!strcmp(_inode_xattrs[i].key, "trusted.lov")) {
+                lum = (void *)_inode_xattrs[i].value->binary.data;
+                break;
+            }
+        }
+    }
     if (lum == NULL)
         /* If lum is NULL and errno is ENODATA, that means the ioctl failed
          * because there is no default striping on the directory.
@@ -667,7 +685,9 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
 
     layout = get_data_striping((void *) lum, S_ISDIR(mode));
     if (layout == NULL) {
-        free(lum);
+        // do not free lum if called from the ldiskfs backend
+        if (fd)
+            free(lum);
         return -1;
     }
 
@@ -769,7 +789,8 @@ free_data:
 err:
     save_errno = save_errno ? : errno;
     llapi_layout_free(layout);
-    free(lum);
+    if (fd)
+        free(lum);
     errno = save_errno;
     return rc ? rc : subcount;
 }
@@ -938,6 +959,21 @@ lustre_attrs_get_no_fid(struct entry_info *entry_info,
 }
 
 static int
+lustre_attrs_get_ldiskfs(struct entry_info *entry_info,
+                        struct rbh_value_pair *pairs,
+                        int available_pairs,
+                        struct rbh_sstack *values)
+{
+    int (*xattrs_funcs[])(int, struct rbh_value_pair *, int) = {
+        xattrs_get_layout,
+    };
+
+    return _get_attrs(entry_info, xattrs_funcs,
+                      sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
+                      pairs, available_pairs, values);
+}
+
+static int
 lustre_attrs_get_all(struct entry_info *entry_info,
                      struct rbh_value_pair *pairs,
                      int available_pairs,
@@ -1063,6 +1099,10 @@ rbh_lustre_enrich(struct entry_info *einfo, uint64_t flags,
         return lustre_attrs_get_no_fid(einfo, pairs, pairs_count, values);
     else if (flags == 0 || flags == (RBH_LEF_LUSTRE | RBH_LEF_ALL))
         return lustre_attrs_get_all(einfo, pairs, pairs_count, values);
+
+    if (flags & RBH_LEF_LDISKFS) {
+        return lustre_attrs_get_ldiskfs(einfo, pairs, pairs_count, values);
+    }
 
     if (flags & RBH_LEF_DIR_LOV) {
         pairs->value = lustre_get_default_dir_stripe(*einfo->fd, flags);
