@@ -9,7 +9,7 @@
 
 #include <robinhood/statx.h>
 
-#define MIN_VALUES_SSTACK_ALLOC (1 << 6)
+#define MIN_VALUES_SSTACK_ALLOC (1 << 8)
 
 static bool
 is_dir(struct rbh_dentry *dentry)
@@ -139,15 +139,14 @@ dentry_path(struct rbh_dentry *dentry, struct rbh_dentry *root,
 static struct rbh_fsentry *
 fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
                     struct rbh_dentry *remote_parent_dir,ext2_filsys fs,
-                    struct rbh_sstack *sstack, bool is_mdt)
+                    struct rbh_sstack *sstack, bool is_mdt,
+                    bool skip_error)
 {
     struct ext2_inode_large *inode = (struct ext2_inode_large *)dentry->inode;
-    struct rbh_value_map inode_xattrs = get_xattrs_from_inode(fs, inode,
-                                                              dentry->ino,
-                                                              sstack);
     struct rbh_value_map ns_xattrs = {0};
     struct rbh_parent_pair *parent_pair;
     __u64 blocks = inode_blocks(inode);
+    struct rbh_value_map inode_xattrs;
     __u64 size = EXT2_I_SIZE(inode);
     const struct rbh_id *parent_id;
     struct rbh_value path_value = {
@@ -160,26 +159,51 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
     struct rbh_fsentry *fsentry;
     struct lu_fid parent_fid;
     struct rbh_statx statx;
+    struct entry_info info;
+    char *error_message;
     struct lu_fid fid;
     struct rbh_id *id;
     int save_errno;
+    // lustre enricher needs a file descriptor to work
+    int fd = -1;
+    int rc;
 
-    if (!is_mdt)
-        // isn't used for now but will be in a future change
-        get_parent_fid_from_xattrs(&inode_xattrs, &parent_fid);
+    rc = get_xattrs_from_inode(fs, inode, &inode_xattrs,
+                               dentry->ino, sstack);
 
-    if (get_fid_from_xattrs(&inode_xattrs, &fid))
-       dentry->fid = fid;
-    else
-        fprintf(stderr,
-                "Retrieval of FID of file '%s' using extended attributes failed. "
-                "Are you sure this is a healthy ldiskfs filesystem ?\n",
-                dentry->name);
+    if (!rc)
+        goto out;
+
+
+    if (!is_mdt) {
+        if (get_parent_fid_from_xattrs(&inode_xattrs, &parent_fid))
+            fill_binary_pair("parent_fid", &parent_fid, sizeof(struct lu_fid),
+                             (struct rbh_value_pair *)
+                             &inode_xattrs.pairs[inode_xattrs.count++], sstack);
+    }
+
+    if (get_fid_from_xattrs(&inode_xattrs, &fid)) {
+        dentry->fid = fid;
+        fill_binary_pair("fid", &fid, sizeof(struct lu_fid),
+                         (struct rbh_value_pair *)
+                         &inode_xattrs.pairs[inode_xattrs.count++], sstack);
+    } else {
+        error_message = "Retrieval of FID of file '%s' using extended attributes failed. "
+                    "Are you sure this is a healthy ldiskfs filesystem ?\n";
+        if (skip_error) {
+            fprintf(stderr, error_message, dentry->name);
+        } else {
+            rbh_backend_error_printf(error_message, dentry->name);
+            goto out;
+        }
+    }
 
     id = rbh_id_from_lu_fid(&dentry->fid);
+
     parent_id = dentry->parent ?
         rbh_id_from_lu_fid(&dentry->parent->fid) :
         &ROOT_ID;
+
 
     parent_pair = g_queue_pop_head(dentry->parents);
     dentry->parent = parent_pair->parent;
@@ -219,17 +243,54 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
     ns_xattrs.pairs = &path;
     path_value.string = dentry_path(dentry, root, remote_parent_dir);
 
+    info.fd = &fd;
+    info.inode_xattrs = (struct rbh_value_pair *)inode_xattrs.pairs;
+    info.inode_xattrs_count = (ssize_t *)&(inode_xattrs.count);
+    info.statx = &statx;
+
+    if (is_mdt && lustre_extension->enrich) {
+        rc = lustre_extension->enrich(&info,
+            RBH_LEF_LUSTRE | RBH_LEF_LAYOUT,
+            (void *)(inode_xattrs.pairs + inode_xattrs.count),
+            INODE_XATTR_COUNT - inode_xattrs.count, sstack);
+
+        if (rc >= 0)
+            inode_xattrs.count += rc;
+        else {
+            if (errno == EINVAL)
+                error_message = "Failed to get layout for file %s: %s (%d), "
+                    "does it have a valid 'trusted.lov' extended attribute?\n";
+            else if (errno = EOVERFLOW)
+                error_message = "Failed to get layout for file %s: %s (%d), "
+                    "INODE_XATTR_COUNT may have been set too low.\n";
+            else
+                error_message = "Failed to get layout for file %s,: %s (%d)\n.";
+            if (skip_error) {
+                fprintf(stderr, error_message, path_value.string,
+                                strerror(errno), errno);
+            } else {
+                rbh_backend_error_printf(error_message, path_value.string,
+                                         strerror(errno), errno);
+                goto out;
+            }
+        }
+    }
+
     fsentry = rbh_fsentry_new(id, parent_id, dentry->name,  &statx, &ns_xattrs,
                               &inode_xattrs, NULL);
 
     save_errno = errno;
     if (g_queue_is_empty(dentry->parents))
         g_queue_free(dentry->parents);
-    free((char *)path_value.string);
+    if(path_value.string)
+        free((char *)path_value.string);
     free(parent_pair);
     errno = save_errno;
 
     return fsentry;
+
+out:
+    return NULL;
 }
 
 static void *
@@ -250,7 +311,8 @@ ldiskfs_iter_next(void *iterator)
         fifo_push_child_entries(iter, dentry);
 
     return fsentry_from_dentry(dentry, iter->root, iter->remote_parent_dir,
-                               iter->fs, iter->sstack, iter->is_mdt);
+                               iter->fs, iter->sstack, iter->is_mdt,
+                               iter->options->skip_error);
 }
 
 static void
@@ -316,7 +378,8 @@ setup_ost_iterator(struct ldiskfs_backend *ldiskfs, struct ldiskfs_iter *iter)
 }
 
 static struct ldiskfs_iter *
-ldiskfs_iter_new(struct ldiskfs_backend *ldiskfs)
+ldiskfs_iter_new(struct ldiskfs_backend *ldiskfs,
+                 const struct rbh_filter_options *options)
 {
     struct ldiskfs_iter *iter;
     int save_errno;
@@ -328,6 +391,7 @@ ldiskfs_iter_new(struct ldiskfs_backend *ldiskfs)
         goto free_iter;
 
     iter->tasks = g_queue_new();
+    iter->options = options;
     iter->fs = ldiskfs->fs;
 
     if (iter->is_mdt)
@@ -363,7 +427,7 @@ ldiskfs_backend_filter(void *backend, const struct rbh_filter *filter,
     if (!scan_target(ldiskfs))
         return NULL;
 
-    iter = ldiskfs_iter_new(ldiskfs);
+    iter = ldiskfs_iter_new(ldiskfs, options);
     if (!iter)
         return NULL;
 
