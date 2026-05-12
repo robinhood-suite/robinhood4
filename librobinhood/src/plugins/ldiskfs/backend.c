@@ -34,6 +34,7 @@ rbh_ldiskfs_backend_new(const struct rbh_backend_plugin *self,
 
     rc = ext2fs_open2(uri->fsname, io_opts, EXT2_FLAG_SOFTSUPP_FEATURES, 0, 0,
                       unix_io_manager, &ldiskfs->fs);
+
     if (rc) {
         ldiskfs_error("failed to open device '%s': %s",
                       uri->fsname, strerror(errno));
