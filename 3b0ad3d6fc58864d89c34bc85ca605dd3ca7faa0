@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dda64f2c_8ed0c72e",
+        "filename": "librobinhood/src/policyengine/core.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-12T07:46:52Z",
+      "side": 1,
+      "message": "comment: is this defensive programmation? both are already checked in the caller",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 29
+      },
+      "revId": "3b0ad3d6fc58864d89c34bc85ca605dd3ca7faa0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c987da2_920f6ae9",
+        "filename": "librobinhood/src/policyengine/core.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-12T07:46:52Z",
+      "side": 1,
+      "message": "suggest: use a rc and break\n\n```\nbool rc \u003d false;\n\n...\n\nfor (size_t i \u003d 0; i \u003c f_ctx.info_pe_count; ++i) {\n    ...\n    if (!candidate.fsentry)\n        continue;\n        \n    *field \u003d candidate;\n    rc \u003d true;\n    break;\n}\n\nfilters_ctx_finish(\u0026f_ctx);\nreturn rc;\n```",
+      "range": {
+        "startLine": 104,
+        "startChar": 12,
+        "endLine": 106,
+        "endChar": 24
+      },
+      "revId": "3b0ad3d6fc58864d89c34bc85ca605dd3ca7faa0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8daac4cc_a4f12db2",
+        "filename": "librobinhood/src/policyengine/core.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-12T07:46:52Z",
+      "side": 1,
+      "message": "question: why do you need to check it at this moment? I think you need to let `rbh_pe_resolve_sort_field` failed here",
+      "range": {
+        "startLine": 139,
+        "startChar": 28,
+        "endLine": 139,
+        "endChar": 37
+      },
+      "revId": "3b0ad3d6fc58864d89c34bc85ca605dd3ca7faa0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
