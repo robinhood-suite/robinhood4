@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fecd22ec_7dbe87fb",
+        "filename": "librobinhood/src/plugins/ldiskfs/internals.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-12T06:38:14Z",
+      "side": 1,
+      "message": "style: that\u0027s valid for all the robinhood project, we have a 80-character line length rule ; you can check what we do above to define multi-line function prototypes",
+      "range": {
+        "startLine": 135,
+        "startChar": 0,
+        "endLine": 135,
+        "endChar": 90
+      },
+      "revId": "cdd84e65f6486a6441e3ee5f9c3061cf3f53a9c4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
