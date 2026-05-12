@@ -34,6 +34,14 @@ rbh_ldiskfs_backend_new(const struct rbh_backend_plugin *self,
 
     rc = ext2fs_open2(uri->fsname, io_opts, EXT2_FLAG_SOFTSUPP_FEATURES, 0, 0,
                       unix_io_manager, &ldiskfs->fs);
+
+    posix_plugin = rbh_backend_plugin_import("posix");
+    lustre_extension = rbh_posix_load_extension(&posix_plugin->plugin,
+                                                "lustre");
+
+    if(lustre_extension->setup_enricher)
+        lustre_extension->setup_enricher();
+
     if (rc) {
         ldiskfs_error("failed to open device '%s': %s",
                       uri->fsname, strerror(errno));

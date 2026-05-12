@@ -55,6 +55,7 @@ librbh_ldiskfs = library(
     ],
     version: librbh_ldiskfs_version, # defined in include/robinhood/backends
     dependencies: [ librobinhood_dep, libext2fs, glib2, libcom_err ],
+    link_with: librbh_posix_lustre_ext,
     include_directories: rbh_include,
     install: true,
     c_args: '-DHAVE_CONFIG_H',

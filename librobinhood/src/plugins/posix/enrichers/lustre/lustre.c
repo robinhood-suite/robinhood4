@@ -604,6 +604,68 @@ get_data_striping(const char *lov_buf, bool is_dir)
 }
 
 /**
+ * Prepare lov extended attribute to be used by the llapi.
+ *
+ * The "trusted.lov" extended attribute may have additional unused fields on mdt
+ * that are not present in the lustre volume.
+ * If its value comes from the mdt, we need to clean it before using it with the
+ * llapi.
+ *
+ * The approach used here was to just reduce the announced size of entries in
+ * the structs. That way the code stays readable and the unused data is skipped
+ * safely by llapi functions.
+ *
+ * The implemented behaviour was deduced from the way the function lov_lsm_pack
+ * (found in the file lustre/lov/lov_pack.c) works.
+ *
+ * Since the internal Lustre implementation could change, this solution is not
+ * optimal and may need to be modified but Lustre does not provide any way to
+ * do this without reimplementing this behaviour.
+ *
+ * @param lum       value of the lov extended attribute
+ *
+ * @return          -1 if an error occured (and errno is set), 0 otherwise
+ */
+static int
+sanitize_lov_xattr(struct lov_user_md *lum)
+{
+    struct lov_comp_md_v1 *lcm;
+    struct lov_comp_md_entry_v1 *curr_entry;
+    struct lov_user_md *curr_entry_lum;
+    __u32 curr_size;
+    __u32 expected_size;
+    __u32 size_diff;
+
+    // no problems with simple layouts
+    if (lum->lmm_magic == LOV_MAGIC_V1 || lum->lmm_magic == LOV_MAGIC_V3)
+        return 0;
+
+    if (lum->lmm_magic != LOV_MAGIC_COMP_V1) {
+        errno = EINVAL;
+        return -1;
+    }
+
+    lcm = (void *)lum;
+    for(int i = 0; i < lcm->lcm_entry_count; i++) {
+        curr_entry = &(lcm->lcm_entries[i]);
+        curr_size = curr_entry->lcme_size;
+        curr_entry_lum = (void *)lum + curr_entry->lcme_offset;
+
+        if(!(curr_entry->lcme_flags & LCME_FL_INIT)) {
+            expected_size = lov_user_md_size(0, curr_entry_lum->lmm_magic);
+            size_diff = curr_size - expected_size;
+            if(size_diff < 0) {
+                errno = EINVAL;
+                return -1;
+            }
+            curr_entry->lcme_size -= size_diff;
+            lcm->lcm_size -= size_diff;
+        }
+    }
+    return 0;
+}
+
+/**
  * Record a file's layout attributes:
  *  - main flags
  *  - magic number and layout generation if the file is regular
@@ -629,9 +691,9 @@ static int
 xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
 {
     struct iterator_data data = { .comp_index = 0 };
+    struct lov_user_md *lum = NULL;
     struct llapi_layout *layout;
     uint16_t mirror_count = 0;
-    struct lov_user_md *lum;
     int required_pairs = 0;
     int save_errno = 0;
     /**
@@ -658,12 +720,35 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
     if (available_pairs < required_pairs)
         return -1;
 
-    lum = (struct lov_user_md *) get_lov_user_md(fd);
+    for(int i = 0; i < *_inode_xattrs_count; i++) {
+        if (!strcmp(_inode_xattrs[i].key, "trusted.lov")) {
+            lum = malloc(_inode_xattrs[i].value->binary.size);
+            memcpy(lum, _inode_xattrs[i].value->binary.data, _inode_xattrs[i].value->binary.size);
+            break;
+        }
+    }
+
+    /*
+     * the ldiskfs backend calls the enricher with fd = 0 and this will fail
+     * regardless so we just skip it in this case
+     * this shouldn't cause problems as long as stdin is never closed
+     */
+    if (fd && !lum)
+        lum = (struct lov_user_md *) get_lov_user_md(fd);
+    else
+        errno = ENODATA;
+
     if (lum == NULL)
         /* If lum is NULL and errno is ENODATA, that means the ioctl failed
          * because there is no default striping on the directory.
          */
         return (S_ISDIR(mode) && errno == ENODATA) ? 0 : -1;
+
+    rc = sanitize_lov_xattr(lum);
+    if (rc) {
+        free(lum);
+        return -1;
+    }
 
     layout = get_data_striping((void *) lum, S_ISDIR(mode));
     if (layout == NULL) {
@@ -945,6 +1030,21 @@ lustre_attrs_get_no_fid(struct entry_info *entry_info,
 }
 
 static int
+lustre_attrs_get_ldiskfs(struct entry_info *entry_info,
+                        struct rbh_value_pair *pairs,
+                        int available_pairs,
+                        struct rbh_sstack *values)
+{
+    int (*xattrs_funcs[])(int, struct rbh_value_pair *, int) = {
+        xattrs_get_layout,
+    };
+
+    return _get_attrs(entry_info, xattrs_funcs,
+                      sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
+                      pairs, available_pairs, values);
+}
+
+static int
 lustre_attrs_get_all(struct entry_info *entry_info,
                      struct rbh_value_pair *pairs,
                      int available_pairs,
@@ -1070,6 +1170,10 @@ rbh_lustre_enrich(struct entry_info *einfo, uint64_t flags,
         return lustre_attrs_get_no_fid(einfo, pairs, pairs_count, values);
     else if (flags == 0 || flags == (RBH_LEF_LUSTRE | RBH_LEF_ALL))
         return lustre_attrs_get_all(einfo, pairs, pairs_count, values);
+
+    if (flags & RBH_LEF_LAYOUT) {
+        return lustre_attrs_get_ldiskfs(einfo, pairs, pairs_count, values);
+    }
 
     if (flags & RBH_LEF_DIR_LOV) {
         pairs->value = lustre_get_default_dir_stripe(*einfo->fd, flags);
