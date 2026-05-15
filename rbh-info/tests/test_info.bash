@@ -28,7 +28,8 @@ test_all()
     echo "$output" | grep "sync" | grep "End"
     echo "$output" | grep "sync" | grep "Mountpoint"
     echo "$output" | grep "sync" | grep "Command"
-    echo "$output" | grep "sync" | grep "Total"
+    echo "$output" | grep "Last sync start date"
+    echo "$output" | grep "start" | grep "date"
     echo "$output" | grep "Amount" | grep "converted"
     echo "$output" | grep "Amount" | grep "skipped"
     echo "$output" | grep "test_info-test_all"
@@ -195,6 +196,17 @@ test_command_backend()
     fi
 }
 
+test_last_sync_start_date()
+{
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    local output=$(rbh_info "rbh:$db:$testdb" --last-sync-start-date)
+
+    echo "output = '$output'"
+    echo "$output" | grep "Last sync start date" ||
+        error "last_sync_start_date should have been retrieved"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -202,7 +214,7 @@ test_command_backend()
 declare -a tests=(test_all test_collection_size test_collection_count
                   test_collection_avg_obj_size test_collection_first_sync
                   test_collection_last_sync test_collection_mountpoint
-                  test_command_backend)
+                  test_command_backend test_last_sync_start_date)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT

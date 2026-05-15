@@ -166,6 +166,14 @@ _get_string_value(const struct rbh_value *value, const char *header)
     printf("%s: %s\n", header, value->string);
 }
 
+static void
+_get_last_sync_start_date(const struct rbh_value *value, const char *header)
+{
+    time_t time = (time_t) value->int64;;
+
+    printf("%s: %s (%ld)\n", header, time_from_timestamp(&time), time);
+}
+
 static struct rbh_info_fields INFO_FIELDS[] = {
     {
         RBH_INFO_AVG_OBJ_SIZE,
@@ -208,6 +216,13 @@ static struct rbh_info_fields INFO_FIELDS[] = {
         "Last sync",
         "last_sync",
         _get_collection_sync
+    },
+    {
+        RBH_INFO_LAST_SYNC_START_DATE,
+        "-d: print the starting date of the last rbh-sync done",
+        "Last sync start date",
+        "last_sync_start_date",
+        _get_last_sync_start_date
     },
     {
         RBH_INFO_MOUNTPOINT,
