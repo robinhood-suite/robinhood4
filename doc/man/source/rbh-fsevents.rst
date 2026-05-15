@@ -54,6 +54,10 @@ Mandatory arguments to long options are mandatory for short options too.
 **-h**, **--help**
     Displays the help message and exits.
 
+**-i**, **--index** *N*
+    Specify the changelog index to start reading from instead of the one stored
+    in the database
+
 **-m**, **--max** *N*
     Specify the maximum number of events to read.
 
