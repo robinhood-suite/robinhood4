@@ -69,10 +69,9 @@ static void
 lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
                            const char *mdtname, const char *username,
                            const char *dump_file, uint64_t max_changelog,
-                           struct sink *sink)
+                           int64_t start_index, struct sink *sink)
 {
     const char *mdtname_index;
-    uint64_t start_index = 0;
     int rc;
 
     events->max_changelog = max_changelog;
@@ -80,14 +79,22 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
     events->sink = sink;
     events->empty = false;
 
-    start_index = lustre_changelog_get_start_idx(events, mdtname);
-    events->last_changelog_index = start_index;
-    events->last_batch_changelog_index = start_index;
+    if (start_index < 0) {
+        uint64_t db_index = 0;
+
+        db_index = lustre_changelog_get_start_idx(events, mdtname);
+        events->last_changelog_index = db_index;
+        events->last_batch_changelog_index = db_index;
+        start_index = (db_index == 0 ? 0 : db_index + 1);
+    } else {
+        events->last_changelog_index = start_index;
+        events->last_batch_changelog_index = start_index;
+    }
 
     rc = llapi_changelog_start(&events->reader,
                                CHANGELOG_FLAG_JOBID |
                                CHANGELOG_FLAG_EXTRA_FLAGS,
-                               mdtname, start_index == 0 ? 0 : start_index + 1);
+                               mdtname, start_index);
     if (rc < 0)
         error(EXIT_FAILURE, -rc, "llapi_changelog_start");
 
@@ -160,14 +167,14 @@ static const struct source LUSTRE_SOURCE = {
 struct source *
 source_from_lustre_changelog(const char *mdtname, const char *username,
                              const char *dump_file, uint64_t max_changelog,
-                             struct sink *sink)
+                             int64_t start_index, struct sink *sink)
 {
     struct lustre_source *source;
 
     source = xmalloc(sizeof(*source));
 
     lustre_changelog_iter_init(&source->events, mdtname, username,
-                               dump_file, max_changelog, sink);
+                               dump_file, max_changelog, start_index, sink);
 
     initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
     source->batch_list = xmalloc(sizeof(*source->batch_list));

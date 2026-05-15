@@ -76,6 +76,9 @@ usage(void)
         "                    enrich changelog records by querying MOUNTPOINT as needed\n"
         "                    MOUNTPOINT is a RobinHood URI (eg. rbh:lustre:/mnt/lustre)\n"
         "    -h, --help      print this message and exit\n"
+        "    -i, --index NUMBER\n"
+        "                    the changelog index to start reading from instead of\n"
+        "                    the one stored in the database\n"
         "    -m, --max NUMBER\n"
         "                    Set a maximum number of changelog to read\n"
         "    -r, --raw       do not enrich changelog records (default)\n"
@@ -139,7 +142,8 @@ source_from_file_uri(const char *file_path,
 static struct sink **sink;
 
 static struct source *
-source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog)
+source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog,
+                int64_t start_index)
 {
     struct source *source = NULL;
     struct rbh_raw_uri *raw_uri;
@@ -176,7 +180,8 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog)
     } else if (strcmp(raw_uri->path, "lustre") == 0) {
 #ifdef HAVE_LUSTRE
         source = source_from_lustre_changelog(name, username, dump_file,
-                                              max_changelog, sink[0]);
+                                              max_changelog, start_index,
+                                              sink[0]);
 #else
         free(raw_uri);
         error(EX_USAGE, EINVAL, "MDT source is not available");
@@ -196,14 +201,15 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog)
 }
 
 static struct source *
-source_new(const char *arg, const char *dump_file, uint64_t max_changelog)
+source_new(const char *arg, const char *dump_file, uint64_t max_changelog,
+           int64_t start_index)
 {
     if (strcmp(arg, "-") == 0)
         /* SOURCE is '-' (stdin) */
         return source_from_file(stdin);
 
     if (rbh_is_uri(arg))
-        return source_from_uri(arg, dump_file, max_changelog);
+        return source_from_uri(arg, dump_file, max_changelog, start_index);
 
     error(EX_USAGE, EINVAL, "%s", arg);
     __builtin_unreachable();
@@ -812,6 +818,11 @@ main(int argc, char *argv[])
             .val = 'h',
         },
         {
+            .name = "index",
+            .has_arg = required_argument,
+            .val = 'i',
+        },
+        {
             .name = "max",
             .has_arg = required_argument,
             .val = 'm',
@@ -846,6 +857,7 @@ main(int argc, char *argv[])
     };
     uint64_t max_changelog = 0;
     char *cmd_backend = NULL;
+    int64_t start_index = -1;
     char *dump_file = NULL;
     int rc;
     char c;
@@ -857,7 +869,7 @@ main(int argc, char *argv[])
     rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "b:c:d:e:hm:nrvw:z", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "b:c:d:e:hi:m:nrvw:z", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
         case 'b':
@@ -879,6 +891,10 @@ main(int argc, char *argv[])
         case 'h':
             usage();
             return 0;
+        case 'i':
+            if (str2int64_t(optarg, &start_index))
+                error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
+            break;
         case 'm':
             if (str2uint64_t(optarg, &max_changelog))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
@@ -927,7 +943,7 @@ main(int argc, char *argv[])
     for (int i = 0; i < nb_workers; i++)
         sink[i] = sink_new(argv[optind]);
 
-    source = source_new(source_uri, dump_file, max_changelog);
+    source = source_new(source_uri, dump_file, max_changelog, start_index);
 
     if (enrich_builder) {
         if (insert_backend_source(cmd_backend) && errno != ENOTSUP)

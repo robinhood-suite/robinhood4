@@ -134,12 +134,37 @@ test_start_idx()
     rbh_find rbh:$db:$testdb | sort | difflines "$path/test_entry2"
 }
 
+test_given_idx()
+{
+    local entry="test_entry"
+    local entry2="test_entry2"
+
+    touch $entry
+    local entry_fid="$(lfs path2fid $entry)"
+    touch $entry2
+    local entry2_fid="$(lfs path2fid $entry2)"
+
+    local first_entry2_changelog="$(lfs changelog $LUSTRE_MDT |
+                                    grep $entry2_fid | head -n 1 |
+                                    cut -d' ' -f1)"
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT"?ack-user=$userid \
+        --index $first_entry2_changelog "rbh:$db:$testdb"
+
+    # '$entry' should have been skipped as we started reading changelogs after
+    # its creation
+    ! find_attribute "\"ns.name\": \"$entry\""
+    find_attribute "\"ns.name\": \"$entry2\""
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_save_idx test_save_idx_with_error
-                  test_save_idx_multiple_mdt test_start_idx)
+                  test_save_idx_multiple_mdt test_start_idx
+                  test_given_idx)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
