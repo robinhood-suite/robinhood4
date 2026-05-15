@@ -1305,6 +1305,74 @@ out:
     return rc;
 }
 
+static int
+get_collection_last_sync_start_date(const struct mongo_backend *mongo,
+                                    struct rbh_value_pair *pair)
+{
+    const struct rbh_value *sync_debut_value;
+    struct rbh_value *value;
+    mongoc_cursor_t *cursor;
+    bson_t *opts = NULL;
+    char _buffer[4096];
+    const bson_t *doc;
+    bson_iter_t iter;
+    bson_t *filter;
+    size_t bufsize;
+    char *buffer;
+    int rc = 0;
+
+    buffer = _buffer;
+    filter = bson_new();
+    bufsize = sizeof(_buffer);
+    value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*value));
+    opts = BCON_NEW("sort", "{", "_id", BCON_INT32(-1), "}");
+
+    cursor = mongoc_collection_find_with_opts(mongo->log, filter, opts, NULL);
+    if (!cursor) {
+        rc = -1;
+        goto out;
+    }
+
+    if (!mongoc_cursor_next(cursor, &doc)) {
+        rc = 1;
+        goto out;
+    }
+
+    if (!bson_iter_init(&iter, doc)) {
+        rc = 1;
+        goto out;
+    }
+
+    while (bson_iter_next(&iter)) {
+        const char *key = bson_iter_key(&iter);
+
+        if (strcmp(key, "sync_metadata") == 0) {
+            if (!bson_iter_rbh_value(&iter, value, &buffer, &bufsize)) {
+                rc = 1;
+                goto out;
+            }
+
+            assert(value->type == RBH_VT_MAP);
+            sync_debut_value = rbh_map_find(&value->map, "sync_debut");
+            assert(value);
+
+            pair->key = "last_sync_start_date";
+            pair->value = value_clone(sync_debut_value);
+            break;
+        }
+    }
+
+out:
+    if (cursor)
+        mongoc_cursor_destroy(cursor);
+    if (filter)
+        bson_destroy(filter);
+    if (opts)
+        bson_destroy(opts);
+
+    return rc;
+}
+
 static struct rbh_value_map *
 mongo_backend_get_info(void *backend, int info_flags)
 {
@@ -1354,6 +1422,11 @@ mongo_backend_get_info(void *backend, int info_flags)
 
     if (info_flags & RBH_INFO_LAST_SYNC) {
         if (get_collection_sync(mongo, "last_sync", &pairs[idx++]))
+            goto out;
+    }
+
+    if (info_flags & RBH_INFO_LAST_SYNC_START_DATE) {
+        if (get_collection_last_sync_start_date(mongo, &pairs[idx++]))
             goto out;
     }
 

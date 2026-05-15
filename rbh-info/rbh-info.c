@@ -76,6 +76,8 @@ help()
         "                           enrich URI\n"
         "    -c, --count            Show the amount of document inside a\n"
         "                           given backend\n"
+        "    -d, --last-sync-start-date\n"
+        "                           Show the starting date of the last rbh-sync\n"
         "    -f, --first-sync       Show infos about the first rbh-sync done\n"
         "    -y, --last-sync        Show infos about the last rbh-sync done\n"
         "    -m, --mountpoint       Show the mountpoint used as source for\n"
@@ -144,6 +146,10 @@ main(int _argc, char **_argv)
             .val = 'c',
         },
         {
+            .name = "last-sync-start-date",
+            .val = 'd',
+        },
+        {
             .name = "first-sync",
             .val = 'f',
         },
@@ -185,7 +191,7 @@ main(int _argc, char **_argv)
         argv = &_argv[nb_cli_args];
     }
 
-    while ((option = getopt_long(argc, argv, "abBcfhlmsy", LONG_OPTIONS,
+    while ((option = getopt_long(argc, argv, "abBcdfhlmsy", LONG_OPTIONS,
                                  NULL)) != -1) {
         switch (option) {
         case 'a':
@@ -199,6 +205,9 @@ main(int _argc, char **_argv)
             break;
         case 'c':
             flags |= RBH_INFO_COUNT;
+            break;
+        case 'd':
+            flags |= RBH_INFO_LAST_SYNC_START_DATE;
             break;
         case 'f':
             flags |= RBH_INFO_FIRST_SYNC;

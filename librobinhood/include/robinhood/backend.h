@@ -253,17 +253,18 @@ struct rbh_filter_output {
  * Determines which info will be displayed by rbh-info.
  */
 enum rbh_info {
-    RBH_INFO_AVG_OBJ_SIZE    = 0x00000001U,
-    RBH_INFO_BACKEND_SOURCE  = 0x00000002U,
-    RBH_INFO_COUNT           = 0x00000004U,
-    RBH_INFO_FIRST_SYNC      = 0x00000008U,
-    RBH_INFO_FSEVENTS_SOURCE = 0x00000010U,
-    RBH_INFO_LAST_SYNC       = 0x00000020U,
-    RBH_INFO_MOUNTPOINT      = 0x00000040U,
-    RBH_INFO_SIZE            = 0x00000080U,
-    RBH_INFO_COMMAND_BACKEND = 0x00000100U,
+    RBH_INFO_AVG_OBJ_SIZE           = 0x00000001U,
+    RBH_INFO_BACKEND_SOURCE         = 0x00000002U,
+    RBH_INFO_COUNT                  = 0x00000004U,
+    RBH_INFO_FIRST_SYNC             = 0x00000008U,
+    RBH_INFO_FSEVENTS_SOURCE        = 0x00000010U,
+    RBH_INFO_LAST_SYNC              = 0x00000020U,
+    RBH_INFO_LAST_SYNC_START_DATE   = 0x00000040U,
+    RBH_INFO_MOUNTPOINT             = 0x00000080U,
+    RBH_INFO_SIZE                   = 0x00000100U,
+    RBH_INFO_COMMAND_BACKEND        = 0x00000200U,
     // Skipping fsevents source for now, must improve info first
-    RBH_INFO_ALL             = 0x000001efU
+    RBH_INFO_ALL                    = 0x000003efU
 };
 
 /**
