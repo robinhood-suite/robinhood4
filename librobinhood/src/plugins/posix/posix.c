@@ -518,18 +518,19 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
             if (callback_xattrs_count == -1) {
                 if (errno != ENOMEM) {
                     fprintf(stderr,
-                            "Failed to get inode xattrs of '%s': %s (%d)\n",
-                            path->string, strerror(errno), errno);
+                            "Failed to get inode xattrs of '%s' from extension '%s': %s (%d)\n",
+                            path->string, enrichers[n_enricher]->extension.name,
+                            strerror(errno), errno);
                     /* Set errno to ESTALE to not stop the iterator for a single
                      * failed entry.
                      */
                     errno = ESTALE;
                 }
                 save_errno = errno;
-                goto out_clear_sstacks;
+            } else {
+                count += callback_xattrs_count;
             }
             n_enricher++;
-            count += callback_xattrs_count;
         }
     }
 

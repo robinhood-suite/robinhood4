@@ -670,7 +670,6 @@ posix_enricher_iter_next(void *iterator)
     struct rbh_id *id;
     int rc;
 
-skip:
     fsevent = rbh_iter_next(enricher->fsevents);
     if (fsevent == NULL) {
         if (enricher->fd > 0) {
@@ -696,13 +695,12 @@ skip:
 
     rc = enrich(enricher, fsevent);
     if (rc) {
-        if (enricher->skip_error) {
+        if (enricher->skip_error)
             fprintf(stderr,
-                    "Failed to enrich entry '%s', skipping it: %s (%d)\n",
+                    "Failed to enrich part of entry '%s', may be incomplete in destination: %s (%d)\n",
                     fsevent->link.name, strerror(errno), errno);
-            goto skip;
-        }
-        return NULL;
+        else
+            return NULL;
     }
 
     return &enricher->fsevent;
