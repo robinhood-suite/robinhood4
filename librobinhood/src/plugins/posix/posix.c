@@ -749,12 +749,18 @@ posix_backend_filter(
     /* TODO: make use of `fsentries_mask' and `statx_mask' */
 
     if (filter != NULL) {
-        errno = ENOTSUP;
+        rbh_backend_error_printf(
+            "'POSIX' plugin does not allow advanced filtering"
+        );
+        errno = RBH_BACKEND_ERROR;
         return NULL;
     }
 
     if (options->skip > 0 || options->limit > 0 || options->sort.count > 0) {
-        errno = ENOTSUP;
+        rbh_backend_error_printf(
+            "'POSIX' plugin does not allow skipping, limiting or sorting entries"
+        );
+        errno = RBH_BACKEND_ERROR;
         return NULL;
     }
 
