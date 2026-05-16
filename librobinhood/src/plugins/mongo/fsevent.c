@@ -26,6 +26,9 @@ _bson_from_xattrs(const char *prefix, const struct rbh_value_map *xattrs,
     if (!bson_append_xattrs(prefix, xattrs, set, unset, inc))
         return false;
 
+    if (bson_empty(set) && bson_empty(unset) && bson_empty(inc))
+        return false;
+
     /* Empty $set documents are not allowed */
     if (!bson_empty(set))
         if (!BSON_APPEND_DOCUMENT(bson, "$set", set))

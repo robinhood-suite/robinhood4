@@ -902,6 +902,7 @@ _get_attrs(struct entry_info *entry_info,
 {
     int count = 0;
     int subcount;
+    int rc = 0;
 
     _inode_xattrs_count = entry_info->inode_xattrs_count;
     _inode_xattrs = entry_info->inode_xattrs;
@@ -911,14 +912,20 @@ _get_attrs(struct entry_info *entry_info,
     for (int i = 0; i < nb_attrs_funcs; ++i) {
         subcount = attrs_funcs[i](*entry_info->fd, &pairs[count],
                                   available_pairs);
-        if (subcount == -1)
-            return -1;
+        if (subcount == -1) {
+            /* XXX: do we go one step further and never return -1 in the
+             * attrs_funcs but only the number of actual pairs filled, even on
+             * error ?
+             */
+            rc = -1;
+            continue;
+        }
 
         available_pairs -= subcount;
         count += subcount;
     }
 
-    return count;
+    return rc == -1 ? rc : count;
 }
 
 static int

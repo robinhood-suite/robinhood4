@@ -697,12 +697,19 @@ skip:
     rc = enrich(enricher, fsevent);
     if (rc) {
         if (enricher->skip_error) {
-            fprintf(stderr,
-                    "Failed to enrich entry '%s', skipping it: %s (%d)\n",
-                    fsevent->link.name, strerror(errno), errno);
-            goto skip;
+            if (errno == ESTALE) {
+                fprintf(stderr,
+                        "Detected stale entry '%s', skipping it: %s (%d)\n",
+                        fsevent->link.name, strerror(errno), errno);
+                goto skip;
+            } else {
+                fprintf(stderr,
+                        "Failed to enrich part of entry '%s', may be incomplete in destination: %s (%d)\n",
+                        fsevent->link.name, strerror(errno), errno);
+            }
+        } else {
+            return NULL;
         }
-        return NULL;
     }
 
     return &enricher->fsevent;

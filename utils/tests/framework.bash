@@ -259,7 +259,7 @@ teardown()
     # properly cleaned.
     set +e
 
-    if (( rc != 0 )); then
+    if (( $rc != 0 )); then
         echo "Test directory content:" > "$errorfile"
         find $testdir >> "$errorfile"
         echo "Test DB content:" >> "$errorfile"
