@@ -40,7 +40,4 @@ source_from_lustre_changelog(const char *mdtname, const char *username,
                              const char *dump_file, uint64_t max_changelog,
                              int64_t start_index, struct sink *sink);
 
-struct source *
-source_from_hestia_file(FILE *file);
-
 #endif

@@ -93,12 +93,6 @@ else
     libmpi = disabler()
 endif
 
-if get_option('hestia').enabled()
-    libhestia = dependency('hestia', disabler: true, required: false)
-else
-    libhestia = disabler()
-endif
-
 build_s3_mpi = false
 if get_option('s3').enabled()
     libs3 = dependency('aws-cpp-sdk-s3', disabler: true, required: true)

@@ -7,5 +7,4 @@
 VERSION=@version@
 BUILD_LUSTRE=@lustre@
 BUILD_MFU=@mfu@
-BUILD_HESTIA=@hestia@
 BUILD_MAN=@man@

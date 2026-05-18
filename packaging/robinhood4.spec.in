@@ -14,13 +14,11 @@ Source0: %{name}-%{version}.tar.xz
 # =================  ====================  ===========================
 # --without lustre ||   %%_with_lustre 0 || remove lustre as dependency
 # --with mfu       ||   %%_with_mfu 1    || force libmfu as dependency
-# --with hestia    ||   %%_with_hestia 1 || force hestia as dependency
 # --with s3        ||   %%_with_s3 1     || force s3 as dependency
 # --without man    ||   %%_with_man 0    || don't build man pages
 
 %bcond_without lustre
 %bcond_with mfu
-%bcond_with hestia
 %bcond_with s3
 %bcond_without man
 
@@ -40,10 +38,6 @@ Requires: lustre-client
 %if %{with mfu}
 Requires: openmpi
 Requires: libmfu
-%endif
-
-%if %{with hestia}
-Requires: hestia
 %endif
 
 %if %{with s3}
@@ -70,10 +64,6 @@ BuildRequires: miniyaml-devel
 BuildRequires: python39
 BuildRequires: python39-rpm-macros
 BuildRequires: python39-devel
-
-%if %{with hestia}
-BuildRequires: hestia-devel
-%endif
 
 %if %{with mfu}
 BuildRequires: openmpi-devel
@@ -126,12 +116,6 @@ OPTS=""
     OPTS+="-Dmfu=disabled "
 %endif
 
-%if %{with hestia}
-    OPTS+="-Dhestia=enabled "
-%else
-    OPTS+="-Dhestia=disabled "
-%endif
-
 %if %{with s3}
     OPTS+="-Ds3=enabled "
 %else
@@ -164,9 +148,6 @@ OPTS=""
 %{_libdir}/librbh-posix-mfu-ext.so*
 %{_libdir}/librbh-mpi-file.so*
 %endif
-%if %{with hestia}
-%{_libdir}/librbh-hestia.so*
-%endif
 %if %{with s3}
 %{_libdir}/librbh-s3.so*
 %endif
@@ -197,9 +178,6 @@ OPTS=""
 %{_includedir}/robinhood/alias.h
 %{_includedir}/robinhood/backend.h
 %{_includedir}/robinhood/backends/common.h
-%if %{with hestia}
-%{_includedir}/robinhood/backends/hestia.h
-%endif
 %if %{with lustre}
 %{_includedir}/robinhood/backends/lustre.h
 %endif
