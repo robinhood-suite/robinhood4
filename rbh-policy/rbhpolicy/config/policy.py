@@ -46,10 +46,13 @@ class Policy:
     optional rules.
     """
     def __init__(self, name: str, target: LogicalCondition, action, trigger,
-            parameters=None, rules=None, sort=None):
+            parameters=None, rules=None, sort=None, stopthreshold=None):
         self.name = name
         self.target = target
         self.trigger = normalize_trigger(trigger)
+        self.stopthreshold = (
+            normalize_trigger(stopthreshold) if stopthreshold else None
+        )
         self.sort = normalize_policy_sort(sort)
         self.parameters = parameters or {}
         self.action = resolve_cmd_action(
@@ -70,18 +73,21 @@ class Policy:
         return (f"Policy<{self.name}>("
                 f"target={self.target}, action={action_name}, "
                 f"trigger={self.trigger}, rules={rules_names}, "
+                f"stopthreshold={self.stopthreshold}, "
                 f"parameters={self.parameters}, sort={self.sort})")
 
 def declare_policy(*, name: str, target, action, trigger, parameters=None,
-                   rules=None, sort=None) -> Policy:
+                   rules=None, sort=None, stopthreshold=None) -> Policy:
     """
     Declare a new policy and inject it into the caller’s namespace
     so it’s directly available in config files.
     """
     from rbhpolicy.config.config_validator import validate_policy
-    validate_policy(name, target, action, trigger, parameters, rules)
+    validate_policy(name, target, action, trigger, parameters, rules,
+                    stopthreshold)
 
-    policy = Policy(name, target, action, trigger, parameters, rules, sort)
+    policy = Policy(name, target, action, trigger, parameters, rules, sort,
+                    stopthreshold)
     policy._filter = target.to_filter()
 
     if isinstance(policy.rules, Rule):

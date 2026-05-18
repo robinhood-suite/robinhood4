@@ -60,6 +60,7 @@ struct rbh_policy {
     size_t rule_count;
 
     struct rbh_policy_sort sort;
+    int (*stop_cb)(void);
 };
 
 const char *
