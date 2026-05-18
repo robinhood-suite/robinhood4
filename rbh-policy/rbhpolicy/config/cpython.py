@@ -17,6 +17,12 @@ from ctypes import (
     POINTER,
     Union,
 )
+from ctypes import CFUNCTYPE
+
+STOP_CB_TYPE = CFUNCTYPE(c_int)
+
+# Keep references to callback wrappers alive to avoid GC while C may call them
+_stop_cb_refs = {}
 
 librbh = ctypes.CDLL("librobinhood.so")
 
@@ -115,6 +121,7 @@ class RbhPolicy(Structure):
         ("rules", POINTER(RbhRule)),
         ("rule_count", ctypes.c_size_t),
         ("sort", RbhPolicySort),
+        ("stop_cb", STOP_CB_TYPE),
     ]
 
 def parse_count(raw):
@@ -192,6 +199,29 @@ def make_c_policy(py_policy):
     else:
         c_policy.sort.by = None
         c_policy.sort.ascending = True
+
+    from rbhpolicy.config.triggers.triggers import (
+            evaluate_trigger,
+            TriggerContext,
+    )
+
+    if getattr(py_policy, "stopthreshold", None):
+        def stop_trigger_cb():
+            try:
+                decision = evaluate_trigger(
+                    py_policy.threshold,
+                    TriggerContext(manual_mode=False,
+                                   database_uri=get_database()),
+                )
+                return 1 if decision.matched else 0
+            except Exception:
+                return 0
+
+        cb_func = STOP_CB_TYPE(stop_trigger_cb)
+        c_policy.stop_cb = cb_func
+        _stop_cb_refs[py_policy.name] = cb_func
+    else:
+        c_policy.stop_cb = STOP_CB_TYPE()
 
     return c_policy
 

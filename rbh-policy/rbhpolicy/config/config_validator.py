@@ -55,7 +55,7 @@ def validate_rule(rule):
                         f"{type(rule.parameters).__name__}")
 
 def validate_policy(name, condition, action, trigger, parameters=None,
-        rules=None):
+                    rules=None, stopthreshold=None):
     """
     Validate arguments for declare_policy.
     """
@@ -77,6 +77,10 @@ def validate_policy(name, condition, action, trigger, parameters=None,
     if not (trigger is None or isinstance(trigger, BaseTrigger)):
         raise TypeError(f"Policy trigger must be a BaseTrigger instance or "
                         f"None, got {type(trigger).__name__}")
+
+    if not (stopthreshold is None or isinstance(stopthreshold, BaseTrigger)):
+        raise TypeError(f"Policy stopthreshold must be a BaseTrigger instance or "
+                        f"None, got {type(stopthreshold).__name__}")
 
     if rules is not None:
         if isinstance(rules, Rule):
