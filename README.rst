@@ -54,7 +54,6 @@ It supports 5 options:
  - `mfu`: enabled by default, build `posix-mpi`, `lustre-mpi` and `mpi-file`
    backends. Both `lustre` and `mfu` must be enabled to build the `lustre-mpi`
    backend;
- - `hestia`: disabled by default, build the `hestia` backend;
  - `s3`: disabled by default, build the `s3` backend;
  - `sqlite`: disabled by default, build the `sqlite` backend;
 

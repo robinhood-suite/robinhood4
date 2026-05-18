@@ -26,10 +26,6 @@ enrich_iter_builder_from_backend(const char *type,
     switch (backend->id) {
     case RBH_BI_POSIX:
         return posix_enrich_iter_builder(backend, type, mount_path);
-#ifdef HAVE_HESTIA
-    case RBH_BI_HESTIA:
-        return hestia_enrich_iter_builder(backend);
-#endif
     default:
         break;
     }

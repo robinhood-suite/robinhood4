@@ -115,9 +115,4 @@ posix_enrich_iter_builder(struct rbh_backend *backend,
                           const char *type,
                           const char *mount_path);
 
-#ifdef HAVE_HESTIA
-struct enrich_iter_builder *
-hestia_enrich_iter_builder(struct rbh_backend *backend);
-#endif
-
 #endif

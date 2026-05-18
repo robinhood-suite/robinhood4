@@ -18,7 +18,6 @@ ld_library_path = ''
 # .. and also add paths for plugins required by tests that require one
 library_dirs = [
     '..',
-    'hestia',
     'mongo',
     'mpi_file',
     'posix',
@@ -51,10 +50,6 @@ subdir('posix')
 
 if build_ldiskfs
   subdir('ldiskfs')
-endif
-
-if get_option('hestia').enabled()
-    subdir('hestia')
 endif
 
 if get_option('s3').enabled()
