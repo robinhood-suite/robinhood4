@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64dbd86a_2b66bcaa",
+        "filename": "librobinhood/src/policyengine/core.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-05-18T14:20:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dda64f2c_8ed0c72e",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 29
+      },
+      "revId": "3b0ad3d6fc58864d89c34bc85ca605dd3ca7faa0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c987da2_920f6ae9",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87e96ff5_a8cf963e",
+        "filename": "librobinhood/src/policyengine/core.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-05-18T14:20:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c987da2_920f6ae9",
+      "range": {
+        "startLine": 104,
+        "startChar": 12,
+        "endLine": 106,
+        "endChar": 24
+      },
+      "revId": "3b0ad3d6fc58864d89c34bc85ca605dd3ca7faa0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8daac4cc_a4f12db2",
@@ -60,6 +108,30 @@
       "writtenOn": "2026-05-12T07:46:52Z",
       "side": 1,
       "message": "question: why do you need to check it at this moment? I think you need to let `rbh_pe_resolve_sort_field` failed here",
+      "range": {
+        "startLine": 139,
+        "startChar": 28,
+        "endLine": 139,
+        "endChar": 37
+      },
+      "revId": "3b0ad3d6fc58864d89c34bc85ca605dd3ca7faa0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79692968_ae915faa",
+        "filename": "librobinhood/src/policyengine/core.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-05-18T14:20:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8daac4cc_a4f12db2",
       "range": {
         "startLine": 139,
         "startChar": 28,
