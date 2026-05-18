@@ -80,7 +80,8 @@ void lustre_changelog_save_batch(void *source, size_t ack_required,
 }
 
 static int
-lustre_changelog_set_last_read(void *iterator, uint64_t last_changelog_index)
+lustre_changelog_set_last_read(void *iterator, uint64_t last_changelog_index,
+                               struct sink *sink)
 {
     struct rbh_value_pair last_read_pair, mdt_pair, fsevents_pair;
     struct lustre_changelog_iterator *records = iterator;
@@ -106,7 +107,7 @@ lustre_changelog_set_last_read(void *iterator, uint64_t last_changelog_index)
     value_map.pairs = &fsevents_pair;
     value_map.count = 1;
 
-    rc = sink_insert_metadata(records->sink, &value_map, RBH_DT_INFO);
+    rc = sink_insert_metadata(sink, &value_map, RBH_DT_INFO);
 
     free(last_read_value);
     free(mdt_map);
@@ -115,7 +116,8 @@ lustre_changelog_set_last_read(void *iterator, uint64_t last_changelog_index)
     return errno != ENOTSUP ? rc : 0;
 }
 
-void lustre_changelog_ack_batch(void *source, uint64_t batch_id)
+void lustre_changelog_ack_batch(void *source, uint64_t batch_id,
+                                struct sink *sink)
 {
     struct lustre_source *lustre = source;
     struct source_batch_node *elem, *tmp;
@@ -160,7 +162,8 @@ void lustre_changelog_ack_batch(void *source, uint64_t batch_id)
                 error(EXIT_FAILURE, errno, "llapi_changelog_clear");
 
             rc = lustre_changelog_set_last_read(&lustre->events,
-                                                elem->last_changelog_index);
+                                                elem->last_changelog_index,
+                                                sink);
             if (rc < 0)
                 error(EXIT_FAILURE, -rc, "Failed to set last changelog read in info");
 

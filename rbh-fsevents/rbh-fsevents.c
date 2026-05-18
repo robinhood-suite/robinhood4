@@ -458,7 +458,7 @@ consumer_thread(void *arg) {
         }
 
         if (source->ack_batch != NULL)
-            source->ack_batch(source, node->batch_id);
+            source->ack_batch(source, node->batch_id, cinfo->sink);
 
         rbh_iter_destroy(node->enricher);
         free(node);
