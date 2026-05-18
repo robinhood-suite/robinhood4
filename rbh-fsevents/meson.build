@@ -33,15 +33,6 @@ if liblustre.found()
     extra_dependencies += [ liblustre ]
 endif
 
-if libhestia.found()
-    libjansson = dependency('jansson', version: '>=2.5')
-    extra_dependencies += [ libjansson, libhestia ]
-    extra_sources += [
-        'src/enrichers/hestia.c',
-    ]
-    add_project_arguments(['-DHAVE_HESTIA',], language: 'c')
-endif
-
 includes = include_directories('.', 'include')
 
 fsevents_lib = static_library(
@@ -57,7 +48,6 @@ fsevents_lib = static_library(
         'src/enrichers/posix/sparse.c',
         'src/sources/yaml_file.c',
         'src/sources/file.c',
-        'src/sources/hestia.c',
         'src/sources/utils.c',
         'src/sinks/backend.c',
         'src/sinks/file.c',

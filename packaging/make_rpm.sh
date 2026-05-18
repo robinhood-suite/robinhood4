@@ -25,9 +25,6 @@ fi
 if [ "$BUILD_MFU" == "True" ]; then
     opts+="--with mfu "
 fi
-if [ "$BUILD_HESTIA" == "True" ]; then
-    opts+="--with hestia "
-fi
 if [ "$BUILD_MAN" == "True" ]; then
     opts+="--with man "
 fi

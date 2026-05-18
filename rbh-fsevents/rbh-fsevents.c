@@ -55,8 +55,7 @@ usage(void)
         "    SOURCE          can be one of:\n"
         "                        '-' for stdin;\n"
         "                        a Source URI (eg. src:file:/path/to/test, \n"
-        "                        src:lustre:lustre-MDT0000,\n"
-        "                        src:hestia:/path/to/file).\n"
+        "                        src:lustre:lustre-MDT0000).\n"
         "    DESTINATION     can be one of:\n"
         "                        '-' for stdout;\n"
         "                        a RobinHood URI (eg. rbh:mongo:test).\n"
@@ -182,8 +181,6 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog)
         error(EX_USAGE, EINVAL, "MDT source is not available");
         __builtin_unreachable();
 #endif
-    } else if (strcmp(raw_uri->path, "hestia") == 0) {
-        source = source_from_file_uri(name, source_from_hestia_file);
     }
 
     if (source) {
@@ -290,17 +287,7 @@ enrich_iter_builder_from_uri(const char *uri, char **backend_source)
 
     *backend_source = xstrdup(rbh_uri->backend);
 
-    /* XXX: this a temporary hack because the Hestia backend cannot properly
-     * build at the moment.
-     */
-    if (strlen(rbh_uri->fsname) == 0) {
-        uri_backend = xmalloc(sizeof(*uri_backend));
-
-        uri_backend->id = RBH_BI_HESTIA;
-    } else {
-        uri_backend = rbh_backend_from_uri(uri, true);
-    }
-
+    uri_backend = rbh_backend_from_uri(uri, true);
     builder = enrich_iter_builder_from_backend(rbh_uri->backend, uri_backend,
                                                rbh_uri->fsname);
     save_errno = errno;

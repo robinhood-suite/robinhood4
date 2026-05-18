@@ -9,7 +9,3 @@ subdir('unit')
 if liblustre.found()
     subdir('lustre')
 endif
-
-if libhestia.found()
-    subdir('hestia')
-endif

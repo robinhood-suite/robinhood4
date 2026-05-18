@@ -101,7 +101,7 @@ enum rbh_backend_id {
     RBH_BI_MONGO,
     RBH_BI_LUSTRE,
     RBH_BI_LUSTRE_MPI,
-    RBH_BI_HESTIA,
+    RBH_BI_HESTIA, // Unused but kept for legacy and compatibility purposes
     RBH_BI_MPI_FILE,
     RBH_BI_RETENTION,
     RBH_BI_MFU,
