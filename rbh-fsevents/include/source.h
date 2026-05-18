@@ -29,7 +29,7 @@ struct source {
      *  the memory associated with this batch in the source (cf. ack the
      *  changelogs for Lustre).
      */
-    void (*ack_batch)(void *source, uint64_t batch_id);
+    void (*ack_batch)(void *source, uint64_t batch_id, struct sink *sink);
 };
 
 struct source *

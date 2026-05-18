@@ -67,7 +67,8 @@ struct lustre_source {
 void lustre_changelog_save_batch(void *source, size_t ack_required,
                                  bool dedup);
 
-void lustre_changelog_ack_batch(void *source, uint64_t batch_id);
+void lustre_changelog_ack_batch(void *source, uint64_t batch_id,
+                                struct sink *sink);
 
 const void *
 lustre_changelog_iter_next(void *iterator);
