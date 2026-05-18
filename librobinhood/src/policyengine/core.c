@@ -305,6 +305,16 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
             (*used)++;
 
         free(fresh);
+
+        if (policy->stop_cb && policy->stop_cb()){
+            filters_ctx_finish(&f_ctx);
+            rbh_pe_actions_destroy(&action_cache);
+            rbh_backend_destroy(fs_backend);
+            rbh_backend_destroy(mirror_backend);
+            rbh_mut_iter_destroy(mirror_iter);
+            return 2; /* stopped by stop trigger */
+        }
+
     }
 
     filters_ctx_finish(&f_ctx);
