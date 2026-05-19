@@ -181,8 +181,8 @@ A predicate that filters entries based on an MDT index.
     /dir-on-mdt-1
     /dir-on-mdt-1/file
 
--ost-index
-----------
+-ost
+----
 
 A predicate that filters entries based on an OST index.
 

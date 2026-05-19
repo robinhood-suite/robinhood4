@@ -53,7 +53,7 @@ rbh_lustre_helper(__attribute__((unused)) const char *backend,
         "                           ro - the entry is in read-only state\n"
         "                           sp - the entry is in a state of being resynchronized\n"
         "                           wp - the entry is in a state of being written.\n"
-        "    -ost-index INDEX     filter entries based on the OST they are on.\n"
+        "    -ost INDEX           filter entries based on the OST they are on.\n"
         "    -pool NAME           filter entries based on the pool their\n"
         "                         components belong to (case sensitive, regex\n"
         "                         allowed).\n"
