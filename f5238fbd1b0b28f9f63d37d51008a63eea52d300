@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c53e5054_c65b1959",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-05-19T14:46:56Z",
+      "side": 1,
+      "message": "suggest: \"which is the mongo client from the reading thread, instead of their own\"",
+      "range": {
+        "startLine": 9,
+        "startChar": 65,
+        "endLine": 10,
+        "endChar": 50
+      },
+      "revId": "f5238fbd1b0b28f9f63d37d51008a63eea52d300",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
