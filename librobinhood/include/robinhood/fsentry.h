@@ -80,7 +80,7 @@ struct rbh_fsentry {
          */
         struct rbh_value_map ns; /* namespace is a reserved keyword in C++ */
         /**
-         * Namespace extended attributes
+         * Inode extended attributes
          *
          * Much like regular xattrs in filesystems.
          */
