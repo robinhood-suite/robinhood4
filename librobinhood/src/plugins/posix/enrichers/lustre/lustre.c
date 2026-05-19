@@ -782,7 +782,8 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
         struct lov_comp_md_v1 *v1;
         uint32_t state;
 
-        if (available_pairs < 1) {
+        // we need to fill 2 pairs here: mirror_count and mirror_state
+        if (available_pairs < 2) {
             errno = EOVERFLOW;
             return -1;
         }
@@ -842,6 +843,11 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
         required_pairs = nb_xattrs - 1;
     else
         required_pairs = nb_xattrs;
+
+    if (data.ost)
+        required_pairs += 1;
+    if (data.has_extension)
+        required_pairs += 1;
 
     if (available_pairs < required_pairs) {
         errno = EOVERFLOW;
