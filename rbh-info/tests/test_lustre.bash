@@ -20,8 +20,8 @@ test_lustre_source()
     local output=$(rbh_info "rbh:$db:$testdb" -b)
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 5)); then
-        error "Four backends should have been registered + 1 line for header, got '$output'"
+    if ((n_lines != 6)); then
+        error "Five backends should have been registered + 1 line for header, got '$output'"
     fi
 
     echo "$output" | grep "posix" ||
@@ -35,6 +35,9 @@ test_lustre_source()
 
     echo "$output" | grep "sparse" ||
         error "The sparse extension should have been registered"
+
+    echo "$output" | grep "selinux" ||
+        error "The selinux extension should have been registered"
 }
 
 test_command_backend()
