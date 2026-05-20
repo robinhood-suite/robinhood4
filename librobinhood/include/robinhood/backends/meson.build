@@ -181,6 +181,25 @@ librbh_sparse_h = configure_file(input: 'sparse.h.in',
 install_headers(librbh_sparse_h, subdir: 'robinhood/backends')
 
 
+librbh_selinux_conf = configuration_data()
+
+librbh_selinux_conf.set('RBH_SELINUX_PLUGIN_MAJOR', 0)
+librbh_selinux_conf.set('RBH_SELINUX_PLUGIN_MINOR', 0)
+librbh_selinux_conf.set('RBH_SELINUX_PLUGIN_RELEASE', 0)
+
+librbh_selinux_version = '@0@.@1@.@2@'.format(
+    librbh_selinux_conf.get('RBH_SELINUX_PLUGIN_MAJOR'),
+    librbh_selinux_conf.get('RBH_SELINUX_PLUGIN_MINOR'),
+    librbh_selinux_conf.get('RBH_SELINUX_PLUGIN_RELEASE')
+)
+
+librbh_selinux_h = configure_file(input: 'selinux.h.in',
+                                  output: 'selinux.h',
+                                  configuration: librbh_selinux_conf)
+
+install_headers(librbh_selinux_h, subdir: 'robinhood/backends')
+
+
 # S3 MPI extension plugin
 
 if build_s3_mpi
