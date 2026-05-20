@@ -122,6 +122,27 @@ if get_option('s3').enabled()
     install_headers(librbh_s3_h, subdir: 'robinhood/backends')
 endif
 
+# Hestia backend
+
+if get_option('hestia').enabled()
+    librbh_hestia_conf = configuration_data()
+
+    librbh_hestia_conf.set('RBH_HESTIA_BACKEND_MAJOR', 0)
+    librbh_hestia_conf.set('RBH_HESTIA_BACKEND_MINOR', 0)
+    librbh_hestia_conf.set('RBH_HESTIA_BACKEND_RELEASE', 0)
+
+    librbh_hestia_version = '@0@.@1@.@2@'.format(
+        librbh_hestia_conf.get('RBH_HESTIA_BACKEND_MAJOR'),
+        librbh_hestia_conf.get('RBH_HESTIA_BACKEND_MINOR'),
+        librbh_hestia_conf.get('RBH_HESTIA_BACKEND_RELEASE')
+    )
+
+    librbh_hestia_h = configure_file(input: 'hestia.h.in', output: 'hestia.h',
+                                     configuration: librbh_hestia_conf)
+
+    install_headers(librbh_hestia_h, subdir: 'robinhood/backends')
+endif
+
 librbh_retention_conf = configuration_data()
 
 librbh_retention_conf.set('RBH_RETENTION_PLUGIN_MAJOR', 0)
@@ -158,6 +179,25 @@ librbh_sparse_h = configure_file(input: 'sparse.h.in',
                                  configuration: librbh_sparse_conf)
 
 install_headers(librbh_sparse_h, subdir: 'robinhood/backends')
+
+
+librbh_selinux_conf = configuration_data()
+
+librbh_selinux_conf.set('RBH_SELINUX_PLUGIN_MAJOR', 0)
+librbh_selinux_conf.set('RBH_SELINUX_PLUGIN_MINOR', 0)
+librbh_selinux_conf.set('RBH_SELINUX_PLUGIN_RELEASE', 0)
+
+librbh_selinux_version = '@0@.@1@.@2@'.format(
+    librbh_selinux_conf.get('RBH_SELINUX_PLUGIN_MAJOR'),
+    librbh_selinux_conf.get('RBH_SELINUX_PLUGIN_MINOR'),
+    librbh_selinux_conf.get('RBH_SELINUX_PLUGIN_RELEASE')
+)
+
+librbh_selinux_h = configure_file(input: 'selinux.h.in',
+                                  output: 'selinux.h',
+                                  configuration: librbh_selinux_conf)
+
+install_headers(librbh_selinux_h, subdir: 'robinhood/backends')
 
 
 # S3 MPI extension plugin
