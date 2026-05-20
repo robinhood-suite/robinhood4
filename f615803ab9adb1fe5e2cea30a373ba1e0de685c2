@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "685841ac_2d6bf42e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-20T07:18:28Z",
+      "side": 1,
+      "message": "Will not block the patch for that, but I do not like the name of the attribute.",
+      "revId": "f615803ab9adb1fe5e2cea30a373ba1e0de685c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "955ce59a_d6ba5c23",
+        "filename": "librobinhood/src/policyengine/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-20T07:18:28Z",
+      "side": 1,
+      "message": "suggest: merge\n\n```\n    if (policy-\u003estop_cb \u0026\u0026 policy-\u003estop_cb()) {\n        ...\n    }\n```",
+      "range": {
+        "startLine": 312,
+        "startChar": 12,
+        "endLine": 313,
+        "endChar": 23
+      },
+      "revId": "f615803ab9adb1fe5e2cea30a373ba1e0de685c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d06cdb90_2055534d",
+        "filename": "rbh-policy/rbhpolicy/config/cpython.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-20T07:18:28Z",
+      "side": 1,
+      "message": "comment: not fan of the name",
+      "range": {
+        "startLine": 208,
+        "startChar": 27,
+        "endLine": 208,
+        "endChar": 38
+      },
+      "revId": "f615803ab9adb1fe5e2cea30a373ba1e0de685c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf4548f3_87d85893",
+        "filename": "rbh-policy/rbhpolicy/config/cpython.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-20T07:18:28Z",
+      "side": 1,
+      "message": "suggest:\n\n```\n    if getattr(py_policy, \"stoptrigger\", None):\n```",
+      "range": {
+        "startLine": 208,
+        "startChar": 47,
+        "endLine": 208,
+        "endChar": 58
+      },
+      "revId": "f615803ab9adb1fe5e2cea30a373ba1e0de685c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8c1dc0c_2ca5a9a3",
+        "filename": "rbh-policy/rbhpolicy/config/policy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-20T07:18:28Z",
+      "side": 1,
+      "message": "suggest:\n\n```\n    normalize_trigger(stoptrigger) if stoptrigger else None\n```",
+      "range": {
+        "startLine": 54,
+        "startChar": 43,
+        "endLine": 54,
+        "endChar": 69
+      },
+      "revId": "f615803ab9adb1fe5e2cea30a373ba1e0de685c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
