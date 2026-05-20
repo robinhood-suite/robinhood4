@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "315bc2c6_6a64b388",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-20T08:57:51Z",
+      "side": 1,
+      "message": "question: `str2uint64_t`? I don\u0027t think we will have a negative integer, right? also, you consider it invalid if it is negative",
+      "range": {
+        "startLine": 895,
+        "startChar": 16,
+        "endLine": 895,
+        "endChar": 27
+      },
+      "revId": "5e4ce5214d918d3dbb9a465e58930cf5b9cd1316",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
