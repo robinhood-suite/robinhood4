@@ -39,3 +39,4 @@ endif
 
 subdir('enrichers/retention')
 subdir('enrichers/sparse')
+subdir('enrichers/selinux')
