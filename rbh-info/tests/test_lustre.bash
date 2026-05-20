@@ -21,7 +21,7 @@ test_lustre_source()
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != 5)); then
-        error "Four backends should have been registered + 1 line for header, got '$output'"
+        error "Five backends should have been registered + 1 line for header, got '$output'"
     fi
 
     echo "$output" | grep "posix" ||
