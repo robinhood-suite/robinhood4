@@ -8,6 +8,7 @@ backends:
             - retention
             - lustre
             - sparse
+            - selinux
     posix-mpi:
         extends: posix
         iterator: mfu
@@ -32,6 +33,10 @@ backends:
         iterator: mfu
         enrichers:
             - sparse
+    selinux:
+        extends: posix
+        enrichers:
+            - selinux
 
 s3:
     address: 127.0.0.1:9000
