@@ -1,0 +1,35 @@
+/* This file is part of RobinHood
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifier: LGPL-3.0-or-later
+ */
+
+#ifndef ROBINHOOD_SELINUX_POSIX_H
+#define ROBINHOOD_SELINUX_POSIX_H
+
+#include "robinhood/backend.h"
+
+#define RBH_SELINUX_PLUGIN_NAME "selinux"
+
+#mesondefine RBH_SELINUX_PLUGIN_MAJOR
+#mesondefine RBH_SELINUX_PLUGIN_MINOR
+#mesondefine RBH_SELINUX_PLUGIN_RELEASE
+#define RBH_SELINUX_PLUGIN_VERSION RPV(RBH_SELINUX_PLUGIN_MAJOR, \
+                                      RBH_SELINUX_PLUGIN_MINOR, \
+                                      RBH_SELINUX_PLUGIN_RELEASE)
+
+#define RBH_SELINUX_ATTR_FLAG(bits) RBH_ATTR_BACKEND_VALUE(SELINUX, bits)
+
+static inline bool
+rbh_attr_is_selinux(uint64_t flags)
+{
+    return flags == 0 || RBH_ATTR_BACKEND(flags) == RBH_BI_SELINUX;
+}
+
+enum rbh_selinux_enrich_flag {
+    RBH_XEF_ALL        = 0x1,
+    RBH_XEF_SELINUX     = RBH_ATTR_BACKEND_VALUE(SELINUX),
+};
+
+#endif
