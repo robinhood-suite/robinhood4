@@ -12,9 +12,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sysexits.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #include <robinhood.h>
+#include <robinhood/action.h>
 #include <robinhood/config.h>
 #include <robinhood/filters/parser.h>
 #include <robinhood/open.h>
@@ -61,10 +64,63 @@ usage(void)
         "    -s, --sync-time SYNC_TIME  instead of checking every entry of the BACKEND,\n"
         "                               only consider entries with a sync_time lesser\n"
         "                               than SYNC_TIME\n"
+        "    --check CMD                command or script to used as checker\n"
+        "                               script must receive an entry path as its last argument\n"
+        "                               and returns 0 if the entry must be deleted\n"
         "    -v, --verbose              verbose mode\n"
         "    --version                  print RobinHood 4's version\n";
 
     printf(message, program_invocation_short_name);
+}
+
+static bool
+_is_launchable(const char *path)
+{
+    struct stat st;
+
+    if (stat(path, &st) != 0) {
+        errno = ENOENT;
+        return false;
+    }
+
+    if (!S_ISREG(st.st_mode)) {
+        errno = EINVAL;
+        return false;
+    }
+
+    if (!(st.st_mode & S_IXUSR)) {
+        errno = EPERM;
+        return false;
+    }
+
+    return true;
+}
+
+static bool
+verify_cmd_is_launchable(const char *cmd)
+{
+    char *path = getenv("PATH");
+    char buffer[4096];
+
+    if (strchr(cmd, '/') == NULL) {
+        char *duppath = strdup(path);
+        char *token = strtok(duppath, ":");
+
+        while (token) {
+            snprintf(buffer, sizeof(buffer), "%s/%s", token, cmd);
+            if (_is_launchable(buffer)) {
+                free(duppath);
+                return true;
+            }
+            token = strtok(NULL, ":");
+        }
+
+        free(duppath);
+        errno = EINVAL;
+        return false;
+    }
+
+    return _is_launchable(cmd);
 }
 
 static char *
@@ -88,6 +144,7 @@ struct fsentry2gc_iterator {
     struct rbh_iterator *fsentries;
     struct rbh_fsevent delete;
     const char *mnt_path;
+    char *check_cmd;
 };
 
 static bool
@@ -145,11 +202,16 @@ fsentry2delete_iter_next(void *iterator)
 
         assert((fsentry->mask & RBH_FP_ID) == RBH_FP_ID);
 
-        if (still_alive(
-            &fsentry->id,
-            rbh_fsentry_find_ns_xattr(fsentry, "path")->string,
-            deletes->mnt_path,
-            fsentry->statx->stx_nlink))
+        if ((deletes->check_cmd &&
+             rbh_action_exec_command(
+                 deletes->check_cmd,
+                 rbh_fsentry_find_ns_xattr(fsentry, "path")->string)) ||
+            (!deletes->check_cmd &&
+             still_alive(
+                 &fsentry->id,
+                 rbh_fsentry_find_ns_xattr(fsentry, "path")->string,
+                 deletes->mnt_path,
+                 fsentry->statx->stx_nlink)))
             continue;
 
         deletes->delete.id = fsentry->id;
@@ -175,11 +237,17 @@ fsentry2print_iter_next(void *iterator)
 
         assert((fsentry->mask & RBH_FP_ID) == RBH_FP_ID);
 
-        if (still_alive(
-            &fsentry->id,
-            rbh_fsentry_find_ns_xattr(fsentry, "path")->string,
-            prints->mnt_path,
-            fsentry->statx->stx_nlink))
+        if ((prints->check_cmd &&
+             rbh_action_exec_command(
+                 prints->check_cmd,
+                 rbh_fsentry_find_ns_xattr(fsentry, "path")->string)) ||
+            (!prints->check_cmd &&
+             still_alive(
+                 &fsentry->id,
+                 rbh_fsentry_find_ns_xattr(fsentry, "path")->string,
+                 prints->mnt_path,
+                 fsentry->statx->stx_nlink))
+            )
             continue;
 
         return fsentry;
@@ -194,6 +262,7 @@ fsentry2gc_iter_destroy(void *iterator)
     struct fsentry2gc_iterator *iter = iterator;
 
     rbh_iter_destroy(iter->fsentries);
+    free(iter->check_cmd);
     free(iter);
 }
 
@@ -216,7 +285,8 @@ static const struct rbh_iterator FSENTRY2PRINT_ITERATOR = {
 };
 
 static struct rbh_iterator *
-iter_fsentry2delete(struct rbh_iterator *fsentries, const char *mnt_path)
+iter_fsentry2delete(struct rbh_iterator *fsentries, const char *mnt_path,
+                    const char *check_cmd)
 {
     struct fsentry2gc_iterator *deletes;
 
@@ -227,11 +297,17 @@ iter_fsentry2delete(struct rbh_iterator *fsentries, const char *mnt_path)
     deletes->delete.type = RBH_FET_UNLINK;
     deletes->mnt_path = mnt_path;
 
+    if (check_cmd)
+        asprintf(&deletes->check_cmd, "%s {}", check_cmd);
+    else
+        deletes->check_cmd = NULL;
+
     return &deletes->iterator;
 }
 
 static struct rbh_iterator *
-iter_fsentry2print(struct rbh_iterator *fsentries, const char *mnt_path)
+iter_fsentry2print(struct rbh_iterator *fsentries, const char *mnt_path,
+                   const char *check_cmd)
 {
     struct fsentry2gc_iterator *prints;
 
@@ -240,6 +316,11 @@ iter_fsentry2print(struct rbh_iterator *fsentries, const char *mnt_path)
     prints->iterator = FSENTRY2PRINT_ITERATOR;
     prints->fsentries = fsentries;
     prints->mnt_path = mnt_path;
+
+    if (check_cmd)
+        asprintf(&prints->check_cmd, "%s '{}'", check_cmd);
+    else
+        prints->check_cmd = NULL;
 
     return &prints->iterator;
 }
@@ -277,7 +358,7 @@ print_entries(struct rbh_iterator *iterator)
 
 static void
 gc(char *mnt_path, bool dry_run_mode, bool verbose_mode, int64_t sync_time,
-   struct rbh_filter *filter)
+   char *check_cmd, struct rbh_filter *filter)
 {
     const struct rbh_filter_options OPTIONS = {
         .verbose = verbose_mode,
@@ -334,7 +415,7 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode, int64_t sync_time,
         struct rbh_mut_iterator *chunks;
         struct rbh_iterator *deletes;
 
-        deletes = iter_fsentry2delete(constify, mnt_path);
+        deletes = iter_fsentry2delete(constify, mnt_path, check_cmd);
 
         chunks = rbh_iter_chunkify(deletes, RBH_ITER_CHUNK_SIZE);
         if (chunks == NULL)
@@ -374,7 +455,7 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode, int64_t sync_time,
     } else {
         struct rbh_iterator *prints;
 
-        prints = iter_fsentry2print(constify, mnt_path);
+        prints = iter_fsentry2print(constify, mnt_path, check_cmd);
         if (print_entries(prints) == -1)
             error(EXIT_FAILURE, errno, "print_entries");
 
@@ -391,6 +472,7 @@ main(int _argc, char *_argv[])
     bool dry_run_mode = false;
     bool verbose_mode = false;
     struct rbh_filter *filter;
+    char *check_cmd = NULL;
     int64_t sync_time = -1;
     int others_count = 0;
     char **others = NULL;
@@ -424,6 +506,15 @@ main(int _argc, char *_argv[])
         } else if (strcmp(arg, "--config") == 0 || strcmp(arg, "-c") == 0) {
             /* already parsed */
             ++i;
+
+        } else if (strcmp(arg, "--check") == 0) {
+            if (i + 1 >= argc)
+                error(EXIT_FAILURE, EINVAL, "Missing argument for %s", arg);
+
+            check_cmd = argv[++i];
+            if (!verify_cmd_is_launchable(check_cmd))
+                error(EXIT_FAILURE, errno,
+                      "Check command '%s' is not valid", check_cmd);
 
         } else if (strcmp(arg, "--dry-run") == 0 || strcmp(arg, "-d") == 0) {
             dry_run_mode = true;
@@ -480,7 +571,7 @@ main(int _argc, char *_argv[])
     if (mount_fd < 0)
         error(EXIT_FAILURE, errno, "Failed to open mountpoint '%s'", path);
 
-    gc(path, dry_run_mode, verbose_mode, sync_time, filter);
+    gc(path, dry_run_mode, verbose_mode, sync_time, check_cmd, filter);
 
     free(path);
     rbh_config_free();
