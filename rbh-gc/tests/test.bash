@@ -80,6 +80,29 @@ test_filter()
         difflines "'/fileB' needs to be deleted" "1 element total to delete"
 }
 
+test_bad_check()
+{
+    rbh_gc -d --check "/not/a/path" "rbh:$db:$testdb" &&
+        error "gc with an invalid check script path should have failed"
+
+    touch noexec.sh
+    rbh_gc -d --check "noexec.sh" "rbh:$db:$testdb" &&
+        error "gc with a non executable check script should have failed"
+
+    rm noexec.sh
+}
+
+test_check()
+{
+    touch fileA
+    touch fileB
+
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    rbh_gc -d --check "$test_dir/letter_check.sh" "rbh:$db:$testdb" |
+        difflines "'/fileA' needs to be deleted" "1 element total to delete"
+}
+
 test_config()
 {
     local conf_file="conf"
@@ -116,7 +139,10 @@ test_config()
         difflines "'/test_file' needs to be deleted" "1 element total to delete"
 }
 
-declare -a tests=(test_basic test_dry_run test_sync_gc_run test_filter test_config)
+declare -a tests=(
+    test_basic test_dry_run test_sync_gc_run test_filter
+    test_bad_check test_check test_config
+)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT

@@ -19,6 +19,10 @@ Mandatory arguments to long options are mandatory for short options too.
     Specify the backend to delete entries from. Should take the form of a
     RobinHood4 URI.
 
+**-c, --config** *PATH*
+    The configuration file to use, if not specified, will use
+    `/etc/robinhood4.d/default.yaml`.
+
 **-d, --dry-run**
     Display the list of absent entries.
     Print the generated command after alias substitution but does not execute
@@ -29,6 +33,11 @@ Mandatory arguments to long options are mandatory for short options too.
 
 **-s, --sync-time** *SYNC_TIME*
     Only consider for deletion entries with a sync_time lesser than `SYNC_TIME`.
+
+**--check** *CMD*
+    Specify the command to use to verify if an entry should be deleted from
+    the mirror backend. The command needs to receive as its last argument
+    the entry path, and returns 0 if the entry must be deleted.
 
 **-v, --verbose**
     Display the request sent by the backend to the underlying storage system.
