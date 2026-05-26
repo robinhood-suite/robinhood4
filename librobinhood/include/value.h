@@ -96,6 +96,21 @@ fill_int64_pair(const char *key, int64_t integer, struct rbh_value_pair *pair,
                 struct rbh_sstack *stack);
 
 /**
+ * Fill a given value pair with the key and uint64_t provided using a sstack for
+ * allocation.
+ *
+ * @param  key      the key to fill in the rbh_value_pair
+ * @param  integer  the value to fill in the rbh_value_pair
+ * @param  pair     the rbh_value_pair to fill
+ * @param  stack    the sstack to use for allocations
+ *
+ * @return 0 on success, -1 on error
+ */
+int
+fill_uint64_pair(const char *key, uint64_t integer, struct rbh_value_pair *pair,
+                struct rbh_sstack *stack);
+
+/**
  * Fill a given value pair with the key and string provided using a sstack for
  * allocation.
  *
