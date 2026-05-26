@@ -149,4 +149,11 @@ void
 get_size_and_blocks_from_xattrs(__u64 *size, __u64 *blocks,
                                 struct rbh_value_map *xattrs);
 
+/*
+ * gets the HSM attributes from the "trusted.hsm" extended atribute and add them
+ * into xattrs
+ */
+bool
+get_hsm_from_xattrs(struct rbh_value_map *xattrs, struct rbh_sstack *sstack);
+
 #endif
