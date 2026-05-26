@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "962b37da_6d6ec0da",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T11:24:06Z",
+      "side": 1,
+      "message": "typo: in",
+      "range": {
+        "startLine": 9,
+        "startChar": 31,
+        "endLine": 9,
+        "endChar": 34
+      },
+      "revId": "64ebd5f8724952298b239e33ced4d3fbffdf3236",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "098676f5_a68459e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T11:24:06Z",
+      "side": 1,
+      "message": "minor: the `required_pairs` modification is not documented\n\nAlso does this fix concern lustre or is it implied by the ldiskfs extension? I think this is an original bug, just want to confirm with you.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 32
+      },
+      "revId": "64ebd5f8724952298b239e33ced4d3fbffdf3236",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36b9e140_e4d1511a",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T11:24:06Z",
+      "side": 1,
+      "message": "suggest: add a comment to explain which pairs are expected here",
+      "range": {
+        "startLine": 719,
+        "startChar": 12,
+        "endLine": 719,
+        "endChar": 32
+      },
+      "revId": "64ebd5f8724952298b239e33ced4d3fbffdf3236",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f0300c0_ce2d9875",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T11:24:06Z",
+      "side": 1,
+      "message": "question: who set those fields of data, and what do they mean?",
+      "range": {
+        "startLine": 774,
+        "startChar": 8,
+        "endLine": 774,
+        "endChar": 16
+      },
+      "revId": "64ebd5f8724952298b239e33ced4d3fbffdf3236",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
