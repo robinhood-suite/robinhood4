@@ -11,13 +11,16 @@
 
 #define LINK_EA_MAGIC 0x11EAF1DFUL
 
+static __thread int xattrs_count = 0;
+
 struct xattr_iter_data {
     struct rbh_value_map *values;
     struct rbh_sstack *sstack;
 };
 
 /*
- * Internal Lustre structures needed to use the trusted.link xattr
+ * Internal Lustre structures needed to use the trusted.link and trusted.hsm
+ * extended attributes
  * Copied from Lustre source code and modified for our use
  * Original file is lustre/include/uapi/linux/lustre/lustre_idl.h
  */
@@ -33,6 +36,13 @@ struct link_ea_header {
         __u64 leh_len;
         __u32 leh_overflow_time;
         __u32 leh_padding;
+};
+
+struct hsm_attrs {
+    __u32   hsm_compat;
+    __u32   hsm_flags;
+    __u64   hsm_arch_id;
+    __u64   hsm_arch_ver;
 };
 
 #ifdef LUSTRE_VERSION_E2FSPROGS_XATTRS_ITERATE
@@ -425,4 +435,36 @@ get_size_and_blocks_from_xattrs(__u64 *size, __u64 *blocks,
         *size = som->lsa_size;
         *blocks = som->lsa_blocks;
     }
+}
+
+bool
+get_hsm_from_xattrs(struct rbh_value_map *xattrs, struct rbh_sstack *sstack)
+{
+    struct hsm_attrs *hsm_data = NULL;
+
+    if (xattrs_count - xattrs->count < 3)
+        return false;
+
+    for(int i = 0; i < xattrs->count; i++) {
+        if(!strncmp(xattrs->pairs[i].key, "trusted.hsm", 11)) {
+            hsm_data = (void *)xattrs->pairs[i].value->binary.data;
+            break;
+        }
+    }
+
+    if (!hsm_data)
+        return true;
+
+    // values in the extended attribute are little endian
+    fill_uint32_pair("hsm_state", le32toh(hsm_data->hsm_flags),
+                     (struct rbh_value_pair *)&xattrs->pairs[xattrs->count++],
+                     sstack);
+    fill_uint64_pair("hsm_archive_id", le64toh(hsm_data->hsm_arch_id),
+                    (struct rbh_value_pair *)&xattrs->pairs[xattrs->count++],
+                    sstack);
+    fill_uint64_pair("hsm_archive_version", le64toh(hsm_data->hsm_arch_ver),
+                    (struct rbh_value_pair *)&xattrs->pairs[xattrs->count++],
+                    sstack);
+
+    return true;
 }
