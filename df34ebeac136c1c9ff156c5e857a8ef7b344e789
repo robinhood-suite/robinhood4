@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39c125ac_acdcef5f",
+        "filename": "librobinhood/include/robinhood/backends/selinux.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T09:17:32Z",
+      "side": 1,
+      "message": "style: alignment, args aligned after opening parenthesis",
+      "range": {
+        "startLine": 19,
+        "startChar": 38,
+        "endLine": 20,
+        "endChar": 65
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5652be7c_be330774",
+        "filename": "librobinhood/include/robinhood/backends/selinux.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T09:17:32Z",
+      "side": 1,
+      "message": "style: alignment, aligned following the equal sign",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 58
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eee3156_1697c4a4",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T09:17:32Z",
+      "side": 1,
+      "message": "question: as we want to store every information contained in the context, is there any benefit to store the binary context also?",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 38
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f1bf92c_c34df35c",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T09:17:32Z",
+      "side": 1,
+      "message": "style: non-empty line",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 8
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1eeb0b2_6c4e94a9",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T09:17:32Z",
+      "side": 1,
+      "message": "question: is this range format understood by mirror backends?\n\nNot sure how ranges are repesented, but in case it is from `c123` to `c456`, will mongo be able to return the entry if `c200` is used as a filter?\n\nMaybe we need to change the way range is represented?",
+      "range": {
+        "startLine": 49,
+        "startChar": 24,
+        "endLine": 49,
+        "endChar": 36
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab782140_e3d4bb12",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T09:17:32Z",
+      "side": 1,
+      "message": "style: do we need to hypertext them again?",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 82
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12f091bf_7f7a762e",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T09:17:32Z",
+      "side": 1,
+      "message": "suggest: \"listed\"? avoiding \"defined\" repetition",
+      "range": {
+        "startLine": 65,
+        "startChar": 10,
+        "endLine": 65,
+        "endChar": 17
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0c50a21_c65cb1a0",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T09:17:32Z",
+      "side": 1,
+      "message": "comment: as stated earlier, do not know if this is really interesting, maybe an admin can answer and decide",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 79
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d020c9d_b25a28d4",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T09:17:32Z",
+      "side": 1,
+      "message": "comment: as stated earlier, and because other filters work that way, we may want to filter around a given value, but validate each range that contains this value",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 68
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fc519fc_a7a55393",
+        "filename": "rbh-info/tests/test_lustre.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T09:17:32Z",
+      "side": 1,
+      "message": "question: is selinux forcefully installed for the lustre non-regression?",
+      "range": {
+        "startLine": 24,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 92
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
