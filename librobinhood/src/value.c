@@ -529,6 +529,18 @@ fill_int64_pair(const char *key, int64_t integer, struct rbh_value_pair *pair,
 }
 
 int
+fill_uint64_pair(const char *key, uint64_t integer, struct rbh_value_pair *pair,
+                 struct rbh_sstack *stack)
+{
+    const struct rbh_value uint64_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = integer,
+    };
+
+    return fill_pair(key, &uint64_value, pair, stack);
+}
+
+int
 fill_double_pair(const char *key, double float64, struct rbh_value_pair *pair,
                  struct rbh_sstack *stack)
 {
