@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d18c435_dabe3661",
+        "filename": "librobinhood/include/robinhood/backends/selinux.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-05-26T11:49:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39c125ac_acdcef5f",
+      "range": {
+        "startLine": 19,
+        "startChar": 38,
+        "endLine": 20,
+        "endChar": 65
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5652be7c_be330774",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-05-26T09:17:32Z",
       "side": 1,
       "message": "style: alignment, aligned following the equal sign",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 58
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ffb63f3_5f7ade3f",
+        "filename": "librobinhood/include/robinhood/backends/selinux.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-05-26T11:49:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5652be7c_be330774",
       "range": {
         "startLine": 31,
         "startChar": 0,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a6b359d6_c54830a3",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-05-26T11:49:03Z",
+      "side": 1,
+      "message": "The enricher is expected to parse the whole context to a string so it won\u0027t be a binary anymore.",
+      "parentUuid": "2eee3156_1697c4a4",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 38
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f1bf92c_c34df35c",
         "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
         "patchSetId": 1
@@ -83,6 +155,30 @@
       "writtenOn": "2026-05-26T09:17:32Z",
       "side": 1,
       "message": "style: non-empty line",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 8
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86766229_e8f3f744",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-05-26T11:49:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f1bf92c_c34df35c",
       "range": {
         "startLine": 40,
         "startChar": 0,
@@ -118,6 +214,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0e99ea37_86c0acf2",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-05-26T11:49:03Z",
+      "side": 1,
+      "message": "Good point. This current range format won\u0027t be understood natively by mongo. In this representation it will understand the range only like s0:c123,c456. \nIt is possible to separate s0 and c123,c456 it two differents xattrs, but I don\u0027t see other ways to store the c123,c456 part (maybe a selinux.category entry containing a list of categories, could be too long)\n\nFor SELinux, c123,c456 represents c123 AND c456, but c123.c456 represents FROM c123 TO c456.",
+      "parentUuid": "c1eeb0b2_6c4e94a9",
+      "range": {
+        "startLine": 49,
+        "startChar": 24,
+        "endLine": 49,
+        "endChar": 36
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ab782140_e3d4bb12",
         "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
         "patchSetId": 1
@@ -141,6 +261,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "08c06849_d3e17703",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-05-26T11:49:03Z",
+      "side": 1,
+      "message": "It was copied from the older sparse enricher\u0027s README.",
+      "parentUuid": "ab782140_e3d4bb12",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 82
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "12f091bf_7f7a762e",
         "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
         "patchSetId": 1
@@ -152,6 +296,30 @@
       "writtenOn": "2026-05-26T09:17:32Z",
       "side": 1,
       "message": "suggest: \"listed\"? avoiding \"defined\" repetition",
+      "range": {
+        "startLine": 65,
+        "startChar": 10,
+        "endLine": 65,
+        "endChar": 17
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4366803_a26da929",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-05-26T11:49:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12f091bf_7f7a762e",
       "range": {
         "startLine": 65,
         "startChar": 10,
@@ -210,6 +378,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5882e779_962baffb",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-05-26T11:49:03Z",
+      "side": 1,
+      "message": "In this version, selinux-range filters the entries whose range exactly matches a given range.\n\nMaybe addind a -selinux-category filter to filter entries whose range CONTAINS a given category ?",
+      "parentUuid": "0d020c9d_b25a28d4",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 68
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4fc519fc_a7a55393",
         "filename": "rbh-info/tests/test_lustre.bash",
         "patchSetId": 1
@@ -221,6 +413,30 @@
       "writtenOn": "2026-05-26T09:17:32Z",
       "side": 1,
       "message": "question: is selinux forcefully installed for the lustre non-regression?",
+      "range": {
+        "startLine": 24,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 92
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "546a5de9_3ca0a32c",
+        "filename": "rbh-info/tests/test_lustre.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-05-26T11:49:03Z",
+      "side": 1,
+      "message": "This test does not require SELinux to be installed, it only checks that the SELinux posix enricher is compiled, similary to retention and sparse enrichers.",
+      "parentUuid": "4fc519fc_a7a55393",
       "range": {
         "startLine": 24,
         "startChar": 8,
