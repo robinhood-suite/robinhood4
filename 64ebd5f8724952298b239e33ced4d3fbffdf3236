@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d35ab54a_d3c9b762",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-05-26T14:28:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "962b37da_6d6ec0da",
+      "range": {
+        "startLine": 9,
+        "startChar": 31,
+        "endLine": 9,
+        "endChar": 34
+      },
+      "revId": "64ebd5f8724952298b239e33ced4d3fbffdf3236",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "098676f5_a68459e4",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-05-26T11:24:06Z",
       "side": 1,
       "message": "minor: the `required_pairs` modification is not documented\n\nAlso does this fix concern lustre or is it implied by the ldiskfs extension? I think this is an original bug, just want to confirm with you.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 32
+      },
+      "revId": "64ebd5f8724952298b239e33ced4d3fbffdf3236",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a729cf8_20fc8bf6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-05-26T14:28:43Z",
+      "side": 1,
+      "message": "The `required_pairs` modification is to correct another bug in the same function with the same effect.\nThese bugs are not related to the ldiskfs extension. It looks like they were introduced in commits `dccd3f686` and `fe1a1b7bf`. I did not check the other functions filling pairs in the given `rbh_value_pair *` yet, and they may still include similar bugs.",
+      "parentUuid": "098676f5_a68459e4",
       "range": {
         "startLine": 9,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "469944d7_d4418bd8",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-05-26T14:28:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36b9e140_e4d1511a",
+      "range": {
+        "startLine": 719,
+        "startChar": 12,
+        "endLine": 719,
+        "endChar": 32
+      },
+      "revId": "64ebd5f8724952298b239e33ced4d3fbffdf3236",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f0300c0_ce2d9875",
@@ -83,6 +155,30 @@
       "writtenOn": "2026-05-26T11:24:06Z",
       "side": 1,
       "message": "question: who set those fields of data, and what do they mean?",
+      "range": {
+        "startLine": 774,
+        "startChar": 8,
+        "endLine": 774,
+        "endChar": 16
+      },
+      "revId": "64ebd5f8724952298b239e33ced4d3fbffdf3236",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5d6d232_33962bf6",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-05-26T14:28:43Z",
+      "side": 1,
+      "message": "Those fields are set by `init_iterator_data()` and `fill_iterator_data()`.\n`data.ost` is set if the file is not a directory and `data.has_extension` is set to true if the lustre layout has the LCME_FL_EXTENSION flag.\nThose are used in the following fuction `xattrs_fill_layout`, to decide whether to fill some pairs or not, but no check was done to ensure the created pairs could fit in the available space.",
+      "parentUuid": "6f0300c0_ce2d9875",
       "range": {
         "startLine": 774,
         "startChar": 8,
