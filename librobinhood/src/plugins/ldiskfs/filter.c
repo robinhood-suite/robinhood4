@@ -208,6 +208,11 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
     if(is_mdt)
         get_size_and_blocks_from_xattrs(&size, &blocks, &inode_xattrs);
 
+    fill_uint32_pair(
+        "project_id", inode_projid(*inode),
+        (struct rbh_value_pair *)&inode_xattrs.pairs[inode_xattrs.count++],
+        sstack);
+
     statx.stx_mask = RBH_STATX_ATIME_SEC | RBH_STATX_CTIME_SEC |
         RBH_STATX_MTIME_SEC | RBH_STATX_INO | RBH_STATX_BLOCKS |
         RBH_STATX_SIZE | RBH_STATX_MODE | RBH_STATX_UID | RBH_STATX_GID;
