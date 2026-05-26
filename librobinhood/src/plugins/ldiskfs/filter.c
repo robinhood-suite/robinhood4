@@ -191,6 +191,8 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
                 dentry->name);
     }
 
+    get_hsm_from_xattrs(&inode_xattrs, sstack);
+
     id = rbh_id_from_lu_fid(&dentry->fid);
 
     parent_id = dentry->parent ?
