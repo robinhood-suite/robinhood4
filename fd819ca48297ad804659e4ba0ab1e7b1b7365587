@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8578711_0b2fc7cc",
+        "filename": "librobinhood/include/robinhood/backends/lustre.h.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T11:18:25Z",
+      "side": 1,
+      "message": "question: does this must be defined by the ldiskfs instead?",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 34
+      },
+      "revId": "fd819ca48297ad804659e4ba0ab1e7b1b7365587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13b8b801_a28dbb8e",
+        "filename": "librobinhood/src/plugins/ldiskfs/backend.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T11:18:25Z",
+      "side": 1,
+      "message": "style: size\u003e80 characters",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 81
+      },
+      "revId": "fd819ca48297ad804659e4ba0ab1e7b1b7365587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5e243b3_90e594ae",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T11:18:25Z",
+      "side": 1,
+      "message": "question: is it because of code deduplication that you use the lustre enrichment function?\n\nMore generally, is the lustre extension required to be installed to use the ldiskfs one? If that\u0027s the case, why the ldiskfs is not directly an extension of lustre? I donnot recall if this is possible or not..",
+      "range": {
+        "startLine": 244,
+        "startChar": 27,
+        "endLine": 244,
+        "endChar": 33
+      },
+      "revId": "fd819ca48297ad804659e4ba0ab1e7b1b7365587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0e597b4_49923423",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T11:18:25Z",
+      "side": 1,
+      "message": "question: why changing this?",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 11
+      },
+      "revId": "fd819ca48297ad804659e4ba0ab1e7b1b7365587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea2f7021_f5cc6b56",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-26T11:18:25Z",
+      "side": 1,
+      "message": "style:\n\n```\n    links \u003d parents_lu_fid_from_link(\n        (void *)xattrs-\u003epairs[i].value-\u003ebinary.data,\n        sstack);\n\n```",
+      "range": {
+        "startLine": 368,
+        "startChar": 12,
+        "endLine": 369,
+        "endChar": 68
+      },
+      "revId": "fd819ca48297ad804659e4ba0ab1e7b1b7365587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
