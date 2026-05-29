@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4305117e_8b13d73e",
+        "filename": "librobinhood/include/robinhood/backends/lustre.h.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-29T09:48:27Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d1daff90_71d40a28",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 34
+      },
+      "revId": "fd819ca48297ad804659e4ba0ab1e7b1b7365587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13b8b801_a28dbb8e",
@@ -144,6 +168,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9c8ad6ef_22a29816",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-29T09:48:27Z",
+      "side": 1,
+      "message": "Okay, I searched in the repository and I now clearly see what ldiskfs is, as it is not an extension of a given plugin, that\u0027s an independent one.\n\nBut for the build of the ldiskfs plugin, you do not have to require that the lustre enriche is built, only that lustre is available. So I think that the enricher code needs to be taken out from the lustre extension if you want to avoid code duplication. But I will not block this patch for this reason.",
+      "parentUuid": "150272c0_2de59e61",
+      "range": {
+        "startLine": 244,
+        "startChar": 27,
+        "endLine": 244,
+        "endChar": 33
+      },
+      "revId": "fd819ca48297ad804659e4ba0ab1e7b1b7365587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0e597b4_49923423",
         "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
         "patchSetId": 2
@@ -179,6 +227,30 @@
       "side": 1,
       "message": "The previous implementation set an error message but did not actually cause an error for the user, virtually doing nothing, so I chose to just cast a warning to warn the user the results may not be correct",
       "parentUuid": "d0e597b4_49923423",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 11
+      },
+      "revId": "fd819ca48297ad804659e4ba0ab1e7b1b7365587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c94c93c_96b3bca8",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-05-29T09:48:27Z",
+      "side": 1,
+      "message": "Kind of strange: as the errno is set I thought that the caller will check the errno and then exit. That\u0027s what the code generally do. Maybe we need to add to `fsentry_from_dentry()` the checking of the errno?",
+      "parentUuid": "0715c5da_f785ff17",
       "range": {
         "startLine": 131,
         "startChar": 4,
