@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "86c3695b_d011f0e5",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-01T12:06:34Z",
+      "side": 1,
+      "message": "We allow relative paths. PATH is only checked if there is no `/` in the command, like `ls` or whatever you want. If you want to check for a relative path script, the good way to do so is to use `./script.sh`.\n\nOr you can also add current dir to PATH or use its absolute path.",
+      "parentUuid": "ac81125a_e9929b39",
+      "range": {
+        "startLine": 102,
+        "startChar": 17,
+        "endLine": 102,
+        "endChar": 32
+      },
+      "revId": "37873fac61b09b1cc9678eecf9814489fe1820c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6585f1d_ff9869ab",
         "filename": "rbh-gc/rbh-gc.c",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2026-06-01T11:38:40Z",
       "side": 1,
       "message": "defect: if i understand correctly, you\u0027re checking here that the command given with a relative path can be started, but if the command is `a/b`, then it is a relative path, but this if will not be triggered because the command contains a `/`",
+      "range": {
+        "startLine": 105,
+        "startChar": 8,
+        "endLine": 105,
+        "endChar": 32
+      },
+      "revId": "37873fac61b09b1cc9678eecf9814489fe1820c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0866a818_9e93b3e2",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-01T12:06:34Z",
+      "side": 1,
+      "message": "I check if the command got a `/`, if not I consider the command to be available through PATH.\n\n`ls` -\u003e in if\n`/root/to/exec` -\u003e out if -\u003e absolute\n`./exec` -\u003e out if -\u003e relative\n`a/b` -\u003e out if -\u003e relative",
+      "parentUuid": "e6585f1d_ff9869ab",
       "range": {
         "startLine": 105,
         "startChar": 8,
