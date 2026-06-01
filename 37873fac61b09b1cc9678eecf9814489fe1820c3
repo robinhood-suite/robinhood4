@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac81125a_e9929b39",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-01T11:38:40Z",
+      "side": 1,
+      "message": "question: so commands can be only be in the PATH variable ? Why not allow path relative to the current dir ? `rbh-gc --check truc.sh` with `truc.sh` in the current dir should work no ?",
+      "range": {
+        "startLine": 102,
+        "startChar": 17,
+        "endLine": 102,
+        "endChar": 32
+      },
+      "revId": "37873fac61b09b1cc9678eecf9814489fe1820c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6585f1d_ff9869ab",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-01T11:38:40Z",
+      "side": 1,
+      "message": "defect: if i understand correctly, you\u0027re checking here that the command given with a relative path can be started, but if the command is `a/b`, then it is a relative path, but this if will not be triggered because the command contains a `/`",
+      "range": {
+        "startLine": 105,
+        "startChar": 8,
+        "endLine": 105,
+        "endChar": 32
+      },
+      "revId": "37873fac61b09b1cc9678eecf9814489fe1820c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
