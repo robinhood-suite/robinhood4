@@ -286,6 +286,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2ab817fe_68989c3b",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-01T14:24:39Z",
+      "side": 1,
+      "message": "Still thinking about how to store this last part. \nGoing to store without s and c after parsing elements.\n\nModifying the README file to make the example more complete and accurate.\nTo be changed.",
+      "parentUuid": "b8e26618_55f2a387",
+      "range": {
+        "startLine": 49,
+        "startChar": 24,
+        "endLine": 49,
+        "endChar": 36
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ab782140_e3d4bb12",
         "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
         "patchSetId": 1
@@ -486,6 +510,30 @@
       "side": 1,
       "message": "Maybe doing both in the same filter, but that just can be implemented later.",
       "parentUuid": "5882e779_962baffb",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 68
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deaa6146_c278372d",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-01T14:24:39Z",
+      "side": 1,
+      "message": "Yes, this can be updated later.",
+      "parentUuid": "918b65f9_4dbd1685",
       "range": {
         "startLine": 111,
         "startChar": 0,
