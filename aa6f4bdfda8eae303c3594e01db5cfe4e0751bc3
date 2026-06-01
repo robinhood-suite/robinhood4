@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "064ddabd_f3080f7c",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-01T07:02:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cac85879_da9c2f82",
+      "range": {
+        "startLine": 301,
+        "startChar": 42,
+        "endLine": 301,
+        "endChar": 44
+      },
+      "revId": "aa6f4bdfda8eae303c3594e01db5cfe4e0751bc3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b801804f_45f7e17a",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-05-27T07:43:10Z",
       "side": 1,
       "message": "major: Where is `letter_check.sh` ?",
+      "range": {
+        "startLine": 102,
+        "startChar": 33,
+        "endLine": 102,
+        "endChar": 48
+      },
+      "revId": "aa6f4bdfda8eae303c3594e01db5cfe4e0751bc3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cd1963f_cdc7e847",
+        "filename": "rbh-gc/tests/test.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-01T07:02:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b801804f_45f7e17a",
       "range": {
         "startLine": 102,
         "startChar": 33,
