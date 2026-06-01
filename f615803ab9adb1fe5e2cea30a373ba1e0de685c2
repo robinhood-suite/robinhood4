@@ -204,6 +204,30 @@
       },
       "revId": "f615803ab9adb1fe5e2cea30a373ba1e0de685c2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "655b8765_6836d845",
+        "filename": "rbh-policy/rbhpolicy/config/policy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-06-01T12:36:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8cbcf39_9c1c93c2",
+      "range": {
+        "startLine": 54,
+        "startChar": 43,
+        "endLine": 54,
+        "endChar": 69
+      },
+      "revId": "f615803ab9adb1fe5e2cea30a373ba1e0de685c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
