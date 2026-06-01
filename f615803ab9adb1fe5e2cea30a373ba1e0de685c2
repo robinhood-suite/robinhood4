@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cb89262_9e20c8c3",
+        "filename": "librobinhood/src/policyengine/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-06-01T10:54:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "955ce59a_d6ba5c23",
+      "range": {
+        "startLine": 312,
+        "startChar": 12,
+        "endLine": 313,
+        "endChar": 23
+      },
+      "revId": "f615803ab9adb1fe5e2cea30a373ba1e0de685c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d06cdb90_2055534d",
@@ -89,6 +113,54 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0488ff22_b13290d4",
+        "filename": "rbh-policy/rbhpolicy/config/cpython.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-06-01T10:54:44Z",
+      "side": 1,
+      "message": "Does anyone have a suggestion?",
+      "parentUuid": "d06cdb90_2055534d",
+      "range": {
+        "startLine": 208,
+        "startChar": 27,
+        "endLine": 208,
+        "endChar": 38
+      },
+      "revId": "f615803ab9adb1fe5e2cea30a373ba1e0de685c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa6ca898_e98d78a4",
+        "filename": "rbh-policy/rbhpolicy/config/cpython.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-06-01T10:54:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf4548f3_87d85893",
+      "range": {
+        "startLine": 208,
+        "startChar": 47,
+        "endLine": 208,
+        "endChar": 58
+      },
+      "revId": "f615803ab9adb1fe5e2cea30a373ba1e0de685c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c8c1dc0c_2ca5a9a3",
         "filename": "rbh-policy/rbhpolicy/config/policy.py",
         "patchSetId": 1
@@ -100,6 +172,30 @@
       "writtenOn": "2026-05-20T07:18:28Z",
       "side": 1,
       "message": "suggest:\n\n```\n    normalize_trigger(stoptrigger) if stoptrigger else None\n```",
+      "range": {
+        "startLine": 54,
+        "startChar": 43,
+        "endLine": 54,
+        "endChar": 69
+      },
+      "revId": "f615803ab9adb1fe5e2cea30a373ba1e0de685c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8cbcf39_9c1c93c2",
+        "filename": "rbh-policy/rbhpolicy/config/policy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-06-01T10:54:44Z",
+      "side": 1,
+      "message": "If I make this change, the stoptrigger field will become mandatory in my policy. I wanted to make it optional to allow the execution of a policy without an end condition that stops when we have no more entry to process.",
+      "parentUuid": "c8c1dc0c_2ca5a9a3",
       "range": {
         "startLine": 54,
         "startChar": 43,
