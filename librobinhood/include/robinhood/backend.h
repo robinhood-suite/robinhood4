@@ -866,6 +866,6 @@ struct rbh_backend_plugin_info {
  *             plugin could handle the given arguments.
  */
 struct rbh_filter *
-build_filter_from_uri(const char *uri, const char **argv);
+build_filter_from_uri(const char *uri, char **argv);
 
 #endif

@@ -46,8 +46,7 @@ enum rbh_parser_token
 rbh_sparse_check_valid_token(const char *token);
 
 struct rbh_filter *
-rbh_sparse_build_filter(const char **argv, int argc, int *index,
-                        bool *need_prefetch);
+rbh_sparse_build_filter(struct filters_context *context, int *index);
 
 enum known_directive
 rbh_sparse_fill_entry_info(const struct rbh_fsentry *fsentry,
