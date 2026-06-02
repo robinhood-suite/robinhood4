@@ -300,13 +300,16 @@ get_backend_plugin_info(const char *uri)
 }
 
 struct rbh_filter *
-build_filter_from_uri(const char *uri, const char **argv)
+build_filter_from_uri(const char *uri, char **argv)
 {
     struct rbh_backend_plugin_info info = get_backend_plugin_info(uri);
+    struct filters_context context = {
+        .argc = 2,
+        .argv = argv,
+        .need_prefetch = false,
+    };
     struct rbh_filter *filter = NULL;
-    bool need_prefetch = false;
     int index = 0;
-    int argc = 2;
 
     for (int i = 0; i < info.extension_count; ++i) {
         const struct rbh_plugin_extension *ext = info.extensions[i];
@@ -314,8 +317,7 @@ build_filter_from_uri(const char *uri, const char **argv)
             ext->common_ops->check_valid_token(argv[0]) ==
             RBH_TOKEN_PREDICATE) {
 
-            filter = ext->common_ops->build_filter(argv, argc, &index,
-                                                   &need_prefetch);
+            filter = ext->common_ops->build_filter(&context, &index);
             if (filter != NULL)
                 return filter;
         }
@@ -324,8 +326,7 @@ build_filter_from_uri(const char *uri, const char **argv)
         info.plugin->common_ops->check_valid_token(argv[0]) ==
         RBH_TOKEN_PREDICATE) {
 
-        filter = info.plugin->common_ops->build_filter(argv, argc, &index,
-                                                       &need_prefetch);
+        filter = info.plugin->common_ops->build_filter(&context, &index);
         if (filter != NULL)
             return filter;
     }

@@ -40,8 +40,7 @@ enum rbh_parser_token
 rbh_lustre_check_valid_token(const char *token);
 
 struct rbh_filter *
-rbh_lustre_build_filter(const char **argv, int argc, int *index,
-                        bool *need_prefetch);
+rbh_lustre_build_filter(struct filters_context *context, int *index);
 
 struct rbh_fsentry *
 rbh_lustre_undelete(void *backend, const char *path,

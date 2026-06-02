@@ -47,8 +47,7 @@ struct rbh_filter_field
 rbh_posix_sort2field(const char *attribute);
 
 struct rbh_filter *
-rbh_posix_build_filter(const char **argv, int argc, int *index,
-                       bool *need_prefetch);
+rbh_posix_build_filter(struct filters_context *context, int *index);
 
 int
 rbh_posix_delete_entry(struct rbh_backend *backend,

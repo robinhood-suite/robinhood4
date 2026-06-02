@@ -18,6 +18,7 @@
 
 #include "parser.h"
 #include "robinhood/filter.h"
+#include <robinhood/filters/core.h>
 #include "robinhood/statx.h"
 #include "robinhood/utils.h"
 
@@ -807,10 +808,11 @@ predicate_needs_argument(enum predicate predicate)
 }
 
 struct rbh_filter *
-rbh_posix_build_filter(const char **argv, int argc, int *index,
-                       bool *need_prefetch)
+rbh_posix_build_filter(struct filters_context *context, int *index)
 {
+    char **argv = context->argv;
     struct rbh_filter *filter;
+    int argc = context->argc;
     enum predicate predicate;
     int i = *index;
 
@@ -833,7 +835,7 @@ rbh_posix_build_filter(const char **argv, int argc, int *index,
         filter = xmin2filter(predicate, argv[++i]);
         break;
     case PRED_ANEWER:
-        *need_prefetch = true;
+        context->need_prefetch = true;
         filter = newer2filter(PRED_ATIME, argv[++i]);
         break;
     case PRED_ATIME:
@@ -843,7 +845,7 @@ rbh_posix_build_filter(const char **argv, int argc, int *index,
         filter = xtime2filter(predicate, argv[++i]);
         break;
     case PRED_CNEWER:
-        *need_prefetch = true;
+        context->need_prefetch = true;
         filter = newer2filter(PRED_CTIME, argv[++i]);
         break;
     case PRED_EMPTY:
@@ -877,7 +879,7 @@ rbh_posix_build_filter(const char **argv, int argc, int *index,
         filter = regex2filter(predicate, argv[++i], RBH_RO_SHELL_PATTERN);
         break;
     case PRED_NEWER:
-        *need_prefetch = true;
+        context->need_prefetch = true;
         filter = newer2filter(PRED_MTIME, argv[++i]);
         break;
     case PRED_NOGROUP:

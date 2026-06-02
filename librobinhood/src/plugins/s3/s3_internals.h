@@ -57,8 +57,7 @@ enum rbh_parser_token
 rbh_s3_check_valid_token(const char *token);
 
 struct rbh_filter *
-rbh_s3_build_filter(const char **argv, int argc, int *index,
-                    bool *need_prefetch);
+rbh_s3_build_filter(struct filters_context *context, int *index);
 
 int
 rbh_s3_delete_entry(struct rbh_backend *backend, struct rbh_fsentry *fsentry,

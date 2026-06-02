@@ -13,6 +13,7 @@
 #include <stddef.h>
 #include <sysexits.h>
 
+#include <robinhood/filters/core.h>
 #include "robinhood/plugins/backend.h"
 #include "plugin_callback_common.h"
 
@@ -28,10 +29,11 @@ bucket2filter(const char *bucket)
 }
 
 struct rbh_filter *
-rbh_s3_build_filter(const char **argv, int argc, int *index,
-                    bool *need_prefetch)
+rbh_s3_build_filter(struct filters_context *context, int *index)
 {
+    char **argv = context->argv;
     struct rbh_filter *filter;
+    int argc = context->argc;
     int i = *index;
 
     if (posix_plugin == NULL)
@@ -44,8 +46,8 @@ rbh_s3_build_filter(const char **argv, int argc, int *index,
         filter = bucket2filter(argv[++i]);
         *index = i;
     } else {
-        filter = rbh_pe_common_ops_build_filter(posix_plugin->common_ops, argv,
-                                                argc, index, need_prefetch);
+        filter = rbh_pe_common_ops_build_filter(posix_plugin->common_ops,
+                                                context, index);
     }
 
     assert(filter != NULL);

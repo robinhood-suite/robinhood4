@@ -203,10 +203,7 @@ parse_expression(struct filters_context *ctx, int *arg_idx,
             {
                 const struct rbh_pe_common_operations *common_ops =
                     get_common_operations(&ctx->info_pe[pe_index]);
-                tmp = rbh_pe_common_ops_build_filter(common_ops,
-                                                     (const char **) ctx->argv,
-                                                     ctx->argc, &i,
-                                                     &ctx->need_prefetch);
+                tmp = rbh_pe_common_ops_build_filter(common_ops, ctx, &i);
             }
 
             if (negate) {

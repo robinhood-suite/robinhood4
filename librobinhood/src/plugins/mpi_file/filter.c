@@ -15,6 +15,7 @@
 #include <fnmatch.h>
 
 #include "robinhood/filter.h"
+#include <robinhood/filters/core.h>
 #include "robinhood/plugins/backend.h"
 #include "robinhood/statx.h"
 #include "robinhood/utils.h"
@@ -330,13 +331,12 @@ _mfu_pred_free(mfu_pred *pred)
 }
 
 struct rbh_filter *
-rbh_mpi_file_build_filter(const char **argv, int argc, int *index,
-                          bool *need_prefetch)
+rbh_mpi_file_build_filter(struct filters_context *context, int *index)
 {
     if (posix_plugin == NULL)
         if (import_posix_plugin())
             return NULL;
 
-    return rbh_pe_common_ops_build_filter(posix_plugin->common_ops, argv, argc,
-                                          index, need_prefetch);
+    return rbh_pe_common_ops_build_filter(posix_plugin->common_ops, context,
+                                          index);
 }
