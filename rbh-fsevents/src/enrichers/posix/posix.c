@@ -696,20 +696,21 @@ skip:
 
     rc = enrich(enricher, fsevent);
     if (rc) {
-        if (enricher->skip_error) {
-            if (errno == ESTALE) {
+        if (!enricher->skip_error)
+            return NULL;
+
+        if (errno == ESTALE) {
+            if (enricher->estale_logs)
                 fprintf(stderr,
                         "Detected stale entry '%s', skipping it: %s (%d)\n",
                         fsevent->link.name, strerror(errno), errno);
-                goto skip;
-            } else {
-                fprintf(stderr,
-                        "Failed to enrich part of entry '%s', may be incomplete in destination: %s (%d)\n",
-                        fsevent->link.name, strerror(errno), errno);
-            }
-        } else {
-            return NULL;
+
+            goto skip;
         }
+
+        fprintf(stderr,
+                "Failed to enrich part of entry '%s', may be incomplete in destination: %s (%d)\n",
+                fsevent->link.name, strerror(errno), errno);
     }
 
     return &enricher->fsevent;
@@ -818,7 +819,7 @@ setup_fsevent_enrichers(struct enricher *enricher, const char *type)
 struct rbh_iterator *
 posix_iter_enrich(struct rbh_backend *backend, const char *type,
                   struct rbh_iterator *fsevents, int mount_fd,
-                  const char *mount_path, bool skip_error)
+                  const char *mount_path, bool skip_error, bool estale_logs)
 {
     struct rbh_value_pair *pairs;
     struct enricher *enricher;
@@ -840,6 +841,7 @@ posix_iter_enrich(struct rbh_backend *backend, const char *type,
     enricher->pair_count = INITIAL_PAIR_COUNT;
     enricher->symlink = symlink;
     enricher->skip_error = skip_error;
+    enricher->estale_logs = estale_logs;
     setup_fsevent_enrichers(enricher, type);
 
     return &enricher->iterator;
@@ -915,14 +917,14 @@ iter_no_partial(struct rbh_iterator *fsevents)
 static struct rbh_iterator *
 posix_enrich_iter_builder_build_iter(void *_builder,
                                      struct rbh_iterator *fsevents,
-                                     bool skip_error)
+                                     bool skip_error,
+                                     bool estale_logs)
 {
     struct enrich_iter_builder *builder = _builder;
 
     return posix_iter_enrich(builder->backend, builder->type, fsevents,
-                             builder->mount_fd,
-                             builder->mount_path,
-                             skip_error);
+                             builder->mount_fd, builder->mount_path, skip_error,
+                             estale_logs);
 }
 
 #define MIN_VALUES_SSTACK_ALLOC (1 << 6)
