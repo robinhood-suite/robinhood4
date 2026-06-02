@@ -50,8 +50,7 @@ struct rbh_filter_field
 rbh_retention_sort2field(const char *attribute);
 
 struct rbh_filter *
-rbh_retention_build_filter(const char **argv, int argc, int *index,
-                           bool *need_prefetch);
+rbh_retention_build_filter(struct filters_context *context, int *index);
 
 enum known_directive
 rbh_retention_fill_entry_info(const struct rbh_fsentry *fsentry,

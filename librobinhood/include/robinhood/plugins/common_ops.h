@@ -60,21 +60,19 @@ struct rbh_pe_common_operations {
     struct rbh_filter_field (*sort2field)(const char *string);
 
     /**
-     * Create a filter from the command line argument at \p index in \p argv
+     * Create a filter from the command line argument in \p context
      *
-     * @param argv           the list of arguments given to the command
-     * @param argc           the number of strings in \p argv
+     * @param context        the context of the command, containing the list of
+     *                       arguments given to it
      * @param index          the argument currently being parsed, should be
      *                       updated if necessary to skip optionnal values
-     * @param need_prefetch  boolean value set by the plugin or extension to
-     *                       indicate if a filter will need to be completed
      *
      * @return               a pointer to newly allocated struct rbh_filter on
      *                       success, NULL on error and errno is set
      *                       appropriately
      */
-    struct rbh_filter *(*build_filter)(const char **argv, int argc, int *index,
-                                       bool *need_prefetch);
+    struct rbh_filter *(*build_filter)(struct filters_context *context,
+                                       int *index);
 
     /**
      * Fill information about an entry according to a given directive into a
@@ -218,11 +216,11 @@ rbh_pe_common_ops_sort2field(
 static inline struct rbh_filter *
 rbh_pe_common_ops_build_filter(
     const struct rbh_pe_common_operations *common_ops,
-    const char **argv, int argc, int *index, bool *need_prefetch
+    struct filters_context *ctx, int *index
 )
 {
     if (common_ops && common_ops->build_filter)
-        return common_ops->build_filter(argv, argc, index, need_prefetch);
+        return common_ops->build_filter(ctx, index);
 
     errno = ENOTSUP;
     return NULL;

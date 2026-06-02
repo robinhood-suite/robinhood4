@@ -39,46 +39,16 @@ rbh_mpi_file_backend_new(const struct rbh_backend_plugin *self,
                          bool read_only);
 
 /**
- * Check the given token corresponds to a predicate or action known by mpi-file
- *
- * @param token   a string that represents a token mpi-file should identify
- *
- * @return        RBH_TOKEN_PREDICATE if the token is a predicate
- *                RBH_TOKEN_ACTION if the token is an action
- *                RBH_TOKEN_UNKNOWN if the token is not valid
- *                RBH_TOKEN_ERROR if an error occur and errno is set
- *                appropriately
+ * The following functions are implementations of the different callbacks of the
+ * `rbh_pe_common_operations` structure. Their documentation is the same as the
+ * one given for the structure's callbacks.
  */
 enum rbh_parser_token
 rbh_mpi_file_check_valid_token(const char *token);
 
-/**
- * Create a filter from the given command line arguments and position in that
- * command line
- *
- * @param argv           the list of arguments given to the command
- * @param argc           the number of strings in \p argv
- * @param index          the argument currently being parsed, should be updated
- *                       if necessary to skip optionnal values
- * @param need_prefetch  boolean value set by mpi-file to indicate if a filter
- *                       needs to be completed
- *
- * @return               a pointer to newly allocated struct rbh_filter on
- *                       success, NULL on error and errno is set appropriately
- */
 struct rbh_filter *
-rbh_mpi_file_build_filter(const char **argv, int argc, int *index,
-                          bool *need_prefetch);
+rbh_mpi_file_build_filter(struct filters_context *context, int *index);
 
-/**
- * Delete an entry from the plugin
- *
- * @param backend        the backend handling the entry
- * @param fsentry        the entry to delete
- * @param params         delete parameters
- *
- * @return               0 on success, -1 on error and errno is set
- */
 int
 rbh_mpi_file_delete_entry(struct rbh_backend *backend,
                           struct rbh_fsentry *fsentry,

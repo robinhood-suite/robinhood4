@@ -28,6 +28,7 @@
 #include <robinhood/backends/posix_extension.h>
 #include <robinhood/utils.h>
 #include <robinhood/filter.h>
+#include <robinhood/filters/core.h>
 
 #include "parser.h"
 
@@ -891,10 +892,11 @@ predicate_has_argument(int predicate)
 }
 
 struct rbh_filter *
-rbh_lustre_build_filter(const char **argv, int argc, int *index,
-                        __attribute__((unused)) bool *need_prefetch)
+rbh_lustre_build_filter(struct filters_context *context, int *index)
 {
+    char **argv = context->argv;
     struct rbh_filter *filter;
+    int argc = context->argc;
     int i = *index;
     int predicate;
 
