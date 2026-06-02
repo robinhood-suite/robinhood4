@@ -14,7 +14,7 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-no_skip_option()
+no_skip()
 {
     local file="test_file"
 
@@ -25,21 +25,51 @@ no_skip_option()
     rm $file
 
     echo "$non_enriched_output" |
-        rbh_fsevents --no-skip --enrich rbh:lustre:"$LUSTRE_DIR" - - \
-        > /dev/null &&
-        error "fsevents with an error at enrich and the 'no-skip' flag should" \
-              "have failed"
+        rbh_fsevents --no-skip \
+        --enrich rbh:lustre:"$LUSTRE_DIR" - - > /dev/null &&
+        error "fsevents with an error at enrich and the 'no-skip' flag should have failed"
 
     echo "$non_enriched_output" |
         rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" - - > /dev/null ||
         error "fsevents with a skipped error at enrich should have succeeded"
 }
 
+no_estale_logs()
+{
+    local file="test_file"
+
+    lfs setstripe -c 1 $file
+
+    local non_enriched_output=$(rbh_fsevents src:lustre:"$LUSTRE_MDT" -)
+
+    rm $file
+
+    echo "$non_enriched_output" |
+        rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        - "rbh:$db:$testdb" 2> output.log ||
+        error "fsevents with a skipped ESTALE at enrich should have succeeded"
+
+    grep "stale entry" output.log ||
+        error "fsevents with an ESTALE at enrich should have been logged"
+
+    rm output.log
+
+    echo "$non_enriched_output" |
+        rbh_fsevents --no-estale-logs --enrich rbh:lustre:"$LUSTRE_DIR" \
+        - "rbh:$db:$testdb" 2> output.log ||
+        error "fsevents with a skipped ESTALE at enrich should have succeeded"
+
+    grep "stale entry" output.log &&
+        error "fsevents with an ESTALE at enrich and --no-estale-logs shouldn't have been logged"
+
+    return 0
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(no_skip_option)
+declare -a tests=(no_skip no_estale_logs)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
