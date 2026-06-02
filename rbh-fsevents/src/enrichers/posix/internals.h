@@ -76,6 +76,7 @@ struct enricher {
     char *symlink;
 
     bool skip_error;
+    bool estale_logs;
     struct posix_enricher *extension_enrichers;
     size_t n_extensions;
 };
@@ -98,7 +99,7 @@ int posix_enrich(struct enricher *enricher,
 struct rbh_iterator *
 posix_iter_enrich(struct rbh_backend *backend, const char *type,
                   struct rbh_iterator *fsevents, int mount_fd,
-                  const char *mount_path, bool skip_error);
+                  const char *mount_path, bool skip_error, bool estale_logs);
 
 void
 posix_enricher_iter_destroy(void *iterator);

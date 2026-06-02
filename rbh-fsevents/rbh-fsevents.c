@@ -78,8 +78,11 @@ usage(void)
         "    -i, --index NUMBER\n"
         "                    the changelog index to start reading from instead of\n"
         "                    the one stored in the database\n"
+        "    -l, --no-estale-logs\n"
+        "                    do not print any log on ESTALE errors, quietly skip/quit instead\n"
         "    -m, --max NUMBER\n"
         "                    Set a maximum number of changelog to read\n"
+        "    -n, --no-skip   do not skip entries on error, stop instead\n"
         "    -r, --raw       do not enrich changelog records (default)\n"
         "    -v, --verbose   Set the verbose mode\n"
         "    --version       print RobinHood 4's version\n"
@@ -334,6 +337,7 @@ destroy_enrich_point(void)
 static _Atomic _Bool should_stop;
 static bool done_producing = false;
 static bool skip_error = true;
+static bool estale_logs = true;
 
 struct rbh_node_iterator {
     uint64_t batch_id;
@@ -579,7 +583,8 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
             if (builder != NULL)
                 sub_batch->fsevents = build_enrich_iter(builder,
                                                         sub_batch->fsevents,
-                                                        skip_error);
+                                                        skip_error,
+                                                        estale_logs);
             else if (!allow_partials)
                 sub_batch->fsevents = iter_no_partial(sub_batch->fsevents);
 
@@ -810,6 +815,10 @@ main(int argc, char *argv[])
             .val = 'i',
         },
         {
+            .name = "no-estale-logs",
+            .val = 'l',
+        },
+        {
             .name = "max",
             .has_arg = required_argument,
             .val = 'm',
@@ -856,7 +865,7 @@ main(int argc, char *argv[])
     rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "b:c:d:e:hi:m:nrvw:z", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "b:c:d:e:hi:lm:nrvw:z", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
         case 'b':
@@ -881,6 +890,9 @@ main(int argc, char *argv[])
         case 'i':
             if (str2uint64_t(optarg, &start_index))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
+            break;
+        case 'l':
+            estale_logs = false;
             break;
         case 'm':
             if (str2uint64_t(optarg, &max_changelog))
