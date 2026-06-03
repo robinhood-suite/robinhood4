@@ -26,9 +26,10 @@
 
 #include <robinhood/backend.h>
 #include <robinhood/backends/posix_extension.h>
-#include <robinhood/utils.h>
 #include <robinhood/filter.h>
 #include <robinhood/filters/core.h>
+#include <robinhood/projection.h>
+#include <robinhood/utils.h>
 
 #include "parser.h"
 
@@ -323,49 +324,40 @@ get_default_stripe_filter(void)
 }
 
 static const struct rbh_value *
-get_fs_default_dir_lov(uint64_t flags)
+get_fs_default_dir_lov(struct filters_context *context,
+                       const struct rbh_filter_field *field)
 {
-    struct rbh_backend *backend = rbh_backend_from_uri("rbh:lustre:.", true);
-    struct rbh_posix_enrich_ctx ctx = {0};
-    struct rbh_value_pair pair;
-    char *mount_path = NULL;
-    char pwd[PATH_MAX];
-    int rc;
-    int fd;
+    struct rbh_filter_projection projection = { 0 };
+    struct rbh_fsentry *root_fsentry;
 
-    if (backend == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "Failed to create the Lustre backend for default values retrieval");
-
-    if (getcwd(pwd, sizeof(pwd)) == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "Failed to get the current working directory");
-
-    rc = get_mount_path(pwd, &mount_path);
-    if (rc)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "Failed to get the mount point of the current working directory '%s'",
-                      pwd);
-
-    fd = open(mount_path, O_RDONLY | O_CLOEXEC);
-    ctx.einfo.fd = &fd;
-
-    if (*ctx.einfo.fd < 0)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "Failed to open the mount point '%s' of the current working directory",
-                      mount_path);
-
-    if (rbh_backend_get_attribute(backend,
-                                  RBH_LEF_LUSTRE | RBH_LEF_DIR_LOV | flags,
-                                  &ctx, &pair, 1) == -1)
+    if (context->backend_count == 0 || context->backend == NULL)
         return NULL;
 
-    return pair.value;
+    rbh_projection_add(&projection, field);
+
+    for (size_t i = 0; i < context->backend_count; ++i) {
+        struct rbh_backend *backend = context->backend[i];
+        const struct rbh_value *value;
+
+        root_fsentry = rbh_backend_root(backend, &projection);
+        if (!root_fsentry)
+            return NULL;
+
+        value = rbh_fsentry_find_inode_xattr(root_fsentry, field->xattr);
+        if (value) {
+            assert(value->type == RBH_VT_SEQUENCE);
+            assert(value->sequence.count == 1);
+            return &value->sequence.values[0];
+        }
+    }
+
+    return NULL;
 }
 
 static struct rbh_filter *
-stripe_count2filter(const char *stripe_count)
+stripe_count2filter(const char *stripe_count, struct filters_context *context)
 {
+    const struct rbh_filter_field *field = get_filter_field(LPRED_STRIPE_COUNT);
     const struct rbh_value *default_stripe_count;
     struct rbh_filter *default_filter;
     struct rbh_filter *filter;
@@ -374,10 +366,9 @@ stripe_count2filter(const char *stripe_count)
     if (strcmp(stripe_count, "default") == 0)
         return default_filter;
 
-    default_stripe_count = get_fs_default_dir_lov(RBH_LEF_STRIPE_COUNT);
+    default_stripe_count = get_fs_default_dir_lov(context, field);
 
-    filter = rbh_numeric2filter(get_filter_field(LPRED_STRIPE_COUNT),
-                                stripe_count, RBH_FOP_EQUAL);
+    filter = rbh_numeric2filter(field, stripe_count, RBH_FOP_EQUAL);
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "Invalid stripe count provided, should be '<+|->n', got '%s'",
@@ -407,8 +398,9 @@ stripe_count2filter(const char *stripe_count)
 }
 
 static struct rbh_filter *
-stripe_size2filter(const char *stripe_size)
+stripe_size2filter(const char *stripe_size, struct filters_context *context)
 {
+    const struct rbh_filter_field *field = get_filter_field(LPRED_STRIPE_SIZE);
     const struct rbh_value *default_stripe_size;
     struct rbh_filter *default_filter;
     struct rbh_filter *filter;
@@ -417,10 +409,9 @@ stripe_size2filter(const char *stripe_size)
     if (strcmp(stripe_size, "default") == 0)
         return default_filter;
 
-    default_stripe_size = get_fs_default_dir_lov(RBH_LEF_STRIPE_SIZE);
+    default_stripe_size = get_fs_default_dir_lov(context, field);
 
-    filter = rbh_numeric2filter(get_filter_field(LPRED_STRIPE_SIZE),
-                                stripe_size, RBH_FOP_EQUAL);
+    filter = rbh_numeric2filter(field, stripe_size, RBH_FOP_EQUAL);
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "Invalid stripe size provided, should be '<+|->n', got '%s'",
@@ -486,8 +477,10 @@ str2layout_patterns(const char *layout_pattern)
 }
 
 static struct rbh_filter *
-layout_pattern2filter(const char *_layout)
+layout_pattern2filter(const char *_layout, struct filters_context *context)
 {
+    const struct rbh_filter_field *field =
+        get_filter_field(LPRED_LAYOUT_PATTERN);
     const struct rbh_value *default_pattern;
     struct rbh_filter *default_filter;
     enum layout_patterns layout;
@@ -503,33 +496,25 @@ layout_pattern2filter(const char *_layout)
     if (layout == LAYOUT_PATTERN_DEFAULT)
         return default_filter;
 
-    default_pattern = get_fs_default_dir_lov(RBH_LEF_STRIPE_PATTERN);
+    default_pattern = get_fs_default_dir_lov(context, field);
 
     /* The values for comparison are taken from Lustre's source code */
     switch (layout) {
     case LAYOUT_PATTERN_RAID0:
-        filter = rbh_filter_compare_uint64_new(
-            RBH_FOP_EQUAL,
-            get_filter_field(LPRED_LAYOUT_PATTERN),
-            LLAPI_LAYOUT_RAID0);
+        filter = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, field,
+                                               LLAPI_LAYOUT_RAID0);
         break;
     case LAYOUT_PATTERN_MDT:
-        filter = rbh_filter_compare_uint64_new(
-            RBH_FOP_EQUAL,
-            get_filter_field(LPRED_LAYOUT_PATTERN),
-            LLAPI_LAYOUT_MDT);
+        filter = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, field,
+                                               LLAPI_LAYOUT_MDT);
         break;
     case LAYOUT_PATTERN_OVERSTRIPED:
-        filter = rbh_filter_compare_uint64_new(
-            RBH_FOP_EQUAL,
-            get_filter_field(LPRED_LAYOUT_PATTERN),
-            LLAPI_LAYOUT_OVERSTRIPING);
+        filter = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, field,
+                                               LLAPI_LAYOUT_OVERSTRIPING);
         break;
     case LAYOUT_PATTERN_RELEASED:
-        filter = rbh_filter_compare_uint64_new(
-            RBH_FOP_BITS_ANY_SET,
-            get_filter_field(LPRED_LAYOUT_PATTERN),
-            LOV_PATTERN_F_RELEASED);
+        filter = rbh_filter_compare_uint64_new(RBH_FOP_BITS_ANY_SET, field,
+                                               LOV_PATTERN_F_RELEASED);
         break;
     default:
         __builtin_unreachable();
@@ -943,7 +928,7 @@ rbh_lustre_build_filter(struct filters_context *context, int *index)
         filter = ipool2filter(argv[++i]);
         break;
     case LPRED_LAYOUT_PATTERN:
-        filter = layout_pattern2filter(argv[++i]);
+        filter = layout_pattern2filter(argv[++i], context);
         break;
     case LPRED_MDT_COUNT:
         filter = mdt_count2filter(argv[++i]);
@@ -967,10 +952,10 @@ rbh_lustre_build_filter(struct filters_context *context, int *index)
         filter = project_id2filter(argv[++i]);
         break;
     case LPRED_STRIPE_COUNT:
-        filter = stripe_count2filter(argv[++i]);
+        filter = stripe_count2filter(argv[++i], context);
         break;
     case LPRED_STRIPE_SIZE:
-        filter = stripe_size2filter(argv[++i]);
+        filter = stripe_size2filter(argv[++i], context);
         break;
     default:
         error(EX_USAGE, 0, "invalid filter found `%s'", argv[i]);

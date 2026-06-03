@@ -112,6 +112,24 @@ test_default_layout()
         difflines
     rbh_find "rbh:$db:$testdb" -layout-pattern raid0 | sort |
         difflines "/" "/$file" "/$dir"
+
+    cd /tmp
+
+    lfs setstripe -L mdt -E 1M $LUSTRE_DIR
+
+    rbh_find "rbh:$db:$testdb" -layout-pattern mdt | sort |
+        difflines "/" "/$dir"
+    rbh_find "rbh:$db:$testdb" -layout-pattern raid0 | sort |
+        difflines "/$file"
+
+    lfs setstripe -L raid0 -c 1 $LUSTRE_DIR
+
+    rbh_find "rbh:$db:$testdb" -layout-pattern mdt | sort |
+        difflines
+    rbh_find "rbh:$db:$testdb" -layout-pattern raid0 | sort |
+        difflines "/" "/$file" "/$dir"
+
+    cd $tmpdir
 }
 
 test_other_layouts()
