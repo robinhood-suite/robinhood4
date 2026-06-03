@@ -63,6 +63,19 @@ void
 ctx_finish(struct find_context *ctx);
 
 /**
+ * Open \p backends and store them in \p f_ctx.
+ *
+ * @param  backends       the backends to open
+ * @param  backend_count  the number of backends to open
+ * @param  f_ctx          the filters_context where to store the opened backends
+ *
+ * This function will exit the program if an error occurs.
+ */
+void
+open_system_backends(struct rbh_backend **backends, size_t backend_count,
+                     struct filters_context *f_ctx);
+
+/**
  * Execute a find search corresponding to an action on each backend
  *
  * @param ctx            find's context for this execution
