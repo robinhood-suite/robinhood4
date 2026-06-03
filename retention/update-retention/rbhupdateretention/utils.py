@@ -28,15 +28,19 @@ def exec_popen(_command, output_callback, context):
     for line in iter(process.stdout.readline, b""):
         err = process.poll()
         if err is not None and err != 0:
-            print(f"{command} failed with error code {err}:")
-            for err_line in iter(process.stderr.readline, b""):
-                err_line = err_line.rstrip()
-                print(f"{err_line}")
-
-            sys.exit(err)
+            break
 
         line = line.decode('utf-8').rstrip()
         output_callback(context, line)
+
+    err = process.poll()
+    if err is not None and err != 0:
+        print(f"{command} failed with error code {err}:")
+        for err_line in iter(process.stderr.readline, b""):
+            err_line = err_line.rstrip()
+            print(f"{err_line}")
+
+        sys.exit(err)
 
 def exec_run(_command, string):
     command = _command.split()
