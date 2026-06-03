@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1992c225_69dc0bad",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-03T07:49:46Z",
+      "side": 1,
+      "message": "Then I\u0027d ask that you add a comment saying that you expect relative paths to be in the `./` form. Ok for the explanation though.",
+      "parentUuid": "86c3695b_d011f0e5",
+      "range": {
+        "startLine": 102,
+        "startChar": 17,
+        "endLine": 102,
+        "endChar": 32
+      },
+      "revId": "37873fac61b09b1cc9678eecf9814489fe1820c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6585f1d_ff9869ab",
         "filename": "rbh-gc/rbh-gc.c",
         "patchSetId": 2
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "I check if the command got a `/`, if not I consider the command to be available through PATH.\n\n`ls` -\u003e in if\n`/root/to/exec` -\u003e out if -\u003e absolute\n`./exec` -\u003e out if -\u003e relative\n`a/b` -\u003e out if -\u003e relative",
       "parentUuid": "e6585f1d_ff9869ab",
+      "range": {
+        "startLine": 105,
+        "startChar": 8,
+        "endLine": 105,
+        "endChar": 32
+      },
+      "revId": "37873fac61b09b1cc9678eecf9814489fe1820c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e788772f_39591e86",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-03T07:49:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0866a818_9e93b3e2",
       "range": {
         "startLine": 105,
         "startChar": 8,
