@@ -143,6 +143,22 @@ test_default_stripe_size()
         difflines "/$file"
     rbh_find "rbh:$db:$testdb" -stripe-size +$twoM | sort |
         difflines "/" "/$file" "/$dir"
+
+    cd /tmp
+
+    rbh_find "rbh:$db:$testdb" -stripe-size $threeM | sort |
+        difflines "/" "/$dir"
+
+    rbh_find "rbh:$db:$testdb" -stripe-size -$threeM | sort |
+        difflines
+    rbh_find "rbh:$db:$testdb" -stripe-size -$(($fourM << 1)) | sort |
+        difflines "/" "/$file" "/$dir"
+    rbh_find "rbh:$db:$testdb" -stripe-size +$threeM | sort |
+        difflines "/$file"
+    rbh_find "rbh:$db:$testdb" -stripe-size +$twoM | sort |
+        difflines "/" "/$file" "/$dir"
+
+    cd $tmpdir
 }
 
 ################################################################################
