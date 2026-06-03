@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c1662249_5d9a8f52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-03T13:51:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b865cc3_8c212678",
+      "revId": "f7f0e5bcb9b106434233be0ab7370b3c7c718a3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f9203e81_2d63819e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -48,6 +66,24 @@
       "writtenOn": "2026-06-03T08:41:26Z",
       "side": 1,
       "message": "question: this comment leads to think that the attrs_func could \"partially\" success and consumes some \"pairs\" even if it returns -1. In this case, the available_pairs value should not be updated (as it is updated on success by substracting subcount ?)\n\nThe question is also concerning the final count value ? -1 will be returned even if some attrs are set ?",
+      "revId": "f7f0e5bcb9b106434233be0ab7370b3c7c718a3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba94ae00_7b2d4941",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-03T13:51:54Z",
+      "side": 1,
+      "message": "You are right,the attrs_func could partially succeed and fill some pairs, but if we get an error in that func later, then those pairs are \"discarded\", as we simply return -1. That is not an issue because we use a sstack, so memory is correctly freed, and if another extension is requested, then those pairs will be overwritten, so there won\u0027t be any bug.\n\nAs discussed (and as shown in the comment), I\u0027d like to change this behaviour, but for this path, that behaviour is good enough.",
+      "parentUuid": "8b5fb3e3_20dd6f9c",
       "revId": "f7f0e5bcb9b106434233be0ab7370b3c7c718a3e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
