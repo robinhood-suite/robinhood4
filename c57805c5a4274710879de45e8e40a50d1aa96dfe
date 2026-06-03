@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "057445a5_0905c98b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-03T10:12:55Z",
+      "side": 1,
+      "message": "style: too long, should be 72 characters max IIRC",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "c57805c5a4274710879de45e8e40a50d1aa96dfe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0246637d_910f29be",
+        "filename": "librobinhood/include/robinhood/backends/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-03T10:12:55Z",
+      "side": 1,
+      "message": "style: indentation",
+      "range": {
+        "startLine": 197,
+        "startChar": 32,
+        "endLine": 197,
+        "endChar": 33
+      },
+      "revId": "c57805c5a4274710879de45e8e40a50d1aa96dfe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "360b38a9_397be7b8",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-03T10:12:55Z",
+      "side": 1,
+      "message": "style: missing `#` to match title length (in other parts of the doc aswell)",
+      "range": {
+        "startLine": 9,
+        "startChar": 15,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "c57805c5a4274710879de45e8e40a50d1aa96dfe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad62dbf7_948c4365",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-03T10:12:55Z",
+      "side": 1,
+      "message": "major: missing the `-readable`, `-writable` and `-executable` predicates, which are arguably the most important ones",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 9
+      },
+      "revId": "c57805c5a4274710879de45e8e40a50d1aa96dfe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adcaa68c_cbdf0128",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-03T10:12:55Z",
+      "side": 1,
+      "message": "major: should be `%RZc`, check the current readmes/implementation, this has been changed since the creation of the sparse extension",
+      "range": {
+        "startLine": 133,
+        "startChar": 8,
+        "endLine": 133,
+        "endChar": 9
+      },
+      "revId": "c57805c5a4274710879de45e8e40a50d1aa96dfe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
