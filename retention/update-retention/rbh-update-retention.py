@@ -39,10 +39,11 @@ def make_parser():
                         help='URI of where to fetch and update expired '
                              'directories')
     parser.add_argument('-c', '--config', metavar='CONFIG', type=pathlib.Path,
-                        default='/etc/robinhood4.d/default.yaml',
                         help='path to a configuration file, used to determine '
-                             'the expiration attribute to check for. By '
-                             'default, use \'/etc/robinhood4.d/default.yaml\'')
+                             'the expiration attribute to check for. If not '
+                             'given, use the environment variable '
+                             '\'RBH_CONFIG_PATH\', or, if not defined, '
+                             'use \'/etc/robinhood4.d/default.yaml\'')
     parser.add_argument('-d', '--delay', metavar='DELAY', default=0, type=int,
                         help='a delay window during which entries that will '
                              'expire should be notified. Should be given as '
