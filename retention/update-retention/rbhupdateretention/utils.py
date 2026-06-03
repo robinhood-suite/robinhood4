@@ -24,7 +24,7 @@ def exec_check_output(_command):
 def exec_popen(_command, output_callback, context):
     command = _command.split()
     process = subprocess.Popen(command, stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE, bufsize=1)
+                               stderr=subprocess.PIPE)
     for line in iter(process.stdout.readline, b""):
         err = process.poll()
         if err is not None and err != 0:
