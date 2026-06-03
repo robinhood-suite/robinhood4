@@ -33,6 +33,62 @@ ctx_finish(struct find_context *ctx)
     filters_ctx_finish(&ctx->f_ctx);
 }
 
+void
+open_system_backends(struct rbh_backend **backends, size_t backend_count,
+                     struct filters_context *f_ctx)
+{
+    if (f_ctx->backend)
+        /* Backends have already been opened, no need to do it again */
+        return;
+
+    f_ctx->backend_count = backend_count;
+    f_ctx->backend = xmalloc(f_ctx->backend_count);
+
+    for (int i = 0; i < backend_count; ++i) {
+        struct rbh_value_map *info_map = NULL;
+        struct rbh_raw_uri *raw_uri;
+        const char *command_backend;
+        const char *mountpoint;
+        struct rbh_uri *uri;
+        char *string_uri;
+
+        info_map = rbh_backend_get_info(backends[i],
+                                        RBH_INFO_COMMAND_BACKEND |
+                                        RBH_INFO_MOUNTPOINT);
+        if (info_map == NULL || info_map->count != 2) {
+            fprintf(stderr,
+                    "Failed to retrieve the command backend and mountpoint from '%s', certain features may not be available\n",
+                    backends[i]->name);
+            return;
+        }
+
+        assert(info_map->pairs[0].value->type == RBH_VT_STRING);
+        command_backend = info_map->pairs[0].value->string;
+        assert(info_map->pairs[1].value->type == RBH_VT_STRING);
+        mountpoint = info_map->pairs[1].value->string;
+
+        if (asprintf(&string_uri, "rbh:%s:%s", command_backend, mountpoint) < 0)
+            error(EXIT_FAILURE, errno,
+                  "Failed to asprintf the rbh URI using '%s' and '%s'\n",
+                  command_backend, mountpoint);
+
+        raw_uri = rbh_raw_uri_from_string(string_uri);
+        if (raw_uri == NULL)
+            error(EXIT_FAILURE, errno, "Cannot open URI '%s'", string_uri);
+
+        free(string_uri);
+        uri = rbh_uri_from_raw_uri(raw_uri);
+        free(raw_uri);
+        if (uri == NULL)
+            error(EXIT_FAILURE, errno, "Cannot detect given backend");
+
+        f_ctx->backend[i] = rbh_backend_and_branch_from_uri(uri, true);
+        free(uri);
+        if (f_ctx->backend[i] == NULL)
+            error(EXIT_FAILURE, errno, "Cannot open given backend");
+    }
+}
+
 /**
  * Filter through every fsentries in a specific backend, executing the
  * requested action on each of them
