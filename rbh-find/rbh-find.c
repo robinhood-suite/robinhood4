@@ -265,6 +265,8 @@ main(int _argc, char *_argv[])
     import_plugins(&ctx.f_ctx, info_maps, ctx.backend_count);
     free(info_maps);
 
+    open_system_backends(ctx.backends, ctx.backend_count, &ctx.f_ctx);
+
     ctx.f_ctx.need_prefetch = false;
     filter = parse_expression(&ctx.f_ctx, &index, NULL, &options,
                               find_parse_callback, &ctx);
