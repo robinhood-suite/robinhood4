@@ -6,6 +6,7 @@
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
+import os
 import subprocess
 
 from datetime import datetime, timedelta
@@ -15,7 +16,6 @@ class Context():
     """General context of the command"""
     def __init__(self, uri, config, delay, delete):
         self.uri = uri
-        self.config = config
         self.delete = delete
         self.found_expired_dir = False
 
@@ -27,6 +27,11 @@ class Context():
         else:
             delay2days = timedelta(days=delay)
             self.delay = int(datetime.timestamp(dt + delay2days))
+
+        self.config = config
+        if self.config is None:
+            self.config = os.environ.get('RBH_CONFIG_PATH',
+                                         '/etc/robinhood4.d/default.yaml')
 
         mnt = exec_check_output(f"rbh-info {uri} -m")
         self.mountpoint = mnt[mnt.find('/'):]
