@@ -473,6 +473,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa3d068b_a9c4ac48",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-03T13:22:38Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "00d227e8_e88181cc",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 79
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d020c9d_b25a28d4",
@@ -653,6 +677,30 @@
       "side": 1,
       "message": "Yes if we start the retention CI, then Lustre tests won\u0027t be done, which includes this one (so it won\u0027t be run). However, modifying this line is necessary if the test config file is modified so that the \"lustre\" backend also now has this extension. \n\nBut since SELinux requires additional softwares, we will have to discuss how to integrate it to our tests, maybe it shouldn\u0027t be in the test config file...",
       "parentUuid": "4a4fb03f_a8b46955",
+      "range": {
+        "startLine": 24,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 92
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cec7c2b_52fa5674",
+        "filename": "rbh-info/tests/test_lustre.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-03T13:22:38Z",
+      "side": 1,
+      "message": "So removing it for the moment ?",
+      "parentUuid": "1bf833c5_29fd808b",
       "range": {
         "startLine": 24,
         "startChar": 8,
