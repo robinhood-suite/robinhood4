@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b865cc3_8c212678",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-06-03T08:41:26Z",
+      "side": 1,
+      "message": "typo: ...failed are managed.",
+      "revId": "f7f0e5bcb9b106434233be0ab7370b3c7c718a3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9203e81_2d63819e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-06-03T08:41:26Z",
+      "side": 1,
+      "message": "It sounds good even if I still have few questions.",
+      "revId": "f7f0e5bcb9b106434233be0ab7370b3c7c718a3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b5fb3e3_20dd6f9c",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-06-03T08:41:26Z",
+      "side": 1,
+      "message": "question: this comment leads to think that the attrs_func could \"partially\" success and consumes some \"pairs\" even if it returns -1. In this case, the available_pairs value should not be updated (as it is updated on success by substracting subcount ?)\n\nThe question is also concerning the final count value ? -1 will be returned even if some attrs are set ?",
+      "revId": "f7f0e5bcb9b106434233be0ab7370b3c7c718a3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
