@@ -6,6 +6,7 @@
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
+import os
 import shutil
 import subprocess
 import sys
@@ -54,3 +55,13 @@ def exec_run(_command, string):
 
 def rm_tree(tree):
     shutil.rmtree(tree, ignore_errors=True)
+
+def delete_parent_if_empty(path):
+    parent = os.path.dirname(path)
+
+    try:
+        # rmdir will only delete if the directory is empty
+        os.rmdir(parent)
+        print("Deleted empty parent of '{path}'")
+    except OSError as e:
+        return
