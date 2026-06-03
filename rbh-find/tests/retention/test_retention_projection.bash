@@ -19,8 +19,12 @@ check_printf_project()
     local project=$2
     local conf=$3
 
-    local output="$(rbh_find --config $conf --verbose "rbh:$db:$testdb" \
-                    -printf "$printf")"
+    if [ ! -z "$conf" ]; then
+        local output="$(rbh_find --config $conf --verbose "rbh:$db:$testdb" \
+                        -printf "$printf")"
+    else
+        local output="$(rbh_find --verbose "rbh:$db:$testdb" -printf "$printf")"
+    fi
 
     echo "$output" | grep "\$project" | grep "$project"
 }
