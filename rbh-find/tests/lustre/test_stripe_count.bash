@@ -134,6 +134,22 @@ test_default_stripe_count()
         difflines "/$file"
     rbh_find "rbh:$db:$testdb" -stripe-count +2 | sort |
         difflines "/" "/$file" "/$dir"
+
+    cd /tmp
+
+    rbh_find "rbh:$db:$testdb" -stripe-count 3 | sort |
+        difflines "/" "/$dir"
+
+    rbh_find "rbh:$db:$testdb" -stripe-count -3 | sort |
+        difflines
+    rbh_find "rbh:$db:$testdb" -stripe-count -5 | sort |
+        difflines "/" "/$file" "/$dir"
+    rbh_find "rbh:$db:$testdb" -stripe-count +3 | sort |
+        difflines "/$file"
+    rbh_find "rbh:$db:$testdb" -stripe-count +2 | sort |
+        difflines "/" "/$file" "/$dir"
+
+    cd $tmpdir
 }
 
 ################################################################################
