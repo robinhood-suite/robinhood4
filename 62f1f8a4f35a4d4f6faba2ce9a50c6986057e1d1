@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c82c4bbf_4570cbee",
+        "filename": "doc/man/source/rbh-policy-conf.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-03T07:51:36Z",
+      "side": 1,
+      "message": "Could you remind me again of the explanation ? It\u0027s been a while, and it\u0027d be good to have a comment somewhere explaining this necessity",
+      "parentUuid": "1124ba83_353c74bc",
+      "range": {
+        "startLine": 24,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 40
+      },
+      "revId": "62f1f8a4f35a4d4f6faba2ce9a50c6986057e1d1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "89c8b0ed_80b4dbb6",
         "filename": "doc/man/source/rbh-policy.rst",
         "patchSetId": 2
