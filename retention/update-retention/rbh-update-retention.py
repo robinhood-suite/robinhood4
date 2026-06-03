@@ -7,6 +7,7 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
 import argparse
+import os
 import pathlib
 import re
 import shutil
@@ -16,7 +17,8 @@ import sys
 from datetime import datetime
 from rbhupdateretention.context import Context
 from rbhupdateretention.directory import Directory
-from rbhupdateretention.utils import exec_check_output, exec_popen, rm_tree
+from rbhupdateretention.utils import ( exec_check_output, exec_popen, rm_tree,
+                                       delete_parent_if_empty )
 
 def looks_like_URI(string):
     pattern = re.compile(r"rbh:mongo:[A-Za-z0-9]+", re.IGNORECASE)
@@ -51,6 +53,12 @@ def make_parser():
     parser.add_argument('--delete', action='store_true', default=False,
                         help='delete the expired directories instead of just '
                              'printing. False by default.')
+    parser.add_argument('--delete-parent-if-empty', action='store_true',
+                        default=False,
+                        help='delete the parent of expired directories if they '
+                             'become empty after deleting the expired '
+                             'directories. False by default. Can only be used '
+                             'if \'--delete\' is specified.')
 
     return parser
 
@@ -59,16 +67,22 @@ def handle_non_relative_expiration(context, directory):
           f"'{datetime.fromtimestamp(directory.expiration_date)}'")
 
     if context.delete:
+        print(f"Deleting directory '{directory.path}'")
         rm_tree(f"{context.mountpoint}/{directory.path}")
+        if context.delete_parent_if_empty:
+            delete_parent_if_empty(f"{context.mountpoint}/{directory.path}")
 
 def handle_truly_expired_empty_directory(context, directory):
     print(f"Directory '{directory.path}' has expired and is empty, no other "
            "check needed")
 
     if context.delete:
+        print(f"Deleting empty directory '{directory.path}'")
         command = (f"find {context.mountpoint}/{directory.path} "
                     "-depth -exec rmdir {} ;")
         exec_check_output(command)
+        if context.delete_parent_if_empty:
+            delete_parent_if_empty(f"{context.mountpoint}/{directory.path}")
 
 def handle_truly_expired_directory(context, directory):
     print(f"The last accessed file in it was accessed on "
@@ -79,6 +93,8 @@ def handle_truly_expired_directory(context, directory):
     if context.delete:
         print(f"Directory '{directory.path}' has expired and will be deleted")
         rm_tree(f"{context.mountpoint}/{directory.path}")
+        if context.delete_parent_if_empty:
+            delete_parent_if_empty(f"{context.mountpoint}/{directory.path}")
     else:
         print(f"Directory '{directory.path}' has expired")
 
@@ -146,7 +162,8 @@ def check_directory_expirancy(context, _dir_info):
 def main(args=None):
     args = make_parser().parse_args(args)
 
-    context = Context(args.uri, args.config, args.delay, args.delete)
+    context = Context(args.uri, args.config, args.delay, args.delete,
+                      args.delete_parent_if_empty)
     command = (f"rbh-find -c {str(context.config)} {context.uri} "
                f"-type d -expired-at {str(context.delay)} "
                 "-sort expiration-date -printf %p|%RRe|%RRE|%I\\n")

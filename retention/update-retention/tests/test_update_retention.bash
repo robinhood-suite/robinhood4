@@ -403,6 +403,56 @@ test_retention_sort()
     done <<< "$output"
 }
 
+test_delete_parent_if_empty()
+{
+    local dir1="dir1"
+    local dir2="dir2"
+    local dir3="dir3"
+
+    local current="$(date +%s)"
+
+    mkdir $dir1
+    mkdir $dir1/$dir2 $dir1/$dir3
+    setfattr -n user.expires -v +10 $dir1/$dir2
+    setfattr -n user.expires -v +50 $dir1/$dir3
+
+    date --set="@$(( current + 20 ))"
+
+    rbh_sync rbh:retention:. "rbh:$db:$testdb"
+
+    local output="$(rbh_update_retention "rbh:$db:$testdb" \
+                        --delete-parent-if-empty)"
+    should_be_expired "$output" "$dir1/$dir2"
+    shant_be_expired "$output" "$dir1/$dir3"
+    # Verify we get a log saying that --delete-parent-if-empty does nothing
+    # because --delete is not specified
+    echo "$output" | grep "delete-parent-if-empty" | grep "delete"
+
+    local output="$(rbh_update_retention "rbh:$db:$testdb" \
+                        --delete --delete-parent-if-empty)"
+    should_be_expired "$output" "$dir1/$dir2"
+    shant_be_expired "$output" "$dir1/$dir3"
+    ! echo "$output" | grep "delete-parent-if-empty" | grep "delete"
+
+    if [ -d $dir1/$dir2 ]; then
+        error "Directory '$dir1/$dir2' should have been deleted"
+    fi
+
+    date --set="@$(( current + 100 ))"
+
+    do_db drop $testdb
+    rbh_sync rbh:retention:. "rbh:$db:$testdb"
+
+    local output="$(rbh_update_retention "rbh:$db:$testdb" \
+                        --delete --delete-parent-if-empty)"
+    should_be_expired "$output" "$dir1/$dir3"
+    echo "$output" | grep "Deleted empty parent"
+
+    if [ -d $dir1 ]; then
+        error "Directory '$dir1' should have been deleted after becoming empty"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -411,7 +461,8 @@ mongo_only_test
 
 declare -a tests=(test_retention_script test_retention_after_sync
                   test_retention_with_config test_retention_on_empty_dir
-                  test_retention_expiration_in_days test_retention_sort)
+                  test_retention_expiration_in_days test_retention_sort
+                  test_delete_parent_if_empty)
 
 tmpdir=$(mktemp --directory)
 trap "rm -r $tmpdir" EXIT

@@ -14,10 +14,15 @@ from rbhupdateretention.utils import exec_check_output
 
 class Context():
     """General context of the command"""
-    def __init__(self, uri, config, delay, delete):
+    def __init__(self, uri, config, delay, delete, delete_parent_if_empty):
         self.uri = uri
         self.delete = delete
+        self.delete_parent_if_empty = delete_parent_if_empty
         self.found_expired_dir = False
+
+        if self.delete_parent_if_empty and not self.delete:
+            print('\'--delete-parent-if-empty\' specified but not '
+                  '\'--delete\', will not take effect.')
 
         dt = datetime.now()
         self.current = datetime.timestamp(dt)
