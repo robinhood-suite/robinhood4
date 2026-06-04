@@ -189,6 +189,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fed34d63_e4331ed0",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-04T09:35:20Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e8c96ae7_72cc20c3",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 9
+      },
+      "revId": "c57805c5a4274710879de45e8e40a50d1aa96dfe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "adcaa68c_cbdf0128",

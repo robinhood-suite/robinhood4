@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ac31513_ff1d6cc9",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-04T09:35:20Z",
+      "side": 1,
+      "message": "style: line-split is weird here",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 18
+      },
+      "revId": "0ddd20eab42a588b3f3c6f9208197addf664abeb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
