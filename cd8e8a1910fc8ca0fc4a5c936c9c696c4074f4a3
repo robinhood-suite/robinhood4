@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73e2b34e_9ef3db47",
+        "filename": "librobinhood/src/policyengine/core.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-06-04T12:02:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1954b4d7_44233a71",
+      "range": {
+        "startLine": 122,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 1
+      },
+      "revId": "cd8e8a1910fc8ca0fc4a5c936c9c696c4074f4a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f4960c9_561d6fdd",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-06-04T08:28:57Z",
       "side": 1,
       "message": "style: order",
+      "range": {
+        "startLine": 142,
+        "startChar": 8,
+        "endLine": 144,
+        "endChar": 1
+      },
+      "revId": "cd8e8a1910fc8ca0fc4a5c936c9c696c4074f4a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd35a83b_0203aa7b",
+        "filename": "librobinhood/src/policyengine/core.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-06-04T12:02:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f4960c9_561d6fdd",
       "range": {
         "startLine": 142,
         "startChar": 8,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a3d97ed_c215be86",
+        "filename": "librobinhood/src/policyengine/core.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-06-04T12:02:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "877b7141_1451062d",
+      "range": {
+        "startLine": 148,
+        "startChar": 12,
+        "endLine": 148,
+        "endChar": 36
+      },
+      "revId": "cd8e8a1910fc8ca0fc4a5c936c9c696c4074f4a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "15220b42_b4d85e0e",
@@ -83,6 +155,30 @@
       "writtenOn": "2026-06-04T08:28:57Z",
       "side": 1,
       "message": "major: seems very redundant and not future proof to force a list of keywords here. IMO the user should be able to specify anything, and it should be librobinhood and the plugins/extensions which determine if that key is valid or not. Which is what you already do in librobinhood/src/policyengine/core.c:103.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 1
+      },
+      "revId": "cd8e8a1910fc8ca0fc4a5c936c9c696c4074f4a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f167918_e652eb52",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-06-04T12:02:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15220b42_b4d85e0e",
       "range": {
         "startLine": 10,
         "startChar": 0,
