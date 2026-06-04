@@ -161,6 +161,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "59f7a66d_3cd055ab",
+        "filename": "rbh-policy/rbhpolicy/config/cpython.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-04T08:35:16Z",
+      "side": 1,
+      "message": "`nominal_threshold` ? `end_quota` ? `acceptable_level` ?",
+      "parentUuid": "0488ff22_b13290d4",
+      "range": {
+        "startLine": 208,
+        "startChar": 27,
+        "endLine": 208,
+        "endChar": 38
+      },
+      "revId": "f615803ab9adb1fe5e2cea30a373ba1e0de685c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c8c1dc0c_2ca5a9a3",
         "filename": "rbh-policy/rbhpolicy/config/policy.py",
         "patchSetId": 1
