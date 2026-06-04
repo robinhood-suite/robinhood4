@@ -22,6 +22,30 @@
       },
       "revId": "0579be5d9a64e757970b7b2572f1b13e1239d8db",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ff5d9fb_15bd984b",
+        "filename": "librobinhood/src/backend.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-04T14:48:27Z",
+      "side": 1,
+      "message": "Yes we do, especially because of the aliases. I tried adding const everywhere, but it requires modifications accross around 20 files, with aliases requiring heavy modifications. I didn\u0027t want to bother, and between removing a const here and adding about 50 everywhere else, i made the easier choice.",
+      "parentUuid": "19841517_37ea0632",
+      "range": {
+        "startLine": 308,
+        "startChar": 8,
+        "endLine": 308,
+        "endChar": 21
+      },
+      "revId": "0579be5d9a64e757970b7b2572f1b13e1239d8db",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
