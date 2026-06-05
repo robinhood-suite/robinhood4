@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd46bf39_6a78fbe2",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-05T09:18:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a8f5768_2c3bd88f",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 81
+      },
+      "revId": "0ddd20eab42a588b3f3c6f9208197addf664abeb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ac31513_ff1d6cc9",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db9ca4c5_a2984cab",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-05T09:18:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ac31513_ff1d6cc9",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 18
+      },
+      "revId": "0ddd20eab42a588b3f3c6f9208197addf664abeb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df8e31b3_7329da5a",
@@ -60,6 +108,30 @@
       "writtenOn": "2026-06-05T09:09:19Z",
       "side": 1,
       "message": "major: filter names do not correspond (same below)",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 148,
+        "endChar": 24
+      },
+      "revId": "0ddd20eab42a588b3f3c6f9208197addf664abeb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56608011_c24d3f0d",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-05T09:18:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df8e31b3_7329da5a",
       "range": {
         "startLine": 148,
         "startChar": 0,
