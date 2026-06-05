@@ -47,10 +47,7 @@ backend_path_env_for_mpi_tests.set('WITH_MPI', 'true')
 
 subdir('mongo')
 subdir('posix')
-
-if build_ldiskfs
-  subdir('ldiskfs')
-endif
+subdir('ldiskfs')
 
 if get_option('s3').enabled()
     subdir('s3')

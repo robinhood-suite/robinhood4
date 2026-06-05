@@ -38,14 +38,6 @@ add_project_arguments([
 
 miniyaml = dependency('miniyaml', version: '>=0.0.0')
 
-build_ldiskfs = false
-
-if get_option('lustre').enabled()
-    if get_option('ldiskfs').enabled()
-        build_ldiskfs = true
-    endif
-endif
-
 # Whether to build code that depends on openmpi and MPIFileUtils
 build_mfu = false
 
