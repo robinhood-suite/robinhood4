@@ -72,6 +72,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c65101d9_da56b84f",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-05T09:27:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1992c225_69dc0bad",
+      "range": {
+        "startLine": 102,
+        "startChar": 17,
+        "endLine": 102,
+        "endChar": 32
+      },
+      "revId": "37873fac61b09b1cc9678eecf9814489fe1820c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6585f1d_ff9869ab",
