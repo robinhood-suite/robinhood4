@@ -16,6 +16,6 @@ if test_mfu
     subdir('mpifile')
 endif
 
-if libs3.found()
+if test_s3
     subdir('s3')
 endif

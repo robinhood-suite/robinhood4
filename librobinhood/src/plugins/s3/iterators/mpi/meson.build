@@ -4,6 +4,8 @@
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
+libmpi = dependency('ompi', disabler: true, required: false)
+
 librbh_s3_mpi_ext = library(
     'rbh-s3-mpi-ext',
     sources: [

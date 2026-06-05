@@ -52,9 +52,7 @@ if get_option('ldiskfs').enabled()
   subdir('ldiskfs')
 endif
 
-if get_option('s3').enabled()
-    subdir('s3')
-endif
+subdir('s3')
 
 if build_mfu
     subdir('mpi_file')
