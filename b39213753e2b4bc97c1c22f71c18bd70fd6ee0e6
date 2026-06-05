@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12b568fb_45de6ab7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-05T16:39:18Z",
+      "side": 1,
+      "message": "Another thing is that the LDISKFS plugin does not depend on the Lustre extension library, it should be added to the meson file.",
+      "revId": "b39213753e2b4bc97c1c22f71c18bd70fd6ee0e6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc5d0d65_33178d02",
