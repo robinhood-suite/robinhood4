@@ -39,6 +39,24 @@
       "message": "question: Why do you delete the database ?",
       "revId": "5bba6a4f90673375c8bce7f46d21d6abe12cd850",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "804a1ea8_10709c49",
+        "filename": "retention/update-retention/tests/test_update_retention.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-05T14:56:50Z",
+      "side": 1,
+      "message": "Since we delete directories through rmdir/find + rmdir, the deleted directories are not removed from the DB, so another rbh-update-retention will fail because the directories we want to delete are not there anymore. So we can either drop the db or run gc. Should probably run gc, just because it\u0027s cooler.",
+      "parentUuid": "8ae4b641_696076fd",
+      "revId": "5bba6a4f90673375c8bce7f46d21d6abe12cd850",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
