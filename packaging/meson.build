@@ -19,6 +19,7 @@ build_options.set('lustre', get_option('lustre').enabled())
 build_options.set('mfu', get_option('mfu').enabled())
 build_options.set('version', meson.project_version())
 build_options.set('man', get_option('man').enabled())
+build_options.set('s3', get_option('s3').enabled())
 
 configure_file(
     input: 'build_options.sh.in',

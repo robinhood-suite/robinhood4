@@ -49,9 +49,7 @@ subdir('mongo')
 subdir('posix')
 subdir('ldiskfs')
 
-if get_option('s3').enabled()
-    subdir('s3')
-endif
+subdir('s3')
 
 if build_mfu
     subdir('mpi_file')

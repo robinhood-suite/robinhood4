@@ -4,6 +4,20 @@
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
+test_s3 = false
+
+if get_option('s3').disabled()
+    subdir_done()
+endif
+
+libs3 = dependency('aws-cpp-sdk-s3', disabler: true, required: true)
+
+if is_disabler(libs3)
+    subdir_done()
+endif
+
+test_s3 = true
+
 s3_wrapper = library(
     's3_wrapper',
     sources: [
@@ -33,6 +47,7 @@ librbh_s3 = library(
     install: true,
     c_args: '-DHAVE_CONFIG_H',
 )
-if build_s3_mpi
+
+if get_option('mfu').enabled()
     subdir('iterators/mpi')
 endif
