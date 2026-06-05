@@ -181,46 +181,44 @@ if get_option('s3').enabled() and get_option('mfu').enabled()
     install_headers(librbh_s3_mpi_h, subdir: 'robinhood/backends')
 endif
 
-if not build_mfu
-    subdir_done()
-endif
-
 # Posix MPIFileUtils extension plugin
 
-librbh_mfu_conf = configuration_data()
+if get_option('mfu').enabled()
+    librbh_mfu_conf = configuration_data()
 
-librbh_mfu_conf.set('RBH_MFU_PLUGIN_MAJOR', 1)
-librbh_mfu_conf.set('RBH_MFU_PLUGIN_MINOR', 0)
-librbh_mfu_conf.set('RBH_MFU_PLUGIN_RELEASE', 0)
+    librbh_mfu_conf.set('RBH_MFU_PLUGIN_MAJOR', 1)
+    librbh_mfu_conf.set('RBH_MFU_PLUGIN_MINOR', 0)
+    librbh_mfu_conf.set('RBH_MFU_PLUGIN_RELEASE', 0)
 
-librbh_mfu_version = '@0@.@1@.@2@'.format(
-    librbh_mfu_conf.get('RBH_MFU_PLUGIN_MAJOR'),
-    librbh_mfu_conf.get('RBH_MFU_PLUGIN_MINOR'),
-    librbh_mfu_conf.get('RBH_MFU_PLUGIN_RELEASE')
-)
+    librbh_mfu_version = '@0@.@1@.@2@'.format(
+        librbh_mfu_conf.get('RBH_MFU_PLUGIN_MAJOR'),
+        librbh_mfu_conf.get('RBH_MFU_PLUGIN_MINOR'),
+        librbh_mfu_conf.get('RBH_MFU_PLUGIN_RELEASE')
+    )
 
-librbh_mfu_h = configure_file(input: 'mfu.h.in',
-                              output: 'mfu.h',
-                              configuration: librbh_mfu_conf)
+    librbh_mfu_h = configure_file(input: 'mfu.h.in',
+                                  output: 'mfu.h',
+                                  configuration: librbh_mfu_conf)
 
-install_headers(librbh_mfu_h, subdir: 'robinhood/backends')
+    install_headers(librbh_mfu_h, subdir: 'robinhood/backends')
 
-# MPI-FILE backend
+    # MPI-FILE backend
 
-librbh_mpi_file_conf = configuration_data()
+    librbh_mpi_file_conf = configuration_data()
 
-librbh_mpi_file_conf.set('RBH_MPI_FILE_BACKEND_MAJOR', 0)
-librbh_mpi_file_conf.set('RBH_MPI_FILE_BACKEND_MINOR', 0)
-librbh_mpi_file_conf.set('RBH_MPI_FILE_BACKEND_RELEASE', 0)
+    librbh_mpi_file_conf.set('RBH_MPI_FILE_BACKEND_MAJOR', 0)
+    librbh_mpi_file_conf.set('RBH_MPI_FILE_BACKEND_MINOR', 0)
+    librbh_mpi_file_conf.set('RBH_MPI_FILE_BACKEND_RELEASE', 0)
 
-librbh_mpi_file_version = '@0@.@1@.@2@'.format(
-    librbh_mpi_file_conf.get('RBH_MPI_FILE_BACKEND_MAJOR'),
-    librbh_mpi_file_conf.get('RBH_MPI_FILE_BACKEND_MINOR'),
-    librbh_mpi_file_conf.get('RBH_MPI_FILE_BACKEND_RELEASE')
-)
+    librbh_mpi_file_version = '@0@.@1@.@2@'.format(
+        librbh_mpi_file_conf.get('RBH_MPI_FILE_BACKEND_MAJOR'),
+        librbh_mpi_file_conf.get('RBH_MPI_FILE_BACKEND_MINOR'),
+        librbh_mpi_file_conf.get('RBH_MPI_FILE_BACKEND_RELEASE')
+    )
 
-librbh_mpi_file_h = configure_file(input: 'mpi_file.h.in',
-                                   output: 'mpi_file.h',
-                                   configuration: librbh_mpi_file_conf)
+    librbh_mpi_file_h = configure_file(input: 'mpi_file.h.in',
+                                       output: 'mpi_file.h',
+                                       configuration: librbh_mpi_file_conf)
 
-install_headers(librbh_mpi_file_h, subdir: 'robinhood/backends')
+    install_headers(librbh_mpi_file_h, subdir: 'robinhood/backends')
+endif
