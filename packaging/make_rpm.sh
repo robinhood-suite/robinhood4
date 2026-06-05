@@ -19,6 +19,9 @@ BUILDDIR=$1
 
 meson dist -C "$BUILDDIR" --no-tests
 
+if [ "$BUILD_LDISKFS" == "True" ]; then
+    opts+="--with ldiskfs "
+fi
 if [ "$BUILD_LUSTRE" == "False" ]; then
     opts+="--without lustre "
 fi

@@ -4,6 +4,14 @@
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
+test_ldiskfs = false
+
+if get_option('ldiskfs').disabled()
+    subdir_done()
+endif
+
+test_ldiskfs = true
+
 libext2fs = cc.find_library('libext2fs', required: false, disabler: true)
 libcom_err = cc.find_library('com_err', required: false, disabler: true)
 glib2 = dependency('glib-2.0', required: false, disabler: true)

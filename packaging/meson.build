@@ -13,10 +13,13 @@ configure_file(
 )
 
 build_options = configuration_data()
+
+build_options.set('ldiskfs', get_option('ldiskfs').enabled())
 build_options.set('lustre', get_option('lustre').enabled())
 build_options.set('mfu', get_option('mfu').enabled())
 build_options.set('version', meson.project_version())
 build_options.set('man', get_option('man').enabled())
+
 configure_file(
     input: 'build_options.sh.in',
     output: 'build_options.sh',
