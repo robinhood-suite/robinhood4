@@ -48,7 +48,7 @@ backend_path_env_for_mpi_tests.set('WITH_MPI', 'true')
 subdir('mongo')
 subdir('posix')
 
-if build_ldiskfs
+if get_option('ldiskfs').enabled()
   subdir('ldiskfs')
 endif
 
