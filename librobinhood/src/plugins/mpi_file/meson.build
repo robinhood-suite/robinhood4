@@ -4,6 +4,28 @@
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
+test_mpi_file = false
+
+if get_option('mfu').disabled()
+    subdir_done()
+endif
+
+libmfu = cc.find_library('mfu', dirs: '/usr/lib64/openmpi/lib',
+                         disabler: true, required: false)
+libmpi = dependency('ompi', disabler: true, required: false)
+
+if not libmpi.found() and not libmfu.found()
+    subdir_done()
+endif
+
+r = run_command(meson.project_source_root() + '/utils/check_mpirun.sh',
+                check: false)
+if r.returncode() == 0
+    test_mpi_file = true
+else
+    message('"check_mpirun" failed, do not run MPI File Utils specific tests')
+endif
+
 librbh_mpi_file = library(
     'rbh-mpi-file',
     sources: [
@@ -25,4 +47,3 @@ librbh_mpi_file = library(
     include_directories: rbh_include,
     install: true,
 )
-

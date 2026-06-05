@@ -115,18 +115,18 @@ if test_mfu
              suite: 'librobinhood')
     endforeach
 
-    if liblustre.found()
+    if test_lustre
         foreach t: ['check_lustre_mpi']
             executable(t, t + '.c',
-                dependencies: [check, miniyaml],
-                link_with: [librobinhood, librbh_posix],
-                include_directories: rbh_include,
-                c_args: '-DHAVE_CONFIG_H')
+                       dependencies: [check, miniyaml],
+                       link_with: [librobinhood, librbh_posix],
+                       include_directories: rbh_include,
+                       c_args: '-DHAVE_CONFIG_H')
             test(t, bash,
                  args: [files(t + '.sh'), builddir],
-                depends: [librbh_posix],
-                env: backend_path_env,
-                suite: 'librobinhood')
+                 depends: [librbh_posix],
+                 env: backend_path_env,
+                 suite: 'librobinhood')
         endforeach
     endif
 endif

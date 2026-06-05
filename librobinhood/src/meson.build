@@ -14,9 +14,12 @@ libuuid = cc.find_library('libuuid', has_headers: ['uuid/uuid.h'],
 python3_inst = import('python').find_installation('python3')
 python3_dep = python3_inst.dependency(embed: true)
 
-if build_mfu and libmpi.found()
-    extra_sources += ['mpi_rc.c']
-    extra_dependencies += [libmpi]
+if get_option('mfu').enabled()
+    libmpi = dependency('ompi', disabler: true, required: false)
+    if not is_disabler(libmpi)
+        extra_sources += ['mpi_rc.c']
+        extra_dependencies += [libmpi]
+    endif
 endif
 
 librobinhood = library(

@@ -12,7 +12,7 @@ if test_lustre
     subdir('lustre')
 endif
 
-if test_mfu
+if test_mpi_file
     subdir('mpifile')
 endif
 

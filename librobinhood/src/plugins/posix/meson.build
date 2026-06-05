@@ -29,10 +29,7 @@ librbh_posix_dep = declare_dependency(
     include_directories: rbh_include
 )
 
-if build_mfu
-  subdir('iterators/mfu')
-endif
-
+subdir('iterators/mfu')
 subdir('enrichers/lustre')
 subdir('enrichers/retention')
 subdir('enrichers/sparse')
