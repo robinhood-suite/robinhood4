@@ -38,29 +38,12 @@ add_project_arguments([
 
 miniyaml = dependency('miniyaml', version: '>=0.0.0')
 
-build_lustre = false
-test_lustre = false
 build_ldiskfs = false
 
 if get_option('lustre').enabled()
-    liblustre = dependency('lustre', disabler: true, required: false)
-    if not liblustre.found()
-        liblustre = cc.find_library('lustreapi', disabler:true, required: false)
-    endif
-    build_lustre = true
-
-    r = run_command('utils/check_lustre.sh', check: false)
-    if r.returncode() == 0
-        test_lustre = true
-    else
-        message('"check_lustre" failed, do not run Lustre specific tests')
-    endif
-
     if get_option('ldiskfs').enabled()
         build_ldiskfs = true
     endif
-else
-    liblustre = disabler()
 endif
 
 # Whether to build code that depends on openmpi and MPIFileUtils
@@ -122,7 +105,7 @@ subdir('rbh-report')
 subdir('rbh-info')
 subdir('rbh-update-path')
 subdir('rbh-gc')
-if build_lustre
+if get_option('lustre').enabled()
     subdir('rbh-undelete')
 endif
 subdir('retention')

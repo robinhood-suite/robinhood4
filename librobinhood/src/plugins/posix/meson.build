@@ -33,9 +33,6 @@ if build_mfu
   subdir('iterators/mfu')
 endif
 
-if build_lustre
-    subdir('enrichers/lustre')
-endif
-
+subdir('enrichers/lustre')
 subdir('enrichers/retention')
 subdir('enrichers/sparse')

@@ -67,7 +67,7 @@ foreach t: ['check_sparse']
          suite: 'librobinhood')
 endforeach
 
-if liblustre.found()
+if test_lustre
     foreach t: ['check_lustre']
         test(t,
              executable(t, t + '.c',
