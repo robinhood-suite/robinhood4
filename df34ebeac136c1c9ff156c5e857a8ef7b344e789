@@ -781,6 +781,30 @@
       },
       "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7559e67e_496f10f5",
+        "filename": "rbh-info/tests/test_lustre.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-05T14:43:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "365a536e_3d2e892f",
+      "range": {
+        "startLine": 24,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 92
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
