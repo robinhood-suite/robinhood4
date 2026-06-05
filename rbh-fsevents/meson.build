@@ -21,7 +21,7 @@ extra_sources = []
 extra_dependencies = []
 extra_args = []
 
-if liblustre.found()
+if get_option('lustre').enabled()
     extra_sources += [
         'src/sources/lustre/lustre.c',
         'src/sources/lustre/lustre_utils.c',
@@ -70,7 +70,7 @@ executable(
     sources: 'rbh-fsevents.c',
     include_directories: includes,
     link_with: fsevents_lib,
-    dependencies: [librobinhood_dep, miniyaml, liblustre, pthread],
+    dependencies: [librobinhood_dep, miniyaml, pthread],
     install: true,
     c_args: ['-DHAVE_CONFIG_H'] + extra_args,
 )
