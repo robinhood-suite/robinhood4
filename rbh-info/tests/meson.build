@@ -40,7 +40,7 @@ if test_lustre
     endforeach
 endif
 
-if libs3.found()
+if test_s3
     foreach t: ['test_s3']
         e = find_program(t + '.bash')
         test(t, e, env: backend_path_env,

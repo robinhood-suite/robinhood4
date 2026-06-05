@@ -31,6 +31,9 @@ fi
 if [ "$BUILD_MAN" == "True" ]; then
     opts+="--with man "
 fi
+if [ "$BUILD_S3" == "True" ]; then
+    opts+="--with s3 "
+ fi
 
 rpmbuild --define="_topdir $PWD/rpms" $opts \
     -ta "$BUILDDIR/meson-dist/robinhood4-$VERSION.tar.xz"

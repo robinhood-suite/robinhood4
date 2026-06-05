@@ -9,3 +9,4 @@ BUILD_LDISKFS=@ldiskfs@
 BUILD_LUSTRE=@lustre@
 BUILD_MFU=@mfu@
 BUILD_MAN=@man@
+BUILD_S3=@s3@

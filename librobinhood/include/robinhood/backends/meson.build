@@ -161,7 +161,7 @@ install_headers(librbh_sparse_h, subdir: 'robinhood/backends')
 
 # S3 MPI extension plugin
 
-if build_s3_mpi
+if get_option('s3').enabled() and get_option('mfu').enabled()
     librbh_s3_mpi_conf = configuration_data()
 
     librbh_s3_mpi_conf.set('RBH_S3_MPI_PLUGIN_MAJOR', 1)

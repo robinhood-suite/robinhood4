@@ -17,6 +17,6 @@ if test_lustre
     subdir('lustre')
 endif
 
-if get_option('s3').enabled()
+if test_s3
     subdir('s3')
 endif
