@@ -308,6 +308,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c169e25_2ff2c9ba",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-05T09:09:19Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "2ab817fe_68989c3b",
+      "range": {
+        "startLine": 49,
+        "startChar": 24,
+        "endLine": 49,
+        "endChar": 36
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab782140_e3d4bb12",
@@ -582,6 +606,30 @@
       "side": 1,
       "message": "Yes, this can be updated later.",
       "parentUuid": "918b65f9_4dbd1685",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 68
+      },
+      "revId": "df34ebeac136c1c9ff156c5e857a8ef7b344e789",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d96c7d1e_7bbbb5a6",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-05T09:09:19Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "deaa6146_c278372d",
       "range": {
         "startLine": 111,
         "startChar": 0,

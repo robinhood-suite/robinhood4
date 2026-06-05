@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5a8f5768_2c3bd88f",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-05T09:09:19Z",
+      "side": 1,
+      "message": "style: 81 characters",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 81
+      },
+      "revId": "0ddd20eab42a588b3f3c6f9208197addf664abeb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ac31513_ff1d6cc9",
         "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
         "patchSetId": 5
@@ -19,6 +42,29 @@
         "startChar": 0,
         "endLine": 40,
         "endChar": 18
+      },
+      "revId": "0ddd20eab42a588b3f3c6f9208197addf664abeb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df8e31b3_7329da5a",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/README.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-05T09:09:19Z",
+      "side": 1,
+      "message": "major: filter names do not correspond (same below)",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 148,
+        "endChar": 24
       },
       "revId": "0ddd20eab42a588b3f3c6f9208197addf664abeb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
