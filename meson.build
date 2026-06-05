@@ -38,36 +38,6 @@ add_project_arguments([
 
 miniyaml = dependency('miniyaml', version: '>=0.0.0')
 
-# Whether to build code that depends on openmpi and MPIFileUtils
-build_mfu = false
-
-# Whether to run tests that depend on mpirun and MPIFileUtils tools.
-# It is assumed that if mpirun is found, MPIFileUtils will also be installed.
-# This variable should be used to check whether to add MPI specific tests.
-test_mfu = false
-
-if get_option('mfu').enabled()
-    libmfu = cc.find_library('mfu',
-                             dirs: '/usr/lib64/openmpi/lib',
-                             disabler: true, required: false)
-    libmpi = dependency('ompi', disabler: true, required: false)
-    build_mfu = true
-
-    if libmpi.found() and libmfu.found()
-        r = run_command('utils/check_mpirun.sh', check: false)
-        if r.returncode() == 0
-            test_mfu = true
-        else
-            message('"check_mpirun" failed, do not run MPI File Utils specific tests')
-        endif
-    else
-        message('openmpi or MPIFileUtils library not found, do not compile with MPI File Utils')
-    endif
-else
-    libmfu = disabler()
-    libmpi = disabler()
-endif
-
 check = dependency('check', disabler: true, version: '>=0.9.9', required: false)
 if not check.found()
     message('check is missing: skipping unit testing')

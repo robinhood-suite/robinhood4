@@ -53,10 +53,7 @@ if get_option('ldiskfs').enabled()
 endif
 
 subdir('s3')
-
-if build_mfu
-    subdir('mpi_file')
-endif
+subdir('mpi_file')
 
 if get_option('sqlite').enabled()
     subdir('sqlite')
