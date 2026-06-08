@@ -65,7 +65,8 @@ s3_iterator_new(char* bucket_name)
 
     s3_iter->obj_data.list = NULL;
     if (bucket_name == NULL) {
-        s3_get_bucket_list(&s3_iter->bkt_data.length, &s3_iter->bkt_data.list);
+        s3_get_bucket_list((size_t *) &s3_iter->bkt_data.length,
+                           &s3_iter->bkt_data.list);
     } else {
         if (!s3_check_bucket(bucket_name))
             error(EXIT_FAILURE, ENODATA, "specified bucket does not exist");
@@ -81,7 +82,8 @@ s3_iterator_new(char* bucket_name)
     }
 
     if (s3_iter->bkt_data.length > 0)
-        s3_get_object_list(s3_iter->bkt_data.list[0], &s3_iter->obj_data.length,
+        s3_get_object_list(s3_iter->bkt_data.list[0],
+                           (size_t *) &s3_iter->obj_data.length,
                            &s3_iter->obj_data.list);
 
     s3_iter->obj_data.current_id = -1;

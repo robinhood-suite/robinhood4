@@ -17,7 +17,7 @@
 #include <robinhood/action.h>
 
 struct item_data {
-    int64_t length;
+    size_t length;
     int64_t current_id;
     char **list;
 };

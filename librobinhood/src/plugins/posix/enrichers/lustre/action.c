@@ -47,7 +47,7 @@ snprintf_key_values(char *output, int max_length,
             continue;
 
         tmp_length += snprintf(output + tmp_length, max_length - tmp_length,
-                               key_values[i].value);
+                               "%s", key_values[i].value);
 
         input ^= key_values[i].key;
         if (input)
