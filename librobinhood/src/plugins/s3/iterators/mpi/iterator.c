@@ -87,7 +87,7 @@ rbh_s3_mpi_iter_new()
 {
     struct s3_iterator *s3_iter = NULL;
     size_t max_bucket_size = 64;
-    int64_t tmp_length;
+    size_t tmp_length;
     char **tmp_list;
     int arr_start;
     int mpi_rank;

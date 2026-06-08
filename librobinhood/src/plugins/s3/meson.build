@@ -19,7 +19,7 @@ endif
 test_s3 = true
 
 s3_wrapper = library(
-    's3_wrapper',
+    'rbh-s3_wrapper',
     sources: [
         's3_wrapper.h',
         's3_wrapper.cpp',
