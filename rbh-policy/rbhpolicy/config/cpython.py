@@ -355,6 +355,12 @@ def set_evaluation_interval(interval):
 
 # Initialize global policy engine settings used by admin config scripts.
 # Sets `backend`, `database` and `evaluation_interval` variables.
+# The `filesystem` field represents the URI of the actual underlying storage
+# system. This value already exists in the database, but we ask the user to
+# define it here to make the configuration more readable. Having both URIs
+# visible in the policy engine config makes the target system explicit and
+# also allows overriding the stored value in the future without modifying
+# the database.
 def config(*, filesystem, database, evaluation_interval):
     """Initialize backend, database and evaluation interval."""
     from rbhpolicy.config.config_validator import validate_config
