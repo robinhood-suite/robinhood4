@@ -888,8 +888,11 @@ main(int argc, char *argv[])
             usage();
             return 0;
         case 'i':
-            if (str2uint64_t(optarg, &start_index))
+            if (str2int64_t(optarg, &start_index))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
+            if (start_index < 0)
+                error(EXIT_FAILURE, 0, "'%s' cannot be a negative integer",
+                      optarg);
             break;
         case 'l':
             estale_logs = false;
