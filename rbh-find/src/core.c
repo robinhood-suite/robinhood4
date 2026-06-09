@@ -56,10 +56,11 @@ open_system_backends(struct rbh_backend **backends, size_t backend_count,
                                         RBH_INFO_COMMAND_BACKEND |
                                         RBH_INFO_MOUNTPOINT);
         if (info_map == NULL || info_map->count != 2) {
+            f_ctx->backend[i] = NULL;
             fprintf(stderr,
                     "Failed to retrieve the command backend and mountpoint from '%s', certain features may not be available\n",
                     backends[i]->name);
-            return;
+            continue;
         }
 
         assert(info_map->pairs[0].value->type == RBH_VT_STRING);
