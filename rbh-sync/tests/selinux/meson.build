@@ -1,0 +1,13 @@
+# This file is part of RobinHood
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
+#                    alternatives
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
+integration_tests = ['test_selinux_db_sync']
+
+foreach t: integration_tests
+    e = find_program(t + '.bash')
+    test(t, e, env: backend_path_env,
+         suite: ['rbh-sync', 'selinux'], timeout: 120)
+endforeach
