@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ba0b66ba_c9bd2ca6",
+        "filename": "retention/update-retention/rbh-update-retention.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-09T12:11:11Z",
+      "side": 1,
+      "message": "I\u0027ve seen this style for python imports online, and I find it more readable.",
+      "parentUuid": "6a6e9190_58f3ef7c",
+      "range": {
+        "startLine": 20,
+        "startChar": 37,
+        "endLine": 20,
+        "endChar": 40
+      },
+      "revId": "5bba6a4f90673375c8bce7f46d21d6abe12cd850",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8ae4b641_696076fd",
         "filename": "retention/update-retention/tests/test_update_retention.bash",
         "patchSetId": 1
