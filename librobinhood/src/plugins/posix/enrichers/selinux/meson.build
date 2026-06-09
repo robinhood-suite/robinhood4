@@ -8,6 +8,7 @@ librbh_posix_selinux_ext = library(
     'rbh-posix-selinux-ext',
     sources: [
         'plugin.c',
+        'selinux.c',
     ],
     version: librbh_selinux_version, # defined in include/robinhood/backends
     link_with: librobinhood,
