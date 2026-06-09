@@ -52,6 +52,8 @@ open_system_backends(struct rbh_backend **backends, size_t backend_count,
         struct rbh_uri *uri;
         char *string_uri;
 
+        f_ctx->backend[i] = NULL;
+
         info_map = rbh_backend_get_info(backends[i],
                                         RBH_INFO_COMMAND_BACKEND |
                                         RBH_INFO_MOUNTPOINT);
