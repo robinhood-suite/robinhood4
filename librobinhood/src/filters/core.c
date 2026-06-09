@@ -17,9 +17,10 @@ void
 filters_ctx_finish(struct filters_context *ctx)
 {
     free(ctx->info_pe);
-    for (int i = 0; i < ctx->backend_count; ++i)
-        rbh_backend_destroy(ctx->backend[i]);
-
+    for (int i = 0; i < ctx->backend_count; ++i) {
+        if(ctx->backend[i])
+            rbh_backend_destroy(ctx->backend[i]);
+    }
     free(ctx->backend);
 }
 
