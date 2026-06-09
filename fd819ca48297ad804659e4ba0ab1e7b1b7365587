@@ -216,6 +216,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a4aa8593_356f136a",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-09T13:27:27Z",
+      "side": 1,
+      "message": "The ldiskfs backend only requires the `lustre/lustre_user.h` header to be built.\nSince this is only meant to be used with lustre systems and uses a header provided by lustre, I think it is not necessary to move this code.",
+      "parentUuid": "50370c9c_67e8089a",
+      "range": {
+        "startLine": 244,
+        "startChar": 27,
+        "endLine": 244,
+        "endChar": 33
+      },
+      "revId": "fd819ca48297ad804659e4ba0ab1e7b1b7365587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0e597b4_49923423",
         "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
         "patchSetId": 2
@@ -275,6 +299,30 @@
       "side": 1,
       "message": "Kind of strange: as the errno is set I thought that the caller will check the errno and then exit. That\u0027s what the code generally do. Maybe we need to add to `fsentry_from_dentry()` the checking of the errno?",
       "parentUuid": "0715c5da_f785ff17",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 11
+      },
+      "revId": "fd819ca48297ad804659e4ba0ab1e7b1b7365587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8ed7d6a_751584f8",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-09T13:27:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c94c93c_96b3bca8",
       "range": {
         "startLine": 131,
         "startChar": 4,

@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "211ee831_af75ff42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-09T13:27:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12b568fb_45de6ab7",
+      "revId": "b39213753e2b4bc97c1c22f71c18bd70fd6ee0e6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc5d0d65_33178d02",
@@ -31,6 +49,30 @@
       "writtenOn": "2026-06-05T08:39:32Z",
       "side": 1,
       "message": "major: seeing the use of this value, rather than referencing ldiskfs here, which is not necessary, simply call this one `RBH_LEF_LAYOUT` and you\u0027re good to go",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 34
+      },
+      "revId": "b39213753e2b4bc97c1c22f71c18bd70fd6ee0e6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d67679b_26ca2534",
+        "filename": "librobinhood/include/robinhood/backends/lustre.h.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-09T13:27:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc5d0d65_33178d02",
       "range": {
         "startLine": 38,
         "startChar": 4,
@@ -64,6 +106,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4b2babe_3525cb1a",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-09T13:27:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b48aa4e_5e55616a",
+      "range": {
+        "startLine": 661,
+        "startChar": 4,
+        "endLine": 679,
+        "endChar": 5
+      },
+      "revId": "b39213753e2b4bc97c1c22f71c18bd70fd6ee0e6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cdd3ec96_d5675449",
@@ -77,6 +143,30 @@
       "writtenOn": "2026-06-05T08:39:32Z",
       "side": 1,
       "message": "follow-up: if you do the change i suggested above, then this won\u0027t work anymore, so an easy thing to ensure the free is done to either strdup the _inode_xattrs[i].value-\u003ebinary.data or have an extra bool variable telling you if the free is necessary or not.",
+      "range": {
+        "startLine": 688,
+        "startChar": 8,
+        "endLine": 690,
+        "endChar": 22
+      },
+      "revId": "b39213753e2b4bc97c1c22f71c18bd70fd6ee0e6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a44126eb_02eebf08",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-09T13:27:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cdd3ec96_d5675449",
       "range": {
         "startLine": 688,
         "startChar": 8,
