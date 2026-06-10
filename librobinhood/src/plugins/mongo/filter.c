@@ -10,11 +10,17 @@
 #endif
 
 #include <assert.h>
+#include <string.h>
 
 #include "robinhood/id.h"
 #include "robinhood/filter.h"
 
 #include "mongo.h"
+
+/*
+ * Prefix used to target a field inside an $elemMatch array element.
+ */
+#define ELEMMATCH_FIELD_PREFIX "__elem__."
 
 /*----------------------------------------------------------------------------*
  |                          bson_append_rbh_filter()                          |
@@ -427,11 +433,34 @@ bson_append_array_filter(bson_t *bson, const struct rbh_filter *filter,
 
     for (uint32_t i = 0; i < filter->array.count; i++) {
         const struct rbh_filter *subfilter = filter->array.filters[i];
+        const struct rbh_filter_field *subfield = &subfilter->compare.field;
+        const char *subkey = NULL;
 
-        if (!BSON_APPEND_RBH_VALUE(&subdocuments,
-                                   fop2str(subfilter->op, negate),
-                                   &subfilter->compare.value))
-            return false;
+        if (subfield->xattr != NULL &&
+            strncmp(subfield->xattr, ELEMMATCH_FIELD_PREFIX,
+                    strlen(ELEMMATCH_FIELD_PREFIX)) == 0)
+            subkey = subfield->xattr + strlen(ELEMMATCH_FIELD_PREFIX);
+
+        if (subkey != NULL && subkey[0] != '\0') {
+            bson_t subdocument;
+
+            if (!bson_append_document_begin(&subdocuments, subkey,
+                                            strlen(subkey), &subdocument))
+                return false;
+
+            if (!BSON_APPEND_RBH_VALUE(&subdocument,
+                                       fop2str(subfilter->op, negate),
+                                       &subfilter->compare.value))
+                return false;
+
+            if (!bson_append_document_end(&subdocuments, &subdocument))
+                return false;
+        } else {
+            if (!BSON_APPEND_RBH_VALUE(&subdocuments,
+                                       fop2str(subfilter->op, negate),
+                                       &subfilter->compare.value))
+                return false;
+        }
     }
 
     if (!bson_append_document_end(negate_subdoc, &subdocuments))
