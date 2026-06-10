@@ -10,6 +10,7 @@
 #endif
 
 #include <assert.h>
+#include <string.h>
 
 #include "robinhood/id.h"
 #include "robinhood/filter.h"
@@ -428,10 +429,28 @@ bson_append_array_filter(bson_t *bson, const struct rbh_filter *filter,
     for (uint32_t i = 0; i < filter->array.count; i++) {
         const struct rbh_filter *subfilter = filter->array.filters[i];
 
-        if (!BSON_APPEND_RBH_VALUE(&subdocuments,
-                                   fop2str(subfilter->op, negate),
-                                   &subfilter->compare.value))
-            return false;
+        if (filter->array.use_subfilters_fields) {
+            const struct rbh_filter_field *subfield = &subfilter->compare.field;
+            const char *subkey = subfield->xattr;
+            bson_t subdocument;
+
+            if (!bson_append_document_begin(&subdocuments, subkey,
+                                            strlen(subkey), &subdocument))
+                return false;
+
+            if (!BSON_APPEND_RBH_VALUE(&subdocument,
+                                       fop2str(subfilter->op, negate),
+                                       &subfilter->compare.value))
+                return false;
+
+            if (!bson_append_document_end(&subdocuments, &subdocument))
+                return false;
+        } else {
+            if (!BSON_APPEND_RBH_VALUE(&subdocuments,
+                                       fop2str(subfilter->op, negate),
+                                       &subfilter->compare.value))
+                return false;
+        }
     }
 
     if (!bson_append_document_end(negate_subdoc, &subdocuments))
