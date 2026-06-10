@@ -231,6 +231,12 @@ struct rbh_filter {
              */
             const struct rbh_filter * const *filters;
             size_t count;
+
+            /*
+             * When true, subfilters fields are used inside the array element
+             * for an elemmatch query.
+             */
+            bool use_subfilters_fields;
         } array;
 
         struct {
@@ -522,7 +528,7 @@ rbh_filter_exists_new(const struct rbh_filter_field *field);
 struct rbh_filter *
 rbh_filter_array_elemmatch_new(const struct rbh_filter_field *field,
                                const struct rbh_filter * const *filters,
-                               size_t count);
+                               size_t count, bool use_subfilters_fields);
 
 /**
  * Create a filter composed of two filters, one which should be completed
