@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c072270_583f6e98",
+        "filename": "librobinhood/include/robinhood/backends/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-06-10T07:55:12Z",
+      "side": 1,
+      "message": "question: Are you sure that we can build `ldiskfs` without Lustre ?",
+      "revId": "d85f656231d62e699e8e171b3c56d8e86d84f15b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
