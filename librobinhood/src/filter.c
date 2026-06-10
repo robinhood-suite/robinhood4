@@ -154,6 +154,9 @@ array_filter_copy(struct rbh_filter *dest, const struct rbh_filter *src,
     /* dest->array.count */
     dest->array.count = src->array.count;
 
+    /* dest->array.use_subfilters_fields */
+    dest->array.use_subfilters_fields = src->array.use_subfilters_fields;
+
     *buffer = data;
     *bufsize = size;
     return 0;
@@ -592,14 +595,16 @@ rbh_filter_exists_new(const struct rbh_filter_field *field)
 struct rbh_filter *
 rbh_filter_array_new(enum rbh_filter_operator op,
                      const struct rbh_filter_field *field,
-                     const struct rbh_filter * const *filters, size_t count)
+                     const struct rbh_filter * const *filters, size_t count,
+                     bool use_subfilters_fields)
 {
     const struct rbh_filter ARRAY = {
         .op = op,
         .array = {
             .field = *field,
             .filters = filters,
-            .count = count
+            .count = count,
+            .use_subfilters_fields = use_subfilters_fields
         },
     };
 
@@ -614,9 +619,9 @@ rbh_filter_array_new(enum rbh_filter_operator op,
 struct rbh_filter *
 rbh_filter_array_elemmatch_new(const struct rbh_filter_field *field,
                                const struct rbh_filter * const *filters,
-                               size_t count)
+                               size_t count, bool use_subfilters_fields)
 {
-    return rbh_filter_array_new(RBH_FOP_ELEMMATCH, field, filters, count);
+    return rbh_filter_array_new(RBH_FOP_ELEMMATCH, field, filters, count, use_subfilters_fields);
 }
 
 struct rbh_filter *
@@ -721,6 +726,7 @@ rbh_filter_array_compose(struct rbh_filter *left, struct rbh_filter *right)
     filter->op = RBH_FOP_ELEMMATCH;
     filter->array.filters = array;
     filter->array.count = 2;
+    filter->array.use_subfilters_fields = false;
 
     return filter;
 }
