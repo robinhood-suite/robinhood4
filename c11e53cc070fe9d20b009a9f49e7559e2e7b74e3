@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "00ee8020_e1224928",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-11T11:18:17Z",
+      "side": 1,
+      "message": "Since the function `open_system_backends` returns when `get_info` fails, and a NULL backend results in an error if `get_info` succeeds, a backend being NULL here ensures us that `get_info` failed and that the previous backend was the last one.\nIf the `return` in `open_system_backends` was to be replaced by a `continue`, then a `continue` would be required here.",
+      "parentUuid": "72ab7c72_771334ad",
+      "range": {
+        "startLine": 22,
+        "startChar": 12,
+        "endLine": 22,
+        "endChar": 17
+      },
+      "revId": "c11e53cc070fe9d20b009a9f49e7559e2e7b74e3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7c8863e5_a796e60d",
         "filename": "rbh-find/src/core.c",
         "patchSetId": 1
