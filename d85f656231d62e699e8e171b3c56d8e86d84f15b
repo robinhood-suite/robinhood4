@@ -16,6 +16,24 @@
       "message": "question: Are you sure that we can build `ldiskfs` without Lustre ?",
       "revId": "d85f656231d62e699e8e171b3c56d8e86d84f15b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d14e199_6c62400f",
+        "filename": "librobinhood/include/robinhood/backends/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-11T07:20:15Z",
+      "side": 1,
+      "message": "IIRC, we cannot. But that should :p. Lustre should remain a dependency, but we should not be forced to build the lustre plugin for the ldiskfs one IMO. That\u0027s the case for the time being because that\u0027s easier to implement.\n\nIf this effectively does not build, we can maybe add a warning to indicate the build will not work unless lustre plugin build is not required?",
+      "parentUuid": "3c072270_583f6e98",
+      "revId": "d85f656231d62e699e8e171b3c56d8e86d84f15b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
