@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a68df2b_eb404d19",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-11T14:19:13Z",
+      "side": 1,
+      "message": "minor: use str2uint4_t instead",
+      "range": {
+        "startLine": 163,
+        "startChar": 11,
+        "endLine": 163,
+        "endChar": 23
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6dd8a0c_97d591f5",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-11T14:19:13Z",
+      "side": 1,
+      "message": "minor: missing check about sens\u0027s max value",
+      "range": {
+        "startLine": 164,
+        "startChar": 4,
+        "endLine": 164,
+        "endChar": 17
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16d1fe33_2713c51e",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-11T14:19:13Z",
+      "side": 1,
+      "message": "minor: this function and the one above could easily be merged",
+      "range": {
+        "startLine": 173,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 14
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "baddae52_46abfa5d",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-11T14:19:13Z",
+      "side": 1,
+      "message": "question: do intervals have to be in ascending order ? or could we have `c2,c7,c5,c4,c6` ?",
+      "range": {
+        "startLine": 209,
+        "startChar": 21,
+        "endLine": 209,
+        "endChar": 79
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4e11bef_af28969c",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-11T14:19:13Z",
+      "side": 1,
+      "message": "suggest: do this function as:\n```\nmemset\ncolon \u003d strchr(\u0027:\u0027)\nif colon\n    *colon \u003d \u0027\\0\u0027;\n    \n\nif (*string !\u003d \u0027s\u0027)\n    return...\n    \n\nif (str2uint64_t(string + 1, \u0026level-\u003esens))\n    return...\n    \n\nif (!colon)\n    return 0;\n    \nstring \u003d colon + 1;\nif (*string !\u003d \u0027c\u0027)\n    return...\n    \nif (parse_category_set)\n    return...\n```",
+      "range": {
+        "startLine": 306,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 11
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36b9abda_7efd59e5",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-11T14:19:13Z",
+      "side": 1,
+      "message": "suggest:\n```\ndash \u003d ...\nif (dash)\n    *dash \u003d \u0027\\0\u0027;\n    \n\nif (parser_level(range, low))\n    return -1;\n    \n\nif (dash)\n    if (parser_level(range, high))\n        return -1\nelse\n    high \u003d low\n```",
+      "range": {
+        "startLine": 343,
+        "startChar": 4,
+        "endLine": 356,
+        "endChar": 5
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33832430_3d48cc8d",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-11T14:19:13Z",
+      "side": 1,
+      "message": "style: order",
+      "range": {
+        "startLine": 442,
+        "startChar": 4,
+        "endLine": 442,
+        "endChar": 18
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7136dada_caddbf7e",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-11T14:19:13Z",
+      "side": 1,
+      "message": "suggest: put this in a specific function which sets the different parts",
+      "range": {
+        "startLine": 444,
+        "startChar": 4,
+        "endLine": 460,
+        "endChar": 21
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e40705a0_622ac7db",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-11T14:19:13Z",
+      "side": 1,
+      "message": "question: from what we discussed, is there any point in having a low_sens here since it always dominated by an higher one ?",
+      "range": {
+        "startLine": 496,
+        "startChar": 24,
+        "endLine": 496,
+        "endChar": 46
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4b6e18e_fb41931c",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-11T14:19:13Z",
+      "side": 1,
+      "message": "style: indentation and space/tab error",
+      "range": {
+        "startLine": 527,
+        "startChar": 18,
+        "endLine": 528,
+        "endChar": 15
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
