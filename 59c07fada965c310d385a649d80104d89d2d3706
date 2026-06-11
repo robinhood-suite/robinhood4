@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc94704a_49ea2505",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/action.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-11T07:26:37Z",
+      "side": 1,
+      "message": "comment: oopsie, the Wall found it?",
+      "range": {
+        "startLine": 49,
+        "startChar": 8,
+        "endLine": 50,
+        "endChar": 58
+      },
+      "revId": "59c07fada965c310d385a649d80104d89d2d3706",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
