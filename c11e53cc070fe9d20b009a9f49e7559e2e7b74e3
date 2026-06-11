@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72ab7c72_771334ad",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-11T09:51:57Z",
+      "side": 1,
+      "message": "Not continue?",
+      "range": {
+        "startLine": 22,
+        "startChar": 12,
+        "endLine": 22,
+        "endChar": 17
+      },
+      "revId": "c11e53cc070fe9d20b009a9f49e7559e2e7b74e3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c8863e5_a796e60d",
+        "filename": "rbh-find/src/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-11T09:51:57Z",
+      "side": 1,
+      "message": "@yoann.valeri@cea.fr why do we return here? The error message seems to indicate that we will continue to run: \"certain features may not be available\". Should we change the message or the return?",
+      "range": {
+        "startLine": 64,
+        "startChar": 12,
+        "endLine": 64,
+        "endChar": 18
+      },
+      "revId": "c11e53cc070fe9d20b009a9f49e7559e2e7b74e3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
