@@ -4,6 +4,18 @@
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
+test_selinux = false
+getenforce_prog = find_program('getenforce', required: false)
+chcon_prog = find_program('chcon', required: false)
+
+if getenforce_prog.found() and chcon_prog.found()
+    getenforce_res = run_command(getenforce_prog, check: false)
+
+    if getenforce_res.stdout().strip() != 'Disabled'
+        test_selinux = true
+    endif
+endif
+
 librbh_posix_selinux_ext = library(
     'rbh-posix-selinux-ext',
     sources: [
@@ -16,4 +28,3 @@ librbh_posix_selinux_ext = library(
     install: true,
     c_args: '-DHAVE_CONFIG_H',
 )
-

@@ -19,3 +19,7 @@ endif
 if libs3.found()
     subdir('s3')
 endif
+
+if test_selinux
+    subdir('selinux')
+endif
