@@ -12,7 +12,7 @@ foreach t: integration_tests
          suite: ['rbh-sync', 's3'], timeout: 120)
 endforeach
 
-if test_mfu
+if test_s3_mpi
     foreach t: integration_tests
         e = find_program(t + '.bash')
         test(t + '_mpi', e, is_parallel: false, timeout: 120,

@@ -119,6 +119,28 @@ if get_option('s3').enabled()
                                      configuration: librbh_s3_conf)
 
     install_headers(librbh_s3_h, subdir: 'robinhood/backends')
+
+    # S3 MPI extension plugin
+
+    if get_option('mpi').enabled()
+        librbh_s3_mpi_conf = configuration_data()
+
+        librbh_s3_mpi_conf.set('RBH_S3_MPI_PLUGIN_MAJOR', 1)
+        librbh_s3_mpi_conf.set('RBH_S3_MPI_PLUGIN_MINOR', 0)
+        librbh_s3_mpi_conf.set('RBH_S3_MPI_PLUGIN_RELEASE', 0)
+
+        librbh_s3_mpi_version = '@0@.@1@.@2@'.format(
+            librbh_s3_mpi_conf.get('RBH_S3_MPI_PLUGIN_MAJOR'),
+            librbh_s3_mpi_conf.get('RBH_S3_MPI_PLUGIN_MINOR'),
+            librbh_s3_mpi_conf.get('RBH_S3_MPI_PLUGIN_RELEASE')
+            )
+
+        librbh_s3_mpi_h = configure_file(input: 's3_mpi.h.in',
+                                         output: 's3_mpi.h',
+                                         configuration: librbh_s3_mpi_conf)
+
+        install_headers(librbh_s3_mpi_h, subdir: 'robinhood/backends')
+    endif
 endif
 
 librbh_retention_conf = configuration_data()
@@ -158,28 +180,6 @@ librbh_sparse_h = configure_file(input: 'sparse.h.in',
 
 install_headers(librbh_sparse_h, subdir: 'robinhood/backends')
 
-
-# S3 MPI extension plugin
-
-if get_option('s3').enabled() and get_option('mfu').enabled()
-    librbh_s3_mpi_conf = configuration_data()
-
-    librbh_s3_mpi_conf.set('RBH_S3_MPI_PLUGIN_MAJOR', 1)
-    librbh_s3_mpi_conf.set('RBH_S3_MPI_PLUGIN_MINOR', 0)
-    librbh_s3_mpi_conf.set('RBH_S3_MPI_PLUGIN_RELEASE', 0)
-
-    librbh_s3_mpi_version = '@0@.@1@.@2@'.format(
-        librbh_s3_mpi_conf.get('RBH_S3_MPI_PLUGIN_MAJOR'),
-        librbh_s3_mpi_conf.get('RBH_S3_MPI_PLUGIN_MINOR'),
-        librbh_s3_mpi_conf.get('RBH_S3_MPI_PLUGIN_RELEASE')
-    )
-
-    librbh_s3_mpi_h = configure_file(input: 's3_mpi.h.in',
-                                     output: 's3_mpi.h',
-                                     configuration: librbh_s3_mpi_conf)
-
-    install_headers(librbh_s3_mpi_h, subdir: 'robinhood/backends')
-endif
 
 # Posix MPIFileUtils extension plugin
 
