@@ -48,6 +48,4 @@ librbh_s3 = library(
     c_args: '-DHAVE_CONFIG_H',
 )
 
-if get_option('mfu').enabled()
-    subdir('iterators/mpi')
-endif
+subdir('iterators/mpi')

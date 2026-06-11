@@ -4,6 +4,14 @@
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
+test_s3_mpi = false
+
+if get_option('mpi').disabled()
+    subdir_done()
+endif
+
+test_s3_mpi = true
+
 libmpi = dependency('ompi', disabler: true, required: false)
 
 librbh_s3_mpi_ext = library(
