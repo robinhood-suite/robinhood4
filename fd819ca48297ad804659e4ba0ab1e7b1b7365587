@@ -240,6 +240,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cc057e0a_aca6726b",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-11T09:44:26Z",
+      "side": 1,
+      "message": "The plugin also needs liblustreapi.so. I don\u0027t see the issue with having the ldiskfs plugin using the POSIX extensions. The current implementation is hardcoded which is not ideal. The goal was just to have something working first. Long term, we will also need to support the retention extension. This should be configurable as for the POSIX backend. At some point we will need to discuss the best approach to do this.",
+      "parentUuid": "a4aa8593_356f136a",
+      "range": {
+        "startLine": 244,
+        "startChar": 27,
+        "endLine": 244,
+        "endChar": 33
+      },
+      "revId": "fd819ca48297ad804659e4ba0ab1e7b1b7365587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0e597b4_49923423",
         "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
         "patchSetId": 2

@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "005e96bf_b67bc9a3",
+        "filename": "librobinhood/src/plugins/ldiskfs/backend.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-11T09:44:26Z",
+      "side": 1,
+      "message": "minor: you don\u0027t need a global variable, you can put these in the ldiskfs backend structure.",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 16
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfa074bb_51701a49",
+        "filename": "librobinhood/src/plugins/ldiskfs/backend.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-11T09:44:26Z",
+      "side": 1,
+      "message": "major: these could fail, you should check whether these calls succeeded or not.",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 16
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87646cf9_b78da85d",
+        "filename": "librobinhood/src/plugins/ldiskfs/backend.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-11T09:44:26Z",
+      "side": 1,
+      "message": "If this fails, we can simply continue and not get Lustre attributes during the scan. Maybe a warning message can be useful in this case: `failed to load lustre extension, lustre enrichment disabled`",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 20
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f325f933_51983349",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-11T09:44:26Z",
+      "side": 1,
+      "message": "minor: use -1, 0 is a valid fd.",
+      "range": {
+        "startLine": 167,
+        "startChar": 13,
+        "endLine": 167,
+        "endChar": 14
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "def93e8b_b2e90637",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-11T09:44:26Z",
+      "side": 1,
+      "message": "minor: reset errno before the call to get_xattrs_from_inode",
+      "range": {
+        "startLine": 174,
+        "startChar": 7,
+        "endLine": 174,
+        "endChar": 12
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a54b4992_cd16b4e6",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-11T09:44:26Z",
+      "side": 1,
+      "message": "minor: `RBH_LEF_LUSTRE | RBH_LEF_LAYOUT`",
+      "range": {
+        "startLine": 248,
+        "startChar": 27,
+        "endLine": 248,
+        "endChar": 74
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4d3ce1e_3e49cdc1",
+        "filename": "librobinhood/src/plugins/ldiskfs/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-11T09:44:26Z",
+      "side": 1,
+      "message": "minor: There is no need for this. You don\u0027t link explicitly with the lustre extension.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 2
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70af659f_fb264ed7",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-11T09:44:26Z",
+      "side": 1,
+      "message": "Something that is done in the POSIX backend is simply to allocate a big array for the pairs and check whether we don\u0027t have enough space to store xattrs. Instead of using the exact number of pairs currently stored.",
+      "range": {
+        "startLine": 107,
+        "startChar": 18,
+        "endLine": 107,
+        "endChar": 43
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41bb275c_6b87ceec",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-11T09:44:26Z",
+      "side": 1,
+      "message": "style: order",
+      "range": {
+        "startLine": 632,
+        "startChar": 4,
+        "endLine": 632,
+        "endChar": 9
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dc11042_fc89e11f",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-11T09:44:26Z",
+      "side": 1,
+      "message": "style: alignment",
+      "range": {
+        "startLine": 1034,
+        "startChar": 24,
+        "endLine": 1034,
+        "endChar": 28
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7fc6e26_fe005cfd",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-11T09:44:26Z",
+      "side": 1,
+      "message": "style: no braces",
+      "range": {
+        "startLine": 1174,
+        "startChar": 31,
+        "endLine": 1174,
+        "endChar": 33
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
