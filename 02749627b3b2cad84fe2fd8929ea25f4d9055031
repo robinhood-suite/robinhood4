@@ -22,6 +22,30 @@
       },
       "revId": "02749627b3b2cad84fe2fd8929ea25f4d9055031",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df008a3c_19756c5c",
+        "filename": "librobinhood/src/value.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-11T11:41:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "deb22a9a_991a7ff7",
+      "range": {
+        "startLine": 517,
+        "startChar": 16,
+        "endLine": 517,
+        "endChar": 20
+      },
+      "revId": "02749627b3b2cad84fe2fd8929ea25f4d9055031",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
