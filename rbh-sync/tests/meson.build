@@ -6,6 +6,7 @@
 
 subdir('posix')
 subdir('sparse')
+subdir('selinux')
 subdir('db')
 
 if test_lustre
