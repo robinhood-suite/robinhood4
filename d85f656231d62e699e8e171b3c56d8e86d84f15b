@@ -34,6 +34,24 @@
       "parentUuid": "3c072270_583f6e98",
       "revId": "d85f656231d62e699e8e171b3c56d8e86d84f15b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6d60af7_3e73b143",
+        "filename": "librobinhood/include/robinhood/backends/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-11T14:44:54Z",
+      "side": 1,
+      "message": "When I wrote this patch, ldiskfs didn\u0027t require Lustre. Until that changes, this patch doesn\u0027t have to change. But ultimately I do agree with you both.",
+      "parentUuid": "1d14e199_6c62400f",
+      "revId": "d85f656231d62e699e8e171b3c56d8e86d84f15b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
