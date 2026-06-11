@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b127a5e_f7b2b3b4",
+        "filename": "packaging/robinhood4.spec.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-06-11T08:48:40Z",
+      "side": 1,
+      "message": "question: I don’t see sqlite. Don’t we want to package sqlite?",
+      "revId": "8afccde680ef4bd3cb954ae61d0786a8e19a6d07",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "025bdade_459e1d8b",
+        "filename": "packaging/robinhood4.spec.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-06-11T08:48:40Z",
+      "side": 1,
+      "message": "minor: It\u0027s already declared just above",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 23
+      },
+      "revId": "8afccde680ef4bd3cb954ae61d0786a8e19a6d07",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "483cba5c_b127d22c",
+        "filename": "packaging/robinhood4.spec.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-06-11T08:48:40Z",
+      "side": 1,
+      "message": "question: We only need Lustre for ldiskfs ? I think it uses ext2fs also",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 27
+      },
+      "revId": "8afccde680ef4bd3cb954ae61d0786a8e19a6d07",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "614bf0d9_b9c0f06a",
+        "filename": "packaging/robinhood4.spec.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-06-11T08:48:40Z",
+      "side": 1,
+      "message": "major: same here, I think we shouldn\u0027t need mfu to build s3-mpi",
+      "revId": "8afccde680ef4bd3cb954ae61d0786a8e19a6d07",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0646615c_731573ec",
+        "filename": "packaging/robinhood4.spec.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-06-11T08:48:40Z",
+      "side": 1,
+      "message": "major: We don\u0027t need mpifileutils",
+      "revId": "8afccde680ef4bd3cb954ae61d0786a8e19a6d07",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "758f87be_4e5f8a0d",
+        "filename": "packaging/robinhood4.spec.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-06-11T08:48:40Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "8afccde680ef4bd3cb954ae61d0786a8e19a6d07",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
