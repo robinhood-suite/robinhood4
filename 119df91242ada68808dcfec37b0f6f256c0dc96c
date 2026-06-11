@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22de7faf_e35a7649",
+        "filename": "librobinhood/include/robinhood/backends/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-06-11T07:00:12Z",
+      "side": 1,
+      "message": "major: The S3 MPI iterator is not using mfu, only MPI. We don\u0027t need to have mpiFileUtils to use it",
+      "range": {
+        "startLine": 164,
+        "startChar": 34,
+        "endLine": 164,
+        "endChar": 61
+      },
+      "revId": "119df91242ada68808dcfec37b0f6f256c0dc96c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
