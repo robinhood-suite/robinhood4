@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8c7e8a0_5b298774",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-11T07:22:35Z",
+      "side": 1,
+      "message": "Ok for me, except for what Gauthier said.",
+      "revId": "119df91242ada68808dcfec37b0f6f256c0dc96c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22de7faf_e35a7649",
