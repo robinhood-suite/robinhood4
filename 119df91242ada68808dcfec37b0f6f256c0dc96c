@@ -39,6 +39,30 @@
       },
       "revId": "119df91242ada68808dcfec37b0f6f256c0dc96c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f3ad2b3_85a9b12a",
+        "filename": "librobinhood/include/robinhood/backends/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-12T09:47:37Z",
+      "side": 1,
+      "message": "Changed in a next patch, where is dissociate mpi from mfu",
+      "parentUuid": "22de7faf_e35a7649",
+      "range": {
+        "startLine": 164,
+        "startChar": 34,
+        "endLine": 164,
+        "endChar": 61
+      },
+      "revId": "119df91242ada68808dcfec37b0f6f256c0dc96c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
