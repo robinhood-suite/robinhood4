@@ -47,6 +47,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c855367_9e152b30",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-12T13:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6dd8a0c_97d591f5",
+      "range": {
+        "startLine": 164,
+        "startChar": 4,
+        "endLine": 164,
+        "endChar": 17
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16d1fe33_2713c51e",
@@ -70,6 +94,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19933b71_80ffa3c4",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-12T13:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16d1fe33_2713c51e",
+      "range": {
+        "startLine": 173,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 14
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "baddae52_46abfa5d",
@@ -83,6 +131,30 @@
       "writtenOn": "2026-06-11T14:19:13Z",
       "side": 1,
       "message": "question: do intervals have to be in ascending order ? or could we have `c2,c7,c5,c4,c6` ?",
+      "range": {
+        "startLine": 209,
+        "startChar": 21,
+        "endLine": 209,
+        "endChar": 79
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac9b8d82_ff1781d7",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-12T13:48:12Z",
+      "side": 1,
+      "message": "Yes, it expects an ascending order because SELinux ensures that categories are stored in ascending order.",
+      "parentUuid": "baddae52_46abfa5d",
       "range": {
         "startLine": 209,
         "startChar": 21,
@@ -139,6 +211,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a15d456b_40f0ec07",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-12T13:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36b9abda_7efd59e5",
+      "range": {
+        "startLine": 343,
+        "startChar": 4,
+        "endLine": 356,
+        "endChar": 5
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33832430_3d48cc8d",
@@ -162,6 +258,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26248114_7190218b",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-12T13:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33832430_3d48cc8d",
+      "range": {
+        "startLine": 442,
+        "startChar": 4,
+        "endLine": 442,
+        "endChar": 18
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7136dada_caddbf7e",
@@ -175,6 +295,30 @@
       "writtenOn": "2026-06-11T14:19:13Z",
       "side": 1,
       "message": "suggest: put this in a specific function which sets the different parts",
+      "range": {
+        "startLine": 444,
+        "startChar": 4,
+        "endLine": 460,
+        "endChar": 21
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a72aa2b_30fe006b",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-12T13:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7136dada_caddbf7e",
       "range": {
         "startLine": 444,
         "startChar": 4,
@@ -210,6 +354,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c39c4a0d_5b71bc84",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-12T13:48:12Z",
+      "side": 1,
+      "message": "The lower sensibility is not usefull for current filter. \nRemoving it for now.",
+      "parentUuid": "e40705a0_622ac7db",
+      "range": {
+        "startLine": 496,
+        "startChar": 24,
+        "endLine": 496,
+        "endChar": 46
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d4b6e18e_fb41931c",
         "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
         "patchSetId": 14
@@ -221,6 +389,30 @@
       "writtenOn": "2026-06-11T14:19:13Z",
       "side": 1,
       "message": "style: indentation and space/tab error",
+      "range": {
+        "startLine": 527,
+        "startChar": 18,
+        "endLine": 528,
+        "endChar": 15
+      },
+      "revId": "da016a3053efdccd02af3fe82c131e3e3611d08a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a43190ce_c04eb9e1",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-12T13:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4b6e18e_fb41931c",
       "range": {
         "startLine": 527,
         "startChar": 18,
