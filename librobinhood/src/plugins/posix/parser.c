@@ -230,6 +230,18 @@ rbh_posix_check_valid_token(const char *token)
             if (strcmp(&token[3], "mefile") == 0)
                 return RBH_TOKEN_PREDICATE;
             break;
+        case 'e':
+            if (strcmp(&token[3], "linux-context") == 0)
+                return RBH_TOKEN_PREDICATE;
+            if (strcmp(&token[3], "linux-user") == 0)
+                return RBH_TOKEN_PREDICATE;
+            if (strcmp(&token[3], "linux-role") == 0)
+                return RBH_TOKEN_PREDICATE;
+            if (strcmp(&token[3], "linux-type") == 0)
+                return RBH_TOKEN_PREDICATE;
+            if (strcmp(&token[3], "linux-range") == 0)
+                return RBH_TOKEN_PREDICATE;
+            break;
         case 'i':
             if (strcmp(&token[3], "ze") == 0)
                 return RBH_TOKEN_PREDICATE;
@@ -518,6 +530,18 @@ str2predicate(const char *string)
             if (strcmp(&string[3], "mefile") == 0)
                 return PRED_SAMEFILE;
             break;
+        case 'e':
+            if (strcmp(&string[3], "linux-context") == 0)
+                return PRED_SELINUX_CTX;
+            if (strcmp(&string[3], "linux-user") == 0)
+                return PRED_SELINUX_USER;
+            if (strcmp(&string[3], "linux-role") == 0)
+                return PRED_SELINUX_ROLE;
+            if (strcmp(&string[3], "linux-type") == 0)
+                return PRED_SELINUX_TYPE;
+            if (strcmp(&string[3], "linux-range") == 0)
+                return PRED_SELINUX_RANGE;
+            break;
         case 'i':
             if (strcmp(&string[3], "ze") == 0)
                 return PRED_SIZE;
@@ -629,6 +653,11 @@ static const char *__predicate2str[] = {
     [PRED_READABLE]     = "readable",
     [PRED_REGEX]        = "regex",
     [PRED_SAMEFILE]     = "samefile",
+    [PRED_SELINUX_CTX]  = "selinux-context",
+    [PRED_SELINUX_USER] = "selinux-user",
+    [PRED_SELINUX_ROLE] = "selinux-role",
+    [PRED_SELINUX_TYPE] = "selinux-type",
+    [PRED_SELINUX_RANGE] = "selinux-range",
     [PRED_SIZE]         = "size",
     [PRED_SPARSE]       = "sparse",
     [PRED_TRUE]         = "true",
