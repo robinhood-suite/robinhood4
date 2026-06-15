@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93f621d5_c2b2aa2c",
+        "filename": "rbh-sync/tests/selinux/selinux_utils.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T13:41:05Z",
+      "side": 1,
+      "message": "major: instead of checking this here, it should be checked in the backend\u0027s meson file. You can run commands in it, and verify their outputs, which is what you want here.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 15
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9275334a_008d4949",
+        "filename": "rbh-sync/tests/selinux/selinux_utils.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T13:41:05Z",
+      "side": 1,
+      "message": "minor: don\u0027t have to test this one",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 18,
+        "endChar": 65
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "361b2237_5b4b2050",
+        "filename": "rbh-sync/tests/selinux/selinux_utils.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T13:41:05Z",
+      "side": 1,
+      "message": "minor: shouldn\u0027t be skip, should be an error, same bellow",
+      "range": {
+        "startLine": 39,
+        "startChar": 8,
+        "endLine": 39,
+        "endChar": 12
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "952eeb63_2673d1d9",
+        "filename": "rbh-sync/tests/selinux/test_selinux_db_sync.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T13:41:05Z",
+      "side": 1,
+      "message": "minor: this is only necessary for MPI tests, which you don\u0027t have here",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 1
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16b9265c_69773138",
+        "filename": "rbh-sync/tests/selinux/test_selinux_db_sync.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T13:41:05Z",
+      "side": 1,
+      "message": "minor: unnecessary test, the other already check the fields are correct, they thus also test the fields exist",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 25
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5436b324_d8332029",
+        "filename": "rbh-sync/tests/selinux/test_selinux_db_sync.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T13:41:05Z",
+      "side": 1,
+      "message": "major: shouldn\u0027t be checked each time, it\u0027s unnecessary",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 19
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75ece75c_b4f7934f",
+        "filename": "rbh-sync/tests/selinux/test_selinux_db_sync.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T13:41:05Z",
+      "side": 1,
+      "message": "major: the tests in rbh-sync shouldn\u0027t verify that mongo works as expected. They should only verify that if you create an entry, modify certains values, synchronize it, and check the DB, the values are reflected as expected. The test above is good, the one below is not",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 25
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6daf7674_c7996faa",
+        "filename": "rbh-sync/tests/selinux/test_selinux_db_sync.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T13:41:05Z",
+      "side": 1,
+      "message": "major: should instead check that `low_cat` and `high_cat` are arrays of size 1, and that each of their elements has `f` and `l` at `0`",
+      "range": {
+        "startLine": 82,
+        "startChar": 4,
+        "endLine": 93,
+        "endChar": 6
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4be5d4cc_ad193ced",
+        "filename": "rbh-sync/tests/selinux/test_selinux_db_sync.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T13:41:05Z",
+      "side": 1,
+      "message": "major: similarly, check the arrays are exactly what you expect them to be",
+      "range": {
+        "startLine": 111,
+        "startChar": 19,
+        "endLine": 112,
+        "endChar": 78
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18bf14ab_84bd3d43",
+        "filename": "rbh-sync/tests/selinux/test_selinux_db_sync.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T13:41:05Z",
+      "side": 1,
+      "message": "defect: this should be checked in rbh-find, not here",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 25
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
