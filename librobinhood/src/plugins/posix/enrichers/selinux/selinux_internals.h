@@ -22,6 +22,7 @@
 struct entry_info;
 struct rbh_value_pair;
 struct rbh_sstack;
+struct filters_context;
 
 int
 rbh_selinux_setup(void);
@@ -30,5 +31,11 @@ int
 rbh_selinux_enrich(struct entry_info *einfo, uint64_t flags,
                    struct rbh_value_pair *pairs, size_t pairs_count,
                    struct rbh_sstack *values);
+
+enum rbh_parser_token
+rbh_selinux_check_valid_token(const char *token);
+
+struct rbh_filter *
+rbh_selinux_build_filter(struct filters_context *context, int *index);
 
 #endif
