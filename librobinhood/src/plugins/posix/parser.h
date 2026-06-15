@@ -47,7 +47,6 @@ enum predicate {
     PRED_REGEX,
     PRED_SAMEFILE,
     PRED_SIZE,
-    PRED_SPARSE,
     PRED_TRUE,
     PRED_TYPE,
     PRED_UID,
