@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5d1eedb_c4566d63",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T14:31:38Z",
+      "side": 1,
+      "message": "style: add 4 spaces",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 4
+      },
+      "revId": "c402f014c35ce465d41b225ee48611c0acc81c3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "effb9730_2e9a661a",
+        "filename": "librobinhood/src/plugins/posix/parser.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T14:31:38Z",
+      "side": 1,
+      "message": "defect: remove this",
+      "range": {
+        "startLine": 233,
+        "startChar": 8,
+        "endLine": 244,
+        "endChar": 18
+      },
+      "revId": "c402f014c35ce465d41b225ee48611c0acc81c3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97dd2ff1_f27e00f4",
+        "filename": "librobinhood/src/plugins/posix/parser.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T14:31:38Z",
+      "side": 1,
+      "message": "defect: remove this",
+      "range": {
+        "startLine": 533,
+        "startChar": 8,
+        "endLine": 544,
+        "endChar": 18
+      },
+      "revId": "c402f014c35ce465d41b225ee48611c0acc81c3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06723f97_b6fc5d0f",
+        "filename": "librobinhood/src/plugins/posix/parser.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T14:31:38Z",
+      "side": 1,
+      "message": "defect: remove this",
+      "range": {
+        "startLine": 656,
+        "startChar": 4,
+        "endLine": 660,
+        "endChar": 43
+      },
+      "revId": "c402f014c35ce465d41b225ee48611c0acc81c3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d2a81b9_aea94e3c",
+        "filename": "librobinhood/src/plugins/posix/parser.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T14:31:38Z",
+      "side": 1,
+      "message": "defect: remove this",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 23
+      },
+      "revId": "c402f014c35ce465d41b225ee48611c0acc81c3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
