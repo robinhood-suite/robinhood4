@@ -11,6 +11,11 @@
 #include "robinhood/backends/posix_extension.h"
 #include "robinhood/plugins/backend.h"
 
+static const struct rbh_pe_common_operations SELINUX_EXTENSION_COMMON_OPS = {
+    .check_valid_token = rbh_selinux_check_valid_token,
+    .build_filter = rbh_selinux_build_filter,
+};
+
 const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, SELINUX) = {
     .extension = {
         .super       = RBH_POSIX_BACKEND_NAME,
@@ -18,9 +23,8 @@ const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, SELINUX) = {
         .version     = RBH_SELINUX_PLUGIN_VERSION,
         .min_version = RBH_POSIX_BACKEND_VERSION,
         .max_version = RBH_POSIX_BACKEND_VERSION,
-        .common_ops  = NULL,
+        .common_ops  = &SELINUX_EXTENSION_COMMON_OPS,
     },
     .enrich          = rbh_selinux_enrich,
     .setup_enricher  = rbh_selinux_setup,
 };
-
