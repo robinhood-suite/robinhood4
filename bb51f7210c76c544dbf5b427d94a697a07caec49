@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32b213f0_3a758541",
+        "filename": "librobinhood/src/plugins/mongo/filter.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-15T14:26:54Z",
+      "side": 1,
+      "message": "major: after looking at it and experimenting, I understand why this is necessary, but I don\u0027t like how it is done, hiding the differentiating factor in the field like this. I\u0027d rather have an explicit boolean in the `rbh_filter-\u003earray` sub-structure that specifies whether to use the filter_field in filters or not. As the code currently stands (outside of this patch), they are not read. So you should instead add a boolean to say whether they should be read or not, and use that boolean here to determine or the bson should be constructed.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 42
+      },
+      "revId": "bb51f7210c76c544dbf5b427d94a697a07caec49",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
