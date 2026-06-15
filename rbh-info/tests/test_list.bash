@@ -106,7 +106,7 @@ tests_mongo_backend_detection()
 {
     local backend_path="$(find "$MESON_BUILDDIR" -name librbh-mongo.so |
         xargs dirname)"
-    local non_standard_path="/tmp/non_standard"
+    local non_standard_path="$PWD/non_standard"
     local TEMP=$LD_LIBRARY_PATH
 
     mkdir -p $non_standard_path
@@ -120,8 +120,7 @@ tests_mongo_backend_detection()
     test -f /usr/lib64/librbh-mongo.so.1 &&
         mv /usr/lib64/librbh-mongo.so.1 /tmp/librbh-mongo.so.1.lib64
 
-    mv $backend_path/librbh-mongo.so $non_standard_path
-    cp $backend_path/librbh-mongo.so.1 $non_standard_path/
+    mv $backend_path/* $non_standard_path
 
     unset LD_LIBRARY_PATH
     local output=$(rbh_info mongo 2>&1)
@@ -134,7 +133,7 @@ tests_mongo_backend_detection()
 
     export LD_LIBRARY_PATH=$non_standard_path
     output=$(rbh_info mongo 2>&1)
-    mv $non_standard_path/librbh-mongo.so $backend_path
+    mv $non_standard_path/* $backend_path
 
     if echo "$output" | grep -q "Capabilities of mongo"; then
         echo "Mongo backend imported successfully from non-standard path"
@@ -153,7 +152,6 @@ tests_mongo_backend_detection()
         mv /tmp/librbh-mongo.so.1.lib64 /usr/lib64/librbh-mongo.so.1
 
     export LD_LIBRARY_PATH=$TEMP
-    rm -rf $non_standard_path
 }
 
 ################################################################################
