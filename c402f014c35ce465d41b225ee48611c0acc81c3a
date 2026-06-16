@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32eaf2a2_28828280",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T09:25:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5d1eedb_c4566d63",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 4
+      },
+      "revId": "c402f014c35ce465d41b225ee48611c0acc81c3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "effb9730_2e9a661a",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-06-15T14:31:38Z",
       "side": 1,
       "message": "defect: remove this",
+      "range": {
+        "startLine": 233,
+        "startChar": 8,
+        "endLine": 244,
+        "endChar": 18
+      },
+      "revId": "c402f014c35ce465d41b225ee48611c0acc81c3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03acc5e3_1354d1ec",
+        "filename": "librobinhood/src/plugins/posix/parser.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T09:25:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "effb9730_2e9a661a",
       "range": {
         "startLine": 233,
         "startChar": 8,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00fd8058_146cf175",
+        "filename": "librobinhood/src/plugins/posix/parser.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T09:25:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97dd2ff1_f27e00f4",
+      "range": {
+        "startLine": 533,
+        "startChar": 8,
+        "endLine": 544,
+        "endChar": 18
+      },
+      "revId": "c402f014c35ce465d41b225ee48611c0acc81c3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06723f97_b6fc5d0f",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "553c1a64_5f088ee2",
+        "filename": "librobinhood/src/plugins/posix/parser.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T09:25:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06723f97_b6fc5d0f",
+      "range": {
+        "startLine": 656,
+        "startChar": 4,
+        "endLine": 660,
+        "endChar": 43
+      },
+      "revId": "c402f014c35ce465d41b225ee48611c0acc81c3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d2a81b9_aea94e3c",
@@ -106,6 +202,30 @@
       "writtenOn": "2026-06-15T14:31:38Z",
       "side": 1,
       "message": "defect: remove this",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 23
+      },
+      "revId": "c402f014c35ce465d41b225ee48611c0acc81c3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93cdd753_3855e467",
+        "filename": "librobinhood/src/plugins/posix/parser.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T09:25:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d2a81b9_aea94e3c",
       "range": {
         "startLine": 49,
         "startChar": 4,
