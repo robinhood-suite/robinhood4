@@ -22,6 +22,30 @@
       },
       "revId": "a668c31e16b223b2db9b0e6e75cd644600818ee3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b271a90_101db0a9",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T09:27:14Z",
+      "side": 1,
+      "message": "Done. Updated in the filters patch.",
+      "parentUuid": "332952dc_79fdcb4e",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 1
+      },
+      "revId": "a668c31e16b223b2db9b0e6e75cd644600818ee3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
