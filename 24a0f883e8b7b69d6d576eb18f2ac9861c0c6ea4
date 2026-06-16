@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed66d35e_1a01a023",
+        "filename": "rbh-sync/tests/selinux/selinux_utils.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T08:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93f621d5_c2b2aa2c",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 15
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9275334a_008d4949",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-06-15T13:41:05Z",
       "side": 1,
       "message": "minor: don\u0027t have to test this one",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 18,
+        "endChar": 65
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b51b462e_4f4dce73",
+        "filename": "rbh-sync/tests/selinux/selinux_utils.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T08:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9275334a_008d4949",
       "range": {
         "startLine": 18,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72eddf09_8d7f3f00",
+        "filename": "rbh-sync/tests/selinux/selinux_utils.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T08:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "361b2237_5b4b2050",
+      "range": {
+        "startLine": 39,
+        "startChar": 8,
+        "endLine": 39,
+        "endChar": 12
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "952eeb63_2673d1d9",
@@ -83,6 +155,30 @@
       "writtenOn": "2026-06-15T13:41:05Z",
       "side": 1,
       "message": "minor: this is only necessary for MPI tests, which you don\u0027t have here",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 1
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1d8404f_6221a4e2",
+        "filename": "rbh-sync/tests/selinux/test_selinux_db_sync.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T08:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "952eeb63_2673d1d9",
       "range": {
         "startLine": 13,
         "startChar": 0,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e490838_0e50a487",
+        "filename": "rbh-sync/tests/selinux/test_selinux_db_sync.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T08:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16b9265c_69773138",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 25
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5436b324_d8332029",
@@ -129,6 +249,30 @@
       "writtenOn": "2026-06-15T13:41:05Z",
       "side": 1,
       "message": "major: shouldn\u0027t be checked each time, it\u0027s unnecessary",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 19
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "705fba37_9c7539cf",
+        "filename": "rbh-sync/tests/selinux/test_selinux_db_sync.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T08:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5436b324_d8332029",
       "range": {
         "startLine": 52,
         "startChar": 4,
@@ -162,6 +306,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b908cad3_80a222c4",
+        "filename": "rbh-sync/tests/selinux/test_selinux_db_sync.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T08:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75ece75c_b4f7934f",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 25
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6daf7674_c7996faa",
@@ -175,6 +343,30 @@
       "writtenOn": "2026-06-15T13:41:05Z",
       "side": 1,
       "message": "major: should instead check that `low_cat` and `high_cat` are arrays of size 1, and that each of their elements has `f` and `l` at `0`",
+      "range": {
+        "startLine": 82,
+        "startChar": 4,
+        "endLine": 93,
+        "endChar": 6
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7d1d9de_05340105",
+        "filename": "rbh-sync/tests/selinux/test_selinux_db_sync.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T08:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6daf7674_c7996faa",
       "range": {
         "startLine": 82,
         "startChar": 4,
@@ -208,6 +400,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0536cd7_b8d8fc18",
+        "filename": "rbh-sync/tests/selinux/test_selinux_db_sync.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T08:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4be5d4cc_ad193ced",
+      "range": {
+        "startLine": 111,
+        "startChar": 19,
+        "endLine": 112,
+        "endChar": 78
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18bf14ab_84bd3d43",
@@ -221,6 +437,30 @@
       "writtenOn": "2026-06-15T13:41:05Z",
       "side": 1,
       "message": "defect: this should be checked in rbh-find, not here",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 25
+      },
+      "revId": "24a0f883e8b7b69d6d576eb18f2ac9861c0c6ea4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0a673bc_3f69284f",
+        "filename": "rbh-sync/tests/selinux/test_selinux_db_sync.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-16T08:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18bf14ab_84bd3d43",
       "range": {
         "startLine": 139,
         "startChar": 0,
