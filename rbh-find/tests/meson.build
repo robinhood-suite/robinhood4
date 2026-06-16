@@ -20,3 +20,7 @@ endif
 if get_option('s3').enabled()
     subdir('s3')
 endif
+
+if test_selinux
+    subdir('selinux')
+endif
