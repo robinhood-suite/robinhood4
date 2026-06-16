@@ -20,3 +20,7 @@ endif
 if test_s3
     subdir('s3')
 endif
+
+if test_selinux
+    subdir('selinux')
+endif
