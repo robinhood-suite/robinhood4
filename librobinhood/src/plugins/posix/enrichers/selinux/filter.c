@@ -12,11 +12,19 @@
 #include <stdlib.h>
 #include <sysexits.h>
 
+#include <robinhood/utils.h>
 #include <robinhood/filter.h>
 #include <robinhood/filters/core.h>
 
 #include "parser.h"
+#include "range_parser.h"
 #include "selinux_internals.h"
+
+#define SELINUX_HIGH_SENS_XATTR "selinux.high_sens"
+#define SELINUX_HIGH_CAT_XATTR  "selinux.high_cat"
+
+#define ELEMMATCH_INTERVAL_FIRST_XATTR "f"
+#define ELEMMATCH_INTERVAL_LAST_XATTR  "l"
 
 static const struct rbh_filter_field predicate2filter_field[] = {
     [SPRED_SELINUX_CTX]   = {.fsentry = RBH_FP_INODE_XATTRS,
@@ -30,6 +38,27 @@ static const struct rbh_filter_field predicate2filter_field[] = {
     [SPRED_SELINUX_RANGE] = {.fsentry = RBH_FP_INODE_XATTRS,
                              .xattr = "selinux.range"},
 };
+
+static const struct rbh_filter_field selinux_high_sens_field = {
+    .fsentry = RBH_FP_INODE_XATTRS,
+    .xattr = SELINUX_HIGH_SENS_XATTR,
+};
+
+static const struct rbh_filter_field selinux_high_cat_field = {
+    .fsentry = RBH_FP_INODE_XATTRS,
+    .xattr = SELINUX_HIGH_CAT_XATTR,
+};
+
+static const struct rbh_filter_field interval_last_field = {
+    .fsentry = RBH_FP_INODE_XATTRS,
+    .xattr = ELEMMATCH_INTERVAL_LAST_XATTR,
+};
+
+static const struct rbh_filter_field interval_first_field = {
+    .fsentry = RBH_FP_INODE_XATTRS,
+    .xattr = ELEMMATCH_INTERVAL_FIRST_XATTR,
+};
+
 
 static struct rbh_filter *
 string_predicate2filter(int predicate, const char *arg)
@@ -45,6 +74,75 @@ string_predicate2filter(int predicate, const char *arg)
     return filter;
 }
 
+
+static struct rbh_filter *
+interval_cover_filter(const struct selinux_interval *interval)
+{
+    const struct rbh_filter *subfilters[2];
+    struct rbh_filter *first;
+    struct rbh_filter *last;
+    struct rbh_filter *filter;
+
+    first = rbh_filter_compare_int32_new(RBH_FOP_LOWER_OR_EQUAL,
+                                         &interval_first_field,
+                                         interval->first);
+    if (first == NULL)
+        error(EXIT_FAILURE, errno, "rbh_filter_compare_int32_new");
+
+    last = rbh_filter_compare_int32_new(RBH_FOP_GREATER_OR_EQUAL,
+                                        &interval_last_field,
+                                        interval->last);
+    if (last == NULL)
+        error(EXIT_FAILURE, errno, "rbh_filter_compare_int32_new");
+
+    subfilters[0] = first;
+    subfilters[1] = last;
+
+    filter = rbh_filter_array_elemmatch_new(&selinux_high_cat_field,
+                                            subfilters, 2, true);
+    if (filter == NULL)
+        error(EXIT_FAILURE, errno, "rbh_filter_array_elemmatch_new");
+
+    free(first);
+    free(last);
+
+    return filter;
+}
+
+
+static struct rbh_filter *
+selinux_dominates_filter(const char *arg)
+{
+    struct selinux_level level;
+    struct rbh_filter *filter;
+    char *copy;
+
+    copy = xstrdup(arg);
+
+    if (selinux_parse_level(copy, &level)) {
+        free(copy);
+        error(EX_USAGE, errno, "invalid SELinux level `%s'", arg);
+    }
+
+    free(copy);
+
+    filter = rbh_filter_compare_int32_new(RBH_FOP_GREATER_OR_EQUAL,
+                                          &selinux_high_sens_field,
+                                          level.sens);
+    if (filter == NULL)
+        error(EXIT_FAILURE, errno, "rbh_filter_compare_int32_new");
+
+    for (size_t i = 0; i < level.intervals_count; i++) {
+        struct rbh_filter *cat_filter;
+
+        cat_filter = interval_cover_filter(&level.intervals[i]);
+        filter = rbh_filter_and(filter, cat_filter);
+    }
+
+    return filter;
+}
+
+
 static bool
 predicate_has_argument(int predicate)
 {
@@ -54,6 +152,7 @@ predicate_has_argument(int predicate)
         case SPRED_SELINUX_ROLE:
         case SPRED_SELINUX_TYPE:
         case SPRED_SELINUX_RANGE:
+        case SPRED_SELINUX_RANGE_DOMINATES:
             return true;
         default:
             return false;
@@ -88,6 +187,9 @@ rbh_selinux_build_filter(struct filters_context *context, int *index)
         case SPRED_SELINUX_RANGE:
             filter = string_predicate2filter(predicate, argv[++i]);
         break;
+        case SPRED_SELINUX_RANGE_DOMINATES:
+            filter = selinux_dominates_filter(argv[++i]);
+            break;
         default:
             error(EX_USAGE, 0, "invalid filter found `%s'", argv[i]);
     }
