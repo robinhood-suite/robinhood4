@@ -166,6 +166,7 @@ hsm_state2filter(const char *hsm_state)
     return filter;
 }
 
+#ifdef HAVE_FID_PARSE
 static bool
 check_balanced_braces(const char *fid)
 {
@@ -193,16 +194,17 @@ check_balanced_braces(const char *fid)
     return nb_braces == 0 &&
         (*fid == '[' ? last == ']' : true);
 }
+#endif
 
 static struct rbh_filter *
 fid2filter(const char *fid)
 {
     struct rbh_filter *filter;
     struct lu_fid lu_fid;
-    char *endptr;
     int rc;
 
 #ifdef HAVE_FID_PARSE
+    char *endptr;
     rc = llapi_fid_parse(fid, &lu_fid, &endptr);
     if (rc || *endptr != '\0' || !check_balanced_braces(fid))
         error(EX_USAGE, 0, "invalid fid parsing: %s", strerror(-rc));
