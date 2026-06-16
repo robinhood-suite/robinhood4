@@ -34,6 +34,8 @@ str2selinux_predicate(const char *string)
         if (strcmp(&string[2], "elinux-range") == 0)
             return SPRED_SELINUX_RANGE;
 
+        if (strcmp(&string[2], "elinux-range-dominates") == 0)
+            return SPRED_SELINUX_RANGE_DOMINATES;
         break;
     }
 
@@ -50,11 +52,12 @@ rbh_selinux_check_valid_token(const char *token)
 }
 
 static const char *__selinux_predicate2str[] = {
-    [SPRED_SELINUX_CTX]   = "selinux-context",
-    [SPRED_SELINUX_USER]  = "selinux-user",
-    [SPRED_SELINUX_ROLE]  = "selinux-role",
-    [SPRED_SELINUX_TYPE]  = "selinux-type",
-    [SPRED_SELINUX_RANGE] = "selinux-range",
+    [SPRED_SELINUX_CTX]             = "selinux-context",
+    [SPRED_SELINUX_USER]            = "selinux-user",
+    [SPRED_SELINUX_ROLE]            = "selinux-role",
+    [SPRED_SELINUX_TYPE]            = "selinux-type",
+    [SPRED_SELINUX_RANGE]           = "selinux-range",
+    [SPRED_SELINUX_RANGE_DOMINATES] = "selinux-range",
 };
 
 const char *
