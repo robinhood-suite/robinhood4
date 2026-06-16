@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "52aa2a1d_7a05194f",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-16T07:11:48Z",
+      "side": 1,
+      "message": "While this is correct for rbh-find, it isn\u0027t for other sources that use a struct filters_context, such as the GC, report or the policy engine, and I\u0027d rather not assume that all backends have been correctly initialized (which is the reason for this fix anyway). As Guillaume said, I\u0027d rather have a continue here instead.",
+      "parentUuid": "00ee8020_e1224928",
+      "range": {
+        "startLine": 22,
+        "startChar": 12,
+        "endLine": 22,
+        "endChar": 17
+      },
+      "revId": "c11e53cc070fe9d20b009a9f49e7559e2e7b74e3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7c8863e5_a796e60d",
         "filename": "rbh-find/src/core.c",
         "patchSetId": 1
@@ -61,6 +85,30 @@
       "writtenOn": "2026-06-11T09:51:57Z",
       "side": 1,
       "message": "@yoann.valeri@cea.fr why do we return here? The error message seems to indicate that we will continue to run: \"certain features may not be available\". Should we change the message or the return?",
+      "range": {
+        "startLine": 64,
+        "startChar": 12,
+        "endLine": 64,
+        "endChar": 18
+      },
+      "revId": "c11e53cc070fe9d20b009a9f49e7559e2e7b74e3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26b6c6c6_570c1673",
+        "filename": "rbh-find/src/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-16T07:11:48Z",
+      "side": 1,
+      "message": "My original intent is that if we don\u0027t get those info, it\u0027s most likely because the backend we use cannot handle those info (mpi_file for instance). So IMO we shouldn\u0027t simply treat it as an error and still ensure a sort of baseline service for those backends.\n\nOn another note, we should probably do a \"continue\" here instead, and have the error message also state the URI that we failed to retrieve the info from. Since we can have multiple URIs into one command, one may not have the mountpoint/command backend, but others may.",
+      "parentUuid": "7c8863e5_a796e60d",
       "range": {
         "startLine": 64,
         "startChar": 12,

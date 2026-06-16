@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01adea31_a31e7de4",
+        "filename": "rbh-find/src/core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-16T07:11:48Z",
+      "side": 1,
+      "message": "suggest: this line should be moved to the if line 60, and the \"return\" should become a \"continue\"",
+      "range": {
+        "startLine": 55,
+        "startChar": 8,
+        "endLine": 55,
+        "endChar": 33
+      },
+      "revId": "adc3606d6d05d460936a524bf89c3cfabec259ad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
