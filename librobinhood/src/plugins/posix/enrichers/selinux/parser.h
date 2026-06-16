@@ -14,10 +14,16 @@ enum selinux_predicate {
     SPRED_SELINUX_ROLE,
     SPRED_SELINUX_TYPE,
     SPRED_SELINUX_RANGE,
+    SPRED_SELINUX_RANGE_DOMINATES,
+    SELINUX_HIGH_SENS_FIELD,
+    SELINUX_HIGH_CAT_FIELD,
+    INTERVAL_LAST_FIELD,
+    INTERVAL_FIRST_FIELD,
 
     SPRED_MIN = SPRED_SELINUX_CTX,
-    SPRED_MAX = SPRED_SELINUX_RANGE,
+    SPRED_MAX = INTERVAL_LAST_FIELD,
 };
+
 
 /**
  * str2selinux_predicate - convert a string to an integer corresponding to a
