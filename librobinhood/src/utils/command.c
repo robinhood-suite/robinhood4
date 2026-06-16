@@ -69,7 +69,7 @@ ctx_decref(struct exec_ctx *ctx)
         g_main_loop_quit(ctx->loop);
 }
 
-#ifndef g_spawn_check_wait_status
+#if !GLIB_CHECK_VERSION(2, 70, 0)
 #define g_spawn_check_wait_status g_spawn_check_exit_status
 #endif
 
