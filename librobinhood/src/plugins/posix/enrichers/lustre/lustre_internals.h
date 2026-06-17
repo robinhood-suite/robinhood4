@@ -14,14 +14,14 @@
 #include <robinhood/action.h>
 #include <robinhood/filter.h>
 
-struct entry_info;
+struct rbh_entry_info;
 struct rbh_config;
 struct rbh_filter_projection;
 struct rbh_value_pair;
 struct rbh_sstack;
 
 int
-rbh_lustre_enrich(struct entry_info *einfo, uint64_t flags,
+rbh_lustre_enrich(struct rbh_entry_info *einfo, uint64_t flags,
                   struct rbh_value_pair *pairs,
                   size_t pairs_count,
                   struct rbh_sstack *values);

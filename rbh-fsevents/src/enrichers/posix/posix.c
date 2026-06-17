@@ -387,7 +387,7 @@ str2partial_field(const char *string)
 static int
 enrich_statx(struct rbh_statx *dest, const struct rbh_id *id, int mount_fd,
              uint32_t mask, const struct rbh_statx *original,
-             struct rbh_posix_enrich_ctx *ctx)
+             struct rbh_enrich_context *ctx)
 {
     static const int STATX_FLAGS = AT_STATX_FORCE_SYNC | AT_EMPTY_PATH
                                  | AT_NO_AUTOMOUNT | AT_SYMLINK_NOFOLLOW;
@@ -424,7 +424,7 @@ static int
 posix_extension_enrich(struct enricher *enricher,
                        const struct enrich_request *req,
                        const struct rbh_fsevent *original,
-                       struct rbh_posix_enrich_ctx *ctx)
+                       struct rbh_enrich_context *ctx)
 {
     int n_attrs = 0;
 
@@ -459,7 +459,7 @@ enrich_xattrs(const struct rbh_value *xattrs_to_enrich,
               struct rbh_fsevent *enriched,
               const struct rbh_id *id, int mount_fd,
               struct enricher *enricher,
-              struct rbh_posix_enrich_ctx *ctx)
+              struct rbh_enrich_context *ctx)
 {
     char buffer[XATTR_VALUE_MAX_VFS_SIZE];
     const struct rbh_value *xattrs_seq;
@@ -519,7 +519,7 @@ enrich_xattrs(const struct rbh_value *xattrs_to_enrich,
 
 static int
 enrich_symlink(char symlink[SYMLINK_MAX_SIZE], const struct rbh_id *id,
-               int mount_fd, struct rbh_posix_enrich_ctx *ctx)
+               int mount_fd, struct rbh_enrich_context *ctx)
 {
     ssize_t rc;
 
@@ -541,7 +541,7 @@ posix_enrich(struct enricher *enricher,
              size_t *pair_count,
              struct rbh_fsevent *enriched,
              const struct rbh_fsevent *original,
-             struct rbh_posix_enrich_ctx *ctx)
+             struct rbh_enrich_context *ctx)
 {
     struct rbh_statx *statxbuf = &enricher->statx;
     int mount_fd = enricher->mount_fd;
@@ -615,7 +615,7 @@ enrich(struct enricher *enricher, const struct rbh_fsevent *original)
     struct rbh_fsevent *enriched = &enricher->fsevent;
     struct rbh_value_pair *pairs = enricher->pairs;
     size_t pair_count = enricher->pair_count;
-    struct rbh_posix_enrich_ctx ctx = {0};
+    struct rbh_enrich_context ctx = {0};
 
     *enriched = *original;
     enriched->xattrs.count = 0;

@@ -15,13 +15,13 @@
 #include "sparse_internals.h"
 #include "robinhood/statx.h"
 #include "robinhood/utils.h"
-#include "robinhood/backends/common.h"
+#include "robinhood/backend.h"
 #include "robinhood/backends/sparse.h"
 #include "sstack.h"
 #include "value.h"
 
 int
-rbh_sparse_enrich(struct entry_info *einfo, uint64_t flags,
+rbh_sparse_enrich(struct rbh_entry_info *einfo, uint64_t flags,
                   struct rbh_value_pair *pairs, size_t pairs_count,
                   struct rbh_sstack *values)
 {

@@ -380,7 +380,6 @@ OPTS=""
 %{_includedir}/robinhood/action.h
 %{_includedir}/robinhood/alias.h
 %{_includedir}/robinhood/backend.h
-%{_includedir}/robinhood/backends/common.h
 %{_includedir}/robinhood/backends/posix.h
 %{_includedir}/robinhood/backends/posix_extension.h
 %{_includedir}/robinhood/config.h
