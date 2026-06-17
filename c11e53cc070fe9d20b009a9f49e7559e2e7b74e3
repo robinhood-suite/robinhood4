@@ -117,6 +117,30 @@
       },
       "revId": "c11e53cc070fe9d20b009a9f49e7559e2e7b74e3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "301225f5_05507f3d",
+        "filename": "rbh-find/src/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-17T07:12:51Z",
+      "side": 1,
+      "message": "It would be useful for the ldiskfs backend as well. The tick I used to make it work was to return posix and lustre in the get_info method. It would be better to simply not have to have the method at all.",
+      "parentUuid": "26b6c6c6_570c1673",
+      "range": {
+        "startLine": 64,
+        "startChar": 12,
+        "endLine": 64,
+        "endChar": 18
+      },
+      "revId": "c11e53cc070fe9d20b009a9f49e7559e2e7b74e3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
