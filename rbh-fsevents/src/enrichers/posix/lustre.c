@@ -21,9 +21,9 @@
 #include "enricher.h"
 #include "internals.h"
 
+#include <robinhood/backend.h>
 #include <robinhood/backends/lustre.h>
 #include <robinhood/backends/posix_extension.h>
-#include <robinhood/backend.h>
 #include <robinhood/utils.h>
 
 static int
