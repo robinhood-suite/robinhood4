@@ -49,4 +49,11 @@ rbh_selinux_fill_entry_info(const struct rbh_fsentry *fsentry,
 enum known_directive
 rbh_selinux_fill_projection(struct rbh_filter_projection *projection,
                            const char *format_string, size_t *index);
+
+void
+rbh_selinux_helper(__attribute__((unused)) const char *backend,
+                  __attribute__((unused)) struct rbh_config *config,
+                  char **predicate_helper, char **directive_helper);
+
+
 #endif
