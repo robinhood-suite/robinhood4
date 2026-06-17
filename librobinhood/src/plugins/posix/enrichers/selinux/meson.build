@@ -24,6 +24,7 @@ librbh_posix_selinux_ext = library(
         'range_parser.c',
         'parser.c',
         'filter.c',
+        'action.c',
     ],
     version: librbh_selinux_version, # defined in include/robinhood/backends
     link_with: librobinhood,
