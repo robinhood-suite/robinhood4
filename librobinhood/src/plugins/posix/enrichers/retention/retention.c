@@ -16,7 +16,7 @@
 #include "robinhood/statx.h"
 #include "robinhood/utils.h"
 #include "robinhood/config.h"
-#include "robinhood/backends/common.h"
+#include "robinhood/backend.h"
 #include "robinhood/backends/retention.h"
 #include "sstack.h"
 #include "value.h"
@@ -259,7 +259,7 @@ enrich_from_xattrs(const struct rbh_statx *statx, struct rbh_value_pair *pairs)
 }
 
 int
-rbh_retention_enrich(struct entry_info *einfo, uint64_t flags,
+rbh_retention_enrich(struct rbh_entry_info *einfo, uint64_t flags,
                      struct rbh_value_pair *pairs,
                      size_t pairs_count,
                      struct rbh_sstack *values)

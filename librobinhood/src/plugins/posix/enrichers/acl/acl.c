@@ -21,7 +21,6 @@
 
 #include "robinhood/statx.h"
 #include "robinhood/utils.h"
-#include "robinhood/backends/common.h"
 #include "robinhood/backends/acl.h"
 #include "sstack.h"
 #include "value.h"
@@ -46,7 +45,7 @@
 
 
 static void *
-get_acl_xattr(const struct entry_info *einfo, const char *name,
+get_acl_xattr(const struct rbh_entry_info *einfo, const char *name,
               size_t *size)
 {
     ssize_t length;
@@ -270,7 +269,7 @@ fill_acl(struct rbh_value_pair *pair,
 
 
 int
-rbh_acl_enrich(struct entry_info *einfo, uint64_t flags,
+rbh_acl_enrich(struct rbh_entry_info *einfo, uint64_t flags,
                struct rbh_value_pair *pairs, size_t pairs_count,
                struct rbh_sstack *values)
 {

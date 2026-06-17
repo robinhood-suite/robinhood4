@@ -16,7 +16,7 @@
 #include <fcntl.h>
 
 int
-rbh_posix_enrich_open_by_id(struct rbh_posix_enrich_ctx *ctx,
+rbh_posix_enrich_open_by_id(struct rbh_enrich_context *ctx,
                             int parent_fd,
                             const struct rbh_id *id)
 {
@@ -38,7 +38,7 @@ rbh_posix_enrich_open_by_id(struct rbh_posix_enrich_ctx *ctx,
 }
 
 int
-rbh_posix_enrich_statx(struct rbh_posix_enrich_ctx *ctx, int flags,
+rbh_posix_enrich_statx(struct rbh_enrich_context *ctx, int flags,
                        unsigned int mask, struct rbh_statx *restrict statxbuf)
 {
     int rc;

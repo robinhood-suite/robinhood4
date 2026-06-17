@@ -17,7 +17,7 @@
 
 static int
 sparse_enrich_statx(struct enricher *enricher,
-                    struct rbh_posix_enrich_ctx *ctx,
+                    struct rbh_enrich_context *ctx,
                     const struct rbh_fsevent *original)
 {
     struct rbh_value_pair *pairs;
@@ -44,7 +44,7 @@ sparse_enrich_statx(struct enricher *enricher,
 int
 sparse_enrich_fsevent(struct enricher *enricher,
                       const struct enrich_request *req,
-                      struct rbh_posix_enrich_ctx *ctx,
+                      struct rbh_enrich_context *ctx,
                       const struct rbh_fsevent *original)
 {
     switch (req->type) {

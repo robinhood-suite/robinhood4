@@ -158,9 +158,9 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
         .value = &path_value,
     };
     struct rbh_fsentry *fsentry;
+    struct rbh_entry_info info;
     struct lu_fid parent_fid;
     struct rbh_statx statx;
-    struct entry_info info;
     char *error_message;
     struct lu_fid fid;
     struct rbh_id *id;

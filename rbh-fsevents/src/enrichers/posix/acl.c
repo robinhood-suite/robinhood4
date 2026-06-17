@@ -45,7 +45,7 @@ is_acl_xattr_request(const struct rbh_value_pair *xattr)
 
 static int
 acl_enrich_xattr(struct enricher *enricher,
-                 struct rbh_posix_enrich_ctx *ctx,
+                 struct rbh_enrich_context *ctx,
                  const struct rbh_fsevent *original)
 {
     size_t n_xattrs = enricher->fsevent.xattrs.count;
@@ -78,7 +78,7 @@ acl_enrich_xattr(struct enricher *enricher,
 int
 acl_enrich_fsevent(struct enricher *enricher,
                    const struct enrich_request *req,
-                   struct rbh_posix_enrich_ctx *ctx,
+                   struct rbh_enrich_context *ctx,
                    const struct rbh_fsevent *original)
 {
     switch (req->type) {
