@@ -297,3 +297,40 @@ rbh_selinux_setup(void)
 {
     return 0;
 }
+
+
+void
+rbh_selinux_helper(__attribute__((unused)) const char *backend,
+                  __attribute__((unused)) struct rbh_config *config,
+                  char **predicate_helper, char **directive_helper)
+{
+    int rc;
+    rc = asprintf(predicate_helper,
+        " - SELinux:\n"
+        "   -selinux-context CONTEXT\n"
+        "                         filter entries based on their complete\n"
+        "                         SELinux context\n"
+        "   -selinux-user USER    filter entries based on their SELinux user\n"
+        "   -selinux-role ROLE    filter entries based on their SELinux role\n"
+        "   -selinux-type TYPE    filter entries based on their SELinux type\n"
+        "   -selinux-range RANGE  filter entries based on their complete\n"
+        "                         SELinux range\n"
+        "   -selinux-range-dominates LEVEL\n"
+        "                         filter entries whose SELinux high level\n"
+        "                         dominates LEVEL\n");
+
+
+    if (rc == -1)
+        *predicate_helper = NULL;
+
+    rc = asprintf(directive_helper,
+        "  - SELinux, directive category 'Z':\n"
+        "    %%RZc Complete SELinux context\n"
+        "    %%RZu SELinux user\n"
+        "    %%RZr SELinux role\n"
+        "    %%RZt SELinux type\n"
+        "    %%RZR SELinux range\n");
+
+    if (rc == -1)
+        *directive_helper = NULL;
+}
