@@ -14,6 +14,8 @@
 static const struct rbh_pe_common_operations SELINUX_EXTENSION_COMMON_OPS = {
     .check_valid_token = rbh_selinux_check_valid_token,
     .build_filter = rbh_selinux_build_filter,
+    .fill_entry_info = rbh_selinux_fill_entry_info,
+    .fill_projection = rbh_selinux_fill_projection,
 };
 
 const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, SELINUX) = {
