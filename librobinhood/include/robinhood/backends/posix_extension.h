@@ -23,16 +23,16 @@
 #include <robinhood/plugin.h>
 #include <robinhood/plugins/backend.h>
 
-#include <robinhood/backends/common.h>
+#include <robinhood/backend.h>
 #include <robinhood/iterator.h>
 #include <robinhood/sstack.h>
 
 struct rbh_value_pair;
 struct rbh_statx;
-struct entry_info;
+struct rbh_entry_info;
 struct rbh_sstack;
 
-typedef int (*enricher_t)(struct entry_info *einfo,
+typedef int (*enricher_t)(struct rbh_entry_info *einfo,
                           uint64_t flags,
                           struct rbh_value_pair *pairs,
                           size_t pairs_count,
@@ -70,18 +70,13 @@ struct rbh_posix_extension {
     int (*setup_enricher)(void);
 };
 
-struct rbh_posix_enrich_ctx {
-    struct entry_info einfo;
-    struct rbh_sstack *values;
-};
-
 int
-rbh_posix_enrich_open_by_id(struct rbh_posix_enrich_ctx *ctx,
+rbh_posix_enrich_open_by_id(struct rbh_enrich_context *ctx,
                             int parent_fd,
                             const struct rbh_id *id);
 
 int
-rbh_posix_enrich_statx(struct rbh_posix_enrich_ctx *ctx, int flags,
+rbh_posix_enrich_statx(struct rbh_enrich_context *ctx, int flags,
                        unsigned int mask, struct rbh_statx *restrict statxbuf);
 
 struct posix_backend {

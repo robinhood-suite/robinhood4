@@ -70,7 +70,7 @@ get_mountpoint_from_current_system(struct rbh_backend *source,
     struct rbh_value_pair *pwd_pair = NULL;
     const struct rbh_value *fsentry_path;
     struct rbh_value *pwd_value = NULL;
-    struct rbh_posix_enrich_ctx ctx;
+    struct rbh_enrich_context ctx;
     struct rbh_fsentry *fsentry;
     struct rbh_value_pair pair;
     ssize_t pwd_pair_count = 1;

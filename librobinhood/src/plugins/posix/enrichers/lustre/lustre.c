@@ -893,7 +893,7 @@ get_mdt_idx:
 }
 
 static int
-_get_attrs(struct entry_info *entry_info,
+_get_attrs(struct rbh_entry_info *entry_info,
            int (*attrs_funcs[])(int, struct rbh_value_pair *, int),
            int nb_attrs_funcs,
            struct rbh_value_pair *pairs,
@@ -929,7 +929,7 @@ _get_attrs(struct entry_info *entry_info,
 }
 
 static int
-lustre_attrs_get_no_fid(struct entry_info *entry_info,
+lustre_attrs_get_no_fid(struct rbh_entry_info *entry_info,
                         struct rbh_value_pair *pairs,
                         int available_pairs,
                         struct rbh_sstack *values)
@@ -945,7 +945,7 @@ lustre_attrs_get_no_fid(struct entry_info *entry_info,
 }
 
 static int
-lustre_attrs_get_all(struct entry_info *entry_info,
+lustre_attrs_get_all(struct rbh_entry_info *entry_info,
                      struct rbh_value_pair *pairs,
                      int available_pairs,
                      struct rbh_sstack *values)
@@ -1011,7 +1011,7 @@ lustre_get_default_dir_stripe(int fd, uint64_t flags)
 }
 
 static struct rbh_value *
-lustre_get_fid_from_path(struct entry_info *einfo)
+lustre_get_fid_from_path(struct rbh_entry_info *einfo)
 {
     struct rbh_value *value;
     const char *path = NULL;
@@ -1057,7 +1057,7 @@ lustre_get_fid_from_path(struct entry_info *einfo)
      *--------------------------------------------------------------------*/
 
 int
-rbh_lustre_enrich(struct entry_info *einfo, uint64_t flags,
+rbh_lustre_enrich(struct rbh_entry_info *einfo, uint64_t flags,
                   struct rbh_value_pair *pairs,
                   size_t pairs_count,
                   struct rbh_sstack *values)

@@ -260,6 +260,22 @@ enum rbh_info {
 };
 
 /**
+ * This structure corresponds to the information available about an entry for
+ * other backends.
+ */
+struct rbh_entry_info {
+    int *fd;
+    struct rbh_statx *statx;
+    struct rbh_value_pair *inode_xattrs;
+    ssize_t *inode_xattrs_count;
+};
+
+struct rbh_enrich_context {
+    struct rbh_entry_info einfo;
+    struct rbh_sstack *values;
+};
+
+/**
  * Operations backends implement
  *
  * Only the \c destroy() operation is mandatory, every other one may be set to

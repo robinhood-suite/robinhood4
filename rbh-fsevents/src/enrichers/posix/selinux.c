@@ -44,7 +44,7 @@ is_selinux_xattr_request(const struct rbh_value_pair *xattr)
 
 static int
 selinux_enrich_xattr(struct enricher *enricher,
-                     struct rbh_posix_enrich_ctx *ctx,
+                     struct rbh_enrich_context *ctx,
                      const struct rbh_fsevent *original)
 {
     struct rbh_value_pair *pairs;
@@ -79,7 +79,7 @@ selinux_enrich_xattr(struct enricher *enricher,
 int
 selinux_enrich_fsevent(struct enricher *enricher,
                        const struct enrich_request *req,
-                       struct rbh_posix_enrich_ctx *ctx,
+                       struct rbh_enrich_context *ctx,
                        const struct rbh_fsevent *original)
 {
     switch (req->type) {

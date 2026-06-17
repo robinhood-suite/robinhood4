@@ -177,7 +177,6 @@ OPTS=""
 %{_includedir}/robinhood/action.h
 %{_includedir}/robinhood/alias.h
 %{_includedir}/robinhood/backend.h
-%{_includedir}/robinhood/backends/common.h
 %if %{with lustre}
 %{_includedir}/robinhood/backends/lustre.h
 %endif

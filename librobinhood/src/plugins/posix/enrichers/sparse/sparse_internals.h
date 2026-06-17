@@ -20,7 +20,7 @@
 #include <robinhood/config.h>
 #include <robinhood/fsentry.h>
 
-struct entry_info;
+struct rbh_entry_info;
 struct rbh_value_pair;
 struct rbh_sstack;
 
@@ -28,7 +28,7 @@ int
 rbh_sparse_setup(void);
 
 int
-rbh_sparse_enrich(struct entry_info *einfo, uint64_t flags,
+rbh_sparse_enrich(struct rbh_entry_info *einfo, uint64_t flags,
                   struct rbh_value_pair *pairs, size_t pairs_count,
                   struct rbh_sstack *values);
 

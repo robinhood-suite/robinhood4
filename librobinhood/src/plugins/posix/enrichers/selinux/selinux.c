@@ -62,7 +62,7 @@ value_to_string(const struct rbh_value *value)
 
 
 static char*
-get_selinux_context(struct entry_info *einfo)
+get_selinux_context(struct rbh_entry_info *einfo)
 {
     ssize_t length;
     ssize_t count;
@@ -229,7 +229,7 @@ fill_selinux_pairs(char *ctx, struct rbh_value_pair *pairs,
 
 
 int
-rbh_selinux_enrich(struct entry_info *einfo, uint64_t flags,
+rbh_selinux_enrich(struct rbh_entry_info *einfo, uint64_t flags,
                    struct rbh_value_pair *pairs, size_t pairs_count,
                    struct rbh_sstack *values)
 {
