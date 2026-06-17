@@ -23,7 +23,7 @@
 
 #include <robinhood/backends/lustre.h>
 #include <robinhood/backends/posix_extension.h>
-#include <robinhood/backends/common.h>
+#include <robinhood/backend.h>
 #include <robinhood/utils.h>
 
 static int
@@ -86,7 +86,7 @@ enrich_path(const char *mount_path, const struct rbh_id *id, const char *name,
 }
 
 static int
-rbh_lustre_enrich_statx(struct rbh_posix_enrich_ctx *ctx, int flags,
+rbh_lustre_enrich_statx(struct rbh_enrich_context *ctx, int flags,
                         unsigned int mask, struct rbh_statx *restrict statxbuf,
                         const char *path)
 {
@@ -106,7 +106,7 @@ rbh_lustre_enrich_statx(struct rbh_posix_enrich_ctx *ctx, int flags,
 static int
 lustre_enrich_xattr(struct enricher *enricher,
                     const struct rbh_value_pair *xattr,
-                    struct rbh_posix_enrich_ctx *ctx,
+                    struct rbh_enrich_context *ctx,
                     const struct rbh_fsevent *original)
 {
     static const int STATX_FLAGS = AT_STATX_FORCE_SYNC | AT_EMPTY_PATH
@@ -190,7 +190,7 @@ lustre_enrich_xattr(struct enricher *enricher,
 int
 lustre_enrich_fsevent(struct enricher *enricher,
                       const struct enrich_request *req,
-                      struct rbh_posix_enrich_ctx *ctx,
+                      struct rbh_enrich_context *ctx,
                       const struct rbh_fsevent *original)
 {
     switch (req->type) {

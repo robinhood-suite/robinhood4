@@ -280,6 +280,22 @@ enum metadata_type {
 };
 
 /**
+ * This structure corresponds to the information available about an entry for
+ * other backends.
+ */
+struct entry_info {
+    int *fd;                             /* The file descriptor of the entry */
+    struct rbh_statx *statx;             /* The statx of the entry */
+    struct rbh_value_pair *inode_xattrs; /* The inode xattrs of the entry */
+    ssize_t *inode_xattrs_count;         /* The number of inode xattrs */
+};
+
+struct rbh_enrich_context {
+    struct entry_info einfo;
+    struct rbh_sstack *values;
+};
+
+/**
  * Operations backends implement
  *
  * Only the \c destroy() operation is mandatory, every other one may be set to

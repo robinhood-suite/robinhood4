@@ -12,7 +12,7 @@
 # include "config.h"
 #endif
 
-#include <robinhood/backends/common.h>
+#include <robinhood/backend.h>
 #include <robinhood/iterator.h>
 #include <robinhood/plugins/backend.h>
 #include <robinhood/plugin.h>

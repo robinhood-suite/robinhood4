@@ -19,7 +19,7 @@ static __thread const char *retention_attribute = NULL;
 
 static int
 retention_enrich_statx(struct enricher *enricher,
-                       struct rbh_posix_enrich_ctx *ctx,
+                       struct rbh_enrich_context *ctx,
                        const struct rbh_fsevent *original)
 {
     struct rbh_value_pair *pairs;
@@ -46,7 +46,7 @@ retention_enrich_statx(struct enricher *enricher,
 static int
 retention_enrich_xattr(struct enricher *enricher,
                        const struct rbh_value_pair *xattr,
-                       struct rbh_posix_enrich_ctx *ctx,
+                       struct rbh_enrich_context *ctx,
                        const struct rbh_fsevent *original)
 {
     struct rbh_value_pair *pairs;
@@ -85,7 +85,7 @@ retention_enrich_xattr(struct enricher *enricher,
 int
 retention_enrich_fsevent(struct enricher *enricher,
                          const struct enrich_request *req,
-                         struct rbh_posix_enrich_ctx *ctx,
+                         struct rbh_enrich_context *ctx,
                          const struct rbh_fsevent *original)
 {
     if (!retention_attribute)

@@ -31,7 +31,7 @@ struct enrich_request {
 
 typedef int (*enrich_xattr_t)(struct enricher *enricher,
                               const struct enrich_request *req,
-                              struct rbh_posix_enrich_ctx *ctx,
+                              struct rbh_enrich_context *ctx,
                               const struct rbh_fsevent *original
                               );
 
@@ -43,19 +43,19 @@ struct posix_enricher {
 int
 lustre_enrich_fsevent(struct enricher *enricher,
                       const struct enrich_request *req,
-                      struct rbh_posix_enrich_ctx *ctx,
+                      struct rbh_enrich_context *ctx,
                       const struct rbh_fsevent *original);
 
 int
 retention_enrich_fsevent(struct enricher *enricher,
                          const struct enrich_request *req,
-                         struct rbh_posix_enrich_ctx *ctx,
+                         struct rbh_enrich_context *ctx,
                          const struct rbh_fsevent *original);
 
 int
 sparse_enrich_fsevent(struct enricher *enricher,
                       const struct enrich_request *req,
-                      struct rbh_posix_enrich_ctx *ctx,
+                      struct rbh_enrich_context *ctx,
                       const struct rbh_fsevent *original);
 
 struct enricher {
@@ -94,7 +94,7 @@ int posix_enrich(struct enricher *enricher,
                  size_t *pair_count,
                  struct rbh_fsevent *enriched,
                  const struct rbh_fsevent *original,
-                 struct rbh_posix_enrich_ctx *ctx);
+                 struct rbh_enrich_context *ctx);
 
 struct rbh_iterator *
 posix_iter_enrich(struct rbh_backend *backend, const char *type,

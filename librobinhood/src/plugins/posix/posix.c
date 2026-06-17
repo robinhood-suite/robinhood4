@@ -1048,7 +1048,7 @@ posix_get_attribute(void *backend, uint64_t flags,
 {
     struct posix_backend *posix = backend;
     const struct rbh_posix_extension **enrichers = posix->enrichers;
-    struct rbh_posix_enrich_ctx *ctx = arg;
+    struct rbh_enrich_context *ctx = arg;
     int n_enricher = 0;
     size_t count = 0;
 
