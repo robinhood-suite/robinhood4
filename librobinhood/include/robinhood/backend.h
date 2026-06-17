@@ -36,6 +36,7 @@
 #include "robinhood/fsentry.h"
 #include "robinhood/fsevent.h"
 #include "robinhood/iterator.h"
+#include "robinhood/iterator.h"
 
 /**
  * Calls to a backend's methods may set errno to \c RBH_BACKEND_ERROR if they
@@ -722,6 +723,15 @@ rbh_backend_report(struct rbh_backend *backend, const struct rbh_filter *filter,
 #define RBH_ATTR_BACKEND(flags) (flags >> RBH_ATTR_SHIFT)
 #define RBH_ATTR_BACKEND_VALUE(backend) \
     ((uint64_t)(RBH_BI_ ## backend) << RBH_ATTR_SHIFT)
+
+#define RBH_EF_GENERIC RBH_ATTR_BACKEND_VALUE(GENERIC)
+#define RBH_EF_ID 0x1
+
+static inline bool
+rbh_attr_is_generic(uint64_t flags)
+{
+    return flags == 0 || RBH_ATTR_BACKEND(flags) == RBH_BI_GENERIC;
+}
 
 /**
  * Retrieve specific attributes from a backend

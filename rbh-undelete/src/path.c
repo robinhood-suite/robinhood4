@@ -14,8 +14,6 @@
 #include <unistd.h>
 
 #include "robinhood/backend.h"
-#include "robinhood/backends/lustre.h"
-#include <robinhood/backends/posix_extension.h>
 #include "robinhood/filter.h"
 #include "robinhood/statx.h"
 #include "robinhood/value.h"
@@ -43,24 +41,24 @@ get_mountpoint_from_source(struct rbh_backend *source)
 }
 
 static struct rbh_fsentry *
-get_fsentry_from_metadata_source_with_fid(struct rbh_backend *source,
-                                          const struct rbh_value *fid_value)
+get_fsentry_from_metadata_source_with_id(struct rbh_backend *source,
+                                         const struct rbh_value *id)
 {
     const struct rbh_filter_projection ALL = {
         .fsentry_mask = RBH_FP_ALL,
         .statx_mask = RBH_STATX_ALL,
     };
-    const struct rbh_filter FID_FILTER = {
+    const struct rbh_filter ID_FILTER = {
         .op = RBH_FOP_EQUAL,
         .compare = {
             .field = {
                 .fsentry = RBH_FP_ID,
             },
-            .value = *fid_value,
+            .value = *id,
         },
     };
 
-    return rbh_backend_filter_one(source, &FID_FILTER, &ALL);
+    return rbh_backend_filter_one(source, &ID_FILTER, &ALL);
 }
 
 static char *
@@ -99,16 +97,16 @@ get_mountpoint_from_current_system(struct rbh_backend *source,
     ctx.einfo.inode_xattrs = pwd_pair;
     ctx.einfo.inode_xattrs_count = &pwd_pair_count;
 
-    rc = rbh_backend_get_attribute(target, RBH_LEF_LUSTRE | RBH_LEF_FID,
+    rc = rbh_backend_get_attribute(target, RBH_EF_GENERIC | RBH_EF_ID,
                                    &ctx, &pair, 1);
     free(pwd_value);
     free(pwd_pair);
     if (rc == -1) {
-        fprintf(stderr, "Failed to get FID of current path '%s'\n", full_path);
+        fprintf(stderr, "Failed to get ID of current path '%s'\n", full_path);
         return NULL;
     }
 
-    fsentry = get_fsentry_from_metadata_source_with_fid(source, pair.value);
+    fsentry = get_fsentry_from_metadata_source_with_id(source, pair.value);
     if (fsentry == NULL) {
         /* XXX: this log may appear a lot, but isn't fatal if there is a
          * mountpoint recorded in the source URI. Should we keep it?

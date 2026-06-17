@@ -1040,6 +1040,50 @@ posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
     return &branch->posix.backend;
 }
 
+static struct rbh_value *
+posix_get_id_from_path(struct entry_info *einfo)
+{
+    struct rbh_value *value;
+    const char *path = NULL;
+    struct rbh_id *id;
+    int fd;
+
+    for (int i = 0; i < *(einfo->inode_xattrs_count); ++i) {
+        if (strcmp(einfo->inode_xattrs[i].key, "path") != 0)
+            continue;
+
+        assert(einfo->inode_xattrs[i].value->type == RBH_VT_STRING);
+        path = einfo->inode_xattrs[i].value->string;
+        break;
+    }
+
+    if (path == NULL)
+        return NULL;
+
+    fd = openat(AT_FDCWD, path,
+                O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
+    if (fd < 0) {
+        fprintf(stderr, "Failed to open '%s': %s (%d)\n", path,
+                strerror(errno), errno);
+        return NULL;
+    }
+
+    /* The root entry might already have its ID computed and stored in
+     * `entry_id'.
+     */
+    id = id_from_fd(fd, RBH_BI_POSIX);
+    if (id == NULL)
+        return NULL;
+
+    value = xmalloc(sizeof(*value));
+
+    value->type = RBH_VT_BINARY;
+    value->binary.data = id->data;
+    value->binary.size = id->size;
+
+    return value;
+}
+
 static int
 posix_get_attribute(void *backend, uint64_t flags,
                     void *arg, struct rbh_value_pair *pairs,
@@ -1051,6 +1095,14 @@ posix_get_attribute(void *backend, uint64_t flags,
     struct rbh_enrich_context *ctx = arg;
     int n_enricher = 0;
     size_t count = 0;
+
+    if (rbh_attr_is_generic(flags) && flags & RBH_EF_ID) {
+        pairs->value = posix_get_id_from_path(&ctx->einfo);
+        if (!pairs->value)
+            return -1;
+
+        return 1;
+    }
 
     while (enrichers[n_enricher]) {
         size_t subcount;
