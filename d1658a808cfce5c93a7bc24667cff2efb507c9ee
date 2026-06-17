@@ -16,6 +16,24 @@
       "message": "Patch\u0027s content has been integrated in bfb46cf566ca277654511e69629a311d95a03173 already, sorry about this, but I think this patch has to be abandonned unfortunately",
       "revId": "d1658a808cfce5c93a7bc24667cff2efb507c9ee",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0423ed5c_770340f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1039509
+      },
+      "writtenOn": "2026-06-17T09:12:44Z",
+      "side": 1,
+      "message": "Hello Yoann,\nI think the commit you are referring to is not the good one, it seems to be  02fcec73518274c9fcae7a375838803ab9f35fe9 (ChangeID Id688274e76de54427e2770fd2aafb7ac7a0ecdf8) right ?\nBut yes abandon this one, the most important is that the compilation warning is now fixed 😉",
+      "parentUuid": "9cfc0561_9f040326",
+      "revId": "d1658a808cfce5c93a7bc24667cff2efb507c9ee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
