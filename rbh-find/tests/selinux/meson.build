@@ -6,7 +6,8 @@
 
 integration_tests = [
     'test_selinux',
-    'test_printf'
+    'test_printf',
+    'test_helper',
 ]
 
 foreach t: integration_tests
