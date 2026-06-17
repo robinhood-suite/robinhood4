@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cfc0561_9f040326",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-17T08:42:33Z",
+      "side": 1,
+      "message": "Patch\u0027s content has been integrated in bfb46cf566ca277654511e69629a311d95a03173 already, sorry about this, but I think this patch has to be abandonned unfortunately",
+      "revId": "d1658a808cfce5c93a7bc24667cff2efb507c9ee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
