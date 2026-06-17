@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fd885c9_193233bf",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/meson.build",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-17T12:05:32Z",
+      "side": 1,
+      "message": "suggest: if they\u0027re not found, tests shouldn\u0027t be run",
+      "range": {
+        "startLine": 11,
+        "startChar": 3,
+        "endLine": 11,
+        "endChar": 49
+      },
+      "revId": "6a2936b9cf096e3121e4df1df7b4d395651ee3a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
