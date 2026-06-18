@@ -47,6 +47,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9383bb12_2bb41a9f",
+        "filename": "librobinhood/src/plugins/ldiskfs/backend.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-18T14:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfa074bb_51701a49",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 16
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87646cf9_b78da85d",
@@ -60,6 +84,30 @@
       "writtenOn": "2026-06-11T09:44:26Z",
       "side": 1,
       "message": "If this fails, we can simply continue and not get Lustre attributes during the scan. Maybe a warning message can be useful in this case: `failed to load lustre extension, lustre enrichment disabled`",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 20
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0953271d_846244ad",
+        "filename": "librobinhood/src/plugins/ldiskfs/backend.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-18T14:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87646cf9_b78da85d",
       "range": {
         "startLine": 39,
         "startChar": 4,
@@ -93,6 +141,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f1008e9_0eda0ff2",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-18T14:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f325f933_51983349",
+      "range": {
+        "startLine": 167,
+        "startChar": 13,
+        "endLine": 167,
+        "endChar": 14
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "def93e8b_b2e90637",
@@ -106,6 +178,30 @@
       "writtenOn": "2026-06-11T09:44:26Z",
       "side": 1,
       "message": "minor: reset errno before the call to get_xattrs_from_inode",
+      "range": {
+        "startLine": 174,
+        "startChar": 7,
+        "endLine": 174,
+        "endChar": 12
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce44197b_6049ddbd",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-18T14:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "def93e8b_b2e90637",
       "range": {
         "startLine": 174,
         "startChar": 7,
@@ -139,6 +235,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4bcfe98_863d83d6",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-18T14:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a54b4992_cd16b4e6",
+      "range": {
+        "startLine": 248,
+        "startChar": 27,
+        "endLine": 248,
+        "endChar": 74
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f4d3ce1e_3e49cdc1",
@@ -152,6 +272,30 @@
       "writtenOn": "2026-06-11T09:44:26Z",
       "side": 1,
       "message": "minor: There is no need for this. You don\u0027t link explicitly with the lustre extension.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 2
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddd951f7_4df152e9",
+        "filename": "librobinhood/src/plugins/ldiskfs/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-18T14:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4d3ce1e_3e49cdc1",
       "range": {
         "startLine": 58,
         "startChar": 0,
@@ -185,6 +329,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22d15593_765b166e",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-18T14:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70af659f_fb264ed7",
+      "range": {
+        "startLine": 107,
+        "startChar": 18,
+        "endLine": 107,
+        "endChar": 43
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "41bb275c_6b87ceec",
@@ -198,6 +366,30 @@
       "writtenOn": "2026-06-11T09:44:26Z",
       "side": 1,
       "message": "style: order",
+      "range": {
+        "startLine": 632,
+        "startChar": 4,
+        "endLine": 632,
+        "endChar": 9
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "752590b8_1cf965ff",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-18T14:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41bb275c_6b87ceec",
       "range": {
         "startLine": 632,
         "startChar": 4,
@@ -231,6 +423,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b65b7ede_78112627",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-18T14:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2dc11042_fc89e11f",
+      "range": {
+        "startLine": 1034,
+        "startChar": 24,
+        "endLine": 1034,
+        "endChar": 28
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7fc6e26_fe005cfd",
@@ -244,6 +460,30 @@
       "writtenOn": "2026-06-11T09:44:26Z",
       "side": 1,
       "message": "style: no braces",
+      "range": {
+        "startLine": 1174,
+        "startChar": 31,
+        "endLine": 1174,
+        "endChar": 33
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca209df7_c0f7db3e",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-06-18T14:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7fc6e26_fe005cfd",
       "range": {
         "startLine": 1174,
         "startChar": 31,
