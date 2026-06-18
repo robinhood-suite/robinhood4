@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "59aafd80_73b5dbc6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-18T11:54:27Z",
+      "side": 1,
+      "message": "I meant mostly the name and location, but yes you\u0027re right the file descriptor in it kinda prevents it from being fully generic. At least now it will be usable by everything that isn\u0027t S3, whereas before it was limited to posix and posix extensions only.",
+      "parentUuid": "6b8994c2_0535e5cf",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 11
+      },
+      "revId": "3b6c0bf12fffe044ed5205b716a8037c33290043",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b59abe1c_6d98a041",
         "filename": "librobinhood/include/robinhood/backend.h",
         "patchSetId": 1
