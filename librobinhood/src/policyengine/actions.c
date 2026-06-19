@@ -388,6 +388,21 @@ rbh_pe_name_matches_hint(const char *name, const char *hint, size_t hint_len)
            name[hint_len] == '\0';
 }
 
+static FILE *stream = NULL;
+static char *stream_path = NULL;
+static bool close_stream_invoked_at_exit = false;
+
+static void _close_stream() {
+    if (!stream_path)
+        return;
+
+    fclose(stream);
+    free(stream_path);
+
+    stream = NULL;
+    stream_path = NULL;
+}
+
 /*
  * Log an entry by formatting provided values.
  *
@@ -403,6 +418,7 @@ rbh_pe_log_action(const struct rbh_action *action,
                   const struct filters_context *f_ctx)
 {
     const char *format = action->params.log.format;
+    const char *output = action->params.log.output;
     char details[4096];
     int rc;
 
@@ -423,7 +439,28 @@ rbh_pe_log_action(const struct rbh_action *action,
         return -1;
     }
 
-    printf("LogAction | %s\n", details);
+    if (output) {
+        if (!stream_path || strcmp(stream_path, output)) {
+            _close_stream();
+            stream = fopen(output, "a");
+            stream_path = strdup(output);
+
+            if (stream == NULL) {
+                fprintf(stderr, "Error: failed to open log output file\n");
+                return -1;
+            }
+
+            if (!close_stream_invoked_at_exit) {
+                atexit(_close_stream);
+                close_stream_invoked_at_exit = true;
+            }
+        }
+    } else {
+        _close_stream();
+        stream = stdout;
+    }
+
+    fprintf(stream, "LogAction | %s\n", details);
 
     return 0;
 }
