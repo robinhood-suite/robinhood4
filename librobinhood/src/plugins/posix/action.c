@@ -56,8 +56,7 @@ build_abs_floor(const char *path, size_t mountpoint_len,
         size_t floor_len = mountpoint_len + 1 + strlen(parents_below);
         abs_floor = xmalloc(floor_len + 1);
         memcpy(abs_floor, path, mountpoint_len);
-        abs_floor[mountpoint_len] = '/';
-        strcpy(abs_floor + mountpoint_len + 1, parents_below);
+        strcpy(abs_floor + mountpoint_len, parents_below);
     } else {
         char *tmp1 = xstrdup(path);
         char *tmp2 = xstrdup(dirname(tmp1));
@@ -79,6 +78,8 @@ remove_empty_parents(const char *path, size_t mountpoint_len,
     while (true) {
         char *tmp = strrchr(current, '/');
 
+        if (tmp == NULL)
+            break;
         *tmp = '\0';
 
         /* Stop at or above the mountpoint */

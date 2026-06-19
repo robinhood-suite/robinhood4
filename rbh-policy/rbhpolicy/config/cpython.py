@@ -144,6 +144,8 @@ def make_c_parameters(action: str, params: dict):
         p.count = parse_count(params.get("count"))
 
         below = params.get("remove_parents_below")
+        if below and not below.startswith('/'):
+            raise ValueError("remove_parents_below parameter must be absolute")
         p.remove_parents_below = below.encode() if below else None
 
         return ("delete", p)
