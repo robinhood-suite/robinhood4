@@ -156,6 +156,82 @@ declare_policy(
                             "rbh-policy.py should have failed when 'action' "
                             "is missing from declare_policy")
 
+    def test_log_action_with_output(self):
+        """
+        Verify that the log action is applied and logs are written
+        to the given output.
+        """
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+
+declare_policy(
+    name = "test_log_policy",
+    target = (Type == "f"),
+    action = action.log,
+    parameters = {"output": "/tmp/test_log_policy.log", "format": "path=%P"},
+    trigger = Always
+)
+
+declare_policy(
+    name = "test_dir_policy",
+    target = (Type == "d"),
+    action = action.log,
+    parameters = {"output": "/tmp/test_dir_policy.log", "format": "path=%P"},
+    trigger = Always
+)
+""")
+
+        result = self._run_policy(
+            config_path,
+            "test_log_policy,test_dir_policy"
+        )
+        self.assertEqual(result.returncode, 0,
+                         f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+                         f"stderr:\n{result.stderr}")
+
+        with open("/tmp/test_log_policy.log", "r") as stream:
+            log_output = stream.read()
+
+        with open("/tmp/test_dir_policy.log", "r") as stream:
+            dir_output = stream.read()
+
+        os.unlink("/tmp/test_log_policy.log")
+        os.unlink("/tmp/test_dir_policy.log")
+
+        # Files must appear in output
+        expected_files = [
+            "filedir/file1.txt",
+            "filedir/file2.log",
+            "filedir/file3.csv",
+            "filedir/test1/file4.bin",
+            "filedir/test1/file5.json",
+            "filedir/test1/file6.xml",
+            "filedir/test1/test2/file7.sh",
+            "filedir/test1/test2/file8.py",
+            "filedir/test1/test2/file9.dat",
+            "filedir/test1/test2/file10.big",
+        ]
+        for relpath in expected_files:
+            self.assertIn(f"LogAction | path={relpath}", log_output,
+                          f"Expected file not found in the log: {relpath}")
+
+        # Dirs must appear in output
+        expected_dirs = [
+            "filedir",
+            "filedir/test1",
+            "filedir/test1/test2",
+        ]
+        for relpath in expected_dirs:
+            self.assertIn(f"LogAction | path={relpath}", dir_output,
+                          f"Expected dir not found in the log: {relpath}")
+
+
     def test_log_action_with_rule_and_count_limits(self):
         """
         Verify that count limits are respected independently for:
