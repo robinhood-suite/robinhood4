@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # This file is part of RobinHood
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #            alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -51,4 +51,9 @@ def load_config(fs_input):
     if config_dir not in sys.path:
         sys.path.insert(0, config_dir)
 
-    return importlib.import_module(module_name)
+    try:
+        return importlib.import_module(module_name)
+    except Exception as e:
+        raise ValueError(
+            f"Configuration file {config_path} cannot be parsed: {e}"
+        )
