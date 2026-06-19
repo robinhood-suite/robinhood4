@@ -1,5 +1,5 @@
 # This file is part of RobinHood
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #            alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -95,6 +95,7 @@ class RbhLogParams(Structure):
     _fields_ = [
         ("format", c_char_p),
         ("count", ctypes.c_size_t),
+        ("output", c_char_p),
     ]
 
 class RbhParamsUnion(Union):
@@ -152,6 +153,8 @@ def make_c_parameters(action: str, params: dict):
         p.count = parse_count(params.get("count"))
         log_format = params.get("format")
         p.format = log_format.encode() if log_format else None
+        log_output = params.get("output")
+        p.output = log_output.encode() if log_output else None
         return ("log", p)
 
     yaml_bytes = yaml.safe_dump(params or {}).encode()

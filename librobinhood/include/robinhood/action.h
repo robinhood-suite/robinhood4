@@ -56,6 +56,7 @@ struct rbh_delete_params {
 struct rbh_log_params {
     const char *format;
     size_t count;
+    const char *output;
 };
 
 /**
