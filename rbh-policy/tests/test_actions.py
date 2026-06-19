@@ -494,7 +494,8 @@ declare_policy(
         empty parents above the floor path are preserved.
         """
         # Create filedir/a/b/c/ with a single file inside c/
-        level_b = os.path.join(self.test_dir, "filedir", "a", "b")
+        level_a = os.path.join(self.test_dir, "filedir", "a")
+        level_b = os.path.join(level_a, "b")
         level_c = os.path.join(level_b, "c")
         os.makedirs(level_c)
         deep_file = os.path.join(level_c, "deep.txt")
@@ -517,7 +518,7 @@ declare_policy(
     action = action.delete,
     parameters = {
         "remove_empty_parent": True,
-        "remove_parents_below": "filedir/a/b",
+        "remove_parents_below": "/filedir/a",
     },
     trigger = Always
 )
@@ -536,10 +537,15 @@ declare_policy(
             os.path.exists(level_c),
             "c/ should have been removed (empty after deletion)")
 
-        # The floor directory (b/) must be preserved
-        self.assertTrue(
+        # Directory (b/) must be removed, because it is also empty
+        self.assertFalse(
             os.path.exists(level_b),
-            "b/ is the floor and must not have been removed")
+            "b/ should have been removed (empty after deletion)")
+
+        # Directory (a/) is the floor and must be preserved
+        self.assertTrue(
+            os.path.exists(level_a),
+            "a/ is the floor and must not have been removed")
 
     def test_delete_remove_parents_below_without_remove_empty_parent(self):
         """
@@ -566,7 +572,7 @@ declare_policy(
     name = "test_no_remove_parent",
     target = (Type == "f") & (Name == "alone.txt"),
     action = action.delete,
-    parameters = {"remove_parents_below": "filedir/alone_dir"},
+    parameters = {"remove_parents_below": "/filedir/alone_dir"},
     trigger = Always
 )
 """)
