@@ -67,6 +67,24 @@ foreach t: ['check_sparse']
          suite: 'librobinhood')
 endforeach
 
+if test_selinux
+    foreach t: ['check_selinux']
+        test(t,
+             executable(t, t + '.c',
+                        dependencies: [check],
+                        link_with: [
+                            librobinhood,
+                            librbh_posix,
+                            librbh_posix_selinux_ext
+                        ],
+                        include_directories: rbh_include,
+                        c_args: '-DHAVE_CONFIG_H'),
+             env: backend_path_env,
+             suite: 'librobinhood')
+    endforeach
+endif
+
+
 if test_lustre
     foreach t: ['check_lustre']
         test(t,
