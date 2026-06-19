@@ -77,37 +77,27 @@ remove_empty_parents(const char *path, size_t mountpoint_len,
     bool parent_removed = false;
 
     while (true) {
-        char *tmp = xstrdup(current);
-        char *parent = dirname(tmp);
+        char *tmp = strrchr(current, '/');
+
+        *tmp = '\0';
 
         /* Stop at or above the mountpoint */
-        if (strlen(parent) <= mountpoint_len) {
-            free(tmp);
+        if (strlen(current) <= mountpoint_len)
             break;
-        }
 
         /* Stop at the floor path (do not remove it) */
-        if (abs_floor && strcmp(parent, abs_floor) == 0) {
-            free(tmp);
+        if (abs_floor && strcmp(current, abs_floor) == 0)
             break;
-        }
 
-        if (rmdir(parent) == 0) {
+        if (rmdir(current) == 0) {
             parent_removed = true;
-            free(current);
-            current = tmp;
         } else {
             /* ENOTEMPTY means the directory is not empty; this is not really
              * an error, just a stopping condition. Other errors should be
              * signified to the user. */
-            if (errno != ENOTEMPTY) {
-                free(tmp);
-                free(current);
-
+            if (errno != ENOTEMPTY)
                 return RBH_DELETE_ERROR;
-            }
 
-            free(tmp);
             break;
         }
     }
