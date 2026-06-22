@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "50d72ba8_5d3b4208",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-06-22T08:21:35Z",
+      "side": 1,
+      "message": "question: where is this initialized?",
+      "range": {
+        "startLine": 14,
+        "startChar": 21,
+        "endLine": 14,
+        "endChar": 31
+      },
+      "revId": "6576d54eda769ed25808105c1c477cdc666be61a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3def1de6_1e9ad4aa",
         "filename": "librobinhood/src/value.c",
         "patchSetId": 7
