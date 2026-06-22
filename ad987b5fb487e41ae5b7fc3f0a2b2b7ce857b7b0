@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15954ac8_8bcbfd76",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 20
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-06-22T09:11:06Z",
+      "side": 1,
+      "message": "question: Why \"POSIX enricher\" ? It\u0027s the selinux enricher no ?",
+      "range": {
+        "startLine": 7,
+        "startChar": 13,
+        "endLine": 7,
+        "endChar": 27
+      },
+      "revId": "ad987b5fb487e41ae5b7fc3f0a2b2b7ce857b7b0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
