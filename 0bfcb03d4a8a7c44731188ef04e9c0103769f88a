@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e15ce3b2_0df6002a",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-22T11:47:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e664f1e_2a35e536",
+      "range": {
+        "startLine": 92,
+        "startChar": 22,
+        "endLine": 92,
+        "endChar": 23
+      },
+      "revId": "0bfcb03d4a8a7c44731188ef04e9c0103769f88a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08ea0ae1_41a473a0",
@@ -70,6 +94,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b65c0f2_58af3574",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-22T11:47:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c862a581_4dfd849b",
+      "range": {
+        "startLine": 97,
+        "startChar": 23,
+        "endLine": 97,
+        "endChar": 24
+      },
+      "revId": "0bfcb03d4a8a7c44731188ef04e9c0103769f88a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a443072_a3a990b9",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-22T11:47:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08ea0ae1_41a473a0",
+      "range": {
+        "startLine": 97,
+        "startChar": 10,
+        "endLine": 97,
+        "endChar": 11
+      },
+      "revId": "0bfcb03d4a8a7c44731188ef04e9c0103769f88a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53ad04c7_cfbd1eec",
@@ -83,6 +155,30 @@
       "writtenOn": "2026-06-22T09:11:06Z",
       "side": 1,
       "message": "minor: this check is not needed",
+      "range": {
+        "startLine": 239,
+        "startChar": 8,
+        "endLine": 242,
+        "endChar": 9
+      },
+      "revId": "0bfcb03d4a8a7c44731188ef04e9c0103769f88a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "483920f3_f95ced9e",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-22T11:47:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53ad04c7_cfbd1eec",
       "range": {
         "startLine": 239,
         "startChar": 8,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd80738e_0cae7bdd",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-22T11:47:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad91b57_168c31cc",
+      "range": {
+        "startLine": 244,
+        "startChar": 10,
+        "endLine": 244,
+        "endChar": 11
+      },
+      "revId": "0bfcb03d4a8a7c44731188ef04e9c0103769f88a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f32ef655_21e8ed17",
@@ -129,6 +249,30 @@
       "writtenOn": "2026-06-22T09:11:06Z",
       "side": 1,
       "message": "style: order",
+      "range": {
+        "startLine": 331,
+        "startChar": 4,
+        "endLine": 331,
+        "endChar": 28
+      },
+      "revId": "0bfcb03d4a8a7c44731188ef04e9c0103769f88a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53127b95_3340262b",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-22T11:47:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f32ef655_21e8ed17",
       "range": {
         "startLine": 331,
         "startChar": 4,
@@ -162,6 +306,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4081f68_94028eab",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-22T11:47:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a4df836_840b64af",
+      "range": {
+        "startLine": 335,
+        "startChar": 3,
+        "endLine": 337,
+        "endChar": 18
+      },
+      "revId": "0bfcb03d4a8a7c44731188ef04e9c0103769f88a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b1c05053_7b14856b",
@@ -179,6 +347,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b099bcd1_b3e0e6e8",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-22T11:47:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1c05053_7b14856b",
+      "revId": "0bfcb03d4a8a7c44731188ef04e9c0103769f88a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5edd377a_ecaf4094",
@@ -192,6 +378,30 @@
       "writtenOn": "2026-06-22T09:11:06Z",
       "side": 1,
       "message": "style: alignement",
+      "range": {
+        "startLine": 31,
+        "startChar": 18,
+        "endLine": 32,
+        "endChar": 45
+      },
+      "revId": "0bfcb03d4a8a7c44731188ef04e9c0103769f88a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e4d10b3_3a15d6b9",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux_internals.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-22T11:47:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5edd377a_ecaf4094",
       "range": {
         "startLine": 31,
         "startChar": 18,

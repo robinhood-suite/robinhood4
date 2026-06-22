@@ -22,6 +22,30 @@
       },
       "revId": "ad987b5fb487e41ae5b7fc3f0a2b2b7ce857b7b0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5cd01db_e2268119",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 20
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-22T11:47:58Z",
+      "side": 1,
+      "message": "Done, I renamed it to \"SELinux enricher\" to avoid the ambiguity.",
+      "parentUuid": "15954ac8_8bcbfd76",
+      "range": {
+        "startLine": 7,
+        "startChar": 13,
+        "endLine": 7,
+        "endChar": 27
+      },
+      "revId": "ad987b5fb487e41ae5b7fc3f0a2b2b7ce857b7b0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
