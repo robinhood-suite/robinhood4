@@ -545,7 +545,7 @@ declare_policy(
             file_size = os.path.getsize(file_path)
 
             expected_line = (
-                fr"-rw-r--r-- \d+ root root {file_size} "
+                fr"-rw-r--r--\.? \d+ root root {file_size} "
                 fr"\w+\s+\d+\s+\d+:\d+ {file_path}"
             )
 
@@ -625,7 +625,7 @@ declare_policy(
             expected_path = os.path.join(self.test_dir, "filedir", name)
 
             file_pattern = (
-                fr"-rw-r--r-- \d+ root root {file_size} "
+                fr"-rw-r--r--\.? \d+ root root {file_size} "
                 fr"\w+\s+\d+\s+\d+:\d+ {expected_path}"
             )
             self.assertRegex(output, file_pattern,
