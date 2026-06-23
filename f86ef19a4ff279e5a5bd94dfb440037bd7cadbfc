@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e58824a_174f16eb",
+        "filename": "rbh-find/tests/selinux/test_selinux.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-23T10:46:50Z",
+      "side": 1,
+      "message": "minor: why add this ? It\u0027s a good way to check the default values of the mountpoint aswell",
+      "range": {
+        "startLine": 26,
+        "startChar": 31,
+        "endLine": 26,
+        "endChar": 44
+      },
+      "revId": "f86ef19a4ff279e5a5bd94dfb440037bd7cadbfc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9a68fd8_f0b0fefa",
+        "filename": "rbh-find/tests/selinux/test_selinux.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-23T10:46:50Z",
+      "side": 1,
+      "message": "minor: devide the function, one filter tested per function, and add more tests for each filter",
+      "range": {
+        "startLine": 30,
+        "startChar": 44,
+        "endLine": 30,
+        "endChar": 67
+      },
+      "revId": "f86ef19a4ff279e5a5bd94dfb440037bd7cadbfc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf917d91_d610c860",
+        "filename": "rbh-find/tests/selinux/test_selinux.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-23T10:46:50Z",
+      "side": 1,
+      "message": "style: remove the empty lines",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 1
+      },
+      "revId": "f86ef19a4ff279e5a5bd94dfb440037bd7cadbfc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
