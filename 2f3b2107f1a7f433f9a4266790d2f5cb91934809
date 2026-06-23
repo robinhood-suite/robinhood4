@@ -22,6 +22,30 @@
       },
       "revId": "2f3b2107f1a7f433f9a4266790d2f5cb91934809",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ebcdf94_d9fec748",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-23T12:37:29Z",
+      "side": 0,
+      "message": "Yes, checked with valgrind, there is no memory leak.",
+      "parentUuid": "727c7e0a_9c54ae51",
+      "range": {
+        "startLine": 138,
+        "startChar": 4,
+        "endLine": 138,
+        "endChar": 24
+      },
+      "revId": "2f3b2107f1a7f433f9a4266790d2f5cb91934809",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
