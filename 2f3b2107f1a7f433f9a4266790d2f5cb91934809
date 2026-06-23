@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "727c7e0a_9c54ae51",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-23T10:54:30Z",
+      "side": 0,
+      "message": "question: have you checked if this creates a memory leak ?",
+      "range": {
+        "startLine": 138,
+        "startChar": 4,
+        "endLine": 138,
+        "endChar": 24
+      },
+      "revId": "2f3b2107f1a7f433f9a4266790d2f5cb91934809",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
