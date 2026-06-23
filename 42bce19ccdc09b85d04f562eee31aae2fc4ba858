@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f265d9d_4f1c7900",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/action.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-23T10:48:14Z",
+      "side": 1,
+      "message": "style: indentation",
+      "range": {
+        "startLine": 50,
+        "startChar": 35,
+        "endLine": 50,
+        "endChar": 41
+      },
+      "revId": "42bce19ccdc09b85d04f562eee31aae2fc4ba858",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
