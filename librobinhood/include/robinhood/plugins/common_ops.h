@@ -30,9 +30,6 @@ struct rbh_pe_common_operations {
      *                           freed by the caller with free()
      * @param directive_helper   the output helper for directives, should be
      *                           freed by the caller with free()
-     *
-     * @return                   the plugin or extension's helper for predicates
-     *                           and directives
      */
     void (*helper)(const char *backend, struct rbh_config *config,
                    char **predicate_helper, char **directive_helper);
