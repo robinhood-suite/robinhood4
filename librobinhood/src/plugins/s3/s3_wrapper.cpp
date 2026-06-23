@@ -135,7 +135,6 @@ s3_destroy_api()
      * Temporarily commented out until a solution is found.
      */
     //Aws::ShutdownAPI(*options_ptr);
-    options_ptr.reset();
 }
 
 /*----------------------------------------------------------------------------*
