@@ -22,6 +22,30 @@
       },
       "revId": "b7ca422a1629cd42fb6e0b05bb831d968ada6516",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18989195_499ebeb3",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-23T14:05:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b2243c7_f7ec86d0",
+      "range": {
+        "startLine": 317,
+        "startChar": 47,
+        "endLine": 317,
+        "endChar": 48
+      },
+      "revId": "b7ca422a1629cd42fb6e0b05bb831d968ada6516",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
