@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7219104_d3b26769",
+        "filename": "librobinhood/include/robinhood/filter.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-23T10:32:01Z",
+      "side": 1,
+      "message": "style: remove empty line",
+      "range": {
+        "startLine": 524,
+        "startChar": 2,
+        "endLine": 524,
+        "endChar": 20
+      },
+      "revId": "6000a17d9226c8dcbff8558addecc3b225683c5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
