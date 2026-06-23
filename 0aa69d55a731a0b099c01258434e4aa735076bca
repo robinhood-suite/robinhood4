@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b2300dc_9c50e3cf",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/filter.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-23T10:38:50Z",
+      "side": 1,
+      "message": "defect: add them to the array above, it is its goal to hold these values",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 2
+      },
+      "revId": "0aa69d55a731a0b099c01258434e4aa735076bca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db57f9ef_efb0c276",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/filter.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-23T10:38:50Z",
+      "side": 1,
+      "message": "style: order",
+      "range": {
+        "startLine": 82,
+        "startChar": 4,
+        "endLine": 84,
+        "endChar": 30
+      },
+      "revId": "0aa69d55a731a0b099c01258434e4aa735076bca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd535e98_43ec3606",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/filter.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-23T10:38:50Z",
+      "side": 1,
+      "message": "minor: remove the function, it always return true, so just check that i+1 \u003c argc",
+      "range": {
+        "startLine": 173,
+        "startChar": 8,
+        "endLine": 173,
+        "endChar": 30
+      },
+      "revId": "0aa69d55a731a0b099c01258434e4aa735076bca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ae2158e_4fdef6f7",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/parser.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-23T10:38:50Z",
+      "side": 1,
+      "message": "minor: \"selinux-range-dominates\"",
+      "range": {
+        "startLine": 60,
+        "startChar": 47,
+        "endLine": 60,
+        "endChar": 52
+      },
+      "revId": "0aa69d55a731a0b099c01258434e4aa735076bca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
