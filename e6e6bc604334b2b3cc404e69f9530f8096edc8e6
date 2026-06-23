@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f417943d_4ad1df7c",
+        "filename": "rbh-find/tests/selinux/test_printf.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-23T10:49:30Z",
+      "side": 1,
+      "message": "minor: add a check that you can recreate the context using each printing directive, and another that produce the same output as ls -Z",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 29
+      },
+      "revId": "e6e6bc604334b2b3cc404e69f9530f8096edc8e6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
