@@ -36,6 +36,7 @@
 #define SELINUX_INTERVAL_FIRST_KEY "f"
 #define SELINUX_INTERVAL_LAST_KEY  "l"
 
+static const size_t XATTR_VALUE_MAX_VFS_SIZE = 1 << 16;
 
 /*
  * A SELinux complete context
@@ -75,7 +76,9 @@ value_to_string(const struct rbh_value *value)
 static char*
 get_selinux_context(struct entry_info *einfo)
 {
+    ssize_t length;
     ssize_t count;
+    char* context;
 
     if (einfo == NULL || einfo->inode_xattrs == NULL ||
         einfo->inode_xattrs_count == NULL) {
@@ -93,7 +96,21 @@ get_selinux_context(struct entry_info *einfo)
         return value_to_string(pair->value);
     }
 
-    return NULL;
+    if (einfo->fd == NULL)
+        return NULL;
+
+    context = xmalloc(XATTR_VALUE_MAX_VFS_SIZE + 1);
+
+    length = fgetxattr(*einfo->fd, SELINUX_XATTR_NAME, context,
+                       XATTR_VALUE_MAX_VFS_SIZE);
+    if (length == -1) {
+        free(context);
+        return NULL;
+    }
+
+    context[length] = '\0';
+
+    return context;
 }
 
 /**
