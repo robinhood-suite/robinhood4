@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d198a29_f122f63d",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/parser.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-06-24T07:02:21Z",
+      "side": 1,
+      "message": "question: Why in a different enum since you are using it the same way ? You could just put them in the selinux_predicate and avoid the SPRED_MAX + 1",
+      "revId": "3bf0ae88b928f33feeb81cb6856a53194672aee4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
