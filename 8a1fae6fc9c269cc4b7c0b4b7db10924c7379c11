@@ -16,6 +16,92 @@
       "message": "I think it is fine.\n\nBut, there is one approach that is lacking : providing stats to external monitoring tools. What do you expect for that ? Asking external monitoring tools to run rbh command ? or developing a new rbh command to get existing stats in the mirror db ?",
       "revId": "8a1fae6fc9c269cc4b7c0b4b7db10924c7379c11",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0df7e040_a89d1afe",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-06-24T08:57:30Z",
+      "side": 1,
+      "message": "typo: of",
+      "range": {
+        "startLine": 39,
+        "startChar": 33,
+        "endLine": 39,
+        "endChar": 34
+      },
+      "revId": "8a1fae6fc9c269cc4b7c0b4b7db10924c7379c11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70ec9dfd_b9c35222",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-06-24T08:57:30Z",
+      "side": 1,
+      "message": "typo: will be",
+      "range": {
+        "startLine": 108,
+        "startChar": 51,
+        "endLine": 108,
+        "endChar": 56
+      },
+      "revId": "8a1fae6fc9c269cc4b7c0b4b7db10924c7379c11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "080d2fb7_6013b13c",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-06-24T08:57:30Z",
+      "side": 1,
+      "message": "major: There’s information here that is specific only to RBH3. RBH4 doesn’t have an EntryProcessor pipeline or a scan interval. It would be better to display what it will looks like with rbh-sync for example.",
+      "revId": "8a1fae6fc9c269cc4b7c0b4b7db10924c7379c11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4ea2f1f_cbecba0b",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-06-24T08:57:30Z",
+      "side": 1,
+      "message": "typo: like",
+      "range": {
+        "startLine": 281,
+        "startChar": 8,
+        "endLine": 281,
+        "endChar": 12
+      },
+      "revId": "8a1fae6fc9c269cc4b7c0b4b7db10924c7379c11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
