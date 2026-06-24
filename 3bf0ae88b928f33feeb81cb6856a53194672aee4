@@ -34,6 +34,24 @@
       "parentUuid": "1d198a29_f122f63d",
       "revId": "3bf0ae88b928f33feeb81cb6856a53194672aee4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b27cf1fa_d4b64e5c",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/parser.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-24T07:14:11Z",
+      "side": 1,
+      "message": "I put them here to separate them from user predicates, since these are only used to build range dominance filter. But can put them with the others if it\u0027s better.",
+      "parentUuid": "d33f327b_94a0ff8e",
+      "revId": "3bf0ae88b928f33feeb81cb6856a53194672aee4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
