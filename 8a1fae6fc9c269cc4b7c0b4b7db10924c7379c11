@@ -83,6 +83,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fece2f10_45b362c5",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-24T09:06:03Z",
+      "side": 1,
+      "message": "I haven\u0027t thought about the exact syntax yet, and I didn\u0027t want to go into such details here, that\u0027s why I gave a simple example using RBH3\u0027s syntax. But I can add an example for rbh-sync if you really want",
+      "parentUuid": "080d2fb7_6013b13c",
+      "revId": "8a1fae6fc9c269cc4b7c0b4b7db10924c7379c11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f4ea2f1f_cbecba0b",
         "filename": "designs/metrology.rst",
         "patchSetId": 1
