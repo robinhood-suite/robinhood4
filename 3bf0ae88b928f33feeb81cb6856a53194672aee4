@@ -16,6 +16,24 @@
       "message": "question: Why in a different enum since you are using it the same way ? You could just put them in the selinux_predicate and avoid the SPRED_MAX + 1",
       "revId": "3bf0ae88b928f33feeb81cb6856a53194672aee4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d33f327b_94a0ff8e",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/parser.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-24T07:11:58Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "1d198a29_f122f63d",
+      "revId": "3bf0ae88b928f33feeb81cb6856a53194672aee4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
