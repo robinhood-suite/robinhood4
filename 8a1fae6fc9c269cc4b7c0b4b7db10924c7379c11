@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "585399cf_60f12227",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-24T14:42:58Z",
+      "side": 1,
+      "message": "As it stands, we expect the monitoring tools to run rbh4 commands as external scripts, and use their output. Added a paragraph to mention this.",
+      "parentUuid": "39d258ff_b54effbf",
+      "revId": "8a1fae6fc9c269cc4b7c0b4b7db10924c7379c11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0df7e040_a89d1afe",
@@ -41,6 +59,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6254a2c8_bf43bc0a",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-24T14:42:58Z",
+      "side": 1,
+      "message": "No, I meant the start timestamp of the command or the full command line used",
+      "parentUuid": "0df7e040_a89d1afe",
+      "range": {
+        "startLine": 39,
+        "startChar": 33,
+        "endLine": 39,
+        "endChar": 34
+      },
+      "revId": "8a1fae6fc9c269cc4b7c0b4b7db10924c7379c11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70ec9dfd_b9c35222",
@@ -54,6 +96,30 @@
       "writtenOn": "2026-06-24T08:57:30Z",
       "side": 1,
       "message": "typo: will be",
+      "range": {
+        "startLine": 108,
+        "startChar": 51,
+        "endLine": 108,
+        "endChar": 56
+      },
+      "revId": "8a1fae6fc9c269cc4b7c0b4b7db10924c7379c11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68df044f_0fbf1221",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-24T14:42:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70ec9dfd_b9c35222",
       "range": {
         "startLine": 108,
         "startChar": 51,
@@ -112,6 +178,30 @@
       "writtenOn": "2026-06-24T08:57:30Z",
       "side": 1,
       "message": "typo: like",
+      "range": {
+        "startLine": 281,
+        "startChar": 8,
+        "endLine": 281,
+        "endChar": 12
+      },
+      "revId": "8a1fae6fc9c269cc4b7c0b4b7db10924c7379c11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "539bd5a2_c8b68615",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-24T14:42:58Z",
+      "side": 1,
+      "message": "I like mine more :D",
+      "parentUuid": "f4ea2f1f_cbecba0b",
       "range": {
         "startLine": 281,
         "startChar": 8,
