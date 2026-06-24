@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39d258ff_b54effbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-06-24T08:30:31Z",
+      "side": 1,
+      "message": "I think it is fine.\n\nBut, there is one approach that is lacking : providing stats to external monitoring tools. What do you expect for that ? Asking external monitoring tools to run rbh command ? or developing a new rbh command to get existing stats in the mirror db ?",
+      "revId": "8a1fae6fc9c269cc4b7c0b4b7db10924c7379c11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
