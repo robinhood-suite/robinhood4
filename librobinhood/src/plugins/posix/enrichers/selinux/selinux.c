@@ -36,7 +36,6 @@
 #define SELINUX_INTERVAL_FIRST_KEY "f"
 #define SELINUX_INTERVAL_LAST_KEY  "l"
 
-
 /*
  * A SELinux complete context
  */
@@ -75,7 +74,9 @@ value_to_string(const struct rbh_value *value)
 static char*
 get_selinux_context(struct entry_info *einfo)
 {
+    ssize_t length;
     ssize_t count;
+    char* context;
 
     if (einfo == NULL || einfo->inode_xattrs == NULL ||
         einfo->inode_xattrs_count == NULL) {
@@ -93,7 +94,24 @@ get_selinux_context(struct entry_info *einfo)
         return value_to_string(pair->value);
     }
 
-    return NULL;
+    if (einfo->fd == NULL)
+        return NULL;
+
+    length = fgetxattr(*einfo->fd, SELINUX_XATTR_NAME, NULL, 0);
+    if (length == -1)
+        return NULL;
+
+    context = xmalloc(length + 1);
+
+    length = fgetxattr(*einfo->fd, SELINUX_XATTR_NAME, context, length);
+    if (length == -1) {
+        free(context);
+        return NULL;
+    }
+
+    context[length] = '\0';
+
+    return context;
 }
 
 /**
