@@ -52,6 +52,24 @@
       "parentUuid": "d33f327b_94a0ff8e",
       "revId": "3bf0ae88b928f33feeb81cb6856a53194672aee4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90bc7239_6667fe7f",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/parser.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-25T08:13:41Z",
+      "side": 1,
+      "message": "Add them to the existing enum yes",
+      "parentUuid": "b27cf1fa_d4b64e5c",
+      "revId": "3bf0ae88b928f33feeb81cb6856a53194672aee4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
