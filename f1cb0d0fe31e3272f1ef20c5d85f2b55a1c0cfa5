@@ -22,6 +22,30 @@
       },
       "revId": "f1cb0d0fe31e3272f1ef20c5d85f2b55a1c0cfa5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0603062c_0272c2cb",
+        "filename": "rbh-find/tests/selinux/test_printf.bash",
+        "patchSetId": 8
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-26T12:09:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b73e6519_24d0afdd",
+      "range": {
+        "startLine": 28,
+        "startChar": 30,
+        "endLine": 28,
+        "endChar": 42
+      },
+      "revId": "f1cb0d0fe31e3272f1ef20c5d85f2b55a1c0cfa5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
