@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b73e6519_24d0afdd",
+        "filename": "rbh-find/tests/selinux/test_printf.bash",
+        "patchSetId": 8
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-26T11:18:07Z",
+      "side": 1,
+      "message": "minor: retirer ça, et ajouter la sortie attendue pour / aussi",
+      "range": {
+        "startLine": 28,
+        "startChar": 30,
+        "endLine": 28,
+        "endChar": 42
+      },
+      "revId": "f1cb0d0fe31e3272f1ef20c5d85f2b55a1c0cfa5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
