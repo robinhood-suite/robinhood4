@@ -46,6 +46,7 @@ fsevents_lib = static_library(
         'src/enrichers/posix/posix.c',
         'src/enrichers/posix/retention.c',
         'src/enrichers/posix/sparse.c',
+        'src/enrichers/posix/selinux.c',
         'src/sources/yaml_file.c',
         'src/sources/file.c',
         'src/sources/utils.c',
