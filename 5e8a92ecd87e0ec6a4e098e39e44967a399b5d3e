@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e44f8775_6ebf2153",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-26T14:18:05Z",
+      "side": 1,
+      "message": "question: do you mean you want to imitate RBH3 metrology behavior? I read that like if an RBH3 command is executed, RBH4 will be able to retrieve metrology information",
+      "range": {
+        "startLine": 18,
+        "startChar": 20,
+        "endLine": 18,
+        "endChar": 36
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c65d2470_9b55a428",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-26T14:18:05Z",
+      "side": 1,
+      "message": "typo: invocation",
+      "range": {
+        "startLine": 32,
+        "startChar": 26,
+        "endLine": 32,
+        "endChar": 36
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8b14087_8bc4f088",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-26T14:18:05Z",
+      "side": 1,
+      "message": "typo: a",
+      "range": {
+        "startLine": 32,
+        "startChar": 77,
+        "endLine": 32,
+        "endChar": 79
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6480108c_d5b2578d",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-26T14:18:05Z",
+      "side": 1,
+      "message": "question: will you also consider `rbh-policy`?",
+      "range": {
+        "startLine": 33,
+        "startChar": 28,
+        "endLine": 35,
+        "endChar": 9
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89e8b7f3_d35ee0e4",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-26T14:18:05Z",
+      "side": 1,
+      "message": "question: don\u0027t you want to use a sentence like \"Statistics will not be retrieved for `rbh-info`-like commands, because they are not meant to have long execution runs.\", just avoiding listing them all",
+      "range": {
+        "startLine": 33,
+        "startChar": 28,
+        "endLine": 35,
+        "endChar": 8
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bb43a68_6efda2c1",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-26T14:18:05Z",
+      "side": 1,
+      "message": "minor: to rewrite",
+      "range": {
+        "startLine": 38,
+        "startChar": 26,
+        "endLine": 39,
+        "endChar": 5
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1916ac95_5445a04b",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-26T14:18:05Z",
+      "side": 1,
+      "message": "question: I do not think you mention the possibility for tools to be parallelized (MPI, multi-launch), how this will be managed?",
+      "range": {
+        "startLine": 92,
+        "startChar": 3,
+        "endLine": 93,
+        "endChar": 53
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c2292a3_f6cc1c4f",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-26T14:18:05Z",
+      "side": 1,
+      "message": "defect: `gc_md`",
+      "range": {
+        "startLine": 96,
+        "startChar": 35,
+        "endLine": 96,
+        "endChar": 44
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be30c885_dc50b993",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-26T14:18:05Z",
+      "side": 1,
+      "message": "typo: corresponding to",
+      "range": {
+        "startLine": 100,
+        "startChar": 36,
+        "endLine": 100,
+        "endChar": 49
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1c786f0_cd83f87d",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-26T14:18:05Z",
+      "side": 1,
+      "message": "defect: `gc_md`",
+      "range": {
+        "startLine": 131,
+        "startChar": 35,
+        "endLine": 131,
+        "endChar": 44
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79c37378_ed398879",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-06-26T14:18:05Z",
+      "side": 1,
+      "message": "comment: can you add an example? just to see if this is relevant",
+      "range": {
+        "startLine": 281,
+        "startChar": 8,
+        "endLine": 281,
+        "endChar": 72
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
