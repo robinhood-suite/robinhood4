@@ -78,24 +78,25 @@ get_selinux_context(struct entry_info *einfo)
     ssize_t count;
     char* context;
 
-    if (einfo == NULL || einfo->inode_xattrs == NULL ||
-        einfo->inode_xattrs_count == NULL) {
+    if (einfo == NULL)
         return NULL;
+
+    if (einfo->inode_xattrs != NULL && einfo->inode_xattrs_count != NULL) {
+        count = *einfo->inode_xattrs_count;
+
+        for (ssize_t i = 0; i < count; i++) {
+            const struct rbh_value_pair *pair = &einfo->inode_xattrs[i];
+
+            if (strcmp(pair->key, SELINUX_XATTR_NAME) != 0)
+                continue;
+
+            return value_to_string(pair->value);
+        }
     }
 
-    count = *einfo->inode_xattrs_count;
-
-    for (ssize_t i = 0; i < count; i++) {
-        const struct rbh_value_pair *pair = &einfo->inode_xattrs[i];
-
-        if (strcmp(pair->key, SELINUX_XATTR_NAME) != 0)
-            continue;
-
-        return value_to_string(pair->value);
-    }
-
-    if (einfo->fd == NULL)
+    if (einfo->fd == NULL) {
         return NULL;
+    }
 
     length = fgetxattr(*einfo->fd, SELINUX_XATTR_NAME, NULL, 0);
     if (length == -1)
