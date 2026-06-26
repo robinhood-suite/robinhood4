@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a648339c_a88695e9",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-26T14:33:58Z",
+      "side": 1,
+      "message": "I wanted to say that the goal is to show as much information as RBH3. Rephrased to that effect.",
+      "parentUuid": "e44f8775_6ebf2153",
+      "range": {
+        "startLine": 18,
+        "startChar": 20,
+        "endLine": 18,
+        "endChar": 36
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c65d2470_9b55a428",
         "filename": "designs/metrology.rst",
         "patchSetId": 2
@@ -65,6 +89,54 @@
         "startChar": 77,
         "endLine": 32,
         "endChar": 79
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad221060_d1bb967e",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-26T14:33:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8b14087_8bc4f088",
+      "range": {
+        "startLine": 32,
+        "startChar": 77,
+        "endLine": 32,
+        "endChar": 79
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76d413d5_42c37aca",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-26T14:33:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c65d2470_9b55a428",
+      "range": {
+        "startLine": 32,
+        "startChar": 26,
+        "endLine": 32,
+        "endChar": 36
       },
       "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
@@ -116,6 +188,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d02e8487_2608f6f7",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-26T14:33:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89e8b7f3_d35ee0e4",
+      "range": {
+        "startLine": 33,
+        "startChar": 28,
+        "endLine": 35,
+        "endChar": 8
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13cadeb1_1e84ba4d",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-26T14:33:58Z",
+      "side": 1,
+      "message": "Maybe, why not, it may be harder to implement but that could be interesting...",
+      "parentUuid": "6480108c_d5b2578d",
+      "range": {
+        "startLine": 33,
+        "startChar": 28,
+        "endLine": 35,
+        "endChar": 9
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5bb43a68_6efda2c1",
@@ -129,6 +249,30 @@
       "writtenOn": "2026-06-26T14:18:05Z",
       "side": 1,
       "message": "minor: to rewrite",
+      "range": {
+        "startLine": 38,
+        "startChar": 26,
+        "endLine": 39,
+        "endChar": 5
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd8d903e_d04e790e",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-26T14:33:58Z",
+      "side": 1,
+      "message": "removed the \"both\", and I think the sentence is correct without it.",
+      "parentUuid": "5bb43a68_6efda2c1",
       "range": {
         "startLine": 38,
         "startChar": 26,
@@ -164,6 +308,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "af28342b_d34ed79c",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-26T14:33:58Z",
+      "side": 1,
+      "message": "Yes, in that case, we may need to add some locking mechanisms, but I didn\u0027t want to overspecify this design",
+      "parentUuid": "1916ac95_5445a04b",
+      "range": {
+        "startLine": 92,
+        "startChar": 3,
+        "endLine": 93,
+        "endChar": 53
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6c2292a3_f6cc1c4f",
         "filename": "designs/metrology.rst",
         "patchSetId": 2
@@ -175,6 +343,30 @@
       "writtenOn": "2026-06-26T14:18:05Z",
       "side": 1,
       "message": "defect: `gc_md`",
+      "range": {
+        "startLine": 96,
+        "startChar": 35,
+        "endLine": 96,
+        "endChar": 44
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c100b9fd_48fe36b9",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-26T14:33:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c2292a3_f6cc1c4f",
       "range": {
         "startLine": 96,
         "startChar": 35,
@@ -208,6 +400,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bceb9f8_e42769d3",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-26T14:33:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be30c885_dc50b993",
+      "range": {
+        "startLine": 100,
+        "startChar": 36,
+        "endLine": 100,
+        "endChar": 49
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1c786f0_cd83f87d",
@@ -231,6 +447,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e01dde5c_ab3ba446",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-26T14:33:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1c786f0_cd83f87d",
+      "range": {
+        "startLine": 131,
+        "startChar": 35,
+        "endLine": 131,
+        "endChar": 44
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79c37378_ed398879",
@@ -244,6 +484,30 @@
       "writtenOn": "2026-06-26T14:18:05Z",
       "side": 1,
       "message": "comment: can you add an example? just to see if this is relevant",
+      "range": {
+        "startLine": 281,
+        "startChar": 8,
+        "endLine": 281,
+        "endChar": 72
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97ca370c_397a532a",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-26T14:33:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79c37378_ed398879",
       "range": {
         "startLine": 281,
         "startChar": 8,
