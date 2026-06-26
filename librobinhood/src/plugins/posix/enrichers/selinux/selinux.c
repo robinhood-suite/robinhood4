@@ -80,24 +80,25 @@ get_selinux_context(struct entry_info *einfo)
     ssize_t count;
     char* context;
 
-    if (einfo == NULL || einfo->inode_xattrs == NULL ||
-        einfo->inode_xattrs_count == NULL) {
+    if (einfo == NULL)
         return NULL;
+
+    if (einfo->inode_xattrs != NULL && einfo->inode_xattrs_count != NULL) {
+        count = *einfo->inode_xattrs_count;
+
+        for (ssize_t i = 0; i < count; i++) {
+            const struct rbh_value_pair *pair = &einfo->inode_xattrs[i];
+
+            if (strcmp(pair->key, SELINUX_XATTR_NAME) != 0)
+                continue;
+
+            return value_to_string(pair->value);
+        }
     }
 
-    count = *einfo->inode_xattrs_count;
-
-    for (ssize_t i = 0; i < count; i++) {
-        const struct rbh_value_pair *pair = &einfo->inode_xattrs[i];
-
-        if (strcmp(pair->key, SELINUX_XATTR_NAME) != 0)
-            continue;
-
-        return value_to_string(pair->value);
-    }
-
-    if (einfo->fd == NULL)
+    if (einfo->fd == NULL) {
         return NULL;
+    }
 
     context = xmalloc(XATTR_VALUE_MAX_VFS_SIZE + 1);
 
@@ -292,7 +293,6 @@ rbh_selinux_enrich(struct entry_info *einfo, uint64_t flags,
 
     if (!rbh_attr_is_selinux(flags))
         return 0;
-
     if (pairs_count < 8) {
         errno = ENOMEM;
         return -1;
