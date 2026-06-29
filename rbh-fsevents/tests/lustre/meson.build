@@ -18,6 +18,10 @@ integration_tests = ['test_create_close', 'test_mkdir', 'test_symlink',
                      'test_max_changelog', 'acceptance_workers',
                      'test_starting_idx', 'test_ack', 'test_project_id']
 
+if test_selinux
+    integration_tests += ['test_selinux']
+endif
+
 foreach t: integration_tests
     e = find_program(t + '.bash')
     # Meson by default runs all tests in parallel, and since they all add data
