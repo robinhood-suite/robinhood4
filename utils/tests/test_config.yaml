@@ -36,6 +36,12 @@ backends:
         extends: posix
         enrichers:
             - selinux
+    lustre-selinux:
+        extends: posix
+        iterator: fts
+        enrichers:
+            - lustre
+            - selinux
 
 s3:
     address: 127.0.0.1:9000

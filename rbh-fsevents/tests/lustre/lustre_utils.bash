@@ -13,7 +13,9 @@
 
 invoke_rbh-fsevents()
 {
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+    local backend="${1:-lustre}"
+
+    rbh_fsevents --enrich rbh:"$backend":"$LUSTRE_DIR" \
         src:lustre:"$LUSTRE_MDT"?ack-user=$userid "rbh:$db:$testdb"
 }
 
