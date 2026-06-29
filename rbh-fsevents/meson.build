@@ -33,6 +33,13 @@ if get_option('lustre').enabled()
     extra_dependencies += [ liblustre ]
 endif
 
+if get_option('selinux').enabled()
+    extra_sources += [
+        'src/enrichers/posix/selinux.c',
+    ]
+    extra_args += ['-DHAVE_SELINUX']
+endif
+
 includes = include_directories('.', 'include')
 
 fsevents_lib = static_library(
@@ -46,7 +53,6 @@ fsevents_lib = static_library(
         'src/enrichers/posix/posix.c',
         'src/enrichers/posix/retention.c',
         'src/enrichers/posix/sparse.c',
-        'src/enrichers/posix/selinux.c',
         'src/sources/yaml_file.c',
         'src/sources/file.c',
         'src/sources/utils.c',
@@ -63,6 +69,7 @@ fsevents_dep = declare_dependency(
     link_with: fsevents_lib,
     include_directories: includes
 )
+
 
 pthread = dependency('threads')
 
