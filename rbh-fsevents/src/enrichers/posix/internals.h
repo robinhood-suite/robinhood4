@@ -58,11 +58,13 @@ sparse_enrich_fsevent(struct enricher *enricher,
                       struct rbh_posix_enrich_ctx *ctx,
                       const struct rbh_fsevent *original);
 
+#ifdef HAVE_SELINUX
 int
 selinux_enrich_fsevent(struct enricher *enricher,
                        const struct enrich_request *req,
                        struct rbh_posix_enrich_ctx *ctx,
                        const struct rbh_fsevent *original);
+#endif
 
 struct enricher {
     struct rbh_iterator iterator;
