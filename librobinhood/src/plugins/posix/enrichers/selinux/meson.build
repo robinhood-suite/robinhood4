@@ -5,6 +5,11 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
 test_selinux = false
+
+if get_option('selinux').disabled()
+    subdir_done()
+endif
+
 getenforce_prog = find_program('getenforce', required: false)
 chcon_prog = find_program('chcon', required: false)
 
