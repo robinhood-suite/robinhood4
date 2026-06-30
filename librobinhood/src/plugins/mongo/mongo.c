@@ -1070,6 +1070,7 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
     return _mongo_backend_filter(backend, filter, group, options, output, NULL);
 }
 
+
     /*--------------------------------------------------------------------*
      |                              destroy                               |
      *--------------------------------------------------------------------*/
@@ -1098,6 +1099,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
     .get_info = mongo_backend_get_info,
+    .get_logs = mongo_backend_get_logs,
     .insert_metadata = mongo_insert_metadata,
     .destroy = mongo_backend_destroy,
 };
@@ -1339,12 +1341,21 @@ mongo_branch_get_info(void *backend, int info_flags)
     return mongo_backend_get_info(&branch->mongo, info_flags);
 }
 
+static struct rbh_value_map *
+mongo_branch_get_logs(void *backend, struct rbh_log_options options)
+{
+    struct mongo_branch_backend *branch = backend;
+
+    return mongo_backend_get_logs(&branch->mongo, options);
+}
+
 static const struct rbh_backend_operations MONGO_BRANCH_BACKEND_OPS = {
     .branch = mongo_backend_branch,
     .root = mongo_branch_root,
     .update = mongo_backend_update,
     .filter = generic_branch_backend_filter,
     .get_info = mongo_branch_get_info,
+    .get_logs = mongo_branch_get_logs,
     .destroy = mongo_backend_destroy,
 };
 
