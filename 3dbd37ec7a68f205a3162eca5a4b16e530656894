@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75e24b45_85350e9e",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-30T09:15:08Z",
+      "side": 1,
+      "message": "minor: the size of the malloc is way too big, check `getxattr`\u0027s man page, it says `If size is specified as zero, these calls return the current size of the named extended attribute (and leave value unchanged).  This can be used to determine the size of the buffer that should  be  supplied  in  a  subsequent call.`\n\n\nSo you can either do a preliminary getxattr with size 0 then malloc with the right size (or better yet use a sstack), and use a getxattr again. Or use a much lower size for the malloc (like 128 bytes) and do the getxattr",
+      "range": {
+        "startLine": 102,
+        "startChar": 22,
+        "endLine": 102,
+        "endChar": 46
+      },
+      "revId": "3dbd37ec7a68f205a3162eca5a4b16e530656894",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
