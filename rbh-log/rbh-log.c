@@ -47,10 +47,74 @@ usage(void)
         return printf(message, program_invocation_short_name);
 }
 
+#define WIDTH 32
+
 static void
-print_logs(const struct rbh_value_map *logs)
+print_sync_log(const struct rbh_value *value, const char *header)
 {
-    return;
+    const struct rbh_value_map metadata_map = value->map;
+    time_t time;
+
+    assert(value->type == RBH_VT_MAP);
+
+    printf("%s:\n", header);
+
+    for (size_t i = 0 ; i < metadata_map.count ; i++) {
+        const struct rbh_value_pair *pair = &metadata_map.pairs[i];
+        if (strcmp(pair->key, "sync_debut") == 0) {
+            time = (time_t)pair->value->int64;
+            printf(" - %-*s %s\n", WIDTH, "Start of the sync:",
+                   time_from_timestamp(&time));
+        }
+
+        if (strcmp(pair->key, "sync_duration") == 0) {
+            char _buffer[32];
+            size_t bufsize;
+            char *buffer;
+
+            buffer = _buffer;
+            bufsize = sizeof(_buffer);
+
+            difftime_printer(buffer, bufsize, pair->value->int64);
+
+            printf(" - %-*s %s\n", WIDTH, "Duration of the sync:",
+                   buffer);
+        }
+
+        if (strcmp(pair->key, "sync_end") == 0) {
+            time = (time_t)pair->value->int64;
+            printf(" - %-*s %s\n", WIDTH, "End of the sync:",
+                   time_from_timestamp(&time));
+        }
+
+        if (strcmp(pair->key, "mountpoint") == 0)
+            printf(" - %-*s %s\n", WIDTH, "Mountpoint used for the sync:",
+                   pair->value->string);
+
+        if (strcmp(pair->key, "command_line") == 0)
+            printf(" - %-*s %s\n", WIDTH, "Command used for the sync:",
+                   pair->value->string);
+
+        if (strcmp(pair->key, "converted_entries") == 0)
+            printf(" - %-*s %ld\n", WIDTH, "Amount of entries converted:",
+                   pair->value->int64);
+
+        if (strcmp(pair->key, "skipped_entries") == 0)
+            printf(" - %-*s %ld\n", WIDTH, "Amount of entries skipped:",
+                   pair->value->int64);
+
+        if (strcmp(pair->key, "total_entries_seen") == 0)
+            printf(" - %-*s %ld\n", WIDTH,
+                   "Total entries seen by the sync:",
+                   pair->value->int64);
+    }
+}
+
+static void
+print_logs(const struct rbh_value_map *logs, const char *header)
+{
+    for (size_t i = 0 ; i < logs->count ; i++)
+        print_sync_log(logs->pairs[i].value, header);
 }
 
 int
@@ -126,14 +190,19 @@ main(int argc, char *argv[])
     if (!flags)
         return EXIT_SUCCESS;
 
-    backend = rbh_backend_from_uri(argv[0], false);
-    logs_map = rbh_backend_get_info(backend, flags);
+    if (flags & RBH_INFO_FIRST_SYNC && flags & RBH_INFO_LAST_SYNC)
+        error(EX_USAGE, ENOTSUP,
+              "cannot print logs for both first and last sync");
 
+    backend = rbh_backend_from_uri(argv[0], false);
+
+    logs_map = rbh_backend_get_info(backend, flags);
     if (logs_map == NULL)
         error(EXIT_FAILURE, EINVAL,
               "Failed to retrieve requested logs\n");
 
-    print_logs(logs_map);
+    print_logs(logs_map,
+               flags & RBH_INFO_FIRST_SYNC ? "First sync" : "Last sync");
 
     return EXIT_SUCCESS;
 }
