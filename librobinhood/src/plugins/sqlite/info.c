@@ -590,13 +590,33 @@ sqlite_backend_get_info(void *backend, int flags)
         info = backend_count(sqlite, info);
     if (flags & RBH_INFO_FSEVENTS_SOURCE)
         info = backend_fsevents_source(sqlite, info);
-    if (flags & RBH_INFO_FIRST_SYNC)
-        info = backend_sync_info(sqlite, info, true);
-    if (flags & RBH_INFO_LAST_SYNC)
-        info = backend_sync_info(sqlite, info, false);
     if (flags & RBH_INFO_MOUNTPOINT)
         info = backend_mountpoint(sqlite, info);
 
+    if (!info)
+        return NULL;
+
+    if (!json2value_map(info, map, sqlite->sstack))
+        goto free_map;
+
+    json_decref(info);
+    return map;
+
+free_map:
+    free(map);
+    return NULL;
+}
+
+struct rbh_value_map *
+sqlite_backend_get_logs(void *backend, struct rbh_log_options options)
+{
+    struct sqlite_backend *sqlite = backend;
+    struct rbh_value_map *map;
+    json_t *info = NULL;
+
+    map = RBH_SSTACK_PUSH(sqlite->sstack, NULL, sizeof(*map));
+
+    info = backend_sync_info(sqlite, info, options.ascending);
     if (!info)
         return NULL;
 
