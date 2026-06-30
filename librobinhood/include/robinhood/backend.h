@@ -281,6 +281,24 @@ enum metadata_type {
 };
 
 /**
+ * Determines the type of logs to fetch.
+ */
+enum rbh_log_type {
+    RBH_ALL_LOG,
+    RBH_SYNC_LOG,
+};
+
+/**
+ * Determines which logs should be fetched from the backend, the amount and the
+ * sorting order.
+ */
+struct rbh_log_options {
+    enum rbh_log_type type;
+    size_t count;
+    bool ascending;
+};
+
+/**
  * Operations backends implement
  *
  * Only the \c destroy() operation is mandatory, every other one may be set to
@@ -344,6 +362,10 @@ struct rbh_backend_operations {
     struct rbh_value_map *(*get_info)(
             void *backend,
             int info_flags
+            );
+    struct rbh_value_map *(*get_logs)(
+            void *backend,
+            struct rbh_log_options options
             );
     struct rbh_fsentry *(*undelete)(
             void *backend,
@@ -736,7 +758,8 @@ rbh_backend_get_attribute(struct rbh_backend *backend, uint64_t flags,
 }
 
 /**
- * Retrieve info from a given backend (such as size, first sync, last sync...)
+ * Retrieve info from a given backend (such as size, mountpoint, command
+ * line...)
  *
  * @param backend   a pointer to the struct rbh_backend to reclaim
  * @param info      enum of the required infos
@@ -749,6 +772,26 @@ rbh_backend_get_info(struct rbh_backend *backend, int info_flags)
         return NULL;
     }
     return backend->ops->get_info(backend, info_flags);
+}
+
+/**
+ * Retrieve logs from a given backend.
+ *
+ * @param backend   a pointer to the struct rbh_backend to get logs from
+ * @param options   options to determine the logs to get
+ *
+ * @return          the logs requested in a value_map, NULL on error with errno
+ *                  set
+ */
+static inline struct rbh_value_map *
+rbh_backend_get_logs(struct rbh_backend *backend,
+                     struct rbh_log_options options)
+{
+    if (backend->ops->get_logs == NULL) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+    return backend->ops->get_logs(backend, options);
 }
 
 /**
