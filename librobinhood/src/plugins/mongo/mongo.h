@@ -348,4 +348,7 @@ bson_append_rbh_value_map(bson_t *bson, const char *key, size_t key_length,
 struct rbh_value_map *
 mongo_backend_get_info(void *backend, int info_flags);
 
+struct rbh_value_map *
+mongo_backend_get_logs(void *backend, struct rbh_log_options options);
+
 #endif
