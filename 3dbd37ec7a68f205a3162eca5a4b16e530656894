@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9bac519_edaf7bb3",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-30T09:23:28Z",
+      "side": 0,
+      "message": "style: empty line was fine",
+      "revId": "3dbd37ec7a68f205a3162eca5a4b16e530656894",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

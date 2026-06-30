@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14807183_655cd651",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-30T09:23:28Z",
+      "side": 1,
+      "message": "style: too long",
+      "range": {
+        "startLine": 14,
+        "startChar": 47,
+        "endLine": 14,
+        "endChar": 80
+      },
+      "revId": "16a8d88602f8293ed86f3d8e1559d2de91d2a2e7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8caa2ad2_9a40cc59",
+        "filename": "rbh-fsevents/src/enrichers/posix/selinux.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-06-30T09:23:28Z",
+      "side": 1,
+      "message": "minor: unnecessary",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 1
+      },
+      "revId": "16a8d88602f8293ed86f3d8e1559d2de91d2a2e7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
