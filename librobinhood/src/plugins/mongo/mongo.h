@@ -11,6 +11,7 @@
 #include <stdbool.h>
 
 #include <bson.h>
+#include <mongoc.h>
 
 #include "robinhood/id.h"
 #include "robinhood/backend.h"
@@ -20,6 +21,14 @@ struct rbh_fsentry;
 struct rbh_fsevent;
 struct rbh_value;
 struct rbh_value_map;
+
+struct mongo_backend {
+    struct rbh_backend backend;
+    mongoc_client_t *client;
+    mongoc_collection_t *entries;
+    mongoc_collection_t *info;
+    mongoc_collection_t *log;
+};
 
 /*----------------------------------------------------------------------------*
  |                            Mongo FSEntry layout                            |
@@ -335,5 +344,8 @@ bson_append_rbh_value_map(bson_t *bson, const char *key, size_t key_length,
 
 #define BSON_APPEND_RBH_VALUE_MAP(bson, key, map) \
     bson_append_rbh_value_map(bson, key, strlen(key), map)
+
+struct rbh_value_map *
+mongo_backend_get_info(void *backend, int info_flags);
 
 #endif
