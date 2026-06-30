@@ -16,6 +16,24 @@
       "message": "style: empty line was fine",
       "revId": "3dbd37ec7a68f205a3162eca5a4b16e530656894",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0b30226_683112ff",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/selinux.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-30T13:35:03Z",
+      "side": 0,
+      "message": "Done. Was an error.",
+      "parentUuid": "f9bac519_edaf7bb3",
+      "revId": "3dbd37ec7a68f205a3162eca5a4b16e530656894",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
