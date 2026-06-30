@@ -47,6 +47,12 @@ usage(void)
     printf(message, program_invocation_short_name);
 }
 
+static void
+print_logs(const struct rbh_value_map *logs)
+{
+    return;
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -57,8 +63,16 @@ main(int argc, char *argv[])
             .val = 'c',
         },
         {
+            .name = "first-sync",
+            .val = 'f',
+        },
+        {
             .name = "help",
             .val = 'h',
+        },
+        {
+            .name = "last-sync",
+            .val = 'l',
         },
         {
             .name = "version",
@@ -67,6 +81,8 @@ main(int argc, char *argv[])
         },
         {}
     };
+    struct rbh_value_map *logs_map = NULL;
+    int flags = 0;
     int rc;
     char c;
 
@@ -74,14 +90,20 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:hz", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "c:fhlz", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
             /* already parsed */
             break;
+        case 'f':
+            flags |= RBH_INFO_FIRST_SYNC;
+            break;
         case 'h':
             usage();
             return 0;
+        case 'l':
+            flags |= RBH_INFO_LAST_SYNC;
+            break;
         case 'z':
             rbh_print_version();
             return EXIT_SUCCESS;
@@ -101,7 +123,17 @@ main(int argc, char *argv[])
     if (argc > 1)
         error(EX_USAGE, 0, "unexpected argument: %s", argv[1]);
 
+    if (!flags)
+        return EXIT_SUCCESS;
+
     backend = rbh_backend_from_uri(argv[0], false);
+    logs_map = rbh_backend_get_info(backend, flags);
+
+    if (logs_map == NULL)
+        error(EXIT_FAILURE, EINVAL,
+              "Failed to retrieve requested logs\n");
+
+    print_logs(logs_map);
 
     return EXIT_SUCCESS;
 }
