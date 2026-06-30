@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca8ccdea_4d337392",
+        "filename": "rbh-fsevents/tests/lustre/lustre_utils.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-30T13:35:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b5e8dd4_07acc9e9",
+      "range": {
+        "startLine": 16,
+        "startChar": 4,
+        "endLine": 16,
+        "endChar": 32
+      },
+      "revId": "f76040109f16df4873bb66736bf31f49b566d467",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a2dea23_6d3882ee",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-06-30T09:34:18Z",
       "side": 1,
       "message": "suggest: remove this one, so that you first verify the creation of an entry correctly retrieves the selinux context, then simply do line 35 to 43",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 22,
+        "endChar": 41
+      },
+      "revId": "f76040109f16df4873bb66736bf31f49b566d467",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25517ebd_2991fd48",
+        "filename": "rbh-fsevents/tests/lustre/test_selinux.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-06-30T13:35:40Z",
+      "side": 1,
+      "message": "Changing this later, because in this patch selinux attributes are not created with a creation event, only when xattrs are explicitly changed.",
+      "parentUuid": "5a2dea23_6d3882ee",
       "range": {
         "startLine": 22,
         "startChar": 4,
