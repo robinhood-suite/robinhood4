@@ -145,8 +145,8 @@ main(int argc, char *argv[])
         },
         {}
     };
+    struct rbh_log_options options = { 0 };
     struct rbh_value_map *logs_map = NULL;
-    int flags = 0;
     int rc;
     char c;
 
@@ -160,13 +160,21 @@ main(int argc, char *argv[])
             /* already parsed */
             break;
         case 'f':
-            flags |= RBH_INFO_FIRST_SYNC;
+            options.ascending = true;
+            if (options.count)
+                error(EX_USAGE, ENOTSUP,
+                      "cannot print logs for both first and last sync");
+            options.count = 1;
             break;
         case 'h':
             usage();
             return 0;
         case 'l':
-            flags |= RBH_INFO_LAST_SYNC;
+            options.ascending = false;
+            if (options.count)
+                error(EX_USAGE, ENOTSUP,
+                      "cannot print logs for both first and last sync");
+            options.count = 1;
             break;
         case 'z':
             rbh_print_version();
@@ -187,22 +195,15 @@ main(int argc, char *argv[])
     if (argc > 1)
         error(EX_USAGE, 0, "unexpected argument: %s", argv[1]);
 
-    if (!flags)
-        return EXIT_SUCCESS;
-
-    if (flags & RBH_INFO_FIRST_SYNC && flags & RBH_INFO_LAST_SYNC)
-        error(EX_USAGE, ENOTSUP,
-              "cannot print logs for both first and last sync");
-
     backend = rbh_backend_from_uri(argv[0], false);
 
-    logs_map = rbh_backend_get_info(backend, flags);
+    logs_map = rbh_backend_get_logs(backend, options);
     if (logs_map == NULL)
         error(EXIT_FAILURE, EINVAL,
               "Failed to retrieve requested logs\n");
 
     print_logs(logs_map,
-               flags & RBH_INFO_FIRST_SYNC ? "First sync" : "Last sync");
+               options.ascending ? "First sync" : "Last sync");
 
     return EXIT_SUCCESS;
 }
