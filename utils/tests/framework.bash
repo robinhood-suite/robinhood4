@@ -82,6 +82,12 @@ rbh_update_path()
     "$__rbh_update_path" "$@"
 }
 
+__rbh_log=$(PATH="$PWD/rbh-log:$PATH" which rbh-log)
+rbh_log()
+{
+    "$__rbh_log" "$@"
+}
+
 __rbh_update_retention="$PWD/../retention/update-retention/rbh-update-retention.py"
 __update_retention_PATH+="$PWD/rbh-sync:"
 __update_retention_PATH+="$PWD/rbh-fsevents:"
