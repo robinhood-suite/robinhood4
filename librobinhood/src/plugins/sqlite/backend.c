@@ -14,6 +14,7 @@ const struct rbh_backend_operations SQLITE_BACKEND_OPS = {
     .filter          = sqlite_backend_filter,
     .insert_metadata = sqlite_backend_insert_metadata,
     .get_info        = sqlite_backend_get_info,
+    .get_logs        = sqlite_backend_get_logs,
     .update          = sqlite_backend_update,
     .report          = sqlite_backend_report,
 };
