@@ -1070,7 +1070,6 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
     return _mongo_backend_filter(backend, filter, group, options, output, NULL);
 }
 
-
     /*--------------------------------------------------------------------*
      |                              destroy                               |
      *--------------------------------------------------------------------*/
