@@ -130,6 +130,9 @@ sqlite_backend_insert_metadata(void *backend,
 struct rbh_value_map *
 sqlite_backend_get_info(void *backend, int flags);
 
+struct rbh_value_map *
+sqlite_backend_get_logs(void *backend, struct rbh_log_options options);
+
 /* Open db connexion. Create the DB if it does not exist */
 bool
 sqlite_backend_open(struct sqlite_backend *sqlite,
