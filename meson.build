@@ -58,5 +58,6 @@ subdir('rbh-gc')
 if get_option('lustre').enabled()
     subdir('rbh-undelete')
 endif
+subdir('rbh-log')
 subdir('retention')
 subdir('packaging')
