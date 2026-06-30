@@ -25,6 +25,28 @@ destroy_backend(void)
     }
 }
 
+static void
+usage(void)
+{
+    const char *message =
+        "Usage: %s [OPTIONS] SOURCE\n"
+        "\n"
+        "Print logs from SOURCE's metadata\n"
+        "\n"
+        "Positional arguments:\n"
+        "    SOURCE                 a robinhood URI\n"
+        "\n"
+        "Optional arguments:\n"
+        "   -c, --config PATH       the configuration file to use.\n"
+        "   -h, --help              show this message and exit\n"
+        "    --version              print RobinHood 4's version\n"
+        "\n"
+        "A robinhood URI is built as follows:\n"
+        "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n";
+
+    printf(message, program_invocation_short_name);
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -33,6 +55,15 @@ main(int argc, char *argv[])
             .name = "config",
             .has_arg = required_argument,
             .val = 'c',
+        },
+        {
+            .name = "help",
+            .val = 'h',
+        },
+        {
+            .name = "version",
+            .has_arg = no_argument,
+            .val = 'z',
         },
         {}
     };
@@ -43,14 +74,21 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "c:hz", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
             /* already parsed */
             break;
+        case 'h':
+            usage();
+            return 0;
+        case 'z':
+            rbh_print_version();
+            return EXIT_SUCCESS;
         case '?':
         default:
             /* getopt_long() prints meaningful error messages itself */
+            usage();
             exit(EX_USAGE);
         }
     }
