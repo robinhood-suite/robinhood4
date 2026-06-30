@@ -100,67 +100,6 @@ _get_backend_source(const struct rbh_value *value, const char *header)
 }
 
 static void
-_get_collection_sync(const struct rbh_value *value, const char *header)
-{
-    const struct rbh_value_map metadata_map = value->map;
-    time_t time;
-
-    assert(value->type == RBH_VT_MAP);
-
-    printf("%s:\n", header);
-
-    for (size_t i = 0 ; i < metadata_map.count ; i++) {
-        const struct rbh_value_pair *pair = &metadata_map.pairs[i];
-        if (strcmp(pair->key, "sync_debut") == 0) {
-            time = (time_t)pair->value->int64;
-            printf(" - %-*s %s\n", WIDTH, "Start of the sync:",
-                   time_from_timestamp(&time));
-        }
-
-        if (strcmp(pair->key, "sync_duration") == 0) {
-            char _buffer[32];
-            size_t bufsize;
-            char *buffer;
-
-            buffer = _buffer;
-            bufsize = sizeof(_buffer);
-
-            difftime_printer(buffer, bufsize, pair->value->int64);
-
-            printf(" - %-*s %s\n", WIDTH, "Duration of the sync:",
-                   buffer);
-        }
-
-        if (strcmp(pair->key, "sync_end") == 0) {
-            time = (time_t)pair->value->int64;
-            printf(" - %-*s %s\n", WIDTH, "End of the sync:",
-                   time_from_timestamp(&time));
-        }
-
-        if (strcmp(pair->key, "mountpoint") == 0)
-            printf(" - %-*s %s\n", WIDTH, "Mountpoint used for the sync:",
-                   pair->value->string);
-
-        if (strcmp(pair->key, "command_line") == 0)
-            printf(" - %-*s %s\n", WIDTH, "Command used for the sync:",
-                   pair->value->string);
-
-        if (strcmp(pair->key, "converted_entries") == 0)
-            printf(" - %-*s %ld\n", WIDTH, "Amount of entries converted:",
-                   pair->value->int64);
-
-        if (strcmp(pair->key, "skipped_entries") == 0)
-            printf(" - %-*s %ld\n", WIDTH, "Amount of entries skipped:",
-                   pair->value->int64);
-
-        if (strcmp(pair->key, "total_entries_seen") == 0)
-            printf(" - %-*s %ld\n", WIDTH,
-                   "Total entries seen by the sync:",
-                   pair->value->int64);
-    }
-}
-
-static void
 _get_string_value(const struct rbh_value *value, const char *header)
 {
     printf("%s: %s\n", header, value->string);
@@ -202,20 +141,6 @@ static struct rbh_info_fields INFO_FIELDS[] = {
         "Mirror entry count",
         "count",
         _get_int_value
-    },
-    {
-        RBH_INFO_FIRST_SYNC,
-        "-f: print info about the first rbh-sync done",
-        "First sync",
-        "first_sync",
-        _get_collection_sync
-    },
-    {
-        RBH_INFO_LAST_SYNC,
-        "-l: print info about the last rbh-sync done",
-        "Last sync",
-        "last_sync",
-        _get_collection_sync
     },
     {
         RBH_INFO_LAST_SYNC_START_DATE,
