@@ -78,8 +78,6 @@ help()
         "                           given backend\n"
         "    -d, --last-sync-start-date\n"
         "                           Show the starting date of the last rbh-sync\n"
-        "    -f, --first-sync       Show infos about the first rbh-sync done\n"
-        "    -y, --last-sync        Show infos about the last rbh-sync done\n"
         "    -m, --mountpoint       Show the mountpoint used as source for\n"
         "                           the last rbh-sync\n"
         "    -s, --size             Show the size of entries collection\n"
@@ -150,14 +148,6 @@ main(int _argc, char **_argv)
             .val = 'd',
         },
         {
-            .name = "first-sync",
-            .val = 'f',
-        },
-        {
-            .name = "last-sync",
-            .val = 'y',
-        },
-        {
             .name = "list",
             .val = 'l'
         },
@@ -191,7 +181,7 @@ main(int _argc, char **_argv)
         argv = &_argv[nb_cli_args];
     }
 
-    while ((option = getopt_long(argc, argv, "abBcdfhlmsy", LONG_OPTIONS,
+    while ((option = getopt_long(argc, argv, "abBcdhlms", LONG_OPTIONS,
                                  NULL)) != -1) {
         switch (option) {
         case 'a':
@@ -209,9 +199,6 @@ main(int _argc, char **_argv)
         case 'd':
             flags |= RBH_INFO_LAST_SYNC_START_DATE;
             break;
-        case 'f':
-            flags |= RBH_INFO_FIRST_SYNC;
-            break;
         case 'h':
             help();
             return 0;
@@ -223,9 +210,6 @@ main(int _argc, char **_argv)
             break;
         case 's':
             flags |= RBH_INFO_SIZE;
-            break;
-        case 'y':
-            flags |= RBH_INFO_LAST_SYNC;
             break;
         case 'Z':
             flags |= RBH_INFO_ALL;
