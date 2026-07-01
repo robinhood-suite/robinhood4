@@ -165,6 +165,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "476bd978_15a28562",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-01T07:34:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fece2f10_45b362c5",
+      "revId": "8a1fae6fc9c269cc4b7c0b4b7db10924c7379c11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f4ea2f1f_cbecba0b",
