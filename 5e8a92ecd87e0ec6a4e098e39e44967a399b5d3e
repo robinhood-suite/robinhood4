@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35a3f0f4_04462c05",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-02T14:38:42Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a648339c_a88695e9",
+      "range": {
+        "startLine": 18,
+        "startChar": 20,
+        "endLine": 18,
+        "endChar": 36
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c65d2470_9b55a428",
@@ -320,6 +344,30 @@
       "side": 1,
       "message": "Yes, in that case, we may need to add some locking mechanisms, but I didn\u0027t want to overspecify this design",
       "parentUuid": "1916ac95_5445a04b",
+      "range": {
+        "startLine": 92,
+        "startChar": 3,
+        "endLine": 93,
+        "endChar": 53
+      },
+      "revId": "5e8a92ecd87e0ec6a4e098e39e44967a399b5d3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c009853f_e6b040b1",
+        "filename": "designs/metrology.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-02T14:38:42Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "af28342b_d34ed79c",
       "range": {
         "startLine": 92,
         "startChar": 3,
