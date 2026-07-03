@@ -91,6 +91,12 @@ selinux_enrich_fsevent(struct enricher *enricher,
         return selinux_enrich_xattr(enricher, ctx, original);
 
     case ET_STATX:
+        if (original->upsert.statx == NULL) {
+            errno = ENOTSUP;
+            return -1;
+        }
+        return selinux_enrich_xattr(enricher, ctx, original);
+
     case ET_INVAL:
         errno = ENOTSUP;
         return -1;
