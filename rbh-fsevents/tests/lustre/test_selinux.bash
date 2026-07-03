@@ -26,17 +26,15 @@ test_selinux()
 
     touch "$entry"
 
-    chcon -l "s2:c2,c5-s8:c2,c5" "$entry"
-
     invoke_rbh-fsevents_selinux
 
     find_attribute '"xattrs.selinux.context":{$exists:true}' \
         '"ns.name":"'$entry'"'
 
-    find_attribute '"xattrs.selinux.range":"s2:c2,c5-s8:c2,c5"' \
+    find_attribute '"xattrs.selinux.range":"s0"' \
         '"ns.name":"'$entry'"'
 
-    find_attribute '"xattrs.selinux.high_sens":8' \
+    find_attribute '"xattrs.selinux.high_sens":0' \
         '"ns.name":"'$entry'"'
 
     chcon -l "s2:c2,c5-s12:c2,c5,c12,c14" "$entry"
