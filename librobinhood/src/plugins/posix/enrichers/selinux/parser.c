@@ -36,6 +36,9 @@ str2selinux_predicate(const char *string)
 
         if (strcmp(&string[2], "elinux-range-dominates") == 0)
             return SPRED_SELINUX_RANGE_DOMINATES;
+
+        if (strcmp(&string[2], "elinux-has-cat") == 0)
+            return SPRED_SELINUX_HAS_CAT;
         break;
     }
 
@@ -58,6 +61,7 @@ static const char *__selinux_predicate2str[] = {
     [SPRED_SELINUX_TYPE]            = "selinux-type",
     [SPRED_SELINUX_RANGE]           = "selinux-range",
     [SPRED_SELINUX_RANGE_DOMINATES] = "selinux-range-dominates",
+    [SPRED_SELINUX_HAS_CAT]         = "selinux-has-cat",
 };
 
 const char *

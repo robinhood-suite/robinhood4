@@ -132,6 +132,22 @@ test_selinux_dominates_filter()
         -selinux-range-dominates "s4:c1000" | difflines
 }
 
+test_selinux_has_cat_filter()
+{
+    setup_selinux_filter_entries
+
+    rbh_find "rbh:$db:$testdb" -selinux-has-cat "0" | sort |
+        difflines "/file1" "/file2"
+
+    rbh_find "rbh:$db:$testdb" -selinux-has-cat "2" | sort |
+        difflines "/file1" "/file2"
+
+    rbh_find "rbh:$db:$testdb" -selinux-has-cat "1000" |
+        difflines "/file1"
+
+    rbh_find "rbh:$db:$testdb" -selinux-has-cat "4" | difflines
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -143,6 +159,7 @@ declare -a tests=(
     test_selinux_type_filter
     test_selinux_range_filter
     test_selinux_dominates_filter
+    test_selinux_has_cat_filter
 )
 
 tmpdir=$(mktemp --directory)
