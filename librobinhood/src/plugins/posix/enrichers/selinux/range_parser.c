@@ -131,7 +131,8 @@ selinux_parse_level(char *string, struct selinux_level *level)
     uint64_t sens;
     char *colon;
 
-    memset(level, 0, sizeof(*level));
+    level->sens = 0;
+    level->intervals_count = 0;
 
     colon = strchr(string, ':');
     if (colon)
@@ -164,8 +165,6 @@ selinux_parse_range(char *range, struct selinux_range *parsed)
 {
     char *dash;
 
-    memset(parsed, 0, sizeof(*parsed));
-
     dash = strchr(range, '-');
     if (dash)
         *dash = '\0';
@@ -177,7 +176,11 @@ selinux_parse_range(char *range, struct selinux_range *parsed)
         if (selinux_parse_level(dash + 1, &parsed->high))
             return -1;
     } else {
-        parsed->high = parsed->low;
+        parsed->high.sens = parsed->low.sens;
+        parsed->high.intervals_count = parsed->low.intervals_count;
+
+        memcpy(parsed->high.intervals, parsed->low.intervals,
+               parsed->low.intervals_count * sizeof(*parsed->low.intervals));
     }
 
     return 0;

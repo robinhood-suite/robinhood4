@@ -229,7 +229,6 @@ fill_selinux_pairs(char *ctx, struct rbh_value_pair *pairs,
 {
     struct selinux_range parsed_range;
     struct selinux_context parts;
-    char *range_copy;
     int count = 0;
 
     if (fill_string_pair(SELINUX_CONTEXT_XATTR, ctx,
@@ -255,32 +254,30 @@ fill_selinux_pairs(char *ctx, struct rbh_value_pair *pairs,
                          &pairs[count++], values))
         return -1;
 
-    range_copy = xstrdup(parts.range);
-
-    if (selinux_parse_range(range_copy, &parsed_range)) {
-        free(range_copy);
+    if (selinux_parse_range(parts.range, &parsed_range)) {
         return count;
     }
-
-    free(range_copy);
 
     if (fill_int32_pair(SELINUX_HIGH_SENS_XATTR,
                         parsed_range.high.sens,
                         &pairs[count++], values))
         return -1;
 
-    if (add_interval_list_pair(SELINUX_LOW_CAT_XATTR,
-                               parsed_range.low.intervals,
-                               parsed_range.low.intervals_count,
-                               &pairs[count++], values))
-        return -1;
+    if (parsed_range.low.intervals_count > 0) {
+        if (add_interval_list_pair(SELINUX_LOW_CAT_XATTR,
+                                   parsed_range.low.intervals,
+                                   parsed_range.low.intervals_count,
+                                   &pairs[count++], values))
+            return -1;
+    }
 
-    if (add_interval_list_pair(SELINUX_HIGH_CAT_XATTR,
-                               parsed_range.high.intervals,
-                               parsed_range.high.intervals_count,
-                               &pairs[count++], values))
-        return -1;
-
+    if (parsed_range.high.intervals_count > 0) {
+        if (add_interval_list_pair(SELINUX_HIGH_CAT_XATTR,
+                                   parsed_range.high.intervals,
+                                   parsed_range.high.intervals_count,
+                                   &pairs[count++], values))
+           return -1;
+    }
     return count;
 }
 
