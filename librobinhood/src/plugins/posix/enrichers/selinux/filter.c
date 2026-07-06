@@ -132,6 +132,21 @@ selinux_dominates_filter(const char *arg)
     return filter;
 }
 
+static struct rbh_filter *
+selinux_has_cat_filter(const char *arg)
+{
+    struct selinux_interval interval;
+    uint64_t category;
+
+    if (str2uint64_t(arg, &category) || category > SELINUX_MAX_CATEGORY)
+        error(EX_USAGE, 0, "invalid SELinux category '%s'", arg);
+
+    interval.first = category;
+    interval.last = category;
+
+    return interval_cover_filter(&interval);
+}
+
 
 struct rbh_filter *
 rbh_selinux_build_filter(struct filters_context *context, int *index)
@@ -163,6 +178,9 @@ rbh_selinux_build_filter(struct filters_context *context, int *index)
         break;
         case SPRED_SELINUX_RANGE_DOMINATES:
             filter = selinux_dominates_filter(argv[++i]);
+            break;
+        case SPRED_SELINUX_HAS_CAT:
+            filter = selinux_has_cat_filter(argv[++i]);
             break;
         default:
             error(EX_USAGE, 0, "invalid filter found `%s'", argv[i]);
