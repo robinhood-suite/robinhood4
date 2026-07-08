@@ -31,6 +31,27 @@ print_selinux(const struct rbh_fsentry *fsentry, const char *xattr,
     return snprintf(output, max_length,"%s", value->string);
 }
 
+static int
+print_selinux_context(const struct rbh_fsentry *fsentry,
+                      char *output, int max_length)
+{
+    const struct rbh_value *user;
+    const struct rbh_value *role;
+    const struct rbh_value *type;
+    const struct rbh_value *range;
+
+    user = rbh_fsentry_find_inode_xattr(fsentry, "selinux.user");
+    role = rbh_fsentry_find_inode_xattr(fsentry, "selinux.role");
+    type = rbh_fsentry_find_inode_xattr(fsentry, "selinux.type");
+    range = rbh_fsentry_find_inode_xattr(fsentry, "selinux.range");
+
+    return snprintf(output, max_length, "%s:%s:%s:%s",
+                    user ? user->string : "NULL",
+                    role ? role->string : "NULL",
+                    type ? type->string : "NULL",
+                    range ? range->string : "NULL");
+}
+
 enum known_directive
 rbh_selinux_fill_entry_info(const struct rbh_fsentry *fsentry,
                            const char *format_string, size_t *index,
@@ -46,8 +67,7 @@ rbh_selinux_fill_entry_info(const struct rbh_fsentry *fsentry,
 
     switch (format_string[*index + 3]) {
     case 'c':
-        tmp_length = print_selinux(fsentry, "selinux.context",
-                                   output, max_length);
+        tmp_length = print_selinux_context(fsentry, output, max_length);
         break;
     case 'u':
         tmp_length = print_selinux(fsentry, "selinux.user",
@@ -93,7 +113,13 @@ rbh_selinux_fill_projection(struct rbh_filter_projection *projection,
     switch (format_string[*index + 3]) {
     case 'c':
         rbh_projection_add(projection,
-                           str2filter_field("xattrs.selinux.context"));
+                           str2filter_field("xattrs.selinux.user"));
+        rbh_projection_add(projection,
+                           str2filter_field("xattrs.selinux.role"));
+        rbh_projection_add(projection,
+                           str2filter_field("xattrs.selinux.type"));
+        rbh_projection_add(projection,
+                           str2filter_field("xattrs.selinux.range"));
         break;
     case 'u':
         rbh_projection_add(projection,

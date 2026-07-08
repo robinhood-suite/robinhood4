@@ -28,9 +28,6 @@ test_selinux()
 
     invoke_rbh-fsevents_selinux
 
-    find_attribute '"xattrs.selinux.context":{$exists:true}' \
-        '"ns.name":"'$entry'"'
-
     find_attribute '"xattrs.selinux.range":"s0"' \
         '"ns.name":"'$entry'"'
 

@@ -22,8 +22,6 @@
 
 
 static const struct rbh_filter_field predicate2filter_field[] = {
-    [SPRED_SELINUX_CTX]       = {.fsentry = RBH_FP_INODE_XATTRS,
-                                 .xattr = "selinux.context"},
     [SPRED_SELINUX_USER]      = {.fsentry = RBH_FP_INODE_XATTRS,
                                  .xattr = "selinux.user"},
     [SPRED_SELINUX_ROLE]      = {.fsentry = RBH_FP_INODE_XATTRS,
@@ -52,6 +50,36 @@ string_predicate2filter(int predicate, const char *arg)
 
     if (filter == NULL)
         error(EXIT_FAILURE, errno, "rbh_filter_compare_string_new");
+
+    return filter;
+}
+
+static struct rbh_filter *
+context_predicate2filter(const char *arg)
+{
+    struct selinux_context parts;
+    struct rbh_filter *filter;
+    char *context;
+
+    context = xstrdup(arg);
+    if (split_selinux_context(context, &parts))
+        error(EX_USAGE, 0, "invalid SELinux context `%s'", arg);
+
+    filter = string_predicate2filter(SPRED_SELINUX_USER, parts.user);
+
+    filter = rbh_filter_and(filter,
+                            string_predicate2filter(SPRED_SELINUX_ROLE,
+                                                    parts.role));
+
+    filter = rbh_filter_and(filter,
+                            string_predicate2filter(SPRED_SELINUX_TYPE,
+                                                    parts.type));
+
+    filter = rbh_filter_and(filter,
+                            string_predicate2filter(SPRED_SELINUX_RANGE,
+                                                    parts.range));
+
+    free(context);
 
     return filter;
 }
@@ -170,12 +198,14 @@ rbh_selinux_build_filter(struct filters_context *context, int *index)
      */
     switch (predicate) {
         case SPRED_SELINUX_CTX:
+            filter = context_predicate2filter(argv[++i]);
+            break;
         case SPRED_SELINUX_USER:
         case SPRED_SELINUX_ROLE:
         case SPRED_SELINUX_TYPE:
         case SPRED_SELINUX_RANGE:
             filter = string_predicate2filter(predicate, argv[++i]);
-        break;
+            break;
         case SPRED_SELINUX_RANGE_DOMINATES:
             filter = selinux_dominates_filter(argv[++i]);
             break;
