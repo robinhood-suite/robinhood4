@@ -23,7 +23,6 @@
 
 #define SELINUX_XATTR_NAME    "security.selinux"
 
-#define SELINUX_CONTEXT_XATTR "selinux.context"
 #define SELINUX_USER_XATTR    "selinux.user"
 #define SELINUX_ROLE_XATTR    "selinux.role"
 #define SELINUX_TYPE_XATTR    "selinux.type"
@@ -36,16 +35,6 @@
 #define SELINUX_INTERVAL_FIRST_KEY "f"
 #define SELINUX_INTERVAL_LAST_KEY  "l"
 
-
-/*
- * A SELinux complete context
- */
-struct selinux_context {
-    char *user;
-    char *role;
-    char *type;
-    char *range;
-};
 
 static char*
 value_to_string(const struct rbh_value *value)
@@ -183,45 +172,6 @@ add_interval_list_pair(const char *key,
     return 0;
 }
 
-static int
-split_selinux_context(char *ctx, struct selinux_context *parts)
-{
-    char *sep1;
-    char *sep2;
-    char *sep3;
-
-    sep1 = strchr(ctx, ':');
-    if (sep1 == NULL)
-        goto invalid;
-
-    sep2 = strchr(sep1 + 1, ':');
-    if (sep2 == NULL)
-        goto invalid;
-
-    sep3 = strchr(sep2 + 1, ':');
-    if (sep3 == NULL)
-        goto invalid;
-
-    if (sep1 == ctx || sep2 == sep1 + 1 ||
-        sep3 == sep2 + 1 || sep3[1] == '\0')
-        goto invalid;
-
-    *sep1 = '\0';
-    *sep2 = '\0';
-    *sep3 = '\0';
-
-    parts->user = ctx;
-    parts->role = sep1 + 1;
-    parts->type = sep2 + 1;
-    parts->range = sep3 + 1;
-
-    return 0;
-
-invalid:
-    errno = EINVAL;
-    return -1;
-}
-
 
 static int
 fill_selinux_pairs(char *ctx, struct rbh_value_pair *pairs,
@@ -230,10 +180,6 @@ fill_selinux_pairs(char *ctx, struct rbh_value_pair *pairs,
     struct selinux_range parsed_range;
     struct selinux_context parts;
     int count = 0;
-
-    if (fill_string_pair(SELINUX_CONTEXT_XATTR, ctx,
-                         &pairs[count++], values))
-        return -1;
 
     if (split_selinux_context(ctx, &parts))
         return -1;
@@ -293,7 +239,7 @@ rbh_selinux_enrich(struct entry_info *einfo, uint64_t flags,
     if (!rbh_attr_is_selinux(flags))
         return 0;
 
-    if (pairs_count < 8) {
+    if (pairs_count < 7) {
         errno = ENOMEM;
         return -1;
     }
@@ -303,7 +249,6 @@ rbh_selinux_enrich(struct entry_info *einfo, uint64_t flags,
         return 0;
 
     count = fill_selinux_pairs(context, pairs, values);
-
     free(context);
     return count;
 }

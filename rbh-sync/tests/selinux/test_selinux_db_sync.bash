@@ -31,7 +31,6 @@ test_selinux_context_decomposition()
     rbh_sync_selinux "." "rbh:$db:$testdb"
 
     find_attribute '"ns.xattrs.path":"/file"' \
-               "\"xattrs.selinux.context\":\"$ctx\"" \
                "\"xattrs.selinux.user\":\"$seuser\"" \
                "\"xattrs.selinux.role\":\"$serole\"" \
                "\"xattrs.selinux.type\":\"$setype\"" \
