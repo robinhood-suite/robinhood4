@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe2a3225_c1820989",
+        "filename": "rbh-log/rbh-log.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-08T08:50:48Z",
+      "side": 1,
+      "message": "nit: why returning an int if not used in main?",
+      "range": {
+        "startLine": 28,
+        "startChar": 7,
+        "endLine": 28,
+        "endChar": 10
+      },
+      "revId": "e02b9077a0ee7083b2fb850204da833dec3eb8c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90cc302f_a87aae63",
+        "filename": "rbh-log/rbh-log.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-08T08:50:48Z",
+      "side": 1,
+      "message": "style: alignment",
+      "range": {
+        "startLine": 47,
+        "startChar": 8,
+        "endLine": 47,
+        "endChar": 62
+      },
+      "revId": "e02b9077a0ee7083b2fb850204da833dec3eb8c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
