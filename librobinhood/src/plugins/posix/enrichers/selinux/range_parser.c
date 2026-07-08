@@ -185,3 +185,43 @@ selinux_parse_range(char *range, struct selinux_range *parsed)
 
     return 0;
 }
+
+
+int
+split_selinux_context(char *ctx, struct selinux_context *parts)
+{
+    char *sep1;
+    char *sep2;
+    char *sep3;
+
+    sep1 = strchr(ctx, ':');
+    if (sep1 == NULL)
+        goto invalid;
+
+    sep2 = strchr(sep1 + 1, ':');
+    if (sep2 == NULL)
+        goto invalid;
+
+    sep3 = strchr(sep2 + 1, ':');
+    if (sep3 == NULL)
+        goto invalid;
+
+    if (sep1 == ctx || sep2 == sep1 + 1 ||
+        sep3 == sep2 + 1 || sep3[1] == '\0')
+        goto invalid;
+
+    *sep1 = '\0';
+    *sep2 = '\0';
+    *sep3 = '\0';
+
+    parts->user = ctx;
+    parts->role = sep1 + 1;
+    parts->type = sep2 + 1;
+    parts->range = sep3 + 1;
+
+    return 0;
+
+invalid:
+    errno = EINVAL;
+    return -1;
+}

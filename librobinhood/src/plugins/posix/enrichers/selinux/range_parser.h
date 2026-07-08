@@ -50,10 +50,23 @@ struct selinux_range{
     struct selinux_level high;
 };
 
+/*
+ * A SELinux complete context
+ */
+struct selinux_context {
+    char *user;
+    char *role;
+    char *type;
+    char *range;
+};
+
 int
 selinux_parse_level(char *string, struct selinux_level *level);
 
 int
 selinux_parse_range(char *range, struct selinux_range *parsed);
+
+int
+split_selinux_context(char *ctx, struct selinux_context *parts);
 
 #endif
