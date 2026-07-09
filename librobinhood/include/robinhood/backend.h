@@ -361,6 +361,11 @@ struct rbh_backend_operations {
             void *backend,
             int info_flags
             );
+    int (*insert_log)(
+            void *backend,
+            const char *command,
+            const struct rbh_value_map *map
+            );
     struct rbh_value_map *(*get_logs)(
             void *backend,
             struct rbh_log_options options
@@ -770,6 +775,28 @@ rbh_backend_get_info(struct rbh_backend *backend, int info_flags)
         return NULL;
     }
     return backend->ops->get_info(backend, info_flags);
+}
+
+/**
+ * Insert a log in the given backend
+ *
+ * @param backend         the backend in which to insert the log
+ * @param command         the command the log originiates from
+ * @param pair            a map containing information about the log to insert
+ *
+ * @return                0 on success, -1 on error
+ */
+static inline int
+rbh_backend_insert_log(struct rbh_backend *backend,
+                       const char *command,
+                       const struct rbh_value_map *map)
+{
+    if (backend->ops->insert_log == NULL) {
+        errno = ENOTSUP;
+        return -1;
+    }
+
+    return backend->ops->insert_log(backend, command, map);
 }
 
 /**
