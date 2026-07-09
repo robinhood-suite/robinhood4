@@ -83,12 +83,31 @@ static bool skip_error = true;
  *----------------------------------------------------------------------------*/
 
 static void
+insert_sync_log(struct rbh_backend *backend, struct rbh_value_map *map)
+{
+    if (!rbh_backend_insert_log(backend, "sync_metadata", map))
+        return;
+
+    switch (errno) {
+    case 0:
+        fprintf(stderr, "failed to insert sync log\n");
+        break;
+    case RBH_BACKEND_ERROR:
+        fprintf(stderr, "failed to insert sync log: %s\n", rbh_backend_error);
+        break;
+    default:
+        fprintf(stderr, "failed to insert sync log: %s\n", strerror(errno));
+        break;
+    }
+}
+
+static void
 insert_metadata(struct rbh_backend *backend, struct rbh_value_map *map,
-                enum metadata_type type, const char *msg)
+                const char *msg)
 {
     int rc;
 
-    rc = rbh_backend_insert_metadata(backend, map, type);
+    rc = rbh_backend_insert_metadata(backend, map, RBH_DT_INFO);
     if (!rc)
         return;
 
@@ -130,8 +149,8 @@ sync_source(char *cmd_backend)
     sync_map.pairs = &pair;
     sync_map.count = 1;
 
-    insert_metadata(to, info_map, RBH_DT_INFO, "backend info");
-    insert_metadata(to, &sync_map, RBH_DT_INFO, "command backend");
+    insert_metadata(to, info_map, "backend info");
+    insert_metadata(to, &sync_map, "command backend");
 }
 
 static void
@@ -150,7 +169,7 @@ sync_mountpoint(const char *mountpoint_path)
         .pairs = &pair
     };
 
-    insert_metadata(to, &map, RBH_DT_INFO, "mountpoint");
+    insert_metadata(to, &map, "mountpoint");
 }
 
     /*--------------------------------------------------------------------*
@@ -959,7 +978,7 @@ main(int argc, char *argv[])
     metadata_map = sync_metadata_value_map(sync_debut, sync_end, argv[0],
                                            metadata, command_line);
 
-    insert_metadata(to, metadata_map, RBH_DT_LOG, "metadata");
+    insert_sync_log(to, metadata_map);
 
     free(metadata);
     free(command_line);
