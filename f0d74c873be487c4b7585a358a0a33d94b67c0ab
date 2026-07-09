@@ -22,6 +22,30 @@
       },
       "revId": "f0d74c873be487c4b7585a358a0a33d94b67c0ab",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8433f15_55892a0c",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-09T12:22:56Z",
+      "side": 1,
+      "message": "For now it\u0027s so that I can do the `first`/`last` from rbh-info easily. It\u0027s not in the design, so once I remove those, I\u0027ll remove this aswell.",
+      "parentUuid": "95c70708_26006403",
+      "range": {
+        "startLine": 293,
+        "startChar": 3,
+        "endLine": 293,
+        "endChar": 10
+      },
+      "revId": "f0d74c873be487c4b7585a358a0a33d94b67c0ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
