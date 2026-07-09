@@ -25,6 +25,52 @@ destroy_sstack(void)
         rbh_sstack_destroy(logs_sstack);
 }
 
+int
+mongo_backend_insert_log(void *backend, const char *command,
+                         const struct rbh_value_map *map)
+{
+    struct mongo_backend *mongo = backend;
+    mongoc_collection_t *collection;
+    bson_t *filter = NULL;
+    bson_t *update = NULL;
+    bson_t *opts = NULL;
+    bson_t metadata_doc;
+    bson_error_t error;
+    int result;
+    int rc = 0;
+
+    collection = mongo->log;
+    update = bson_new();
+
+    filter = BCON_NEW("_id", BCON_INT64(time(NULL)));
+    opts = BCON_NEW("upsert", BCON_BOOL(true));
+
+    if (!(BSON_APPEND_DOCUMENT_BEGIN(update, "$set", &metadata_doc)
+        && BSON_APPEND_RBH_VALUE_MAP(&metadata_doc, command, map)
+        && bson_append_document_end(update, &metadata_doc))) {
+        fprintf(stderr, "Error while appending rbh_value to bson\n");
+        rc = -1;
+        goto skip_insert;
+    }
+
+    result = mongoc_collection_update_one(collection, filter, update, opts,
+                                          NULL, &error);
+    if (!result) {
+        fprintf(stderr, "Upsert failed: %s\n", error.message);
+        rc = -1;
+    }
+
+skip_insert:
+    if (filter)
+        bson_destroy(filter);
+    if (update)
+        bson_destroy(update);
+    if (opts)
+        bson_destroy(opts);
+
+    return rc;
+}
+
 static int
 get_collection_sync(const struct mongo_backend *mongo, char *field_to_find,
                     struct rbh_value_pair *pair, size_t *count)

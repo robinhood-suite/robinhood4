@@ -1098,6 +1098,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
     .get_info = mongo_backend_get_info,
+    .insert_log = mongo_backend_insert_log,
     .get_logs = mongo_backend_get_logs,
     .insert_metadata = mongo_insert_metadata,
     .destroy = mongo_backend_destroy,
