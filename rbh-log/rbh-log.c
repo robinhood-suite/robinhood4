@@ -39,6 +39,7 @@ usage(void)
         "Optional arguments:\n"
         "   -c, --config PATH       the configuration file to use.\n"
         "   -h, --help              show this message and exit\n"
+        "   -l, --last N            print the last N logs\n"
         "    --version              print RobinHood 4's version\n"
         "\n"
         "A robinhood URI is built as follows:\n"
@@ -135,7 +136,8 @@ main(int argc, char *argv[])
             .val = 'h',
         },
         {
-            .name = "last-sync",
+            .name = "last",
+            .has_arg = required_argument,
             .val = 'l',
         },
         {
@@ -154,7 +156,7 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:fhlz", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "c:fhl:z", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
             /* already parsed */
@@ -173,8 +175,12 @@ main(int argc, char *argv[])
             options.ascending = false;
             if (options.count)
                 error(EX_USAGE, ENOTSUP,
-                      "cannot print logs for both first and last sync");
-            options.count = 1;
+                      "cannot print logs for both first and last syncs");
+
+            if (str2uint64_t(optarg, &options.count))
+                error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
+                      optarg);
+
             break;
         case 'z':
             rbh_print_version();
