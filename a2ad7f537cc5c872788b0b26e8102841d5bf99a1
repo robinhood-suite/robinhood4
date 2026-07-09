@@ -22,6 +22,30 @@
       },
       "revId": "a2ad7f537cc5c872788b0b26e8102841d5bf99a1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1530a33a_d5456c3a",
+        "filename": "librobinhood/src/plugins/mongo/logs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-09T12:24:00Z",
+      "side": 1,
+      "message": "Yep, it\u0027s just so that I can do the `first-sync`/`last-sync` easily. They will be removed once I remove those options aswell.",
+      "parentUuid": "a897f5a3_9b3290d7",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 5
+      },
+      "revId": "a2ad7f537cc5c872788b0b26e8102841d5bf99a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
