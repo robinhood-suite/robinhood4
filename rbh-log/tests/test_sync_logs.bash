@@ -17,30 +17,29 @@ test_invalid()
 {
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_log "rbh:$db:$testdb" --first-sync --last-sync &&
+    rbh_log "rbh:$db:$testdb" --first-sync --last 1 &&
         error "log with both first and last sync should have failed"
+
+    rbh_log "rbh:$db:$testdb" --last blob &&
+        error "log with invalid last count should have failed"
+
+    rbh_log "rbh:$db:$testdb" --last 42invalid &&
+        error "log with invalid last count should have failed"
+
+    return 0
 }
 
-test_collection_sync()
+check_log_result()
 {
-    local info_flag=$1
+    local output="$1"
 
-    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
-
-    local output=$(rbh_log "rbh:$db:$testdb" "$info_flag")
-    local n_lines=$(echo "$output" | wc -l)
-
-    if ((n_lines != 9)); then
-        error "There should be eight infos about posix sync + 1 line for the header, got '$output'"
-    fi
-
-    echo "$output" | grep "Start" ||
+    echo "$output" | grep "Start" > /dev/null ||
         error "sync_debut should have been retrieved"
 
-    echo "$output" | grep "Duration" ||
+    echo "$output" | grep "Duration" > /dev/null ||
         error "sync_duration should have been retrieved"
 
-    echo "$output" | grep "End" ||
+    echo "$output" | grep "End" > /dev/null ||
         error "sync_end should have been retrieved"
 
     local mountpoint=$(echo "$output" | grep "Mountpoint used" |
@@ -82,19 +81,75 @@ test_collection_sync()
     fi
 }
 
-test_collection_first_sync() {
-    test_collection_sync "--first-sync"
+test_first_sync()
+{
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    local output=$(rbh_log "rbh:$db:$testdb" --first-sync)
+    local n_lines=$(echo "$output" | wc -l)
+
+    if ((n_lines != 9)); then
+        error "There should be 9 lines about posix sync (8 for content, 1 for header), got '$output'"
+    fi
+
+    check_log_result "$output"
 }
 
-test_collection_last_sync() {
-    test_collection_sync "--last-sync"
+test_last_1()
+{
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    local output=$(rbh_log "rbh:$db:$testdb" --last 1)
+    local n_lines=$(echo "$output" | wc -l)
+
+    if ((n_lines != 9)); then
+        error "There should be 9 lines about posix sync (8 for content, 1 for header), got '$output'"
+    fi
+
+    check_log_result "$output"
+}
+
+test_N_logs()
+{
+    local requested=$1
+    local expected=$2
+
+    for i in $(seq 1 $expected); do
+        rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+        sleep 1
+    done
+
+    local output=$(rbh_log "rbh:$db:$testdb" --last $requested)
+
+    local n_lines=$(echo "$output" | wc -l)
+
+    if ((n_lines != 9 * $expected)); then
+        error "There should be 9 * 3 lines about posix sync (8 for content, 1 for header, time 3 logs), got '$output'"
+    fi
+
+    for i in $(seq 1 $expected); do
+        local one_log="$(echo "$output" | head -n 9)"
+        check_log_result "$one_log"
+        output="$(echo "$output" | sed 1,9d)"
+    done
+}
+
+test_last_N()
+{
+    test_N_logs 3 3
+}
+
+test_more_than_N()
+{
+    test_N_logs 6 3
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_collection_first_sync test_collection_last_sync)
+declare -a tests=(test_invalid test_first_sync test_last_1 test_last_N
+                  test_more_than_N)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
