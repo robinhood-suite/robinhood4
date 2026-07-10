@@ -17,8 +17,7 @@ struct sink;
 
 struct sink_operations {
     int (*process)(void *sink, struct rbh_iterator *fsevents);
-    int (*insert_metadata)(void *sink, const struct rbh_value_map *value,
-                           enum metadata_type type);
+    int (*insert_info)(void *sink, const struct rbh_value_map *value);
     struct rbh_value_map *(*get_info)(void *sink, int flags);
     void (*destroy)(void *sink);
 };
@@ -45,11 +44,10 @@ sink_get_info(struct sink *sink, int flags)
 }
 
 static inline int
-sink_insert_metadata(struct sink *sink, const struct rbh_value_map *value,
-                     enum metadata_type type)
+sink_insert_info(struct sink *sink, const struct rbh_value_map *value)
 {
-    if (sink->ops->insert_metadata)
-        return sink->ops->insert_metadata(sink, value, type);
+    if (sink->ops->insert_info)
+        return sink->ops->insert_info(sink, value);
 
     errno = ENOTSUP;
     return -1;
