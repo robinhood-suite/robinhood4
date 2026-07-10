@@ -135,7 +135,7 @@ get_collection_sync(const struct mongo_backend *mongo, char *field_to_find,
         while (bson_iter_next(&iter)) {
             const char *key = bson_iter_key(&iter);
 
-            if (strcmp(key, "sync_metadata") == 0) {
+            if (strcmp(key, "sync") == 0) {
                 if (!bson_iter_rbh_value(&iter, &value, &buffer, &bufsize)) {
                     rc = 1;
                     goto out;
