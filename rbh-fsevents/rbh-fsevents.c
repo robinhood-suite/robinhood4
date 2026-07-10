@@ -32,6 +32,7 @@
 
 #include "deduplicator.h"
 #include "enricher.h"
+#include "info.h"
 #include "source.h"
 #include "sink.h"
 
@@ -704,78 +705,6 @@ feed(struct sink **sink, struct source *source,
     return rc;
 }
 
-static int
-insert_backend_source(char *cmd_backend)
-{
-    struct rbh_value command_backend_value = {
-        .type = RBH_VT_STRING,
-        .string = cmd_backend
-    };
-    struct rbh_value_map *info_map;
-    struct rbh_value_map sync_map;
-    struct rbh_value_pair pair;
-
-
-    info_map = enrich_iter_builder_get_source_backends(enrich_builder);
-    if (info_map == NULL) {
-        fprintf(stderr, "Failed to retrieve source backends from enricher\n");
-        return -1;
-    }
-
-    if (sink_insert_info(sink[0], info_map)) {
-        fprintf(stderr, "Failed to set backend_info\n");
-        return -1;
-    }
-
-    pair.key = "command_backend";
-    pair.value = &command_backend_value;
-
-    sync_map.pairs = &pair;
-    sync_map.count = 1;
-
-    if (sink_insert_info(sink[0], &sync_map)) {
-        fprintf(stderr, "Failed to set command_backend\n");
-        return -1;
-    }
-
-    return 0;
-}
-
-static int
-insert_mountpoint()
-{
-    struct rbh_value_map mountpoint_map;
-    struct rbh_value mountpoint;
-    struct rbh_value_pair pair;
-    char clean_path[PATH_MAX];
-    size_t len;
-
-    strncpy(clean_path, enrich_builder->mount_path, sizeof(clean_path));
-    clean_path[sizeof(clean_path) - 1] = '\0';
-
-    len = strlen(clean_path);
-    if (len > 1 && clean_path[len - 1] == '/')
-        clean_path[len - 1] = '\0';
-
-    mountpoint.type = RBH_VT_STRING;
-    mountpoint.string = xstrdup(clean_path);
-
-    pair.key = "mountpoint";
-    pair.value = &mountpoint;
-
-    mountpoint_map.pairs = &pair;
-    mountpoint_map.count = 1;
-
-    if (sink_insert_info(sink[0], &mountpoint_map)) {
-        fprintf(stderr, "Failed to set the mountpoint\n");
-        free((char *)mountpoint.string);
-        return -1;
-    }
-
-    free((char *)mountpoint.string);
-    return 0;
-}
-
 int
 main(int argc, char *argv[])
 {
@@ -948,12 +877,13 @@ main(int argc, char *argv[])
     source = source_new(source_uri, dump_file, max_changelog, start_index);
 
     if (enrich_builder) {
-        if (insert_backend_source(cmd_backend) && errno != ENOTSUP)
+        if (insert_backend_source(cmd_backend, enrich_builder, sink[0]) &&
+            errno != ENOTSUP)
             error(EX_USAGE, EINVAL,
                   "Failed to insert source backends in destination");
 
         free(cmd_backend);
-        if (insert_mountpoint() && errno != ENOTSUP)
+        if (insert_mountpoint(enrich_builder, sink[0]) && errno != ENOTSUP)
             error(EX_USAGE, EINVAL,
                   "Failed to insert mountpoint in destination\n");
     }

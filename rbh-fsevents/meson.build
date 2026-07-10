@@ -49,6 +49,7 @@ fsevents_lib = static_library(
         'src/deduplicator/fsevent_pool.c',
         'src/deduplicator/hash.c',
         'src/deduplicator/rbh_fsevent_utils.c',
+        'src/info.c',
         'src/enricher.c',
         'src/enrichers/posix/posix.c',
         'src/enrichers/posix/retention.c',
