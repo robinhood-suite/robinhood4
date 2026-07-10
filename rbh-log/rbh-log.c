@@ -11,6 +11,8 @@
 
 #include <robinhood.h>
 
+#include "log.h"
+
 static struct rbh_backend *backend;
 
 static void __attribute__((destructor))
@@ -48,74 +50,11 @@ usage(void)
     printf(message, program_invocation_short_name);
 }
 
-#define WIDTH 32
-
-static void
-print_sync_log(const struct rbh_value *value, const char *header)
-{
-    const struct rbh_value_map metadata_map = value->map;
-    time_t time;
-
-    assert(value->type == RBH_VT_MAP);
-
-    printf("%s:\n", header);
-
-    for (size_t i = 0 ; i < metadata_map.count ; i++) {
-        const struct rbh_value_pair *pair = &metadata_map.pairs[i];
-        if (strcmp(pair->key, "start_time") == 0) {
-            time = (time_t)pair->value->int64;
-            printf(" - %-*s %s\n", WIDTH, "Start of the sync:",
-                   time_from_timestamp(&time));
-        }
-
-        if (strcmp(pair->key, "duration") == 0) {
-            char _buffer[32];
-            size_t bufsize;
-            char *buffer;
-
-            buffer = _buffer;
-            bufsize = sizeof(_buffer);
-
-            difftime_printer(buffer, bufsize, pair->value->int64);
-
-            printf(" - %-*s %s\n", WIDTH, "Duration of the sync:",
-                   buffer);
-        }
-
-        if (strcmp(pair->key, "end_time") == 0) {
-            time = (time_t)pair->value->int64;
-            printf(" - %-*s %s\n", WIDTH, "End of the sync:",
-                   time_from_timestamp(&time));
-        }
-
-        if (strcmp(pair->key, "source_mountpoint") == 0)
-            printf(" - %-*s %s\n", WIDTH, "Mountpoint used for the sync:",
-                   pair->value->string);
-
-        if (strcmp(pair->key, "command_line") == 0)
-            printf(" - %-*s %s\n", WIDTH, "Command used for the sync:",
-                   pair->value->string);
-
-        if (strcmp(pair->key, "converted_entries") == 0)
-            printf(" - %-*s %ld\n", WIDTH, "Amount of entries converted:",
-                   pair->value->int64);
-
-        if (strcmp(pair->key, "skipped_entries") == 0)
-            printf(" - %-*s %ld\n", WIDTH, "Amount of entries skipped:",
-                   pair->value->int64);
-
-        if (strcmp(pair->key, "total_entries") == 0)
-            printf(" - %-*s %ld\n", WIDTH,
-                   "Total entries seen by the sync:",
-                   pair->value->int64);
-    }
-}
-
 static void
 print_logs(const struct rbh_value_map *logs, const char *header)
 {
     for (size_t i = 0 ; i < logs->count ; i++)
-        print_sync_log(logs->pairs[i].value, header);
+        print_sync_log(&logs->pairs[i].value->map, header);
 }
 
 int
