@@ -33,6 +33,7 @@
 #include "deduplicator.h"
 #include "enricher.h"
 #include "info.h"
+#include "log.h"
 #include "source.h"
 #include "sink.h"
 
@@ -705,6 +706,27 @@ feed(struct sink **sink, struct source *source,
     return rc;
 }
 
+char *
+get_command_line(int argc, char *argv[]) {
+    size_t total_len = 0;
+    char *cmd_line;
+
+    for (int i = 0 ; i < argc ; i++)
+        total_len += strlen(argv[i]) + 1;
+
+    assert(total_len > 0);
+    cmd_line = xmalloc(total_len);
+
+    cmd_line[0] = '\0';
+    for (int i = 0 ; i < argc ; i++) {
+        strcat(cmd_line, argv[i]);
+        if (i < argc - 1)
+            strcat(cmd_line, " ");
+    }
+
+    return cmd_line;
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -784,8 +806,13 @@ main(int argc, char *argv[])
     char *cmd_backend = NULL;
     int64_t start_index = -1;
     char *dump_file = NULL;
+    char *command_line;
+    time_t start_time;
+    time_t end_time;
     int rc;
     char c;
+
+    command_line = get_command_line(argc, argv);
 
     rc = rbh_config_from_args(argc - 1, argv + 1);
     if (rc)
@@ -888,8 +915,12 @@ main(int argc, char *argv[])
                   "Failed to insert mountpoint in destination\n");
     }
 
+    start_time = time(NULL);
     rc = feed(sink, source, enrich_builder, strcmp(sink[0]->name, "backend"),
               &dedup_opts);
+    end_time = time(NULL);
+
+    insert_fsevents_log(start_time, end_time, command_line, sink[0]);
 
     rbh_config_free();
 

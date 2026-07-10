@@ -18,6 +18,7 @@ struct sink;
 struct sink_operations {
     int (*process)(void *sink, struct rbh_iterator *fsevents);
     int (*insert_info)(void *sink, const struct rbh_value_map *value);
+    int (*insert_log)(void *sink, const struct rbh_value_map *value);
     struct rbh_value_map *(*get_info)(void *sink, int flags);
     void (*destroy)(void *sink);
 };
@@ -48,6 +49,16 @@ sink_insert_info(struct sink *sink, const struct rbh_value_map *value)
 {
     if (sink->ops->insert_info)
         return sink->ops->insert_info(sink, value);
+
+    errno = ENOTSUP;
+    return -1;
+}
+
+static inline int
+sink_insert_log(struct sink *sink, const struct rbh_value_map *value)
+{
+    if (sink->ops->insert_log)
+        return sink->ops->insert_log(sink, value);
 
     errno = ENOTSUP;
     return -1;
