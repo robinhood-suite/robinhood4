@@ -107,7 +107,7 @@ lustre_changelog_set_last_read(void *iterator, uint64_t last_changelog_index,
     value_map.pairs = &fsevents_pair;
     value_map.count = 1;
 
-    rc = sink_insert_metadata(sink, &value_map, RBH_DT_INFO);
+    rc = sink_insert_info(sink, &value_map);
 
     free(last_read_value);
     free(mdt_map);

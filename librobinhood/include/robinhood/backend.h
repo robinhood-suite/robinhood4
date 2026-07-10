@@ -267,18 +267,6 @@ enum rbh_info {
 };
 
 /**
- * Determines metadata type to help with insertion.
- *
- * When calling metadata_type_to_insert, ensure that all the data inserted are
- * of the same metadata_type (i.e you can not have a rbh_value_map with DT_INFO
- * & DT_LOG data at the same time).
- */
-enum metadata_type {
-    RBH_DT_INFO,
-    RBH_DT_LOG,
-};
-
-/**
  * Determines the type of logs to fetch.
  */
 enum rbh_log_type {
@@ -322,11 +310,6 @@ struct rbh_backend_operations {
             void *backend,
             struct rbh_iterator *fsevents
             );
-    int (*insert_metadata)(
-            void *backend,
-            const struct rbh_value_map *value,
-            enum metadata_type type
-            );
     struct rbh_backend *(*branch)(
             void *backend,
             const struct rbh_id *id,
@@ -356,6 +339,10 @@ struct rbh_backend_operations {
             void *arg,
             struct rbh_value_pair *pairs,
             int available_pairs
+            );
+    int (*insert_info)(
+            void *backend,
+            const struct rbh_value_map *value
             );
     struct rbh_value_map *(*get_info)(
             void *backend,
@@ -565,7 +552,7 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
 }
 
 /**
- * Insert informations backends in the target backend
+ * Insert info in the target backend
  *
  * @param backend         the backend in which to insert the source
  * @param value           a rbh_value map containing metadata to insert
@@ -575,16 +562,15 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
  * @return                0 on success, -1 on error
  */
 static inline int
-rbh_backend_insert_metadata(struct rbh_backend *backend,
-                            const struct rbh_value_map *value,
-                            enum metadata_type type)
+rbh_backend_insert_info(struct rbh_backend *backend,
+                        const struct rbh_value_map *value)
 {
-    if (backend->ops->insert_metadata == NULL) {
+    if (backend->ops->insert_info == NULL) {
         errno = ENOTSUP;
         return -1;
     }
 
-    return backend->ops->insert_metadata(backend, value, type);
+    return backend->ops->insert_info(backend, value);
 }
 
 /**

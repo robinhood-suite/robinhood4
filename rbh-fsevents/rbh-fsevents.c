@@ -722,7 +722,7 @@ insert_backend_source(char *cmd_backend)
         return -1;
     }
 
-    if (sink_insert_metadata(sink[0], info_map, RBH_DT_INFO)) {
+    if (sink_insert_info(sink[0], info_map)) {
         fprintf(stderr, "Failed to set backend_info\n");
         return -1;
     }
@@ -733,7 +733,7 @@ insert_backend_source(char *cmd_backend)
     sync_map.pairs = &pair;
     sync_map.count = 1;
 
-    if (sink_insert_metadata(sink[0], &sync_map, RBH_DT_INFO)) {
+    if (sink_insert_info(sink[0], &sync_map)) {
         fprintf(stderr, "Failed to set command_backend\n");
         return -1;
     }
@@ -766,7 +766,7 @@ insert_mountpoint()
     mountpoint_map.pairs = &pair;
     mountpoint_map.count = 1;
 
-    if (sink_insert_metadata(sink[0], &mountpoint_map, RBH_DT_INFO)) {
+    if (sink_insert_info(sink[0], &mountpoint_map)) {
         fprintf(stderr, "Failed to set the mountpoint\n");
         free((char *)mountpoint.string);
         return -1;
