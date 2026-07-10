@@ -217,14 +217,14 @@ get_collection_last_sync_start_date(const struct mongo_backend *mongo,
     while (bson_iter_next(&iter)) {
         const char *key = bson_iter_key(&iter);
 
-        if (strcmp(key, "sync_metadata") == 0) {
+        if (strcmp(key, "sync") == 0) {
             if (!bson_iter_rbh_value(&iter, value, &buffer, &bufsize)) {
                 rc = 1;
                 goto out;
             }
 
             assert(value->type == RBH_VT_MAP);
-            sync_debut_value = rbh_map_find(&value->map, "sync_debut");
+            sync_debut_value = rbh_map_find(&value->map, "start_time");
             assert(sync_debut_value);
 
             pair->key = "last_sync_start_date";

@@ -62,13 +62,13 @@ print_sync_log(const struct rbh_value *value, const char *header)
 
     for (size_t i = 0 ; i < metadata_map.count ; i++) {
         const struct rbh_value_pair *pair = &metadata_map.pairs[i];
-        if (strcmp(pair->key, "sync_debut") == 0) {
+        if (strcmp(pair->key, "start_time") == 0) {
             time = (time_t)pair->value->int64;
             printf(" - %-*s %s\n", WIDTH, "Start of the sync:",
                    time_from_timestamp(&time));
         }
 
-        if (strcmp(pair->key, "sync_duration") == 0) {
+        if (strcmp(pair->key, "duration") == 0) {
             char _buffer[32];
             size_t bufsize;
             char *buffer;
@@ -82,13 +82,13 @@ print_sync_log(const struct rbh_value *value, const char *header)
                    buffer);
         }
 
-        if (strcmp(pair->key, "sync_end") == 0) {
+        if (strcmp(pair->key, "end_time") == 0) {
             time = (time_t)pair->value->int64;
             printf(" - %-*s %s\n", WIDTH, "End of the sync:",
                    time_from_timestamp(&time));
         }
 
-        if (strcmp(pair->key, "mountpoint") == 0)
+        if (strcmp(pair->key, "source_mountpoint") == 0)
             printf(" - %-*s %s\n", WIDTH, "Mountpoint used for the sync:",
                    pair->value->string);
 
@@ -104,7 +104,7 @@ print_sync_log(const struct rbh_value *value, const char *header)
             printf(" - %-*s %ld\n", WIDTH, "Amount of entries skipped:",
                    pair->value->int64);
 
-        if (strcmp(pair->key, "total_entries_seen") == 0)
+        if (strcmp(pair->key, "total_entries") == 0)
             printf(" - %-*s %ld\n", WIDTH,
                    "Total entries seen by the sync:",
                    pair->value->int64);

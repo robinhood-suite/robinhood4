@@ -85,7 +85,7 @@ static bool skip_error = true;
 static void
 insert_sync_log(struct rbh_backend *backend, struct rbh_value_map *map)
 {
-    if (!rbh_backend_insert_log(backend, "sync_metadata", map))
+    if (!rbh_backend_insert_log(backend, "sync", map))
         return;
 
     switch (errno) {
@@ -752,17 +752,17 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
     values = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*values));
     pairs = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*pairs));
 
-    pairs[0].key = "sync_debut";
+    pairs[0].key = "start_time";
     values[0].type = RBH_VT_INT64;
     values[0].int64 = (int64_t)sync_debut;
     pairs[0].value = &values[0];
 
-    pairs[1].key = "sync_duration";
+    pairs[1].key = "duration";
     values[1].type = RBH_VT_INT64;
     values[1].int64 = (int64_t)sync_duration;
     pairs[1].value = &values[1];
 
-    pairs[2].key = "sync_end";
+    pairs[2].key = "end_time";
     values[2].type = RBH_VT_INT64;
     values[2].int64 = (int64_t)sync_end;
     pairs[2].value = &values[2];
@@ -790,7 +790,7 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
     free(uri);
     abs_path[sizeof(abs_path) - 1] = '\0';
 
-    pairs[3].key = "mountpoint";
+    pairs[3].key = "source_mountpoint";
     values[3].type = RBH_VT_STRING;
     values[3].string = RBH_SSTACK_PUSH(metadata_sstack, abs_path,
                                        strlen(abs_path) + 1);
@@ -811,7 +811,7 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
     values[6].int64 = (int64_t)metadata->skipped_entries;
     pairs[6].value = &values[6];
 
-    pairs[7].key = "total_entries_seen";
+    pairs[7].key = "total_entries";
     values[7].type = RBH_VT_INT64;
     values[7].int64 = (int64_t)(metadata->converted_entries +
                                 metadata->skipped_entries);
