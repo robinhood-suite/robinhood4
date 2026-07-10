@@ -666,7 +666,7 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
 }
 
     /*--------------------------------------------------------------------*
-     |                          insert_metadata                           |
+     |                          insert_info                           |
      *--------------------------------------------------------------------*/
 
 #define SAFE_CLEANUP(x) if ((x) != NULL) { bson_destroy((x)); (x) = NULL; }
@@ -867,72 +867,14 @@ destroy:
 }
 
 static int
-mongo_insert_sync_metadata(mongoc_collection_t *collection,
-                           const struct rbh_value_map *map_value)
-{
-    bson_t metadata_doc;
-    bson_error_t error;
-    bson_t *filter;
-    bson_t *update;
-    bson_t *opts;
-    int result;
-    int rc = 0;
-
-    update = bson_new();
-
-    filter = BCON_NEW("_id", BCON_INT64(time(NULL)));
-    opts = BCON_NEW("upsert", BCON_BOOL(true));
-
-    if (!(BSON_APPEND_DOCUMENT_BEGIN(update, "$set", &metadata_doc)
-        && BSON_APPEND_RBH_VALUE_MAP(
-                &metadata_doc,
-                "sync_metadata",
-                map_value
-            )
-        && bson_append_document_end(update, &metadata_doc))) {
-        fprintf(stderr, "Error while appending rbh_value to bson\n");
-        rc = -1;
-        goto skip_update;
-    }
-
-    result = mongoc_collection_update_one(collection, filter, update, opts,
-                                          NULL, &error);
-    if (!result) {
-        fprintf(stderr, "Upsert failed: %s\n", error.message);
-        rc = -1;
-    }
-
-skip_update:
-    SAFE_CLEANUP(filter);
-    SAFE_CLEANUP(update);
-    SAFE_CLEANUP(opts);
-
-    return rc;
-}
-
-static int
-mongo_insert_metadata(void *backend, const struct rbh_value_map *map_value,
-                      enum metadata_type type)
+mongo_insert_info(void *backend, const struct rbh_value_map *map_value)
 {
     mongoc_collection_t *collection = NULL;
     struct mongo_backend *mongo = backend;
     int rc2 = 0;
     int rc = 0;
 
-    switch (type) {
-    case RBH_DT_INFO:
-        collection = mongo->info;
-        break;
-    case RBH_DT_LOG:
-        collection = mongo->log;
-        break;
-    default:
-        fprintf(stderr, "Unknown Data_type\n");
-        return -1;
-    }
-
-    if (type == RBH_DT_LOG)
-        return mongo_insert_sync_metadata(collection, map_value);
+    collection = mongo->info;
 
     for (size_t i = 0 ; i < map_value->count ; i++) {
         const struct rbh_value_pair *pair = &map_value->pairs[i];
@@ -1100,7 +1042,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .get_info = mongo_backend_get_info,
     .insert_log = mongo_backend_insert_log,
     .get_logs = mongo_backend_get_logs,
-    .insert_metadata = mongo_insert_metadata,
+    .insert_info = mongo_insert_info,
     .destroy = mongo_backend_destroy,
 };
 
