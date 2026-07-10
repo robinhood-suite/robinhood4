@@ -195,7 +195,7 @@ a `rbh_value_map`:
     };
 
     static inline int
-    rbh_pe_common_ops_sort2field(
+    rbh_pe_common_ops_metadata2map(
         const struct rbh_pe_common_operations *common_ops,
         struct rbh_metadata *metadata,
         struct rbh_value_map *metadata_map
