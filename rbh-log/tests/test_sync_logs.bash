@@ -107,7 +107,7 @@ test_N_logs()
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != 9 * $expected)); then
-        error "There should be 9 * 3 lines about posix sync (8 for content, 1 for header, time 3 logs), got '$output'"
+        error "There should be 9 * 3 lines about posix sync (8 for content, 1 for header, time $expected logs), got '$output'"
     fi
 
     for i in $(seq 1 $expected); do
