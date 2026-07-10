@@ -64,65 +64,44 @@ key2log_value(const char *key)
     __builtin_unreachable();
 }
 
+static const struct formatted_log_value sync_log_value[] = {
+    [START_TIME] =        { .key = "start_time",
+                            .header = "Start of the sync",
+                            .print_log_value = print_time_from_timestamp },
+    [DURATION] =          { .key = "duration",
+                            .header = "Duration of the sync",
+                            .print_log_value = print_difftime },
+    [END_TIME] =          { .key = "end_time",
+                            .header = "End of the sync",
+                            .print_log_value = print_time_from_timestamp },
+    [SOURCE_MOUNTPOINT] = { .key = "source_mountpoint",
+                            .header = "Mountpoint used",
+                            .print_log_value = print_value },
+    [COMMAND_LINE] =      { .key = "command_line",
+                            .header = "Command used",
+                            .print_log_value = print_value },
+    [CONVERTED_ENTRIES] = { .key = "converted_entries",
+                            .header = "Amount of entries converted",
+                            .print_log_value = print_value },
+    [SKIPPED_ENTRIES] =   { .key = "skipped_entries",
+                            .header = "Amount of entries skipped",
+                            .print_log_value = print_value },
+    [TOTAL_ENTRIES] =     { .key = "total_entries",
+                            .header = "Total entries seen by the sync",
+                            .print_log_value = print_value },
+};
+
 void
 print_sync_log(const struct rbh_value_map *log, const char *header)
 {
-    time_t time;
-
     printf("%s:\n", header);
 
     for (size_t i = 0 ; i < log->count ; i++) {
         const struct rbh_value_pair *pair = &log->pairs[i];
-        enum log_value log_value = key2log_value(pair->key);
+        struct formatted_log_value log_value;
 
-        switch (log_value) {
-        case START_TIME:
-            time = (time_t)pair->value->int64;
-            printf(" - %-*s %s\n", WIDTH, "Start of the sync:",
-                   time_from_timestamp(&time));
-            break;
-        case DURATION: {
-            char _buffer[32];
-            size_t bufsize;
-            char *buffer;
+        log_value = sync_log_value[key2log_value(pair->key)];
 
-            buffer = _buffer;
-            bufsize = sizeof(_buffer);
-
-            difftime_printer(buffer, bufsize, pair->value->int64);
-
-            printf(" - %-*s %s\n", WIDTH, "Duration of the sync:",
-                   buffer);
-            break;
-        }
-        case END_TIME:
-            time = (time_t)pair->value->int64;
-            printf(" - %-*s %s\n", WIDTH, "End of the sync:",
-                   time_from_timestamp(&time));
-            break;
-        case SOURCE_MOUNTPOINT:
-            printf(" - %-*s %s\n", WIDTH, "Mountpoint used for the sync:",
-                   pair->value->string);
-            break;
-        case COMMAND_LINE:
-            printf(" - %-*s %s\n", WIDTH, "Command used for the sync:",
-                   pair->value->string);
-            break;
-        case CONVERTED_ENTRIES:
-            printf(" - %-*s %ld\n", WIDTH, "Amount of entries converted:",
-                   pair->value->int64);
-            break;
-        case SKIPPED_ENTRIES:
-            printf(" - %-*s %ld\n", WIDTH, "Amount of entries skipped:",
-                   pair->value->int64);
-            break;
-        case TOTAL_ENTRIES:
-            printf(" - %-*s %ld\n", WIDTH,
-                   "Total entries seen by the sync:",
-                   pair->value->int64);
-            break;
-        default:
-            __builtin_unreachable();
-        }
+        log_value.print_log_value(pair->value, log_value.header);
     }
 }
