@@ -42,12 +42,11 @@ backend_sink_get_info(void *_sink, int flags)
 }
 
 static int
-backend_sink_insert_metadata(void *_sink, const struct rbh_value_map *value,
-                             enum metadata_type type)
+backend_sink_insert_info(void *_sink, const struct rbh_value_map *value)
 {
     struct backend_sink *sink = _sink;
 
-    return rbh_backend_insert_metadata(sink->backend, value, type);
+    return rbh_backend_insert_info(sink->backend, value);
 }
 
 static void
@@ -61,7 +60,7 @@ backend_sink_destroy(void *_sink)
 
 static const struct sink_operations BACKEND_SINK_OPS = {
     .process = backend_sink_process,
-    .insert_metadata = backend_sink_insert_metadata,
+    .insert_info = backend_sink_insert_info,
     .get_info = backend_sink_get_info,
     .destroy = backend_sink_destroy,
 };

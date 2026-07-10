@@ -102,12 +102,12 @@ insert_sync_log(struct rbh_backend *backend, struct rbh_value_map *map)
 }
 
 static void
-insert_metadata(struct rbh_backend *backend, struct rbh_value_map *map,
-                const char *msg)
+insert_info(struct rbh_backend *backend, struct rbh_value_map *map,
+            const char *msg)
 {
     int rc;
 
-    rc = rbh_backend_insert_metadata(backend, map, RBH_DT_INFO);
+    rc = rbh_backend_insert_info(backend, map);
     if (!rc)
         return;
 
@@ -149,8 +149,8 @@ sync_source(char *cmd_backend)
     sync_map.pairs = &pair;
     sync_map.count = 1;
 
-    insert_metadata(to, info_map, "backend info");
-    insert_metadata(to, &sync_map, "command backend");
+    insert_info(to, info_map, "backend info");
+    insert_info(to, &sync_map, "command backend");
 }
 
 static void
@@ -169,7 +169,7 @@ sync_mountpoint(const char *mountpoint_path)
         .pairs = &pair
     };
 
-    insert_metadata(to, &map, "mountpoint");
+    insert_info(to, &map, "mountpoint");
 }
 
     /*--------------------------------------------------------------------*
