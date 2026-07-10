@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b420839_0316a388",
+        "filename": "librobinhood/src/plugins/posix/enrichers/selinux/action.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-10T07:16:22Z",
+      "side": 1,
+      "message": "minor: I\u0027d rather print the fields we have and NULL for those we don\u0027t, so that the user can see there is an issue",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 52
+      },
+      "revId": "6f3b6b3b2ad7e93f1bb667e11c7808d9ed95855c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
