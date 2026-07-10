@@ -10,6 +10,7 @@ executable(
     'rbh-log',
     sources: [
         'rbh-log.c',
+        'src/common.c',
         'src/sync.c',
     ],
     dependencies: [librobinhood_dep],

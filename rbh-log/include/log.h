@@ -13,6 +13,12 @@
 
 #define WIDTH 32
 
+struct formatted_log_value {
+    const char *key;
+    const char *header;
+    void (*print_log_value)(const struct rbh_value *, const char *);
+};
+
 /**
  * Print a sync log.
  *
@@ -22,5 +28,30 @@
  */
 void
 print_sync_log(const struct rbh_value_map *log, const char *header);
+
+/**
+ * All following functions are callback for the `print_log_value` field in the
+ * `formatted_log_value` structure. They each take in a `rbh_value` to print
+ * and a header.
+ */
+
+/**
+ * Expects the value to be int64, prints it as a timestamp.
+ */
+void
+print_time_from_timestamp(const struct rbh_value *value, const char *header);
+
+/**
+ * Expects the value to be int64, prints it as string representing a time
+ * differential.
+ */
+void
+print_difftime(const struct rbh_value *value, const char *header);
+
+/**
+ * Print the value as-is, i.e. string as string, int64 as long int, ....
+ */
+void
+print_value(const struct rbh_value *value, const char *header);
 
 #endif
