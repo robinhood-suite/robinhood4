@@ -51,10 +51,10 @@ usage(void)
 }
 
 static void
-print_logs(const struct rbh_value_map *logs, const char *header)
+print_logs(const struct rbh_value_map *logs)
 {
     for (size_t i = 0 ; i < logs->count ; i++)
-        print_sync_log(&logs->pairs[i].value->map, header);
+        print_sync_log(&logs->pairs[i].value->map, "Last syncs");
 }
 
 int
@@ -65,10 +65,6 @@ main(int argc, char *argv[])
             .name = "config",
             .has_arg = required_argument,
             .val = 'c',
-        },
-        {
-            .name = "first-sync",
-            .val = 'f',
         },
         {
             .name = "help",
@@ -95,30 +91,17 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:fhl:z",
+    while ((c = getopt_long(argc, argv, "c:hl:z",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
             /* already parsed */
             break;
-        case 'f':
-            options.ascending = true;
-            options.type = RBH_SYNC_LOG;
-            if (options.count)
-                error(EX_USAGE, ENOTSUP,
-                      "cannot print logs for both first and last sync");
-            options.count = 1;
-            break;
         case 'h':
             usage();
             return 0;
         case 'l':
-            options.ascending = false;
             options.type = RBH_SYNC_LOG;
-            if (options.count)
-                error(EX_USAGE, ENOTSUP,
-                      "cannot print logs for both first and last syncs");
-
             if (str2uint64_t(optarg, &options.count))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
                       optarg);
@@ -150,8 +133,7 @@ main(int argc, char *argv[])
         error(EXIT_FAILURE, EINVAL,
               "Failed to retrieve requested logs\n");
 
-    print_logs(logs_map,
-               options.ascending ? "First sync" : "Last sync");
+    print_logs(logs_map);
 
     return EXIT_SUCCESS;
 }

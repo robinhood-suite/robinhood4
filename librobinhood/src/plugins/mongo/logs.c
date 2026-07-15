@@ -98,9 +98,7 @@ get_logs(const struct mongo_backend *mongo, struct rbh_value_pair *pair,
         filter = BCON_NEW(str_type, "{", "$exists", "true", "}");
 
     opts = BCON_NEW("limit", BCON_INT64(options->count),
-                    "sort",
-                        "{", "_id", BCON_INT32(options->ascending ? 1 : -1),
-                    "}");
+                    "sort", "{", "_id", BCON_INT32(-1), "}");
 
     cursor = mongoc_collection_find_with_opts(mongo->log, filter, opts, NULL);
     if (!cursor) {
