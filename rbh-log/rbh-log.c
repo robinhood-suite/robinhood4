@@ -42,6 +42,7 @@ usage(void)
         "   -c, --config PATH       the configuration file to use.\n"
         "   -h, --help              show this message and exit\n"
         "   -l, --last N            print the last N logs\n"
+        "   -f, --fsevents N        print the last N logs of rbh-fsevents runs\n"
         "    --version              print RobinHood 4's version\n"
         "\n"
         "A robinhood URI is built as follows:\n"
@@ -53,8 +54,21 @@ usage(void)
 static void
 print_logs(const struct rbh_value_map *logs)
 {
-    for (size_t i = 0 ; i < logs->count ; i++)
-        print_sync_log(&logs->pairs[i].value->map, "Last syncs");
+    for (size_t i = 0 ; i < logs->count ; i++) {
+        enum rbh_log_type type = str2rbh_log_type(logs->pairs[i].key);
+
+        switch (type) {
+        case RBH_FSEVENTS_LOG:
+            print_fsevents_log(&logs->pairs[i].value->map);
+            break;
+        case RBH_SYNC_LOG:
+            print_sync_log(&logs->pairs[i].value->map);
+            break;
+        default:
+            error(EXIT_FAILURE, EINVAL, "Invalid log type retrieved: '%s'",
+                  logs->pairs[i].key);
+        }
+    }
 }
 
 int
@@ -65,6 +79,11 @@ main(int argc, char *argv[])
             .name = "config",
             .has_arg = required_argument,
             .val = 'c',
+        },
+        {
+            .name = "fsevents",
+            .has_arg = required_argument,
+            .val = 'f',
         },
         {
             .name = "help",
@@ -91,11 +110,18 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:hl:z",
+    while ((c = getopt_long(argc, argv, "c:f:hl:z",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
             /* already parsed */
+            break;
+        case 'f':
+            options.type = RBH_FSEVENTS_LOG;
+            if (str2uint64_t(optarg, &options.count))
+                error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
+                      optarg);
+
             break;
         case 'h':
             usage();
