@@ -95,13 +95,15 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:fhl:z", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "c:fhl:z",
+                            LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
             /* already parsed */
             break;
         case 'f':
             options.ascending = true;
+            options.type = RBH_SYNC_LOG;
             if (options.count)
                 error(EX_USAGE, ENOTSUP,
                       "cannot print logs for both first and last sync");
@@ -112,6 +114,7 @@ main(int argc, char *argv[])
             return 0;
         case 'l':
             options.ascending = false;
+            options.type = RBH_SYNC_LOG;
             if (options.count)
                 error(EX_USAGE, ENOTSUP,
                       "cannot print logs for both first and last syncs");
