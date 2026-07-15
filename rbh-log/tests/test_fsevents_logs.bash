@@ -51,21 +51,6 @@ check_log_result()
     fi
 }
 
-test_fsevents_1()
-{
-    touch blob
-    invoke_rbh-fsevents
-
-    local output=$(rbh_log "rbh:$db:$testdb" --fsevents 1)
-    local n_lines=$(echo "$output" | wc -l)
-
-    if ((n_lines != 5)); then
-        error "There should be 5 lines about fsevents (4 for content, 1 for header), got '$output'"
-    fi
-
-    check_log_result "$output"
-}
-
 test_N_logs()
 {
     local requested=$1
@@ -81,15 +66,20 @@ test_N_logs()
 
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 5 * $expected)); then
-        error "There should be 5 * 3 lines about fsevents (4 for content, 1 for header, time $expected logs), got '$output'"
+    if ((n_lines != 6 * $expected)); then
+        error "There should be 6 * $expected lines about fsevents (4 for content, 2 for header/footer, time $expected logs), got '$output'"
     fi
 
     for i in $(seq 1 $expected); do
-        local one_log="$(echo "$output" | head -n 5)"
+        local one_log="$(echo "$output" | head -n 6)"
         check_log_result "$one_log"
-        output="$(echo "$output" | sed 1,5d)"
+        output="$(echo "$output" | sed 1,6d)"
     done
+}
+
+test_fsevents_1()
+{
+    test_N_logs 1 1
 }
 
 test_fsevents_N()
