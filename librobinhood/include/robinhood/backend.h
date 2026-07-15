@@ -296,7 +296,6 @@ rbh_log_type2str(enum rbh_log_type type)
 struct rbh_log_options {
     enum rbh_log_type type;
     size_t count;
-    bool ascending;
 };
 
 /**
