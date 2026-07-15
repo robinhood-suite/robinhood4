@@ -274,6 +274,21 @@ enum rbh_log_type {
     RBH_SYNC_LOG,
 };
 
+static inline const char *
+rbh_log_type2str(enum rbh_log_type type)
+{
+    switch (type) {
+    case RBH_ALL_LOG:
+        return "all";
+    case RBH_SYNC_LOG:
+        return "sync";
+    default:
+        return "invalid";
+    };
+
+   __builtin_unreachable();
+}
+
 /**
  * Determines which logs should be fetched from the backend, the amount and the
  * sorting order.
