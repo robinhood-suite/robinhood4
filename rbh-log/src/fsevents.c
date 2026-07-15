@@ -9,6 +9,7 @@
 
 #include "log.h"
 
+/* XXX: PLACEHOLDER FOR NOW
 enum log_value {
     COMMAND_LINE,
     DURATION,
@@ -60,16 +61,23 @@ static const struct formatted_log_value fsevents_log_value[] = {
                             .header = "Command used",
                             .print_log_value = print_value },
 };
-
+*/
 void
 print_fsevents_log(const struct rbh_value_map *log)
 {
     for (size_t i = 0 ; i < log->count ; i++) {
         const struct rbh_value_pair *pair = &log->pairs[i];
-        struct formatted_log_value log_value;
+        enum common_log_value common_log_value;
+        //struct formatted_log_value log_value;
 
-        log_value = fsevents_log_value[key2log_value(pair->key)];
+        common_log_value = key2common_log_value(pair->key);
+        if (common_log_value != CLV_UNKNOWN) {
+            print_common_log_info(pair->value, common_log_value);
+            continue;
+        }
 
-        log_value.print_log_value(pair->value, log_value.header);
+        //log_value = fsevents_log_value[key2log_value(pair->key)];
+
+        //log_value.print_log_value(pair->value, log_value.header);
     }
 }
