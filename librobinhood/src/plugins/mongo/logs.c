@@ -72,9 +72,10 @@ skip_insert:
 }
 
 static int
-get_collection_sync(const struct mongo_backend *mongo, char *field_to_find,
-                    struct rbh_value_pair *pair, size_t *count)
+get_logs(const struct mongo_backend *mongo, struct rbh_value_pair *pair,
+         struct rbh_log_options *options)
 {
+    const char *str_type = rbh_log_type2str(options->type);
     mongoc_cursor_t *cursor;
     struct rbh_value value;
     bson_t *opts = NULL;
@@ -89,16 +90,17 @@ get_collection_sync(const struct mongo_backend *mongo, char *field_to_find,
     int rc = 0;
 
     buffer = _buffer;
-    filter = bson_new();
     bufsize = sizeof(_buffer);
 
-    if (strcmp(field_to_find, "first_sync") == 0)
-        opts = BCON_NEW("limit", BCON_INT64(*count),
-                        "sort", "{", "_id", BCON_INT32(1), "}");
+    if (options->type == RBH_ALL_LOG)
+        filter = bson_new();
+    else
+        filter = BCON_NEW(str_type, "{", "$exists", "true", "}");
 
-    if (strcmp(field_to_find, "last_sync") == 0)
-        opts = BCON_NEW("limit", BCON_INT64(*count),
-                        "sort", "{", "_id", BCON_INT32(-1), "}");
+    opts = BCON_NEW("limit", BCON_INT64(options->count),
+                    "sort",
+                        "{", "_id", BCON_INT32(options->ascending ? 1 : -1),
+                    "}");
 
     cursor = mongoc_collection_find_with_opts(mongo->log, filter, opts, NULL);
     if (!cursor) {
@@ -106,7 +108,7 @@ get_collection_sync(const struct mongo_backend *mongo, char *field_to_find,
         goto out;
     }
 
-    for (index = 0; index < *count; ++index) {
+    for (index = 0; index < options->count; ++index) {
         if (!mongoc_cursor_more(cursor)) {
             if (mongoc_cursor_error(cursor, &error)) {
                 rc = 1;
@@ -135,19 +137,19 @@ get_collection_sync(const struct mongo_backend *mongo, char *field_to_find,
         while (bson_iter_next(&iter)) {
             const char *key = bson_iter_key(&iter);
 
-            if (strcmp(key, "sync") == 0) {
+            if (strcmp(key, str_type) == 0) {
                 if (!bson_iter_rbh_value(&iter, &value, &buffer, &bufsize)) {
                     rc = 1;
                     goto out;
                 }
 
-                pair[index].key = field_to_find;
+                pair[index].key = str_type;
                 pair[index].value = value_clone(&value);
             }
         }
     }
 
-    *count = index;
+    options->count = index;
 
 out:
     if (cursor)
@@ -182,9 +184,8 @@ mongo_backend_get_logs(void *backend, struct rbh_log_options options)
     struct mongo_backend *mongo = backend;
     struct rbh_value_map *map_value;
     struct rbh_value_pair *pairs;
-    size_t count;
 
-    count = (options.count > INT64_MAX ? INT64_MAX : options.count);
+    options.count = (options.count > INT64_MAX ? INT64_MAX : options.count);
 
     if (logs_sstack == NULL)
         logs_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
@@ -194,19 +195,14 @@ mongo_backend_get_logs(void *backend, struct rbh_log_options options)
      * pairs allocated than necessary. But since this is a one-shot command, no
      * need to care for that.
      */
-    pairs = RBH_SSTACK_PUSH(logs_sstack, NULL, count * sizeof(*pairs));
+    pairs = RBH_SSTACK_PUSH(logs_sstack, NULL, options.count * sizeof(*pairs));
     map_value = RBH_SSTACK_PUSH(logs_sstack, NULL, sizeof(*map_value));
 
-    if (options.ascending) {
-        if (get_collection_sync(mongo, "first_sync", pairs, &count))
-            goto out;
-    } else {
-        if (get_collection_sync(mongo, "last_sync", pairs, &count))
-            goto out;
-    }
+    if (get_logs(mongo, pairs, &options))
+        goto out;
 
     map_value->pairs = pairs;
-    map_value->count = count;
+    map_value->count = options.count;
 
     return map_value;
 
