@@ -25,6 +25,7 @@ library_dirs = [
     'posix/enrichers/retention',
     'posix/enrichers/sparse',
     'posix/enrichers/selinux',
+    'posix/enrichers/acl',
     'posix/iterators/mfu',
     's3',
     'sqlite',
