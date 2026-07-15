@@ -109,7 +109,7 @@ mfu_iter_skip_or_fail(struct mfu_iterator *iter, bool skip_error,
         return false;
     }
 
-    iter->metadata->skipped_entries++;
+    iter->metadata->sync_md.skipped_entries++;
     fprintf(stderr, "Synchronization of '%s' skipped\n", path);
     iter->current++;
     current_children--;
@@ -249,7 +249,7 @@ mfu_iter_next(void *_iter)
         seen_first_time = true;
 
         if (iter->metadata)
-            iter->metadata->converted_entries++;
+            iter->metadata->sync_md.converted_entries++;
 
         return fsentry;
     }

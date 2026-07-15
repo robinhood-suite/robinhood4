@@ -84,10 +84,85 @@ static bool skip_error = true;
  |                                   sync()                                   |
  *----------------------------------------------------------------------------*/
 
-static void
-insert_sync_log(struct rbh_backend *backend, struct rbh_value_map *map)
+struct rbh_value_map *
+sync_metadata_value_map(struct rbh_metadata *metadata)
 {
-    if (!rbh_backend_insert_log(backend, "sync", map))
+    struct rbh_value_map *value_map;
+    struct rbh_value_pair *pairs;
+    //struct rbh_raw_uri *raw_uri;
+    struct rbh_value *values;
+    //struct rbh_uri *uri;
+    //char abs_path[4096];
+    int count = 8;
+
+    if (metadata_sstack == NULL)
+        metadata_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
+                                         (sizeof(struct rbh_value_map *)));
+
+    value_map = RBH_SSTACK_PUSH(metadata_sstack, NULL, sizeof(*value_map));
+    values = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*values));
+    pairs = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*pairs));
+
+    rbh_set_common_metadata_pairs(&metadata->common_md, values, pairs);
+
+/*
+    raw_uri = rbh_raw_uri_from_string(from);
+    if (raw_uri == NULL)
+        error(EXIT_FAILURE, errno, "Sync map: cannot detect backend uri");
+
+    uri = rbh_uri_from_raw_uri(raw_uri);
+    if (uri == NULL)
+        error(EXIT_FAILURE, errno, "Sync map: cannot detect given backend");
+    free(raw_uri);
+
+    if (uri->fsname[0] != '/') {
+        if (!realpath(uri->fsname, abs_path)) {
+            strncpy(abs_path, from, sizeof(abs_path) - 2);
+        }
+    } else {
+        if (uri->fsname)
+            strncpy(abs_path, uri->fsname, sizeof(abs_path) - 2);
+        else
+            strncpy(abs_path, from, sizeof(abs_path) - 2);
+    }
+
+    free(uri);
+    abs_path[sizeof(abs_path) - 1] = '\0';
+*/
+    pairs[4].key = "source_mountpoint";
+    values[4].type = RBH_VT_STRING;
+    values[4].string = metadata->sync_md.source_mountpoint;
+   // RBH_SSTACK_PUSH(metadata_sstack, abs_path,
+     //                                  strlen(abs_path) + 1);
+    pairs[4].value = &values[4];
+
+    pairs[5].key = "converted_entries";
+    values[5].type = RBH_VT_INT64;
+    values[5].int64 = (int64_t) metadata->sync_md.converted_entries;
+    pairs[5].value = &values[5];
+
+    pairs[6].key = "skipped_entries";
+    values[6].type = RBH_VT_INT64;
+    values[6].int64 = (int64_t) metadata->sync_md.skipped_entries;
+    pairs[6].value = &values[6];
+
+    pairs[7].key = "total_entries";
+    values[7].type = RBH_VT_INT64;
+    values[7].int64 = (int64_t) (metadata->sync_md.converted_entries +
+                                 metadata->sync_md.skipped_entries);
+    pairs[7].value = &values[7];
+
+    value_map->pairs = pairs;
+    value_map->count = count;
+
+    return value_map;
+}
+
+static void
+insert_sync_log(struct rbh_backend *backend, struct rbh_metadata *metadata)
+{
+    if (!rbh_backend_insert_log(backend, "sync",
+                                sync_metadata_value_map(metadata)))
         return;
 
     switch (errno) {
@@ -509,8 +584,9 @@ iter_convert(struct rbh_iterator *fsentries,
     return &convert->iterator;
 }
 
-static struct rbh_metadata *
-sync(const struct rbh_filter_projection *projection)
+static void
+sync(const struct rbh_filter_projection *projection,
+     struct rbh_metadata *metadata)
 {
     const struct rbh_filter_options OPTIONS = {
         .skip_error = skip_error,
@@ -525,13 +601,10 @@ sync(const struct rbh_filter_projection *projection)
     };
     struct rbh_mut_iterator *_fsentries;
     struct rbh_iterator *fsentries;
-    struct rbh_metadata *metadata;
     struct rbh_iterator *fsevents;
 
-    metadata = xmalloc(sizeof(*metadata));
-
-    metadata->converted_entries = 0;
-    metadata->skipped_entries = 0;
+    metadata->sync_md.converted_entries = 0;
+    metadata->sync_md.skipped_entries = 0;
 
     if (one) {
         struct rbh_fsentry *root;
@@ -543,7 +616,7 @@ sync(const struct rbh_filter_projection *projection)
         _fsentries = mut_iter_one(root);
         if (_fsentries == NULL)
             error(EXIT_FAILURE, errno, "rbh_mut_array_iterator");
-        metadata->converted_entries++;
+        metadata->sync_md.converted_entries++;
     } else {
         /* "Dump" `from' */
         _fsentries = rbh_backend_filter(from, NULL, &OPTIONS, &OUTPUT,
@@ -591,15 +664,13 @@ sync(const struct rbh_filter_projection *projection)
     switch (errno) {
     case ENODATA:
         rbh_backend_update(to, NULL);
-        return metadata;
+        break;
     case RBH_BACKEND_ERROR:
         error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
         __builtin_unreachable();
     default:
         error(EXIT_FAILURE, errno, "while iterating over SOURCE's entries");
     }
-
-    return metadata;
 }
 
 /*----------------------------------------------------------------------------*
@@ -731,100 +802,6 @@ usage(void)
     return printf(message, program_invocation_short_name);
 }
 
-struct rbh_value_map *
-sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
-                        struct rbh_metadata *metadata, char *command_line)
-{
-    struct rbh_value_map *value_map;
-    struct rbh_value_pair *pairs;
-    struct rbh_raw_uri *raw_uri;
-    struct rbh_value *values;
-    double sync_duration;
-    struct rbh_uri *uri;
-    char abs_path[4096];
-    int count = 8;
-
-    sync_duration = difftime(sync_end, sync_debut);
-
-    if (metadata_sstack == NULL)
-        metadata_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
-                                         (sizeof(struct rbh_value_map *)));
-
-    value_map = RBH_SSTACK_PUSH(metadata_sstack, NULL, sizeof(*value_map));
-    values = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*values));
-    pairs = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*pairs));
-
-    pairs[0].key = "start_time";
-    values[0].type = RBH_VT_INT64;
-    values[0].int64 = (int64_t)sync_debut;
-    pairs[0].value = &values[0];
-
-    pairs[1].key = "duration";
-    values[1].type = RBH_VT_INT64;
-    values[1].int64 = (int64_t)sync_duration;
-    pairs[1].value = &values[1];
-
-    pairs[2].key = "end_time";
-    values[2].type = RBH_VT_INT64;
-    values[2].int64 = (int64_t)sync_end;
-    pairs[2].value = &values[2];
-
-    raw_uri = rbh_raw_uri_from_string(from);
-    if (raw_uri == NULL)
-        error(EXIT_FAILURE, errno, "Sync map: cannot detect backend uri");
-
-    uri = rbh_uri_from_raw_uri(raw_uri);
-    if (uri == NULL)
-        error(EXIT_FAILURE, errno, "Sync map: cannot detect given backend");
-    free(raw_uri);
-
-    if (uri->fsname[0] != '/') {
-        if (!realpath(uri->fsname, abs_path)) {
-            strncpy(abs_path, from, sizeof(abs_path) - 2);
-        }
-    } else {
-        if (uri->fsname)
-            strncpy(abs_path, uri->fsname, sizeof(abs_path) - 2);
-        else
-            strncpy(abs_path, from, sizeof(abs_path) - 2);
-    }
-
-    free(uri);
-    abs_path[sizeof(abs_path) - 1] = '\0';
-
-    pairs[3].key = "source_mountpoint";
-    values[3].type = RBH_VT_STRING;
-    values[3].string = RBH_SSTACK_PUSH(metadata_sstack, abs_path,
-                                       strlen(abs_path) + 1);
-    pairs[3].value = &values[3];
-
-    pairs[4].key = "command_line";
-    values[4].type = RBH_VT_STRING;
-    values[4].string = command_line;
-    pairs[4].value = &values[4];
-
-    pairs[5].key = "converted_entries";
-    values[5].type = RBH_VT_INT64;
-    values[5].int64 = (int64_t)metadata->converted_entries;
-    pairs[5].value = &values[5];
-
-    pairs[6].key = "skipped_entries";
-    values[6].type = RBH_VT_INT64;
-    values[6].int64 = (int64_t)metadata->skipped_entries;
-    pairs[6].value = &values[6];
-
-    pairs[7].key = "total_entries";
-    values[7].type = RBH_VT_INT64;
-    values[7].int64 = (int64_t)(metadata->converted_entries +
-                                metadata->skipped_entries);
-    pairs[7].value = &values[7];
-
-    value_map->pairs = pairs;
-    value_map->count = count;
-
-    return value_map;
-}
-
 char *
 get_command_line(int argc, char *argv[]) {
     size_t total_len = 0;
@@ -891,17 +868,12 @@ main(int argc, char *argv[])
         .fsentry_mask = RBH_FP_ALL,
         .statx_mask = RBH_STATX_ALL & ~RBH_STATX_MNT_ID,
     };
-    struct rbh_value_map *metadata_map;
-    struct rbh_metadata *metadata;
-    char mountpoint[PATH_MAX];
-    char *command_line;
+    struct rbh_metadata metadata = { 0 };
     char *cmd_backend;
-    time_t sync_debut;
-    time_t sync_end;
     int rc;
     char c;
 
-    command_line = get_command_line(argc, argv);
+    metadata.common_md.command_line = get_command_line(argc, argv);
 
     rc = rbh_config_from_args(argc - 1, argv + 1);
     if (rc)
@@ -963,27 +935,27 @@ main(int argc, char *argv[])
     if (argc > 2)
         error(EX_USAGE, 0, "unexpected argument: %s", argv[2]);
 
+    metadata.sync_md.source_mountpoint = xmalloc(PATH_MAX);
+
     /* Parse SOURCE */
-    from = get_source_backend_from_uri(argv[0], true, (char *) mountpoint,
+    from = get_source_backend_from_uri(argv[0], true,
+                                       metadata.sync_md.source_mountpoint,
                                        &cmd_backend);
     /* Parse DEST */
     to = rbh_backend_from_uri(argv[1], false);
 
     sync_source(cmd_backend);
     free(cmd_backend);
-    sync_mountpoint(mountpoint);
+    sync_mountpoint(metadata.sync_md.source_mountpoint);
 
-    sync_debut = time(NULL);
-    metadata = sync(&projection);
-    sync_end = time(NULL);
+    metadata.common_md.start_time = time(NULL);
+    sync(&projection, &metadata);
+    metadata.common_md.end_time = time(NULL);
 
-    metadata_map = sync_metadata_value_map(sync_debut, sync_end, argv[0],
-                                           metadata, command_line);
+    insert_sync_log(to, &metadata);
 
-    insert_sync_log(to, metadata_map);
-
-    free(metadata);
-    free(command_line);
+    free(metadata.sync_md.source_mountpoint);
+    free(metadata.common_md.command_line);
     rbh_config_free();
 
     return EXIT_SUCCESS;
