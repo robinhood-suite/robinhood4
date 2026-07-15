@@ -15,12 +15,14 @@
 #include <limits.h>
 #include <sysexits.h>
 
-#include <robinhood.h>
-#include <robinhood/value.h>
-#include <robinhood/config.h>
-#include <robinhood/utils.h>
 #include <robinhood/alias.h>
+#include <robinhood/config.h>
+#include <robinhood/itertools.h>
+#include <robinhood/log.h>
+#include <robinhood/plugins/backend.h>
 #include <robinhood/projection.h>
+#include <robinhood/utils.h>
+#include <robinhood/value.h>
 
 #ifndef RBH_ITER_CHUNK_SIZE
 # define RBH_ITER_CHUNK_SIZE (1 << 12)
