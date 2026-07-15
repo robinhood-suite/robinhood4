@@ -94,8 +94,6 @@ static const struct formatted_log_value sync_log_value[] = {
 void
 print_sync_log(const struct rbh_value_map *log)
 {
-    printf("Last syncs:\n");
-
     for (size_t i = 0 ; i < log->count ; i++) {
         const struct rbh_value_pair *pair = &log->pairs[i];
         struct formatted_log_value log_value;

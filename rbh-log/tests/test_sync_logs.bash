@@ -78,20 +78,6 @@ check_log_result()
     fi
 }
 
-test_last_1()
-{
-    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
-
-    local output=$(rbh_log "rbh:$db:$testdb" --last 1)
-    local n_lines=$(echo "$output" | wc -l)
-
-    if ((n_lines != 9)); then
-        error "There should be 9 lines about posix sync (8 for content, 1 for header), got '$output'"
-    fi
-
-    check_log_result "$output"
-}
-
 test_N_logs()
 {
     local requested=$1
@@ -103,18 +89,22 @@ test_N_logs()
     done
 
     local output=$(rbh_log "rbh:$db:$testdb" --last $requested)
-
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 9 * $expected)); then
-        error "There should be 9 * 3 lines about posix sync (8 for content, 1 for header, time $expected logs), got '$output'"
+    if ((n_lines != 10 * $expected)); then
+        error "There should be 10 * $expected lines about posix sync (8 for content, 2 for header/footer, time $expected logs), got '$output'"
     fi
 
     for i in $(seq 1 $expected); do
-        local one_log="$(echo "$output" | head -n 9)"
+        local one_log="$(echo "$output" | head -n 10)"
         check_log_result "$one_log"
-        output="$(echo "$output" | sed 1,9d)"
+        output="$(echo "$output" | sed 1,10d)"
     done
+}
+
+test_last_1()
+{
+    test_N_logs 1 1
 }
 
 test_last_N()

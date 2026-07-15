@@ -64,8 +64,6 @@ static const struct formatted_log_value fsevents_log_value[] = {
 void
 print_fsevents_log(const struct rbh_value_map *log)
 {
-    printf("Last fsevents:\n");
-
     for (size_t i = 0 ; i < log->count ; i++) {
         const struct rbh_value_pair *pair = &log->pairs[i];
         struct formatted_log_value log_value;
