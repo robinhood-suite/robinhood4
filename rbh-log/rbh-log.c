@@ -57,6 +57,7 @@ print_logs(const struct rbh_value_map *logs)
     for (size_t i = 0 ; i < logs->count ; i++) {
         enum rbh_log_type type = str2rbh_log_type(logs->pairs[i].key);
 
+        printf("{ rbh-%s\n", logs->pairs[i].key);
         switch (type) {
         case RBH_FSEVENTS_LOG:
             print_fsevents_log(&logs->pairs[i].value->map);
@@ -68,6 +69,7 @@ print_logs(const struct rbh_value_map *logs)
             error(EXIT_FAILURE, EINVAL, "Invalid log type retrieved: '%s'",
                   logs->pairs[i].key);
         }
+        printf("}\n");
     }
 }
 
