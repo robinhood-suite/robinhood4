@@ -24,10 +24,18 @@ struct formatted_log_value {
  *
  * @param log       the map whose content corresponds to a sync log and should
  *                  be printed
- * @param header    a string to print as header for the log
  */
 void
-print_sync_log(const struct rbh_value_map *log, const char *header);
+print_sync_log(const struct rbh_value_map *log);
+
+/**
+ * Print a fsevents log.
+ *
+ * @param log       the map whose content corresponds to a fsevents log and
+ *                  should be printed
+ */
+void
+print_fsevents_log(const struct rbh_value_map *log);
 
 /**
  * All following functions are callback for the `print_log_value` field in the
