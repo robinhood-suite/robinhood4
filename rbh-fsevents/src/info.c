@@ -52,7 +52,7 @@ insert_backend_source(char *cmd_backend,
 
 int
 insert_mountpoint(struct enrich_iter_builder *enrich_builder,
-                  struct sink *sink)
+                  struct sink *sink, const char **enrich_mountpoint)
 {
     struct rbh_value_map mountpoint_map;
     struct rbh_value mountpoint;
@@ -67,8 +67,10 @@ insert_mountpoint(struct enrich_iter_builder *enrich_builder,
     if (len > 1 && clean_path[len - 1] == '/')
         clean_path[len - 1] = '\0';
 
+    *enrich_mountpoint = xstrdup(clean_path);
+
     mountpoint.type = RBH_VT_STRING;
-    mountpoint.string = xstrdup(clean_path);
+    mountpoint.string = *enrich_mountpoint;
 
     pair.key = "mountpoint";
     pair.value = &mountpoint;
@@ -78,10 +80,8 @@ insert_mountpoint(struct enrich_iter_builder *enrich_builder,
 
     if (sink_insert_info(sink, &mountpoint_map)) {
         fprintf(stderr, "Failed to set the mountpoint\n");
-        free((char *)mountpoint.string);
         return -1;
     }
 
-    free((char *)mountpoint.string);
     return 0;
 }

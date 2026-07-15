@@ -147,11 +147,10 @@ static struct sink **sink;
 
 static struct source *
 source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog,
-                int64_t start_index)
+                int64_t start_index, const char **name)
 {
     struct source *source = NULL;
     struct rbh_raw_uri *raw_uri;
-    char *name = NULL;
     char *username;
     char *colon;
 
@@ -170,7 +169,7 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog,
     if (colon) {
         /* colon = backend_type:fsname */
         *colon = '\0';
-        name = colon + 1;
+        *name = colon + 1;
     }
 
     if (raw_uri->query)
@@ -180,10 +179,10 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog,
 
     (void) username;
     if (strcmp(raw_uri->path, "file") == 0) {
-        source = source_from_file_uri(name, source_from_file);
+        source = source_from_file_uri(*name, source_from_file);
     } else if (strcmp(raw_uri->path, "lustre") == 0) {
 #ifdef HAVE_LUSTRE
-        source = source_from_lustre_changelog(name, username, dump_file,
+        source = source_from_lustre_changelog(*name, username, dump_file,
                                               max_changelog, start_index,
                                               sink[0]);
 #else
@@ -204,14 +203,17 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog,
 
 static struct source *
 source_new(const char *arg, const char *dump_file, uint64_t max_changelog,
-           int64_t start_index)
+           int64_t start_index, const char **source_read)
 {
-    if (strcmp(arg, "-") == 0)
+    if (strcmp(arg, "-") == 0) {
+        *source_read = "stdin";
         /* SOURCE is '-' (stdin) */
         return source_from_file(stdin);
+    }
 
     if (rbh_is_uri(arg))
-        return source_from_uri(arg, dump_file, max_changelog, start_index);
+        return source_from_uri(arg, dump_file, max_changelog, start_index,
+                               source_read);
 
     error(EX_USAGE, EINVAL, "%s", arg);
     __builtin_unreachable();
@@ -799,6 +801,7 @@ main(int argc, char *argv[])
         },
         {}
     };
+    struct rbh_fsevents_metadata fsevents_md = { 0 };
     struct deduplicator_options dedup_opts = {
         .batch_size = DEFAULT_BATCH_SIZE,
     };
@@ -863,6 +866,8 @@ main(int argc, char *argv[])
         case 'w':
             if (str2uint64_t(optarg, &nb_workers))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
+
+            fsevents_md.worker_count = nb_workers;
             break;
         case 'r':
             /* Ignore errors on close */
@@ -901,7 +906,8 @@ main(int argc, char *argv[])
     for (int i = 0; i < nb_workers; i++)
         sink[i] = sink_new(argv[optind]);
 
-    source = source_new(source_uri, dump_file, max_changelog, start_index);
+    source = source_new(source_uri, dump_file, max_changelog, start_index,
+                        &fsevents_md.source_read);
 
     if (enrich_builder) {
         if (insert_backend_source(cmd_backend, enrich_builder, sink[0]) &&
@@ -910,7 +916,8 @@ main(int argc, char *argv[])
                   "Failed to insert source backends in destination");
 
         free(cmd_backend);
-        if (insert_mountpoint(enrich_builder, sink[0]) && errno != ENOTSUP)
+        if (insert_mountpoint(enrich_builder, sink[0],
+                              &fsevents_md.enrich_mountpoint) && errno != ENOTSUP)
             error(EX_USAGE, EINVAL,
                   "Failed to insert mountpoint in destination\n");
     }
@@ -920,8 +927,10 @@ main(int argc, char *argv[])
               &dedup_opts);
     end_time = time(NULL);
 
-    insert_fsevents_log(start_time, end_time, command_line, sink[0]);
+    insert_fsevents_log(start_time, end_time, command_line, &fsevents_md,
+                        sink[0]);
 
+    free((char *)fsevents_md.enrich_mountpoint);
     rbh_config_free();
 
     return rc == 0 ? EXIT_SUCCESS : EXIT_FAILURE;

@@ -24,13 +24,14 @@ destroy_metadata_sstack(void)
 
 static struct rbh_value_map *
 create_metadata_value_map(time_t start_time, time_t end_time,
-                          char *command_line)
+                          char *command_line,
+                          struct rbh_fsevents_metadata *fsevents_md)
 {
     struct rbh_value_map *value_map;
     struct rbh_value_pair *pairs;
     struct rbh_value *values;
     double duration;
-    int count = 4;
+    int count = 7;
 
     duration = difftime(end_time, start_time);
 
@@ -62,18 +63,35 @@ create_metadata_value_map(time_t start_time, time_t end_time,
     values[3].string = command_line;
     pairs[3].value = &values[3];
 
+    pairs[4].key = "source_read";
+    values[4].type = RBH_VT_STRING;
+    values[4].string = fsevents_md->source_read;
+    pairs[4].value = &values[4];
+
+    pairs[5].key = "enrich_mountpoint";
+    values[5].type = RBH_VT_STRING;
+    values[5].string = fsevents_md->enrich_mountpoint;
+    pairs[5].value = &values[5];
+
+    pairs[6].key = "worker_count";
+    values[6].type = RBH_VT_UINT64;
+    values[6].uint64 = fsevents_md->worker_count;
+    pairs[6].value = &values[6];
+
     value_map->pairs = pairs;
-    value_map->count = 4;
+    value_map->count = count;
 
     return value_map;
 }
 
 void
 insert_fsevents_log(time_t start_time, time_t end_time, char *command_line,
+                    struct rbh_fsevents_metadata *fsevents_md,
                     struct sink *sink)
 {
     struct rbh_value_map *map = create_metadata_value_map(start_time, end_time,
-                                                          command_line);
+                                                          command_line,
+                                                          fsevents_md);
 
     if (!sink_insert_log(sink, map))
         return;
