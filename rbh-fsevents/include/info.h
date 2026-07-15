@@ -29,13 +29,15 @@ insert_backend_source(char *cmd_backend,
 /**
  * Insert the enrichment mountpoint as information in the sink.
  *
- * @param enrich_builder   the enricher from which to fetch the mountpoint
- * @param sink             the sink to push the information in
+ * @param enrich_builder     the enricher from which to fetch the mountpoint
+ * @param sink               the sink to push the information in
+ * @param enrich_mountpoint  where to store the enrich mountpoint, necessary
+ *                           for logs
  *
  * @return                 0 on success, -1 on error
  */
 int
 insert_mountpoint(struct enrich_iter_builder *enrich_builder,
-                  struct sink *sink);
+                  struct sink *sink, const char **enrich_mountpoint);
 
 #endif
