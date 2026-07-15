@@ -22,6 +22,30 @@
       },
       "revId": "90387e99f1790d6a4469c14bae3c56a56b28845c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86f38c7e_c0722228",
+        "filename": "rbh-log/tests/test_sync_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-15T11:40:02Z",
+      "side": 1,
+      "message": "It\u0027s just typo, should be \"42invalid\", but since I forgot to add the test as part of the suite, I didn\u0027t detect it with the initial push... But it works like you say, if there is only 3 logs and you ask for 20, you\u0027ll just get 3 logs and no error.",
+      "parentUuid": "82dbec82_c15a3232",
+      "range": {
+        "startLine": 30,
+        "startChar": 8,
+        "endLine": 30,
+        "endChar": 62
+      },
+      "revId": "90387e99f1790d6a4469c14bae3c56a56b28845c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
