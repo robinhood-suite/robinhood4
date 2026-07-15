@@ -17,9 +17,6 @@ test_invalid()
 {
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_log "rbh:$db:$testdb" --first-sync --last 1 &&
-        error "log with both first and last sync should have failed"
-
     rbh_log "rbh:$db:$testdb" --last blob &&
         error "log with invalid last count should have failed"
 
@@ -34,13 +31,13 @@ check_log_result()
     local output="$1"
 
     echo "$output" | grep "Start" > /dev/null ||
-        error "sync_debut should have been retrieved"
+        error "start_time should have been retrieved"
 
     echo "$output" | grep "Duration" > /dev/null ||
-        error "sync_duration should have been retrieved"
+        error "duration should have been retrieved"
 
     echo "$output" | grep "End" > /dev/null ||
-        error "sync_end should have been retrieved"
+        error "end_time should have been retrieved"
 
     local mountpoint=$(echo "$output" | grep "Mountpoint used" |
                        cut -d':' -f2- | xargs)
@@ -79,20 +76,6 @@ check_log_result()
         error "The sum of converted and skipped entries does not match
                total_entries_seen"
     fi
-}
-
-test_first_sync()
-{
-    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
-
-    local output=$(rbh_log "rbh:$db:$testdb" --first-sync)
-    local n_lines=$(echo "$output" | wc -l)
-
-    if ((n_lines != 9)); then
-        error "There should be 9 lines about posix sync (8 for content, 1 for header), got '$output'"
-    fi
-
-    check_log_result "$output"
 }
 
 test_last_1()
@@ -148,8 +131,7 @@ test_more_than_N()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid test_first_sync test_last_1 test_last_N
-                  test_more_than_N)
+declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
