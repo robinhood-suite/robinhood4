@@ -203,6 +203,26 @@ if get_option('selinux').enabled()
 endif
 
 
+# ACL POSIX extension plugin
+librbh_acl_conf = configuration_data()
+
+librbh_acl_conf.set('RBH_ACL_PLUGIN_MAJOR', 0)
+librbh_acl_conf.set('RBH_ACL_PLUGIN_MINOR', 0)
+librbh_acl_conf.set('RBH_ACL_PLUGIN_RELEASE', 0)
+
+librbh_acl_version = '@0@.@1@.@2@'.format(
+    librbh_acl_conf.get('RBH_ACL_PLUGIN_MAJOR'),
+    librbh_acl_conf.get('RBH_ACL_PLUGIN_MINOR'),
+    librbh_acl_conf.get('RBH_ACL_PLUGIN_RELEASE')
+)
+
+librbh_acl_h = configure_file(input: 'acl.h.in',
+                              output: 'acl.h',
+                              configuration: librbh_acl_conf)
+
+install_headers(librbh_acl_h, subdir: 'robinhood/backends')
+
+
 # Posix MPIFileUtils extension plugin
 
 if get_option('mfu').enabled()
