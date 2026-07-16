@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01d9f1ad_e7124862",
+        "filename": "rbh-log/include/log.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-16T13:12:03Z",
+      "side": 1,
+      "message": "typo: back to the future",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 2
+      },
+      "revId": "d14f1ab66e09a86572cf363238706eaf1283201a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "832a487b_e95d0747",
+        "filename": "rbh-log/src/sync.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-16T13:12:03Z",
+      "side": 1,
+      "message": "comment: used later?",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 23
+      },
+      "revId": "d14f1ab66e09a86572cf363238706eaf1283201a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
