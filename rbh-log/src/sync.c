@@ -44,17 +44,13 @@ key2sync_log_value(const char *key)
 }
 
 static const struct formatted_log_value sync_formatted_log_value[] = {
-    [SOURCE_MOUNTPOINT] = { .key = "source_mountpoint",
-                            .header = "Mountpoint used",
+    [SOURCE_MOUNTPOINT] = { .header = "Mountpoint used",
                             .print_log_value = print_value },
-    [CONVERTED_ENTRIES] = { .key = "converted_entries",
-                            .header = "Amount of entries converted",
+    [CONVERTED_ENTRIES] = { .header = "Amount of entries converted",
                             .print_log_value = print_value },
-    [SKIPPED_ENTRIES] =   { .key = "skipped_entries",
-                            .header = "Amount of entries skipped",
+    [SKIPPED_ENTRIES] =   { .header = "Amount of entries skipped",
                             .print_log_value = print_value },
-    [TOTAL_ENTRIES] =     { .key = "total_entries",
-                            .header = "Total entries seen by the sync",
+    [TOTAL_ENTRIES] =     { .header = "Total entries seen by the sync",
                             .print_log_value = print_value },
 };
 

@@ -79,17 +79,13 @@ key2common_log_value(const char *key)
 }
 
 static const struct formatted_log_value common_formatted_log_value[] = {
-    [CLV_START_TIME] =    { .key = "start_time",
-                            .header = "Start of the command",
+    [CLV_START_TIME] =    { .header = "Start of the command",
                             .print_log_value = print_time_from_timestamp },
-    [CLV_DURATION] =      { .key = "duration",
-                            .header = "Duration of the command",
+    [CLV_DURATION] =      { .header = "Duration of the command",
                             .print_log_value = print_difftime },
-    [CLV_END_TIME] =      { .key = "end_time",
-                            .header = "End of the command",
+    [CLV_END_TIME] =      { .header = "End of the command",
                             .print_log_value = print_time_from_timestamp },
-    [CLV_COMMAND_LINE] =  { .key = "command_line",
-                            .header = "Command used",
+    [CLV_COMMAND_LINE] =  { .header = "Command used",
                             .print_log_value = print_value },
 };
 

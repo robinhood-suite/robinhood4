@@ -14,7 +14,6 @@
 #define WIDTH 32
 
 struct formatted_log_value {
-    const char *key;
     const char *header;
     void (*print_log_value)(const struct rbh_value *, const char *);
 };
