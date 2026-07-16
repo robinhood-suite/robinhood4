@@ -23,17 +23,12 @@ destroy_metadata_sstack(void)
 }
 
 static struct rbh_value_map *
-create_metadata_value_map(time_t start_time, time_t end_time,
-                          char *command_line,
-                          struct rbh_fsevents_metadata *fsevents_md)
+fsevents_metadata_value_map(struct rbh_metadata *metadata)
 {
     struct rbh_value_map *value_map;
     struct rbh_value_pair *pairs;
     struct rbh_value *values;
-    double duration;
     int count = 7;
-
-    duration = difftime(end_time, start_time);
 
     if (metadata_sstack == NULL)
         metadata_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
@@ -43,39 +38,21 @@ create_metadata_value_map(time_t start_time, time_t end_time,
     values = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*values));
     pairs = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*pairs));
 
-    pairs[0].key = "start_time";
-    values[0].type = RBH_VT_INT64;
-    values[0].int64 = (int64_t) start_time;
-    pairs[0].value = &values[0];
-
-    pairs[1].key = "duration";
-    values[1].type = RBH_VT_INT64;
-    values[1].int64 = (int64_t) duration;
-    pairs[1].value = &values[1];
-
-    pairs[2].key = "end_time";
-    values[2].type = RBH_VT_INT64;
-    values[2].int64 = (int64_t) end_time;
-    pairs[2].value = &values[2];
-
-    pairs[3].key = "command_line";
-    values[3].type = RBH_VT_STRING;
-    values[3].string = command_line;
-    pairs[3].value = &values[3];
+    rbh_set_common_metadata_pairs(&metadata->common_md, values, pairs);
 
     pairs[4].key = "source_read";
     values[4].type = RBH_VT_STRING;
-    values[4].string = fsevents_md->source_read;
+    values[4].string = metadata->fsevents_md.source_read;
     pairs[4].value = &values[4];
 
     pairs[5].key = "enrich_mountpoint";
     values[5].type = RBH_VT_STRING;
-    values[5].string = fsevents_md->enrich_mountpoint;
+    values[5].string = metadata->fsevents_md.enrich_mountpoint;
     pairs[5].value = &values[5];
 
     pairs[6].key = "worker_count";
     values[6].type = RBH_VT_UINT64;
-    values[6].uint64 = fsevents_md->worker_count;
+    values[6].uint64 = metadata->fsevents_md.worker_count;
     pairs[6].value = &values[6];
 
     value_map->pairs = pairs;
@@ -85,15 +62,9 @@ create_metadata_value_map(time_t start_time, time_t end_time,
 }
 
 void
-insert_fsevents_log(time_t start_time, time_t end_time, char *command_line,
-                    struct rbh_fsevents_metadata *fsevents_md,
-                    struct sink *sink)
+insert_fsevents_log(struct sink *sink, struct rbh_metadata *metadata)
 {
-    struct rbh_value_map *map = create_metadata_value_map(start_time, end_time,
-                                                          command_line,
-                                                          fsevents_md);
-
-    if (!sink_insert_log(sink, map))
+    if (!sink_insert_log(sink, fsevents_metadata_value_map(metadata)))
         return;
 
     switch (errno) {

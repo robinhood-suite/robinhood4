@@ -29,6 +29,7 @@
 #include <robinhood/config.h>
 #include <robinhood/alias.h>
 #include <robinhood/list.h>
+#include <robinhood/log.h>
 
 #include "deduplicator.h"
 #include "enricher.h"
@@ -801,21 +802,18 @@ main(int argc, char *argv[])
         },
         {}
     };
-    struct rbh_fsevents_metadata fsevents_md = { 0 };
     struct deduplicator_options dedup_opts = {
         .batch_size = DEFAULT_BATCH_SIZE,
     };
+    struct rbh_metadata metadata = { 0 };
     uint64_t max_changelog = 0;
     char *cmd_backend = NULL;
     int64_t start_index = -1;
     char *dump_file = NULL;
-    char *command_line;
-    time_t start_time;
-    time_t end_time;
     int rc;
     char c;
 
-    command_line = get_command_line(argc, argv);
+    metadata.common_md.command_line = get_command_line(argc, argv);
 
     rc = rbh_config_from_args(argc - 1, argv + 1);
     if (rc)
@@ -867,7 +865,7 @@ main(int argc, char *argv[])
             if (str2uint64_t(optarg, &nb_workers))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
 
-            fsevents_md.worker_count = nb_workers;
+            metadata.fsevents_md.worker_count = nb_workers;
             break;
         case 'r':
             /* Ignore errors on close */
@@ -907,7 +905,7 @@ main(int argc, char *argv[])
         sink[i] = sink_new(argv[optind]);
 
     source = source_new(source_uri, dump_file, max_changelog, start_index,
-                        &fsevents_md.source_read);
+                        &metadata.fsevents_md.source_read);
 
     if (enrich_builder) {
         if (insert_backend_source(cmd_backend, enrich_builder, sink[0]) &&
@@ -917,20 +915,21 @@ main(int argc, char *argv[])
 
         free(cmd_backend);
         if (insert_mountpoint(enrich_builder, sink[0],
-                              &fsevents_md.enrich_mountpoint) && errno != ENOTSUP)
+                              &metadata.fsevents_md.enrich_mountpoint) &&
+                errno != ENOTSUP)
             error(EX_USAGE, EINVAL,
                   "Failed to insert mountpoint in destination\n");
     }
 
-    start_time = time(NULL);
+    metadata.common_md.start_time = time(NULL);
     rc = feed(sink, source, enrich_builder, strcmp(sink[0]->name, "backend"),
               &dedup_opts);
-    end_time = time(NULL);
+    metadata.common_md.end_time = time(NULL);
 
-    insert_fsevents_log(start_time, end_time, command_line, &fsevents_md,
-                        sink[0]);
+    insert_fsevents_log(sink[0], &metadata);
 
-    free((char *)fsevents_md.enrich_mountpoint);
+    free((char *) metadata.fsevents_md.enrich_mountpoint);
+    free(metadata.common_md.command_line);
     rbh_config_free();
 
     return rc == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
