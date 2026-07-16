@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8ba89ec_15ea235e",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-07-16T08:06:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2dd27000_489fa8a5",
+      "range": {
+        "startLine": 170,
+        "startChar": 31,
+        "endLine": 170,
+        "endChar": 46
+      },
+      "revId": "66935a99765c3910108a10020b49d958adcaaeef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3893c40_ee978bba",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-06-22T08:29:44Z",
       "side": 1,
       "message": "If you do the void * cast at the end, this can be simplified (and avoid mistakes if the type changes):\n\n```\n(void *)(inode_xattrs.pairs + inode_xattrs.count)\n```\n\nIt\u0027s also possible that the compiler will allow the void* cast implicitly. So it may not be necessary but I might be wrong.",
+      "range": {
+        "startLine": 248,
+        "startChar": 12,
+        "endLine": 249,
+        "endChar": 65
+      },
+      "revId": "66935a99765c3910108a10020b49d958adcaaeef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2262ea30_c51108a5",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-07-16T08:06:49Z",
+      "side": 1,
+      "message": "Done, the compiler won\u0027t allow the implicit cast here because inode_xattrs.pairs is defined as a const.",
+      "parentUuid": "f3893c40_ee978bba",
       "range": {
         "startLine": 248,
         "startChar": 12,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6eea145c_81717c42",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-07-16T08:06:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11be30df_f847e2b6",
+      "range": {
+        "startLine": 255,
+        "startChar": 12,
+        "endLine": 257,
+        "endChar": 39
+      },
+      "revId": "66935a99765c3910108a10020b49d958adcaaeef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db29474b_cb5ace6f",
@@ -83,6 +155,30 @@
       "writtenOn": "2026-06-22T08:02:10Z",
       "side": 1,
       "message": "style: indentation",
+      "range": {
+        "startLine": 1033,
+        "startChar": 24,
+        "endLine": 1033,
+        "endChar": 25
+      },
+      "revId": "66935a99765c3910108a10020b49d958adcaaeef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d08be34_068b736c",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 1033,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-07-16T08:06:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db29474b_cb5ace6f",
       "range": {
         "startLine": 1033,
         "startChar": 24,
