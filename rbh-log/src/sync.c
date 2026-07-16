@@ -17,7 +17,7 @@ enum sync_log_value {
 };
 
 static enum sync_log_value
-key2log_value(const char *key)
+key2sync_log_value(const char *key)
 {
     switch (key[0]) {
     case 'c':
@@ -72,7 +72,7 @@ print_sync_log(const struct rbh_value_map *log)
             continue;
         }
 
-        log_value = sync_formatted_log_value[key2log_value(pair->key)];
+        log_value = sync_formatted_log_value[key2sync_log_value(pair->key)];
 
         log_value.print_log_value(pair->value, log_value.header);
     }
