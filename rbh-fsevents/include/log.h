@@ -10,12 +10,6 @@
 
 #include "sink.h"
 
-struct rbh_fsevents_metadata {
-    const char *source_read;
-    const char *enrich_mountpoint;
-    size_t worker_count;
-};
-
 /**
  * Insert a fsevents log in the given sink.
  *
@@ -26,8 +20,6 @@ struct rbh_fsevents_metadata {
  * @param sink             the sink in which to insert the log
  */
 void
-insert_fsevents_log(time_t start_time, time_t end_time, char *command_line,
-                    struct rbh_fsevents_metadata *fsevents_md,
-                    struct sink *sink);
+insert_fsevents_log(struct sink *sink, struct rbh_metadata *metadata);
 
 #endif

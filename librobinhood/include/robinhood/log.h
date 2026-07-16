@@ -24,6 +24,12 @@ struct rbh_sync_metadata {
     ssize_t skipped_entries;
 };
 
+struct rbh_fsevents_metadata {
+    const char *source_read;
+    const char *enrich_mountpoint;
+    size_t worker_count;
+};
+
 /**
  * Metadata storage structure
  */
@@ -31,6 +37,7 @@ struct rbh_metadata {
     struct rbh_common_metadata common_md;
     union {
         struct rbh_sync_metadata sync_md;
+        struct rbh_fsevents_metadata fsevents_md;
     };
 };
 
