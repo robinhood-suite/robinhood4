@@ -9,36 +9,29 @@
 
 #include "log.h"
 
-/* XXX: PLACEHOLDER FOR NOW
-enum log_value {
-    COMMAND_LINE,
-    DURATION,
-    END_TIME,
-    START_TIME,
+enum fsevents_log_value {
+    ENRICH_MOUNTPOINT,
+    SOURCE_READ,
+    WORKER_COUNT,
 };
 
-static enum log_value
-key2log_value(const char *key)
+static enum fsevents_log_value
+key2fsevents_log_value(const char *key)
 {
     switch (key[0]) {
-    case 'c':
-        if (!strcmp(&key[1], "ommand_line"))
-            return COMMAND_LINE;
-
-        break;
-    case 'd':
-        if (!strcmp(&key[1], "uration"))
-            return DURATION;
-
-        break;
     case 'e':
-        if (!strcmp(&key[1], "nd_time"))
-            return END_TIME;
+        if (!strcmp(&key[1], "nrich_mountpoint"))
+            return ENRICH_MOUNTPOINT;
 
         break;
     case 's':
-        if (!strcmp(&key[1], "tart_time"))
-            return START_TIME;
+        if (!strcmp(&key[1], "ource_read"))
+            return SOURCE_READ;
+
+        break;
+    case 'w':
+        if (!strcmp(&key[1], "orker_count"))
+            return WORKER_COUNT;
 
         break;
     }
@@ -48,27 +41,24 @@ key2log_value(const char *key)
 }
 
 static const struct formatted_log_value fsevents_log_value[] = {
-    [START_TIME] =        { .key = "start_time",
-                            .header = "Start of fsevents",
-                            .print_log_value = print_time_from_timestamp },
-    [DURATION] =          { .key = "duration",
-                            .header = "Duration of fsevents",
-                            .print_log_value = print_difftime },
-    [END_TIME] =          { .key = "end_time",
-                            .header = "End of fsevents",
-                            .print_log_value = print_time_from_timestamp },
-    [COMMAND_LINE] =      { .key = "command_line",
-                            .header = "Command used",
+    [ENRICH_MOUNTPOINT] = { .key = "enrich_mountpoint",
+                            .header = "Enrichment mountpoint",
+                            .print_log_value = print_value },
+    [SOURCE_READ] =       { .key = "source_read",
+                            .header = "Source of the events",
+                            .print_log_value = print_value },
+    [WORKER_COUNT] =      { .key = "worker_count",
+                            .header = "Number of parallel workers used",
                             .print_log_value = print_value },
 };
-*/
+
 void
 print_fsevents_log(const struct rbh_value_map *log)
 {
     for (size_t i = 0 ; i < log->count ; i++) {
         const struct rbh_value_pair *pair = &log->pairs[i];
         enum common_log_value common_log_value;
-        //struct formatted_log_value log_value;
+        struct formatted_log_value log_value;
 
         common_log_value = key2common_log_value(pair->key);
         if (common_log_value != CLV_UNKNOWN) {
@@ -76,8 +66,8 @@ print_fsevents_log(const struct rbh_value_map *log)
             continue;
         }
 
-        //log_value = fsevents_log_value[key2log_value(pair->key)];
+        log_value = fsevents_log_value[key2fsevents_log_value(pair->key)];
 
-        //log_value.print_log_value(pair->value, log_value.header);
+        log_value.print_log_value(pair->value, log_value.header);
     }
 }
