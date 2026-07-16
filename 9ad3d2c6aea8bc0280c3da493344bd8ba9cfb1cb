@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79f70235_985409c4",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-16T13:00:29Z",
+      "side": 1,
+      "message": "question: what can set a 0 errno? inside rbh? inside a backend, like mongo?",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 92,
+        "endChar": 10
+      },
+      "revId": "9ad3d2c6aea8bc0280c3da493344bd8ba9cfb1cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
