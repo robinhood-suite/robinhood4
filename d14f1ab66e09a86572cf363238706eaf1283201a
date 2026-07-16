@@ -45,6 +45,30 @@
       },
       "revId": "d14f1ab66e09a86572cf363238706eaf1283201a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "275b03ce_21007068",
+        "filename": "rbh-log/src/sync.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-16T13:59:05Z",
+      "side": 1,
+      "message": "Nope, but removed later.",
+      "parentUuid": "832a487b_e95d0747",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 23
+      },
+      "revId": "d14f1ab66e09a86572cf363238706eaf1283201a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
