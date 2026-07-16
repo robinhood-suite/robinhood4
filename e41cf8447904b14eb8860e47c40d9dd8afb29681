@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bff31cf_1afb0a38",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-16T14:34:54Z",
+      "side": 1,
+      "message": "question: why all those comments?",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 2
+      },
+      "revId": "e41cf8447904b14eb8860e47c40d9dd8afb29681",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
