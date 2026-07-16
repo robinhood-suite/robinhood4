@@ -41,14 +41,11 @@ key2fsevents_log_value(const char *key)
 }
 
 static const struct formatted_log_value fsevents_log_value[] = {
-    [ENRICH_MOUNTPOINT] = { .key = "enrich_mountpoint",
-                            .header = "Enrichment mountpoint",
+    [ENRICH_MOUNTPOINT] = { .header = "Enrichment mountpoint",
                             .print_log_value = print_value },
-    [SOURCE_READ] =       { .key = "source_read",
-                            .header = "Source of the events",
+    [SOURCE_READ] =       { .header = "Source of the events",
                             .print_log_value = print_value },
-    [WORKER_COUNT] =      { .key = "worker_count",
-                            .header = "Number of parallel workers used",
+    [WORKER_COUNT] =      { .header = "Number of parallel workers used",
                             .print_log_value = print_value },
 };
 
