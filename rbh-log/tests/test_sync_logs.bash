@@ -8,6 +8,7 @@
 
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/../../utils/tests/framework.bash
+. $test_dir/common_logs.bash
 
 ################################################################################
 #                                    TESTS                                     #
@@ -30,28 +31,13 @@ check_log_result()
 {
     local output="$1"
 
-    echo "$output" | grep "Start" > /dev/null ||
-        error "start_time should have been retrieved"
-
-    echo "$output" | grep "Duration" > /dev/null ||
-        error "duration should have been retrieved"
-
-    echo "$output" | grep "End" > /dev/null ||
-        error "end_time should have been retrieved"
+    check_common_logs "$output" rbh-sync "rbh-sync rbh:posix:. rbh:$db:$testdb"
 
     local mountpoint=$(echo "$output" | grep "Mountpoint used" |
                        cut -d':' -f2- | xargs)
 
     if [ "$mountpoint" != "$(pwd)" ]; then
         error "Invalid mountpoint"
-    fi
-
-    local command_line=$(grep 'Command used' <<< "$output" |
-                         sed -n 's/.*rbh-sync/rbh-sync/p')
-
-    if [ "$command_line" != "rbh-sync rbh:posix:. rbh:$db:$testdb" ];
-    then
-        error "command lines are not matching"
     fi
 
     local converted_entries=$(echo "$output" | grep "converted" |
