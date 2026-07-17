@@ -9,6 +9,7 @@
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/../../utils/tests/framework.bash
 . $test_dir/lustre_utils.bash
+. $test_dir/common_logs.bash
 
 ################################################################################
 #                                    TESTS                                     #
@@ -30,25 +31,9 @@ test_invalid()
 check_log_result()
 {
     local output="$1"
-    echo "output = '$output'"
 
-    echo "$output" | grep "Start" > /dev/null ||
-        error "start_time should have been retrieved"
-
-    echo "$output" | grep "Duration" > /dev/null ||
-        error "duration should have been retrieved"
-
-    echo "$output" | grep "End" > /dev/null ||
-        error "end_time should have been retrieved"
-
-    local command_line=$(grep 'Command used' <<< "$output" |
-                         sed -n 's/.*rbh-fsevents/rbh-fsevents/p')
-
-    if [ "$command_line" != \
-        "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb" ];
-    then
-        error "command lines are not matching, got '$command_line'"
-    fi
+    check_common_logs "$output" rbh-fsevents \
+        "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb"
 
     echo "$output" | grep "Enrichment" > /dev/null ||
         error "enrich_mountpoint should have been retrieved"
