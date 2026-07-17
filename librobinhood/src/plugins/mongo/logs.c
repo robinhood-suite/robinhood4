@@ -135,13 +135,20 @@ get_logs(const struct mongo_backend *mongo, struct rbh_value_pair *pair,
         while (bson_iter_next(&iter)) {
             const char *key = bson_iter_key(&iter);
 
-            if (strcmp(key, str_type) == 0) {
+            /* If we request a specific log type, check the given key is of that
+             * type. If we don't request a specific log type, check the key
+             * corresponds to a known log type.
+             */
+            if ((options->type != RBH_ALL_LOG && strcmp(key, str_type) == 0) ||
+                (options->type == RBH_ALL_LOG &&
+                    str2rbh_log_type(key) != RBH_ALL_LOG)) {
                 if (!bson_iter_rbh_value(&iter, &value, &buffer, &bufsize)) {
                     rc = 1;
                     goto out;
                 }
 
-                pair[index].key = str_type;
+                pair[index].key = RBH_SSTACK_PUSH(logs_sstack, key,
+                                                  strlen(key) + 1);
                 pair[index].value = value_clone(&value);
             }
         }

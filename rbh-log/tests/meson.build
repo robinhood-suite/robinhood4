@@ -5,8 +5,9 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
 parallel_integration_tests = [
-  'test_sync_logs',
   'test_find_logs',
+  'test_last_logs',
+  'test_sync_logs',
 ]
 
 if test_lustre
