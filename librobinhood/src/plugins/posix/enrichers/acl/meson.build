@@ -15,6 +15,8 @@ librbh_posix_acl_ext = library(
     'rbh-posix-acl-ext',
     sources: [
         'plugin.c',
+        'acl_xattr.c',
+        'acl.c',
     ],
     version: librbh_acl_version, # defined in include/robinhood/backends
     link_with: librobinhood,
