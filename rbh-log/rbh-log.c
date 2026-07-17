@@ -42,6 +42,7 @@ usage(void)
         "   -c, --config PATH       the configuration file to use.\n"
         "   -h, --help              show this message and exit\n"
         "   -l, --last N            print the last N logs\n"
+        "   -i, --find N            print the last N logs of rbh-find runs\n"
         "   -f, --fsevents N        print the last N logs of rbh-fsevents runs\n"
         "    --version              print RobinHood 4's version\n"
         "\n"
@@ -60,6 +61,9 @@ print_logs(const struct rbh_value_map *logs)
         printf("{ rbh-%s\n", logs->pairs[i].key);
 
         switch (type) {
+        case RBH_FIND_LOG:
+            print_find_log(&logs->pairs[i].value->map);
+            break;
         case RBH_FSEVENTS_LOG:
             print_fsevents_log(&logs->pairs[i].value->map);
             break;
@@ -83,6 +87,11 @@ main(int argc, char *argv[])
             .name = "config",
             .has_arg = required_argument,
             .val = 'c',
+        },
+        {
+            .name = "find",
+            .has_arg = required_argument,
+            .val = 'i',
         },
         {
             .name = "fsevents",
@@ -114,11 +123,18 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:f:hl:z",
+    while ((c = getopt_long(argc, argv, "c:i:f:hl:z",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
             /* already parsed */
+            break;
+        case 'i':
+            options.type = RBH_FIND_LOG;
+            if (str2uint64_t(optarg, &options.count))
+                error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
+                      optarg);
+
             break;
         case 'f':
             options.type = RBH_FSEVENTS_LOG;
