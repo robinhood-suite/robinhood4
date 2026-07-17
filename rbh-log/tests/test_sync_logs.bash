@@ -74,7 +74,7 @@ test_N_logs()
         sleep 1
     done
 
-    local output=$(rbh_log "rbh:$db:$testdb" --last $requested)
+    local output=$(rbh_log "rbh:$db:$testdb" --sync $requested)
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != 10 * $expected)); then
