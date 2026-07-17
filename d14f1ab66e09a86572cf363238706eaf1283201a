@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc2aaed1_2091a8f8",
+        "filename": "rbh-log/include/log.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-17T06:54:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01d9f1ad_e7124862",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 2
+      },
+      "revId": "d14f1ab66e09a86572cf363238706eaf1283201a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "832a487b_e95d0747",
