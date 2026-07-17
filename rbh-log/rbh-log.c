@@ -41,9 +41,9 @@ usage(void)
         "Optional arguments:\n"
         "   -c, --config PATH       the configuration file to use.\n"
         "   -h, --help              show this message and exit\n"
-        "   -l, --last N            print the last N logs\n"
         "   -i, --find N            print the last N logs of rbh-find runs\n"
         "   -f, --fsevents N        print the last N logs of rbh-fsevents runs\n"
+        "   -s, --sync N            print the last N logs of rbh-sync runs\n"
         "    --version              print RobinHood 4's version\n"
         "\n"
         "A robinhood URI is built as follows:\n"
@@ -103,9 +103,9 @@ main(int argc, char *argv[])
             .val = 'h',
         },
         {
-            .name = "last",
+            .name = "sync",
             .has_arg = required_argument,
-            .val = 'l',
+            .val = 's',
         },
         {
             .name = "version",
@@ -123,7 +123,7 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:i:f:hl:z",
+    while ((c = getopt_long(argc, argv, "c:i:f:hs:z",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
@@ -146,7 +146,7 @@ main(int argc, char *argv[])
         case 'h':
             usage();
             return 0;
-        case 'l':
+        case 's':
             options.type = RBH_SYNC_LOG;
             if (str2uint64_t(optarg, &options.count))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
