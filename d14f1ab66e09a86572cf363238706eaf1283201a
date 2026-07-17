@@ -71,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f8165ba_97e3767c",
+        "filename": "rbh-log/src/sync.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-17T13:42:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3f8ce77_a9d191fc",
+      "range": {
+        "startLine": 5,
+        "startChar": 16,
+        "endLine": 5,
+        "endChar": 25
+      },
+      "revId": "d14f1ab66e09a86572cf363238706eaf1283201a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "832a487b_e95d0747",
@@ -108,6 +132,30 @@
       "side": 1,
       "message": "Nope, but removed later.",
       "parentUuid": "832a487b_e95d0747",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 23
+      },
+      "revId": "d14f1ab66e09a86572cf363238706eaf1283201a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aed670ea_2b4ad381",
+        "filename": "rbh-log/src/sync.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-17T13:42:50Z",
+      "side": 1,
+      "message": "Done now actually",
+      "parentUuid": "275b03ce_21007068",
       "range": {
         "startLine": 8,
         "startChar": 0,
