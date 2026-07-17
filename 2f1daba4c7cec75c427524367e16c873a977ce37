@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bc9d361_d4e537ec",
+        "filename": "librobinhood/src/plugins/mongo/logs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-17T09:38:46Z",
+      "side": 1,
+      "message": "In this case as well as in the one below, cursor, filter and opts are not destroyed.",
+      "range": {
+        "startLine": 67,
+        "startChar": 21,
+        "endLine": 67,
+        "endChar": 34
+      },
+      "revId": "2f1daba4c7cec75c427524367e16c873a977ce37",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
