@@ -45,7 +45,6 @@ test_N_logs()
         sleep 1
     done
 
-    mongo $testdb --eval "db.log.find()"
     local output=$(rbh_log "rbh:$db:$testdb" --find $requested)
     local n_lines=$(echo "$output" | wc -l)
 
