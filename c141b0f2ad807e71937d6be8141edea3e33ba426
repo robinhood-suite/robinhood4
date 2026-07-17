@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1ac82d8_edfb3454",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-17T08:48:33Z",
+      "side": 1,
+      "message": "question: si le daemon execute deux policy faisant des logs dans deux fichiers différents, ça ne va pas poser soucis ici vu que le stream est global ?",
+      "range": {
+        "startLine": 434,
+        "startChar": 8,
+        "endLine": 434,
+        "endChar": 27
+      },
+      "revId": "c141b0f2ad807e71937d6be8141edea3e33ba426",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9e26ffc_82db9040",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-17T08:48:33Z",
+      "side": 1,
+      "message": "suggest: changer le print en fprintf avec stream à stdout si \"output\" n\u0027est pas donné",
+      "range": {
+        "startLine": 444,
+        "startChar": 8,
+        "endLine": 447,
+        "endChar": 5
+      },
+      "revId": "c141b0f2ad807e71937d6be8141edea3e33ba426",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
