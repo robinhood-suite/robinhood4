@@ -7,6 +7,7 @@
 
 #include "backends/posix.h"
 #include "robinhood/backends/acl.h"
+#include "acl_internals.h"
 #include "robinhood/backends/posix_extension.h"
 #include "robinhood/plugins/backend.h"
 
@@ -20,4 +21,6 @@ const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, ACL) = {
         .max_version = RBH_POSIX_BACKEND_VERSION,
         .common_ops  = NULL,
     },
+    .enrich         = rbh_acl_enrich,
+    .setup_enricher = rbh_acl_setup,
 };
