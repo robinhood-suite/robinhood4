@@ -6,6 +6,7 @@
 
 parallel_integration_tests = [
   'test_sync_logs',
+  'test_find_logs',
 ]
 
 if test_lustre
