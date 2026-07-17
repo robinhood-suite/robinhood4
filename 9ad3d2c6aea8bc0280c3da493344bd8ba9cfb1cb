@@ -22,6 +22,30 @@
       },
       "revId": "9ad3d2c6aea8bc0280c3da493344bd8ba9cfb1cb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dac6859_20b79af8",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-17T06:52:49Z",
+      "side": 1,
+      "message": "Improper management from the backend. If the insertion failed, we check errno, and if it\u0027s 0, we just don\u0027t know what the cause was, as the backend didn\u0027t specify it properly.",
+      "parentUuid": "79f70235_985409c4",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 92,
+        "endChar": 10
+      },
+      "revId": "9ad3d2c6aea8bc0280c3da493344bd8ba9cfb1cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
