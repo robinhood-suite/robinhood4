@@ -25,6 +25,7 @@ executable(
         'rbh-find.c',
         'src/actions.c',
         'src/core.c',
+        'src/log.c',
         'src/parser.c',
     ],
     dependencies: [librobinhood_dep],

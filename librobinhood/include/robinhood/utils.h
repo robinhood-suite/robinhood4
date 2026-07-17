@@ -285,4 +285,15 @@ convert_xattrs_with_operation(const struct rbh_value_pair *pairs, int count,
 char *
 rbh_value_map_to_string(const struct rbh_value_map *map);
 
+/**
+ * Convert the given argc/argv to a single string command line.
+ *
+ * @param argc      the number of elements in argv
+ * @param argv      the components of the command line
+ *
+ * @return          the full command line as a single string
+ */
+char *
+get_command_line(int argc, char *argv[]);
+
 #endif
