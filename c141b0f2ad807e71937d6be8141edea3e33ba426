@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b6a7eb34_1bbbf056",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-17T09:07:03Z",
+      "side": 1,
+      "message": "question: `stream` is global, so all log actions will write to the first opened file ?",
+      "range": {
+        "startLine": 391,
+        "startChar": 0,
+        "endLine": 391,
+        "endChar": 2
+      },
+      "revId": "c141b0f2ad807e71937d6be8141edea3e33ba426",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e1ac82d8_edfb3454",
         "filename": "librobinhood/src/policyengine/actions.c",
         "patchSetId": 1
@@ -19,6 +42,29 @@
         "startChar": 8,
         "endLine": 434,
         "endChar": 27
+      },
+      "revId": "c141b0f2ad807e71937d6be8141edea3e33ba426",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ededb8c_ff827da0",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-17T09:07:03Z",
+      "side": 1,
+      "message": "question: the \u0027w\u0027 mode truncates the file, so previous log messages are lost. Is it the expected behaviour ?",
+      "range": {
+        "startLine": 435,
+        "startChar": 36,
+        "endLine": 435,
+        "endChar": 37
       },
       "revId": "c141b0f2ad807e71937d6be8141edea3e33ba426",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
