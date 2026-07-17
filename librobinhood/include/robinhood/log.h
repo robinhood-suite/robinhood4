@@ -46,6 +46,7 @@ struct rbh_metadata {
  */
 enum rbh_log_type {
     RBH_ALL_LOG,
+    RBH_FIND_LOG,
     RBH_FSEVENTS_LOG,
     RBH_SYNC_LOG,
 };
@@ -56,6 +57,8 @@ rbh_log_type2str(enum rbh_log_type type)
     switch (type) {
     case RBH_ALL_LOG:
         return "all";
+    case RBH_FIND_LOG:
+        return "find";
     case RBH_FSEVENTS_LOG:
         return "fsevents";
     case RBH_SYNC_LOG:
@@ -70,6 +73,8 @@ rbh_log_type2str(enum rbh_log_type type)
 static inline enum rbh_log_type
 str2rbh_log_type(const char *str)
 {
+    if (!strcmp(str, "find"))
+        return RBH_FIND_LOG;
     if (!strcmp(str, "fsevents"))
         return RBH_FSEVENTS_LOG;
     if (!strcmp(str, "sync"))

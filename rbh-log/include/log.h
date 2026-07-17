@@ -65,6 +65,14 @@ void
 print_fsevents_log(const struct rbh_value_map *log);
 
 /**
+ * Print a find log.
+ *
+ * @param log       the map whose content should be printed
+ */
+void
+print_find_log(const struct rbh_value_map *log);
+
+/**
  * All following functions are callback for the `print_log_value` field in the
  * `formatted_log_value` structure. They each take in a `rbh_value` to print
  * and a header.

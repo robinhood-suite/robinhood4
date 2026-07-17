@@ -11,6 +11,7 @@ executable(
     sources: [
         'rbh-log.c',
         'src/common.c',
+        'src/find.c',
         'src/fsevents.c',
         'src/sync.c',
     ],
