@@ -13,8 +13,8 @@
 #include <stdlib.h>
 #include <sysexits.h>
 
-#include <robinhood/filter.h>
 #include <robinhood.h>
+#include <robinhood/filter.h>
 #include <robinhood/utils.h>
 
 #include "parser.h"

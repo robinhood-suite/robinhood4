@@ -9,6 +9,7 @@
 # include "config.h"
 #endif
 
+#include <assert.h>
 #include <errno.h>
 #include <limits.h>
 
@@ -264,4 +265,25 @@ base64_encode(char *dest, const char *src, size_t n)
 
     dest[j] = '\0';
     return j;
+}
+
+char *
+get_command_line(int argc, char *argv[]) {
+    size_t total_len = 0;
+    char *cmd_line;
+
+    for (int i = 0 ; i < argc ; i++)
+        total_len += strlen(argv[i]) + 1;
+
+    assert(total_len > 0);
+    cmd_line = xmalloc(total_len);
+
+    cmd_line[0] = '\0';
+    for (int i = 0 ; i < argc ; i++) {
+        strcat(cmd_line, argv[i]);
+        if (i < argc - 1)
+            strcat(cmd_line, " ");
+    }
+
+    return cmd_line;
 }

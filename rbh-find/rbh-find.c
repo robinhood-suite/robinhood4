@@ -23,9 +23,11 @@
 #include <robinhood/alias.h>
 #include <robinhood/filter.h>
 #include <robinhood/filters/parser.h>
+#include <robinhood/log.h>
 #include <robinhood/utils.h>
 
 #include "core.h"
+#include "log.h"
 
 static struct find_context ctx;
 
@@ -204,6 +206,7 @@ main(int _argc, char *_argv[])
 {
     struct command_context command_context = {0};
     struct rbh_filter_options options = {0};
+    struct rbh_metadata metadata = { 0 };
     struct rbh_value_map **info_maps;
     struct rbh_filter *filter;
     int nb_cli_args;
@@ -214,6 +217,8 @@ main(int _argc, char *_argv[])
     if (_argc < 2)
         error(EX_USAGE, EINVAL,
               "invalid number of arguments, expected at least 1");
+
+    metadata.common_md.command_line = get_command_line(_argc, _argv);
 
     argc = _argc - 1;
     argv = &_argv[1];
@@ -268,13 +273,23 @@ main(int _argc, char *_argv[])
     open_system_backends(ctx.backends, ctx.backend_count, &ctx.f_ctx);
 
     ctx.f_ctx.need_prefetch = false;
+    metadata.common_md.start_time = time(NULL);
     filter = parse_expression(&ctx.f_ctx, &index, NULL, &options,
                               find_parse_callback, &ctx);
+    metadata.common_md.end_time = time(NULL);
     if (index != ctx.argc)
         error(EX_USAGE, 0, "you have too many ')'");
 
-    if (!ctx.action_done)
+    if (!ctx.action_done) {
+        metadata.common_md.start_time = time(NULL);
         find(&ctx, ACT_PRINT, &index, filter, &options);
+        metadata.common_md.end_time = time(NULL);
+    }
+
+    insert_find_log(&ctx, &metadata);
+
+    free(metadata.common_md.command_line);
+
     free(filter);
     destroy_plugins(&ctx.f_ctx);
 
