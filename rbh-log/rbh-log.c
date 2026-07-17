@@ -43,6 +43,7 @@ usage(void)
         "   -h, --help              show this message and exit\n"
         "   -i, --find N            print the last N logs of rbh-find runs\n"
         "   -f, --fsevents N        print the last N logs of rbh-fsevents runs\n"
+        "   -l, --last N            print the last N logs\n"
         "   -s, --sync N            print the last N logs of rbh-sync runs\n"
         "    --version              print RobinHood 4's version\n"
         "\n"
@@ -103,6 +104,11 @@ main(int argc, char *argv[])
             .val = 'h',
         },
         {
+            .name = "last",
+            .has_arg = required_argument,
+            .val = 'l',
+        },
+        {
             .name = "sync",
             .has_arg = required_argument,
             .val = 's',
@@ -146,6 +152,13 @@ main(int argc, char *argv[])
         case 'h':
             usage();
             return 0;
+        case 'l':
+            options.type = RBH_ALL_LOG;
+            if (str2uint64_t(optarg, &options.count))
+                error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
+                      optarg);
+
+            break;
         case 's':
             options.type = RBH_SYNC_LOG;
             if (str2uint64_t(optarg, &options.count))
