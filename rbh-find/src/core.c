@@ -149,6 +149,7 @@ _find(struct find_context *ctx, int backend_index, enum action action,
         if (fsentry == NULL)
             break;
 
+        ctx->find_md->entry_count++;
         count += find_exec_action(ctx, backend_index, filter, action, fsentry);
         free(fsentry);
     } while (true);

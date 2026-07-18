@@ -30,6 +30,11 @@ struct rbh_fsevents_metadata {
     size_t worker_count;
 };
 
+struct rbh_find_metadata {
+    size_t entry_count;
+    int64_t exec_success_count;
+};
+
 /**
  * Metadata storage structure
  */
@@ -38,6 +43,7 @@ struct rbh_metadata {
     union {
         struct rbh_sync_metadata sync_md;
         struct rbh_fsevents_metadata fsevents_md;
+        struct rbh_find_metadata find_md;
     };
 };
 
