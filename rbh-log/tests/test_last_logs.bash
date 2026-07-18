@@ -69,6 +69,9 @@ check_find_log_result()
     local output="$1"
 
     check_common_logs "$output" rbh-find "rbh-find rbh:$db:$testdb"
+
+    echo "$output" | grep "post-filtering" > /dev/null ||
+        error "entry_count should have been retrieved"
 }
 
 test_last_logs()
@@ -86,13 +89,13 @@ test_last_logs()
 
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 10 + 6)); then
-        error "There should be 10 lines about sync (8 for content, 2 for header/footer) + 6 for find (4/2 aswell), got '$output'"
+    if ((n_lines != 10 + 7)); then
+        error "There should be 10 lines about sync (8 for content, 2 for header/footer) + 7 for find (5/2 aswell), got '$output'"
     fi
 
-    local find_log="$(echo "$output" | head -n 6)"
+    local find_log="$(echo "$output" | head -n 7)"
     check_find_log_result "$find_log"
-    output="$(echo "$output" | sed 1,6d)"
+    output="$(echo "$output" | sed 1,7d)"
 
     local sync_log="$(echo "$output" | head -n 10)"
     check_sync_log_result "$sync_log"

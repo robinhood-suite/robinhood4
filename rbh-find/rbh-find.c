@@ -272,6 +272,8 @@ main(int _argc, char *_argv[])
 
     open_system_backends(ctx.backends, ctx.backend_count, &ctx.f_ctx);
 
+    ctx.find_md = &metadata.find_md;
+    ctx.find_md->exec_success_count = -1;
     ctx.f_ctx.need_prefetch = false;
     metadata.common_md.start_time = time(NULL);
     filter = parse_expression(&ctx.f_ctx, &index, NULL, &options,
