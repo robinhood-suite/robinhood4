@@ -404,6 +404,7 @@ find_pre_action(struct find_context *ctx, const int index,
         if (index + 2 >= ctx->argc) // at least two args: -exec cmd ;
             error(EX_USAGE, 0, "missing argument to `%s'", action2str(action));
 
+        ctx->find_md->exec_success_count = 0;
         rbh_projection_add(&ctx->projection, str2filter_field("ns-xattrs"));
 
         return 1 + parse_exec_command(ctx, index + 1); // consume -exec
@@ -498,6 +499,7 @@ find_exec_action(struct find_context *ctx, size_t backend_index,
                  struct rbh_fsentry *fsentry)
 {
     const struct rbh_value *path;
+    int rc;
 
     switch (action) {
     case ACT_DELETE:
@@ -522,7 +524,11 @@ find_exec_action(struct find_context *ctx, size_t backend_index,
                                              fsentry))
             return 0;
     case ACT_EXEC:
-        return exec_command(ctx, fsentry);
+        rc = exec_command(ctx, fsentry);
+        if (!rc)
+            ctx->find_md->exec_success_count++;
+
+        return rc;
     case ACT_PRINT:
         /* XXX: glibc's printf() handles printf("%s", NULL) pretty well, but
          *      I do not think this is part of any standard.

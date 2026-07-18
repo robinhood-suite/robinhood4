@@ -52,6 +52,9 @@ struct find_context {
     char **exec_command;
 
     struct rbh_filter_projection projection;
+
+    /** Find metadata to prepare rbh-find log */
+    struct rbh_find_metadata *find_md;
 };
 
 /**
