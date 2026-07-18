@@ -26,7 +26,12 @@ find_metadata_value_map(struct rbh_metadata *metadata)
     struct rbh_value_map *value_map;
     struct rbh_value_pair *pairs;
     struct rbh_value *values;
-    int count = 4;
+    int count;
+
+    if (metadata->find_md.exec_success_count >= 0)
+        count = 6;
+    else
+        count = 5;
 
     if (metadata_sstack == NULL)
         metadata_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
@@ -37,6 +42,22 @@ find_metadata_value_map(struct rbh_metadata *metadata)
     pairs = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*pairs));
 
     rbh_set_common_metadata_pairs(&metadata->common_md, values, pairs);
+
+    pairs[4].key = "entry_count";
+    values[4].type = RBH_VT_UINT64;
+    values[4].uint64 = metadata->find_md.entry_count;
+    pairs[4].value = &values[4];
+
+    if (metadata->find_md.exec_success_count >= 0) {
+        pairs[5].key = "exec_success_count";
+        values[5].type = RBH_VT_INT64;
+        values[5].int64 = metadata->find_md.exec_success_count;
+        pairs[5].value = &values[5];
+
+        /** XXX: do we add the exec success ratio in the log, i.e.
+         * (exec_success_count / entry_count) * 100 ?
+         */
+    }
 
     value_map->pairs = pairs;
     value_map->count = count;
