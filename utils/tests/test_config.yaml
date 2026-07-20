@@ -42,6 +42,10 @@ backends:
         enrichers:
             - lustre
             - selinux
+    acl:
+        extends: posix
+        enrichers:
+            - acl
 
 s3:
     address: 127.0.0.1:9000
