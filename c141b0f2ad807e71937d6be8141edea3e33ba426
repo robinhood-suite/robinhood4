@@ -72,6 +72,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a0a1066e_84fad963",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-20T07:29:00Z",
+      "side": 1,
+      "message": "+1, I don’t think this is the expected behavior. It needs to be checked with the admin, but I don’t think they want to lose the previous logs.",
+      "parentUuid": "7ededb8c_ff827da0",
+      "range": {
+        "startLine": 435,
+        "startChar": 36,
+        "endLine": 435,
+        "endChar": 37
+      },
+      "revId": "c141b0f2ad807e71937d6be8141edea3e33ba426",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c9e26ffc_82db9040",
         "filename": "librobinhood/src/policyengine/actions.c",
         "patchSetId": 1
