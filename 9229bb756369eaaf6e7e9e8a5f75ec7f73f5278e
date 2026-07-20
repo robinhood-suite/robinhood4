@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "329d186a_18a4411c",
+        "filename": "rbh-log/src/sync.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-20T08:33:14Z",
+      "side": 1,
+      "message": "style: remove the { }",
+      "range": {
+        "startLine": 84,
+        "startChar": 23,
+        "endLine": 84,
+        "endChar": 24
+      },
+      "revId": "9229bb756369eaaf6e7e9e8a5f75ec7f73f5278e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
