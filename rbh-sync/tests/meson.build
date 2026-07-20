@@ -23,3 +23,7 @@ endif
 if test_selinux
     subdir('selinux')
 endif
+
+if test_acl
+    subdir('acl')
+endif
