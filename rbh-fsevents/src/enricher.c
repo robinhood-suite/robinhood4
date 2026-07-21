@@ -21,11 +21,13 @@
 struct enrich_iter_builder *
 enrich_iter_builder_from_backend(const char *type,
                                  struct rbh_backend *backend,
-                                 const char *mount_path)
+                                 const char *mount_path,
+                                 struct rbh_fsevents_metadata *fsevents_md)
 {
     switch (backend->id) {
     case RBH_BI_POSIX:
-        return posix_enrich_iter_builder(backend, type, mount_path);
+        return posix_enrich_iter_builder(backend, type, mount_path,
+                                         fsevents_md);
     default:
         break;
     }

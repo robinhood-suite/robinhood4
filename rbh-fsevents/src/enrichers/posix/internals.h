@@ -10,6 +10,9 @@
 
 #include <robinhood.h>
 #include <robinhood/backends/posix_extension.h>
+#include <robinhood/log.h>
+
+#include "enricher.h"
 
 struct enricher;
 
@@ -87,6 +90,8 @@ struct enricher {
     bool estale_logs;
     struct posix_enricher *extension_enrichers;
     size_t n_extensions;
+
+    struct rbh_fsevents_metadata *fsevents_md;
 };
 
 /*----------------------------------------------------------------------------*
@@ -105,9 +110,9 @@ int posix_enrich(struct enricher *enricher,
                  struct rbh_posix_enrich_ctx *ctx);
 
 struct rbh_iterator *
-posix_iter_enrich(struct rbh_backend *backend, const char *type,
-                  struct rbh_iterator *fsevents, int mount_fd,
-                  const char *mount_path, bool skip_error, bool estale_logs);
+posix_iter_enrich(struct enrich_iter_builder *builder,
+                  struct rbh_iterator *fsevents, bool skip_error,
+                  bool estale_logs);
 
 void
 posix_enricher_iter_destroy(void *iterator);
@@ -120,8 +125,8 @@ posix_enrich_iter_builder_destroy(void *_enrich);
  *----------------------------------------------------------------------------*/
 
 struct enrich_iter_builder *
-posix_enrich_iter_builder(struct rbh_backend *backend,
-                          const char *type,
-                          const char *mount_path);
+posix_enrich_iter_builder(struct rbh_backend *backend, const char *type,
+                          const char *mount_path,
+                          struct rbh_fsevents_metadata *fsevents_md);
 
 #endif
