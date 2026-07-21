@@ -25,18 +25,31 @@ destroy_metadata_sstack(void)
 static struct rbh_value_map *
 fsevents_metadata_value_map(struct rbh_metadata *metadata)
 {
+    struct rbh_value_pair *pairs_timespec;
+    struct rbh_value_map *timespec_map;
+    struct rbh_value *values_timespec;
     struct rbh_value_map *value_map;
     struct rbh_value_pair *pairs;
     struct rbh_value *values;
-    int count = 7;
+    int count_timespec = 4;
+    int count = 11;
 
     if (metadata_sstack == NULL)
         metadata_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
                                          (sizeof(struct rbh_value_map *)));
 
     value_map = RBH_SSTACK_PUSH(metadata_sstack, NULL, sizeof(*value_map));
-    values = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*values));
+    values = RBH_SSTACK_PUSH(metadata_sstack, NULL,
+                             (count + count_timespec) * sizeof(*values));
     pairs = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*pairs));
+
+    timespec_map = RBH_SSTACK_PUSH(metadata_sstack, NULL,
+                                   (count_timespec / 2) *
+                                        sizeof(*timespec_map));
+    values_timespec = RBH_SSTACK_PUSH(metadata_sstack, NULL,
+                                      count_timespec * sizeof(*values));
+    pairs_timespec = RBH_SSTACK_PUSH(metadata_sstack, NULL,
+                                     4 * sizeof(*pairs_timespec));
 
     rbh_set_common_metadata_pairs(&metadata->common_md, values, pairs);
 
@@ -54,6 +67,56 @@ fsevents_metadata_value_map(struct rbh_metadata *metadata)
     values[6].type = RBH_VT_UINT64;
     values[6].uint64 = metadata->fsevents_md.worker_count;
     pairs[6].value = &values[6];
+
+    pairs_timespec[0].key = "tv_sec";
+    values_timespec[0].type = RBH_VT_UINT64;
+    values_timespec[0].uint64 =
+        metadata->fsevents_md.time_spent_read_and_dedup.tv_sec;
+    pairs_timespec[0].value = &values_timespec[0];
+
+    pairs_timespec[1].key = "tv_nsec";
+    values_timespec[1].type = RBH_VT_UINT64;
+    values_timespec[1].uint64 =
+        metadata->fsevents_md.time_spent_read_and_dedup.tv_nsec;
+    pairs_timespec[1].value = &values_timespec[1];
+
+    timespec_map[0].pairs = &pairs_timespec[0];
+    timespec_map[0].count = 2;
+
+    pairs[7].key = "time_read_dedup";
+    values[7].type = RBH_VT_MAP;
+    values[7].map = timespec_map[0];
+    pairs[7].value = &values[7];
+
+    pairs_timespec[2].key = "tv_sec";
+    values_timespec[2].type = RBH_VT_UINT64;
+    values_timespec[2].uint64 =
+        metadata->fsevents_md.time_spent_enrich_and_update.tv_sec;
+    pairs_timespec[2].value = &values_timespec[2];
+
+    pairs_timespec[3].key = "tv_nsec";
+    values_timespec[3].type = RBH_VT_UINT64;
+    values_timespec[3].uint64 =
+        metadata->fsevents_md.time_spent_enrich_and_update.tv_nsec;
+    pairs_timespec[3].value = &values_timespec[3];
+
+    timespec_map[1].pairs = &pairs_timespec[2];
+    timespec_map[1].count = 2;
+
+    pairs[8].key = "time_enrich_update";
+    values[8].type = RBH_VT_MAP;
+    values[8].map = timespec_map[1];
+    pairs[8].value = &values[8];
+
+    pairs[9].key = "changelog_read";
+    values[9].type = RBH_VT_UINT64;
+    values[9].uint64 = metadata->fsevents_md.changelog_read;
+    pairs[9].value = &values[9];
+
+    pairs[10].key = "start_index";
+    values[10].type = RBH_VT_INT64;
+    values[10].int64 = metadata->fsevents_md.start_index;
+    pairs[10].value = &values[10];
 
     value_map->pairs = pairs;
     value_map->count = count;

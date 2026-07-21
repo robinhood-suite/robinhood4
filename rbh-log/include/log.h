@@ -79,6 +79,13 @@ print_find_log(const struct rbh_value_map *log);
  */
 
 /**
+ * Expects the value to a map with 2 pairs containing int64, prints it as a
+ * timespec with format "tv_sec.tv_nsec".
+ */
+void
+print_timespec(const struct rbh_value *value, const char *header);
+
+/**
  * Expects the value to be int64, prints it as a timestamp.
  */
 void
