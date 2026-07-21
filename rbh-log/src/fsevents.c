@@ -12,6 +12,7 @@
 enum fsevents_log_value {
     CHANGELOG_READ,
     ENRICH_MOUNTPOINT,
+    ENRICH_SKIP_COUNT,
     SOURCE_READ,
     START_INDEX,
     TIME_READ_DEDUP,
@@ -29,8 +30,14 @@ key2fsevents_log_value(const char *key)
 
         break;
     case 'e':
-        if (!strcmp(&key[1], "nrich_mountpoint"))
+        if (strncmp(&key[1], "nrich_", 6))
+            break;
+
+        if (key[7] == 'm' && !strcmp(&key[8], "ountpoint"))
             return ENRICH_MOUNTPOINT;
+
+        if (key[7] == 's' && !strcmp(&key[8], "kip_count"))
+            return ENRICH_SKIP_COUNT;
 
         break;
     case 's':
@@ -67,6 +74,8 @@ static const struct formatted_log_value fsevents_log_value[] = {
     [CHANGELOG_READ] =     { .header = "Amount of changelog read",
                              .print_log_value = print_value },
     [ENRICH_MOUNTPOINT] =  { .header = "Enrichment mountpoint",
+                             .print_log_value = print_value },
+    [ENRICH_SKIP_COUNT] =  { .header = "Number of skipped entries in enrichment",
                              .print_log_value = print_value },
     [SOURCE_READ] =        { .header = "Source of the events",
                              .print_log_value = print_value },

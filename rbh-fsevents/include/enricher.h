@@ -10,6 +10,7 @@
 
 #include <robinhood/backend.h>
 #include <robinhood/iterator.h>
+#include <robinhood/log.h>
 
 struct enrich_iter_builder;
 
@@ -29,6 +30,7 @@ struct enrich_iter_builder {
     const struct enrich_iter_builder_operations *ops;
     int mount_fd;
     const char *mount_path;
+    struct rbh_fsevents_metadata *fsevents_md;
 };
 
 static inline struct rbh_iterator *
@@ -58,8 +60,9 @@ enrich_iter_builder_destroy(struct enrich_iter_builder *builder)
 
 struct enrich_iter_builder *
 enrich_iter_builder_from_backend(const char *type,
-                                 struct rbh_backend *rbh_backend,
-                                 const char *mount_path);
+                                 struct rbh_backend *backend,
+                                 const char *mount_path,
+                                 struct rbh_fsevents_metadata *fsevents_md);
 
 struct rbh_iterator *
 iter_no_partial(struct rbh_iterator *fsevents);

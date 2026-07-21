@@ -279,7 +279,8 @@ sink_exit(void)
 }
 
 static struct enrich_iter_builder *
-enrich_iter_builder_from_uri(const char *uri, char **backend_source)
+enrich_iter_builder_from_uri(const char *uri, char **backend_source,
+                             struct rbh_fsevents_metadata *fsevents_md)
 {
     struct enrich_iter_builder *builder;
     struct rbh_backend *uri_backend;
@@ -302,7 +303,7 @@ enrich_iter_builder_from_uri(const char *uri, char **backend_source)
 
     uri_backend = rbh_backend_from_uri(uri, true);
     builder = enrich_iter_builder_from_backend(rbh_uri->backend, uri_backend,
-                                               rbh_uri->fsname);
+                                               rbh_uri->fsname, fsevents_md);
     save_errno = errno;
     free(rbh_uri);
     errno = save_errno;
@@ -820,7 +821,9 @@ main(int argc, char *argv[])
             dump_file = xstrdup(optarg);
             break;
         case 'e':
-            enrich_builder = enrich_iter_builder_from_uri(optarg, &cmd_backend);
+            enrich_builder = enrich_iter_builder_from_uri(
+                optarg, &cmd_backend, &metadata.fsevents_md
+            );
             if (enrich_builder == NULL)
                 error(EXIT_FAILURE, errno, "invalid enrich URI '%s'", optarg);
             break;
