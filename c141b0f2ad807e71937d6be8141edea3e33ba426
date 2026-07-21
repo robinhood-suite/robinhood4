@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a00e2b7_61b99fcf",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-21T09:38:14Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "070aa225_ebfbd8e9",
+      "range": {
+        "startLine": 391,
+        "startChar": 0,
+        "endLine": 391,
+        "endChar": 2
+      },
+      "revId": "c141b0f2ad807e71937d6be8141edea3e33ba426",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1ac82d8_edfb3454",
@@ -156,6 +180,30 @@
       "side": 1,
       "message": "Well, I changed to the append mode in case multiple policies wanted to log in the same file. There was no expected behavior for the erasure of the log file.",
       "parentUuid": "a0a1066e_84fad963",
+      "range": {
+        "startLine": 435,
+        "startChar": 36,
+        "endLine": 435,
+        "endChar": 37
+      },
+      "revId": "c141b0f2ad807e71937d6be8141edea3e33ba426",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b063b169_c3dba0cd",
+        "filename": "librobinhood/src/policyengine/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-21T09:38:14Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8b6ce7b6_d4574cbe",
       "range": {
         "startLine": 435,
         "startChar": 36,
