@@ -32,7 +32,7 @@ fsevents_metadata_value_map(struct rbh_metadata *metadata)
     struct rbh_value_pair *pairs;
     struct rbh_value *values;
     int count_timespec = 4;
-    int count = 11;
+    int count = 12;
 
     if (metadata_sstack == NULL)
         metadata_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
@@ -117,6 +117,11 @@ fsevents_metadata_value_map(struct rbh_metadata *metadata)
     values[10].type = RBH_VT_INT64;
     values[10].int64 = metadata->fsevents_md.start_index;
     pairs[10].value = &values[10];
+
+    pairs[11].key = "enrich_skip_count";
+    values[11].type = RBH_VT_UINT64;
+    values[11].uint64 = metadata->fsevents_md.enrich_skip_count;
+    pairs[11].value = &values[11];
 
     value_map->pairs = pairs;
     value_map->count = count;
