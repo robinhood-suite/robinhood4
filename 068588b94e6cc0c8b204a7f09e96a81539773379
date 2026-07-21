@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c50fc41b_dac3c7bc",
+        "filename": "rbh-find/src/log.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-21T14:40:29Z",
+      "side": 1,
+      "message": "comment: well, that\u0027s just another pair, for exec finds, but not sure this is really interesting ; the fact that not all execs work may be sufficient\n\nInstead of storing it in the database, we can compute and print it using rbh-log?",
+      "range": {
+        "startLine": 57,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 11
+      },
+      "revId": "068588b94e6cc0c8b204a7f09e96a81539773379",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "908c5037_0b6654cb",
+        "filename": "rbh-log/tests/test_last_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-21T14:40:29Z",
+      "side": 1,
+      "message": "comment: the grep command and the error message does not seem to correspond",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 54
+      },
+      "revId": "068588b94e6cc0c8b204a7f09e96a81539773379",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
