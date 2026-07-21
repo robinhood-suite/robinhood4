@@ -22,6 +22,30 @@
       },
       "revId": "9229bb756369eaaf6e7e9e8a5f75ec7f73f5278e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6d293fe_27ee16b3",
+        "filename": "rbh-log/src/sync.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-21T07:50:36Z",
+      "side": 1,
+      "message": "No it is necessary here because you can\u0027t define variables inside a case. The workaround for this is to create a sub-scope with `{}`. They are removed in a next patch anyway.",
+      "parentUuid": "329d186a_18a4411c",
+      "range": {
+        "startLine": 84,
+        "startChar": 23,
+        "endLine": 84,
+        "endChar": 24
+      },
+      "revId": "9229bb756369eaaf6e7e9e8a5f75ec7f73f5278e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
