@@ -170,7 +170,7 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog,
     if (colon) {
         /* colon = backend_type:fsname */
         *colon = '\0';
-        fsevents_md->source_read = colon + 1;
+        fsevents_md->source_read = xstrdup(colon + 1);
     }
 
     if (raw_uri->query)
@@ -912,6 +912,7 @@ main(int argc, char *argv[])
     insert_fsevents_log(sink[0], &metadata);
 
     free((char *) metadata.fsevents_md.enrich_mountpoint);
+    free((char *) metadata.fsevents_md.source_read);
     free(metadata.common_md.command_line);
     rbh_config_free();
 

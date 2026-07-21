@@ -10,6 +10,21 @@
 #include "log.h"
 
 void
+print_timespec(const struct rbh_value *value, const char *header)
+{
+    struct timespec timespec;
+
+    assert(value->type == RBH_VT_MAP);
+    assert(value->map.count == 2);
+
+    timespec.tv_sec = value->map.pairs[0].value->int64;
+    timespec.tv_nsec = value->map.pairs[1].value->int64;
+
+    printf(" - %-*s: %lu.%lu\n", WIDTH, header,
+           timespec.tv_sec, timespec.tv_nsec);
+}
+
+void
 print_time_from_timestamp(const struct rbh_value *value, const char *header)
 {
     time_t time = (time_t) value->int64;

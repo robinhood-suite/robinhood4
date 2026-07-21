@@ -43,6 +43,18 @@ check_log_result()
 
     echo "$output" | grep "Number" > /dev/null ||
         error "worker_count should have been retrieved"
+
+    echo "$output" | grep "Amount" > /dev/null ||
+        error "changelog_read should have been retrieved"
+
+    echo "$output" | grep "Starting" > /dev/null ||
+        error "start_index should have been retrieved"
+
+    echo "$output" | grep "reading/deduplicating" > /dev/null ||
+        error "time_read_dedup should have been retrieved"
+
+    echo "$output" | grep "enriching/updating" > /dev/null ||
+        error "time_enrich_update should have been retrieved"
 }
 
 test_N_logs()
@@ -60,14 +72,14 @@ test_N_logs()
 
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 9 * $expected)); then
-        error "There should be 9 * $expected lines about fsevents (7 for content, 2 for header/footer, time $expected logs), got '$output'"
+    if ((n_lines != 13 * $expected)); then
+        error "There should be 13 * $expected lines about fsevents (11 for content, 2 for header/footer, time $expected logs), got '$output'"
     fi
 
     for i in $(seq 1 $expected); do
-        local one_log="$(echo "$output" | head -n 9)"
+        local one_log="$(echo "$output" | head -n 13)"
         check_log_result "$one_log"
-        output="$(echo "$output" | sed 1,9d)"
+        output="$(echo "$output" | sed 1,13d)"
     done
 }
 
