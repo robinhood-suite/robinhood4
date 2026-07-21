@@ -28,6 +28,10 @@ struct rbh_fsevents_metadata {
     const char *source_read;
     const char *enrich_mountpoint;
     size_t worker_count;
+    struct timespec time_spent_read_and_dedup;
+    struct timespec time_spent_enrich_and_update;
+    size_t changelog_read;
+    int64_t start_index;
 };
 
 struct rbh_find_metadata {

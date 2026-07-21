@@ -124,12 +124,12 @@ parse_query(const char *query)
 }
 
 static struct source *
-source_from_file_uri(const char *file_path,
+source_from_file_uri(struct rbh_fsevents_metadata *fsevents_md,
                      struct source *(*source_from)(FILE *))
 {
     FILE *file;
 
-    file = fopen(file_path, "r");
+    file = fopen(fsevents_md->source_read, "r");
     if (file != NULL)
         /* SOURCE is a path to a file */
         return source_from(file);
@@ -138,9 +138,9 @@ source_from_file_uri(const char *file_path,
         /* SOURCE is a path to a file, but there was some sort of error trying
          * to open it.
          */
-        error(EXIT_FAILURE, errno, "%s", file_path);
+        error(EXIT_FAILURE, errno, "%s", fsevents_md->source_read);
 
-    error(EX_USAGE, EINVAL, "%s", file_path);
+    error(EX_USAGE, EINVAL, "%s", fsevents_md->source_read);
     __builtin_unreachable();
 }
 
@@ -148,7 +148,7 @@ static struct sink **sink;
 
 static struct source *
 source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog,
-                int64_t start_index, const char **name)
+                struct rbh_fsevents_metadata *fsevents_md)
 {
     struct source *source = NULL;
     struct rbh_raw_uri *raw_uri;
@@ -170,7 +170,7 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog,
     if (colon) {
         /* colon = backend_type:fsname */
         *colon = '\0';
-        *name = colon + 1;
+        fsevents_md->source_read = colon + 1;
     }
 
     if (raw_uri->query)
@@ -180,11 +180,11 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog,
 
     (void) username;
     if (strcmp(raw_uri->path, "file") == 0) {
-        source = source_from_file_uri(*name, source_from_file);
+        source = source_from_file_uri(fsevents_md, source_from_file);
     } else if (strcmp(raw_uri->path, "lustre") == 0) {
 #ifdef HAVE_LUSTRE
-        source = source_from_lustre_changelog(*name, username, dump_file,
-                                              max_changelog, start_index,
+        source = source_from_lustre_changelog(username, dump_file,
+                                              max_changelog, fsevents_md,
                                               sink[0]);
 #else
         free(raw_uri);
@@ -204,7 +204,7 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog,
 
 static struct source *
 source_new(const char *arg, const char *dump_file, uint64_t max_changelog,
-           int64_t start_index, const char **source_read)
+           int64_t start_index, struct rbh_fsevents_metadata *fsevents_md)
 {
     if (strcmp(arg, "-") == 0) {
         *source_read = "stdin";
@@ -214,7 +214,7 @@ source_new(const char *arg, const char *dump_file, uint64_t max_changelog,
 
     if (rbh_is_uri(arg))
         return source_from_uri(arg, dump_file, max_changelog, start_index,
-                               source_read);
+                               fsevents_md);
 
     error(EX_USAGE, EINVAL, "%s", arg);
     __builtin_unreachable();
@@ -551,7 +551,7 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
                 struct consumer_info *cinfos,
                 pthread_mutex_t *mutex_available_for_work,
                 pthread_cond_t *signal_available_for_work,
-                struct timespec *total_read)
+                struct rbh_fsevents_metadata *fsevents_md)
 {
     struct rbh_mut_iterator *batch = NULL;
     struct sub_batch *sub_batch;
@@ -622,7 +622,8 @@ end:
             return rc;
         }
 
-        timespec_accumulate(total_read, start, end);
+        timespec_accumulate(&fsevents_md->time_spent_read_and_dedup,
+                            start, end);
     }
 
     if (batch == NULL && errno != ENODATA)
@@ -639,7 +640,7 @@ end:
 static void
 cleanup_producer_consumers(struct rbh_mut_iterator *deduplicator,
                            struct consumer_info *cinfos, pthread_t *consumers,
-                           struct timespec *total_enrich)
+                           struct rbh_fsevents_metdata *fsevents_md)
 {
     int i;
 
@@ -649,7 +650,9 @@ cleanup_producer_consumers(struct rbh_mut_iterator *deduplicator,
 
     for (i = 0; i < nb_workers; i++) {
         pthread_join(consumers[i], NULL);
-        *total_enrich = timespec_add(*total_enrich, cinfos->total_enrich);
+        fsevents_md->time_spent_enrich_and_update =
+            timespec_add(fsevents_md->time_spent_enrich_and_update,
+                         cinfos->total_enrich);
         pthread_cond_destroy(&cinfos[i].signal_list);
         pthread_mutex_destroy(&cinfos[i].mutex_list);
         rbh_list_del(cinfos[i].list);
@@ -664,14 +667,13 @@ cleanup_producer_consumers(struct rbh_mut_iterator *deduplicator,
 static int
 feed(struct sink **sink, struct source *source,
      struct enrich_iter_builder *builder, bool allow_partials,
-     struct deduplicator_options *dedup_opts)
+     struct deduplicator_options *dedup_opts,
+     struct rbh_fsevents_metadata *fsevents_md)
 {
     struct rbh_mut_iterator *deduplicator = NULL;
     pthread_mutex_t mutex_available_for_work;
     pthread_cond_t signal_available_for_work;
     struct consumer_info *cinfos = NULL;
-    struct timespec total_enrich = {0};
-    struct timespec total_read = {0};
     pthread_t *consumers = NULL;
     int rc = 0;
 
@@ -686,10 +688,10 @@ feed(struct sink **sink, struct source *source,
     /* Launch the producer loop */
     rc = producer_thread(deduplicator, builder, allow_partials, cinfos,
                          &mutex_available_for_work, &signal_available_for_work,
-                         &total_read);
+                         metadata);
 
     /* Cleanup the producer and consumers */
-    cleanup_producer_consumers(deduplicator, cinfos, consumers, &total_enrich);
+    cleanup_producer_consumers(deduplicator, cinfos, consumers, metadata);
 
     pthread_cond_destroy(&signal_available_for_work);
     pthread_mutex_destroy(&mutex_available_for_work);
@@ -700,10 +702,13 @@ feed(struct sink **sink, struct source *source,
 
     if (verbose) {
         printf("Total time elapsed to read changelogs and dedup:"
-               "%ld.%09ld seconds\n", total_read.tv_sec, total_read.tv_nsec);
-        printf("Total time elapsed to enrich and update mongo:"
-               "%ld.%09ld seconds\n", total_enrich.tv_sec / nb_workers,
-               total_enrich.tv_nsec / nb_workers);
+               "%ld.%09ld seconds\n",
+               fsevents_md->time_spent_read_and_dedup.tv_sec,
+               fsevents_md->time_spent_read_and_dedup.tv_nsec);
+        printf("Total time elapsed to enrich and update mongo (average between all workers):"
+               "%ld.%09ld seconds\n",
+               fsevents_md->time_spent_enrich_and_update.tv_sec / nb_workers,
+               fsevents_md->time_spent_enrich_and_update.tv_nsec / nb_workers);
     }
 
     return rc;
@@ -787,11 +792,11 @@ main(int argc, char *argv[])
     struct rbh_metadata metadata = { 0 };
     uint64_t max_changelog = 0;
     char *cmd_backend = NULL;
-    int64_t start_index = -1;
     char *dump_file = NULL;
     int rc;
     char c;
 
+    metadata.fsevents_md.start_index = -1;
     metadata.common_md.command_line = get_command_line(argc, argv);
 
     rc = rbh_config_from_args(argc - 1, argv + 1);
@@ -824,9 +829,9 @@ main(int argc, char *argv[])
             usage();
             return 0;
         case 'i':
-            if (str2int64_t(optarg, &start_index))
+            if (str2int64_t(optarg, &metadata.fsevents_md.start_index))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
-            if (start_index < 0)
+            if (metadata.fsevents_md.start_index < 0)
                 error(EXIT_FAILURE, 0, "'%s' cannot be a negative integer",
                       optarg);
             break;
@@ -883,8 +888,8 @@ main(int argc, char *argv[])
     for (int i = 0; i < nb_workers; i++)
         sink[i] = sink_new(argv[optind]);
 
-    source = source_new(source_uri, dump_file, max_changelog, start_index,
-                        &metadata.fsevents_md.source_read);
+    source = source_new(source_uri, dump_file, max_changelog,
+                        &metadata.fsevents_md);
 
     if (enrich_builder) {
         if (insert_backend_source(cmd_backend, enrich_builder, sink[0]) &&
@@ -902,7 +907,7 @@ main(int argc, char *argv[])
 
     metadata.common_md.start_time = time(NULL);
     rc = feed(sink, source, enrich_builder, strcmp(sink[0]->name, "backend"),
-              &dedup_opts);
+              &dedup_opts, &metadata.fsevents_md);
     metadata.common_md.end_time = time(NULL);
 
     insert_fsevents_log(sink[0], &metadata);
