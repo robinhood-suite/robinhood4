@@ -10,8 +10,12 @@
 #include "log.h"
 
 enum fsevents_log_value {
+    CHANGELOG_READ,
     ENRICH_MOUNTPOINT,
     SOURCE_READ,
+    START_INDEX,
+    TIME_READ_DEDUP,
+    TIME_ENRICH_UPDATE,
     WORKER_COUNT,
 };
 
@@ -19,14 +23,33 @@ static enum fsevents_log_value
 key2fsevents_log_value(const char *key)
 {
     switch (key[0]) {
+    case 'c':
+        if (!strcmp(&key[1], "hangelog_read"))
+            return CHANGELOG_READ;
+
+        break;
     case 'e':
         if (!strcmp(&key[1], "nrich_mountpoint"))
             return ENRICH_MOUNTPOINT;
 
         break;
     case 's':
-        if (!strcmp(&key[1], "ource_read"))
+        if (key[1] == 'o' && !strcmp(&key[2], "urce_read"))
             return SOURCE_READ;
+
+        if (key[1] == 't' && !strcmp(&key[2], "art_index"))
+            return START_INDEX;
+
+        break;
+    case 't':
+        if (strncmp(&key[1], "ime_", 4))
+            break;
+
+        if (key[5] == 'r' && !strcmp(&key[6], "ead_dedup"))
+            return TIME_READ_DEDUP;
+
+        if (key[5] == 'e' && !strcmp(&key[6], "nrich_update"))
+            return TIME_ENRICH_UPDATE;
 
         break;
     case 'w':
@@ -41,12 +64,20 @@ key2fsevents_log_value(const char *key)
 }
 
 static const struct formatted_log_value fsevents_log_value[] = {
-    [ENRICH_MOUNTPOINT] = { .header = "Enrichment mountpoint",
-                            .print_log_value = print_value },
-    [SOURCE_READ] =       { .header = "Source of the events",
-                            .print_log_value = print_value },
-    [WORKER_COUNT] =      { .header = "Number of parallel workers used",
-                            .print_log_value = print_value },
+    [CHANGELOG_READ] =     { .header = "Amount of changelog read",
+                             .print_log_value = print_value },
+    [ENRICH_MOUNTPOINT] =  { .header = "Enrichment mountpoint",
+                             .print_log_value = print_value },
+    [SOURCE_READ] =        { .header = "Source of the events",
+                             .print_log_value = print_value },
+    [START_INDEX] =        { .header = "Starting index for reading changelogs",
+                             .print_log_value = print_value },
+    [TIME_READ_DEDUP] =    { .header = "Time spent reading/deduplicating events",
+                             .print_log_value = print_timespec },
+    [TIME_ENRICH_UPDATE] = { .header = "Time spent enriching/updating mirror (on average between all workers)",
+                             .print_log_value = print_timespec },
+    [WORKER_COUNT] =       { .header = "Number of parallel workers used",
+                             .print_log_value = print_value },
 };
 
 void
