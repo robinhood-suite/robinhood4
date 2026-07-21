@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07b97a11_44d431e5",
+        "filename": "librobinhood/src/utils/utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-21T07:52:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd141bff_374470ef",
+      "range": {
+        "startLine": 271,
+        "startChar": 41,
+        "endLine": 271,
+        "endChar": 42
+      },
+      "revId": "b62612053097d1271726c725d0b358033f85f0ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae9f2fcb_4e25d592",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96f48572_315111e3",
+        "filename": "rbh-find/include/log.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-21T07:52:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae9f2fcb_4e25d592",
+      "range": {
+        "startLine": 16,
+        "startChar": 38,
+        "endLine": 16,
+        "endChar": 49
+      },
+      "revId": "b62612053097d1271726c725d0b358033f85f0ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f95eb56_46aec063",
@@ -60,6 +108,30 @@
       "writtenOn": "2026-07-20T09:48:10Z",
       "side": 1,
       "message": "typo: here and below should be `find`",
+      "range": {
+        "startLine": 60,
+        "startChar": 46,
+        "endLine": 60,
+        "endChar": 50
+      },
+      "revId": "b62612053097d1271726c725d0b358033f85f0ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a3e73b2_a87692ff",
+        "filename": "rbh-find/src/log.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-21T07:52:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f95eb56_46aec063",
       "range": {
         "startLine": 60,
         "startChar": 46,
