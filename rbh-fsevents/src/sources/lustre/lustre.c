@@ -67,34 +67,38 @@ lustre_changelog_get_start_idx(struct lustre_changelog_iterator *events,
 
 static void
 lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
-                           const char *mdtname, const char *username,
-                           const char *dump_file, uint64_t max_changelog,
-                           int64_t start_index, struct sink *sink)
+                           const char *username, const char *dump_file,
+                           uint64_t max_changelog,
+                           struct rbh_fsevents_metadata *fsevents_md,
+                           struct sink *sink)
 {
     const char *mdtname_index;
     int rc;
 
+    events->fsevents_md = fsevents_md;
     events->max_changelog = max_changelog;
-    events->nb_changelog = 0;
+    events->fsevents_md->changelog_read = 0;
     events->sink = sink;
     events->empty = false;
 
-    if (start_index < 0) {
+    if (fsevents_md->start_index < 0) {
         uint64_t db_index = 0;
 
-        db_index = lustre_changelog_get_start_idx(events, mdtname);
+        db_index = lustre_changelog_get_start_idx(events,
+                                                  fsevents_md->source_read);
         events->last_changelog_index = db_index;
         events->last_batch_changelog_index = db_index;
-        start_index = (db_index == 0 ? 0 : db_index + 1);
+        fsevents_md->start_index = (db_index == 0 ? 0 : db_index + 1);
     } else {
-        events->last_changelog_index = start_index;
-        events->last_batch_changelog_index = start_index;
+        events->last_changelog_index = fsevents_md->start_index;
+        events->last_batch_changelog_index = fsevents_md->start_index;
     }
 
     rc = llapi_changelog_start(&events->reader,
                                CHANGELOG_FLAG_JOBID |
                                CHANGELOG_FLAG_EXTRA_FLAGS,
-                               mdtname, start_index);
+                               fsevents_md->source_read,
+                               fsevents_md->start_index);
     if (rc < 0)
         error(EXIT_FAILURE, -rc, "llapi_changelog_start");
 
@@ -110,9 +114,10 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
     events->fsevents_iterator = NULL;
 
     events->username = xstrdup_safe(username);
-    events->mdt_name = xstrdup(mdtname);
+    events->mdt_name = xstrdup(fsevents_md->source_read);
 
-    for (mdtname_index = mdtname + strlen(mdtname) - 1;
+    for (mdtname_index =
+            fsevents_md->source_read + strlen(fsevents_md->source_read) - 1;
          isdigit(*mdtname_index); mdtname_index--);
 
     rc = str2int64_t(++mdtname_index, (int64_t *) &events->source_mdt_index);
@@ -165,16 +170,17 @@ static const struct source LUSTRE_SOURCE = {
 };
 
 struct source *
-source_from_lustre_changelog(const char *mdtname, const char *username,
-                             const char *dump_file, uint64_t max_changelog,
-                             int64_t start_index, struct sink *sink)
+source_from_lustre_changelog(const char *username, const char *dump_file,
+                             uint64_t max_changelog,
+                             struct rbh_fsevents_metadata *fsevents_md,
+                             struct sink *sink)
 {
     struct lustre_source *source;
 
     source = xmalloc(sizeof(*source));
 
-    lustre_changelog_iter_init(&source->events, mdtname, username,
-                               dump_file, max_changelog, start_index, sink);
+    lustre_changelog_iter_init(&source->events, username, dump_file,
+                               max_changelog, fsevents_md, sink);
 
     initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
     source->batch_list = xmalloc(sizeof(*source->batch_list));

@@ -727,7 +727,7 @@ lustre_changelog_iter_next(void *iterator)
     }
 
     if (records->max_changelog > 0 &&
-        records->max_changelog == records->nb_changelog) {
+        records->max_changelog == records->fsevents_md->changelog_read) {
         records->empty = true;
         errno = ENODATA;
         return NULL;
@@ -745,7 +745,7 @@ retry:
     }
 
     records->last_changelog_index = record->cr_index;
-    records->nb_changelog++;
+    records->fsevents_md->changelog_read++;
 
     if (records->dump_file)
         dump_changelog(records, record);
