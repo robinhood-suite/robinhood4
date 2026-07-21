@@ -41,7 +41,6 @@ struct lustre_changelog_iterator {
     int32_t source_mdt_index;
     uint64_t last_changelog_index;
     uint64_t last_batch_changelog_index;
-    uint64_t nb_changelog;
     uint64_t max_changelog;
     bool empty;
 
@@ -51,6 +50,8 @@ struct lustre_changelog_iterator {
     struct source_batch_node *curr_batch;
 
     FILE *dump_file;
+
+    struct rbh_fsevents_metadata *fsevents_md;
 };
 
 struct lustre_source {

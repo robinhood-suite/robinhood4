@@ -12,8 +12,10 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "sink.h"
 #include <robinhood/iterator.h>
+#include <robinhood/log.h>
+
+#include "sink.h"
 
 struct source {
     struct rbh_iterator fsevents;
@@ -36,8 +38,9 @@ struct source *
 source_from_file(FILE *file);
 
 struct source *
-source_from_lustre_changelog(const char *mdtname, const char *username,
-                             const char *dump_file, uint64_t max_changelog,
-                             int64_t start_index, struct sink *sink);
+source_from_lustre_changelog(const char *username, const char *dump_file,
+                             uint64_t max_changelog,
+                             struct rbh_fsevents_metadata *fsevents_md,
+                             struct sink *sink);
 
 #endif
