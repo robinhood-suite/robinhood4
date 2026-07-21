@@ -38,3 +38,14 @@ def run(policies):
 
         result = rbh_pe_execute(iterator, backend, policy)
         print(f"[INFO] Policy '{name}' completed")
+
+        decision = evaluate_trigger(
+            policy.trigger,
+            TriggerContext(manual_mode=True, database_uri=get_database()),
+        )
+
+        if decision.matched:
+            print(
+                f"[WARN] Policy '{name}' has been completed, but "
+                "trigger is still raised"
+            )
