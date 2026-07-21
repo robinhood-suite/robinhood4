@@ -705,6 +705,7 @@ skip:
                         "Detected stale entry '%s', skipping it: %s (%d)\n",
                         fsevent->link.name, strerror(errno), errno);
 
+            enricher->fsevents_md->enrich_skip_count++;
             goto skip;
         }
 
@@ -824,9 +825,9 @@ setup_fsevent_enrichers(struct enricher *enricher, const char *type)
 }
 
 struct rbh_iterator *
-posix_iter_enrich(struct rbh_backend *backend, const char *type,
-                  struct rbh_iterator *fsevents, int mount_fd,
-                  const char *mount_path, bool skip_error, bool estale_logs)
+posix_iter_enrich(struct enrich_iter_builder *builder,
+                  struct rbh_iterator *fsevents, bool skip_error,
+                  bool estale_logs)
 {
     struct rbh_value_pair *pairs;
     struct enricher *enricher;
@@ -839,17 +840,18 @@ posix_iter_enrich(struct rbh_backend *backend, const char *type,
     enricher = xmalloc(sizeof(*enricher));
 
     enricher->iterator = POSIX_ENRICHER_ITERATOR;
-    enricher->backend = backend;
+    enricher->backend = builder->backend;
     enricher->fsevents = fsevents;
     enricher->fd = 0;
-    enricher->mount_fd = mount_fd;
-    enricher->mount_path = mount_path;
+    enricher->mount_fd = builder->mount_fd;
+    enricher->mount_path = builder->mount_path;
     enricher->pairs = pairs;
     enricher->pair_count = INITIAL_PAIR_COUNT;
     enricher->symlink = symlink;
     enricher->skip_error = skip_error;
     enricher->estale_logs = estale_logs;
-    setup_fsevent_enrichers(enricher, type);
+    enricher->fsevents_md = builder->fsevents_md;
+    setup_fsevent_enrichers(enricher, builder->type);
 
     return &enricher->iterator;
 }
@@ -929,9 +931,7 @@ posix_enrich_iter_builder_build_iter(void *_builder,
 {
     struct enrich_iter_builder *builder = _builder;
 
-    return posix_iter_enrich(builder->backend, builder->type, fsevents,
-                             builder->mount_fd, builder->mount_path, skip_error,
-                             estale_logs);
+    return posix_iter_enrich(builder, fsevents, skip_error, estale_logs);
 }
 
 #define MIN_VALUES_SSTACK_ALLOC (1 << 6)
@@ -1022,9 +1022,9 @@ const struct enrich_iter_builder POSIX_ENRICH_ITER_BUILDER = {
 };
 
 struct enrich_iter_builder *
-posix_enrich_iter_builder(struct rbh_backend *backend,
-                          const char *type,
-                          const char *mount_path)
+posix_enrich_iter_builder(struct rbh_backend *backend, const char *type,
+                          const char *mount_path,
+                          struct rbh_fsevents_metadata *fsevents_md)
 {
     struct enrich_iter_builder *builder;
 
@@ -1039,6 +1039,7 @@ posix_enrich_iter_builder(struct rbh_backend *backend,
         error(EXIT_FAILURE, errno, "open: %s", mount_path);
 
     builder->mount_path = xstrdup(mount_path);
+    builder->fsevents_md = fsevents_md;
 
     return builder;
 }

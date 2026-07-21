@@ -32,6 +32,7 @@ struct rbh_fsevents_metadata {
     struct timespec time_spent_enrich_and_update;
     size_t changelog_read;
     int64_t start_index;
+    size_t enrich_skip_count;
 };
 
 struct rbh_find_metadata {
