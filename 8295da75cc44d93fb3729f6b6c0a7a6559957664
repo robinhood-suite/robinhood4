@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3d82d964_aed932c1",
+        "filename": "rbh-log/tests/test_find_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-21T07:55:27Z",
+      "side": 1,
+      "message": "Because currently, the ID for each log is the current timestamp, so if two commands occur at the same timestamp, they are bundled in the same log. That can be handled easily, but it is worse if it\u0027s two of the same commands, in which case the first one is overwritten. I will handle this better in the future, but for now, a simple sleep in the tests will have to do.",
+      "parentUuid": "e6314ea6_0339dbc2",
+      "revId": "8295da75cc44d93fb3729f6b6c0a7a6559957664",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f626b797_f4b184da",
         "filename": "rbh-log/tests/test_find_logs.bash",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2026-07-20T09:18:10Z",
       "side": 1,
       "message": "minor: to remove",
+      "revId": "8295da75cc44d93fb3729f6b6c0a7a6559957664",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57e14c9a_a6312899",
+        "filename": "rbh-log/tests/test_find_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-21T07:55:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f626b797_f4b184da",
       "revId": "8295da75cc44d93fb3729f6b6c0a7a6559957664",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
