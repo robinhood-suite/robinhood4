@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cab39208_6f15612e",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-22T07:26:22Z",
+      "side": 1,
+      "message": "minor: not sure this computes average correctly : `tv_sec` and `tv_nsec` shouldn\u0027t be divided independently. May be better to convert to a single unit before dividing.",
+      "range": {
+        "startLine": 709,
+        "startChar": 0,
+        "endLine": 710,
+        "endChar": 2
+      },
+      "revId": "9f8c5835c20742a464ff50093c822cb94e418150",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
