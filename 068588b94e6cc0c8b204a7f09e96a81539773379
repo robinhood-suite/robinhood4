@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3a892cc4_e2cbcab1",
+        "filename": "rbh-find/src/log.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-23T07:49:53Z",
+      "side": 1,
+      "message": "We could, I didn\u0027t design the code for such changes, but we could. I think we\u0027ll do an inventory when the stack is done about what we could add or not",
+      "parentUuid": "c50fc41b_dac3c7bc",
+      "range": {
+        "startLine": 57,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 11
+      },
+      "revId": "068588b94e6cc0c8b204a7f09e96a81539773379",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "908c5037_0b6654cb",
         "filename": "rbh-log/tests/test_last_logs.bash",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2026-07-21T14:40:29Z",
       "side": 1,
       "message": "comment: the grep command and the error message does not seem to correspond",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 54
+      },
+      "revId": "068588b94e6cc0c8b204a7f09e96a81539773379",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb84738e_4cd6163f",
+        "filename": "rbh-log/tests/test_last_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-23T07:49:53Z",
+      "side": 1,
+      "message": "They do, I just used the actual field stored/retrieved so that it\u0027s easier to check what\u0027s missing or not. I check for the header with the grep, and show in the error the actual field. Do you want me to change this ?",
+      "parentUuid": "908c5037_0b6654cb",
       "range": {
         "startLine": 73,
         "startChar": 4,
