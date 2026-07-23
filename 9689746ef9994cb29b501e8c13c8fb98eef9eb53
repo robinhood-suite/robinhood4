@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fde029e_4b69dae4",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-23T07:02:33Z",
+      "side": 1,
+      "message": "question: Don\u0027t we need to store also if it\u0027s target an user or a group ?",
+      "revId": "9689746ef9994cb29b501e8c13c8fb98eef9eb53",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
