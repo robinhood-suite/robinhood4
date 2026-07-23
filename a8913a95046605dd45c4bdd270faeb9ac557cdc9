@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "883c2f3d_4bf5ef8b",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-23T07:31:28Z",
+      "side": 1,
+      "message": "style: order",
+      "range": {
+        "startLine": 174,
+        "startChar": 4,
+        "endLine": 175,
+        "endChar": 21
+      },
+      "revId": "a8913a95046605dd45c4bdd270faeb9ac557cdc9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79d3ca37_9ce6e54f",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-23T07:31:28Z",
+      "side": 1,
+      "message": "question: Why you are not storing the owner and other ?",
+      "revId": "a8913a95046605dd45c4bdd270faeb9ac557cdc9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09564f49_9a589a28",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-23T07:31:28Z",
+      "side": 1,
+      "message": "style: order",
+      "range": {
+        "startLine": 207,
+        "startChar": 4,
+        "endLine": 208,
+        "endChar": 21
+      },
+      "revId": "a8913a95046605dd45c4bdd270faeb9ac557cdc9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "baba2a65_708a5286",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-23T07:31:28Z",
+      "side": 1,
+      "message": "question: Why rc \u003d 1 ?",
+      "revId": "a8913a95046605dd45c4bdd270faeb9ac557cdc9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
