@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8aea51ad_66ba19f5",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-23T08:33:45Z",
+      "side": 1,
+      "message": "Yes, this could be useful. It would filter the permissions stored in a specific ACL entry, which is different from the readable, writable and executable filters that evaluate effective access.\n\nAnd not a big deal adding this.\n\nWaiting for the other reviews to see if it is worth adding.",
+      "parentUuid": "b590e97c_03030747",
+      "revId": "7d3ba5bebc495e41a060bb4232a3a032b8267397",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5ddedbaa_04af5e80",
         "filename": "librobinhood/src/plugins/posix/enrichers/acl/README.rst",
         "patchSetId": 1
@@ -31,6 +49,30 @@
       "writtenOn": "2026-07-23T08:04:46Z",
       "side": 1,
       "message": "typo: entries",
+      "range": {
+        "startLine": 129,
+        "startChar": 25,
+        "endLine": 129,
+        "endChar": 32
+      },
+      "revId": "7d3ba5bebc495e41a060bb4232a3a032b8267397",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3431782d_e6ea9192",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-23T08:33:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ddedbaa_04af5e80",
       "range": {
         "startLine": 129,
         "startChar": 25,
