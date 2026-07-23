@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bec610a_3adc23aa",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl_xattr.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-23T07:20:39Z",
+      "side": 1,
+      "message": "style: reverse order",
+      "range": {
+        "startLine": 70,
+        "startChar": 8,
+        "endLine": 71,
+        "endChar": 52
+      },
+      "revId": "94e67e6df830399ece17e98f939212775ab85f04",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
