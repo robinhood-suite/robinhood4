@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b590e97c_03030747",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-23T08:04:46Z",
+      "side": 1,
+      "message": "sugest:  Could it be useful to also provide a permission mask with the filter ? `-acl-user 424242:w` This would retrieve all the files that 424242 can write on. Or the readable, writable and executable filters are enough ?",
+      "revId": "7d3ba5bebc495e41a060bb4232a3a032b8267397",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ddedbaa_04af5e80",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-23T08:04:46Z",
+      "side": 1,
+      "message": "typo: entries",
+      "range": {
+        "startLine": 129,
+        "startChar": 25,
+        "endLine": 129,
+        "endChar": 32
+      },
+      "revId": "7d3ba5bebc495e41a060bb4232a3a032b8267397",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
