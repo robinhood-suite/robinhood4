@@ -46,6 +46,30 @@
       },
       "revId": "9f8c5835c20742a464ff50093c822cb94e418150",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44792260_056a6310",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-23T14:03:28Z",
+      "side": 1,
+      "message": "But the printing doesn\u0027t do that. \nFor example, with `total_time \u003d 1.5s` and `nb_workers\u003d2`, we expect `0.75s` per worker, but here `1/2\u003d0s` and `0.5/2\u003d0.25s` so it prints `0.25s` instead of `0.75s` because of integer division.",
+      "parentUuid": "54c360c4_ef8e44a6",
+      "range": {
+        "startLine": 709,
+        "startChar": 0,
+        "endLine": 710,
+        "endChar": 2
+      },
+      "revId": "9f8c5835c20742a464ff50093c822cb94e418150",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
