@@ -22,6 +22,30 @@
       },
       "revId": "9f8c5835c20742a464ff50093c822cb94e418150",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54c360c4_ef8e44a6",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-23T09:41:02Z",
+      "side": 1,
+      "message": "I\u0027m pretty sure this is correct, `x.y / 3 \u003d (x + y/10) / 3 \u003d x / 3 + (y/10)/3`, i.e. tv_sec / nb_workers + tv_nsec / nb_workers",
+      "parentUuid": "cab39208_6f15612e",
+      "range": {
+        "startLine": 709,
+        "startChar": 0,
+        "endLine": 710,
+        "endChar": 2
+      },
+      "revId": "9f8c5835c20742a464ff50093c822cb94e418150",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
