@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94d4992b_8cdf3cf1",
+        "filename": "rbh-sync/tests/acl/acl_utils.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-23T07:57:41Z",
+      "side": 1,
+      "message": "minor: to remove no ?",
+      "range": {
+        "startLine": 34,
+        "startChar": 31,
+        "endLine": 34,
+        "endChar": 33
+      },
+      "revId": "011c4b0256cdd1b539eedef801672c71505642e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "592627c1_075d472a",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-23T07:57:41Z",
+      "side": 1,
+      "message": "major: 6 ?",
+      "range": {
+        "startLine": 49,
+        "startChar": 43,
+        "endLine": 49,
+        "endChar": 44
+      },
+      "revId": "011c4b0256cdd1b539eedef801672c71505642e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f79c8a70_a04def38",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-23T07:57:41Z",
+      "side": 1,
+      "message": "major: Should be 4 ?",
+      "range": {
+        "startLine": 50,
+        "startChar": 43,
+        "endLine": 50,
+        "endChar": 44
+      },
+      "revId": "011c4b0256cdd1b539eedef801672c71505642e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea5eaf88_8339b32d",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-23T07:57:41Z",
+      "side": 1,
+      "message": "major: 5 ?",
+      "range": {
+        "startLine": 57,
+        "startChar": 47,
+        "endLine": 57,
+        "endChar": 48
+      },
+      "revId": "011c4b0256cdd1b539eedef801672c71505642e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
