@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7be79f83_a0ac8a4f",
+        "filename": "rbh-sync/tests/acl/acl_utils.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-23T08:33:15Z",
+      "side": 1,
+      "message": "Done. Copied from other extensions, where it was used for an additional option maybe.",
+      "parentUuid": "94d4992b_8cdf3cf1",
+      "range": {
+        "startLine": 34,
+        "startChar": 31,
+        "endLine": 34,
+        "endChar": 33
+      },
+      "revId": "011c4b0256cdd1b539eedef801672c71505642e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "592627c1_075d472a",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-07-23T07:57:41Z",
       "side": 1,
       "message": "major: 6 ?",
+      "range": {
+        "startLine": 49,
+        "startChar": 43,
+        "endLine": 49,
+        "endChar": 44
+      },
+      "revId": "011c4b0256cdd1b539eedef801672c71505642e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7155fb50_05321327",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-23T08:33:15Z",
+      "side": 1,
+      "message": "Done. Here and below the test was succeeding because of a typo with the quotes.",
+      "parentUuid": "592627c1_075d472a",
       "range": {
         "startLine": 49,
         "startChar": 43,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbc12b04_c995505a",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-23T08:33:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f79c8a70_a04def38",
+      "range": {
+        "startLine": 50,
+        "startChar": 43,
+        "endLine": 50,
+        "endChar": 44
+      },
+      "revId": "011c4b0256cdd1b539eedef801672c71505642e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea5eaf88_8339b32d",
@@ -83,6 +155,30 @@
       "writtenOn": "2026-07-23T07:57:41Z",
       "side": 1,
       "message": "major: 5 ?",
+      "range": {
+        "startLine": 57,
+        "startChar": 47,
+        "endLine": 57,
+        "endChar": 48
+      },
+      "revId": "011c4b0256cdd1b539eedef801672c71505642e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df78f050_4ec44684",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-23T08:33:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea5eaf88_8339b32d",
       "range": {
         "startLine": 57,
         "startChar": 47,
