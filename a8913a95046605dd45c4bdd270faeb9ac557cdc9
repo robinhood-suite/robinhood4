@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c358bdf7_518a9328",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-23T08:32:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "883c2f3d_4bf5ef8b",
+      "range": {
+        "startLine": 174,
+        "startChar": 4,
+        "endLine": 175,
+        "endChar": 21
+      },
+      "revId": "a8913a95046605dd45c4bdd270faeb9ac557cdc9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79d3ca37_9ce6e54f",
@@ -37,6 +61,24 @@
       "writtenOn": "2026-07-23T07:31:28Z",
       "side": 1,
       "message": "question: Why you are not storing the owner and other ?",
+      "revId": "a8913a95046605dd45c4bdd270faeb9ac557cdc9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c125477_46dd7204",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-23T08:32:44Z",
+      "side": 1,
+      "message": "As said in the design, they are already stored in statx.mode under standart user and other permissions. It avoids duplicating them.",
+      "parentUuid": "79d3ca37_9ce6e54f",
       "revId": "a8913a95046605dd45c4bdd270faeb9ac557cdc9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -64,6 +106,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00f44dab_04607c63",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-23T08:32:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09564f49_9a589a28",
+      "range": {
+        "startLine": 207,
+        "startChar": 4,
+        "endLine": 208,
+        "endChar": 21
+      },
+      "revId": "a8913a95046605dd45c4bdd270faeb9ac557cdc9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "baba2a65_708a5286",
@@ -77,6 +143,24 @@
       "writtenOn": "2026-07-23T07:31:28Z",
       "side": 1,
       "message": "question: Why rc \u003d 1 ?",
+      "revId": "a8913a95046605dd45c4bdd270faeb9ac557cdc9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b9bce6c_c87dc4aa",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-23T08:32:44Z",
+      "side": 1,
+      "message": "The function returns the number of pairs produced. Acl extension produces only one pair.",
+      "parentUuid": "baba2a65_708a5286",
       "revId": "a8913a95046605dd45c4bdd270faeb9ac557cdc9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
