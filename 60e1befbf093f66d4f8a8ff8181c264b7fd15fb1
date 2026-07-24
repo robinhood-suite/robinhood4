@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dda4ad77_8b2ca11e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-24T11:16:09Z",
+      "side": 1,
+      "message": "Seems good to me.",
+      "revId": "60e1befbf093f66d4f8a8ff8181c264b7fd15fb1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2c847c9_392de4bb",
+        "filename": "packaging/make_rpm.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-24T11:16:09Z",
+      "side": 1,
+      "message": "minor: already checked below",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 2
+      },
+      "revId": "60e1befbf093f66d4f8a8ff8181c264b7fd15fb1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
