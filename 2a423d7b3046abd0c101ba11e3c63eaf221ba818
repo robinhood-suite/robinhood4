@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "869bbdd2_490d9633",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/README.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-24T06:56:28Z",
+      "side": 1,
+      "message": "style: I think you need to add a blank line after those",
+      "range": {
+        "startLine": 43,
+        "startChar": 58,
+        "endLine": 43,
+        "endChar": 60
+      },
+      "revId": "2a423d7b3046abd0c101ba11e3c63eaf221ba818",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
