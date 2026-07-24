@@ -21,6 +21,8 @@ dump_value(const struct rbh_value *value, char *buffer)
         return sprintf(buffer, "%d", value->int32);
     case RBH_VT_INT64:
         return sprintf(buffer, "%ld", value->int64);
+    case RBH_VT_DOUBLE:
+        return sprintf(buffer, "%f", value->float64);
     case RBH_VT_STRING:
         return sprintf(buffer, "%s", value->string);
     case RBH_VT_SEQUENCE:

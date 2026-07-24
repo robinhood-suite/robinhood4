@@ -122,11 +122,20 @@ test_group_by_invalid_value()
     do_db update $testdb "/first_dir" '"statx.uid": null'
     do_db update $testdb "/second_dir/second_file" '"statx.uid": -1'
 
+    # XXX: this is a MongoDB bug, if an entry has a negative integer, it is
+    # considered a double for some reason, but it is fixed in later versions
+    # so just choose one depending on the version used.
+    if (( $(mongo_version) < $(version_code 5.0.0) )); then
+        local shown_uid="-1.000000"
+    else
+        local shown_uid="-1"
+    fi
+
     rbh_report "rbh:$db:$testdb" --csv --group-by "statx.uid,statx.type" \
                                    --output "sum(statx.size)" |
-        difflines "-1,file: $main_user_file_size" \
-	          "$main_user_id,directory: $main_user_dir_size" \
-                  "$fake_user_id,file: $fake_user_file_size"
+        difflines "$shown_uid,file: $main_user_file_size" \
+            "$main_user_id,directory: $main_user_dir_size" \
+            "$fake_user_id,file: $fake_user_file_size"
 }
 
 ################################################################################

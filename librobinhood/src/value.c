@@ -32,6 +32,7 @@ value_data_size(const struct rbh_value *value, size_t offset)
     case RBH_VT_UINT32:
     case RBH_VT_INT64:
     case RBH_VT_UINT64:
+    case RBH_VT_DOUBLE:
     case RBH_VT_NULL:
         return 0;
     case RBH_VT_STRING:
@@ -126,6 +127,9 @@ value_copy(struct rbh_value *dest, const struct rbh_value *src, char **buffer,
         break;
     case RBH_VT_UINT64: /* dest->uint64 */
         dest->uint64 = src->uint64;
+        break;
+    case RBH_VT_DOUBLE: /* dest->float64 */
+        dest->float64 = src->float64;
         break;
     case RBH_VT_STRING: /* dest->string */
         length = strlen(src->string) + 1;
@@ -367,6 +371,17 @@ rbh_value_uint64_new(uint64_t uint64)
 }
 
 struct rbh_value *
+rbh_value_double_new(double float64)
+{
+    const struct rbh_value float64_ = {
+        .type = RBH_VT_DOUBLE,
+        .float64 = float64,
+    };
+
+    return value_clone(&float64_);
+}
+
+struct rbh_value *
 rbh_value_string_new(const char *string)
 {
     const struct rbh_value string_ = {
@@ -447,6 +462,7 @@ rbh_value_validate(const struct rbh_value *value)
     case RBH_VT_UINT32:
     case RBH_VT_INT64:
     case RBH_VT_UINT64:
+    case RBH_VT_DOUBLE:
     case RBH_VT_NULL:
         return 0;
     case RBH_VT_STRING:
@@ -510,6 +526,18 @@ fill_int64_pair(const char *key, int64_t integer, struct rbh_value_pair *pair,
     };
 
     return fill_pair(key, &int64_value, pair, stack);
+}
+
+int
+fill_double_pair(const char *key, double float64, struct rbh_value_pair *pair,
+                 struct rbh_sstack *stack)
+{
+    const struct rbh_value double_value = {
+        .type = RBH_VT_DOUBLE,
+        .float64 = float64,
+    };
+
+    return fill_pair(key, &double_value, pair, stack);
 }
 
 int
