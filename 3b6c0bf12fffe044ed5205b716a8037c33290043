@@ -95,6 +95,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de90fd09_2a1bd707",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-24T10:20:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b59abe1c_6d98a041",
+      "range": {
+        "startLine": 286,
+        "startChar": 7,
+        "endLine": 286,
+        "endChar": 17
+      },
+      "revId": "3b6c0bf12fffe044ed5205b716a8037c33290043",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca63461a_ba7c5c05",
@@ -108,6 +132,30 @@
       "writtenOn": "2026-06-18T08:23:55Z",
       "side": 1,
       "message": "I\u0027m not sure these comments are adding much information",
+      "range": {
+        "startLine": 287,
+        "startChar": 42,
+        "endLine": 287,
+        "endChar": 45
+      },
+      "revId": "3b6c0bf12fffe044ed5205b716a8037c33290043",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a510d57d_9850eceb",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-24T10:20:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca63461a_ba7c5c05",
       "range": {
         "startLine": 287,
         "startChar": 42,
