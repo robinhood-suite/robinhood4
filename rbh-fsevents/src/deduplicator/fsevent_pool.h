@@ -23,7 +23,8 @@ void
 rbh_fsevent_pool_destroy(struct rbh_fsevent_pool *pool);
 
 enum fsevent_pool_push_res {
-    POOL_INSERT_OK,
+    POOL_INSERT_NEW_OK,
+    POOL_INSERT_DEDUPLICATED_OK,
     POOL_FULL,
     POOL_INSERT_FAILED,
     POOL_ALREADY_FULL,

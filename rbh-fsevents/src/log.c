@@ -32,7 +32,7 @@ fsevents_metadata_value_map(struct rbh_metadata *metadata)
     struct rbh_value_pair *pairs;
     struct rbh_value *values;
     int count_timespec = 4;
-    int count = 12;
+    int count = 13;
 
     if (metadata_sstack == NULL)
         metadata_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
@@ -122,6 +122,18 @@ fsevents_metadata_value_map(struct rbh_metadata *metadata)
     values[11].type = RBH_VT_UINT64;
     values[11].uint64 = metadata->fsevents_md.enrich_skip_count;
     pairs[11].value = &values[11];
+
+    pairs[12].key = "deduplication_ratio";
+    values[12].type = RBH_VT_DOUBLE;
+
+    if (metadata->fsevents_md.event_amount)
+        values[12].float64 =
+            (double) (metadata->fsevents_md.deduplicated_event_amount * 100) /
+                (double) metadata->fsevents_md.event_amount;
+    else
+        values[12].float64 = 0.0;
+
+    pairs[12].value = &values[12];
 
     value_map->pairs = pairs;
     value_map->count = count;

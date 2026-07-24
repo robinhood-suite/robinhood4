@@ -26,6 +26,7 @@ struct deduplicator {
     struct rbh_fsevent_pool *pool;
     struct source *source;
     size_t nb_workers;
+    struct rbh_fsevents_metadata *fsevents_md;
 };
 
 /*----------------------------------------------------------------------------*
@@ -71,7 +72,10 @@ deduplicator_iter_next(void *iterator)
             last_fsevent = fsevent;
             break;
         }
-        assert(rc == POOL_INSERT_OK);
+        assert(rc == POOL_INSERT_NEW_OK || rc == POOL_INSERT_DEDUPLICATED_OK);
+        deduplicator->fsevents_md->event_amount++;
+        if (rc == POOL_INSERT_DEDUPLICATED_OK)
+            deduplicator->fsevents_md->deduplicated_event_amount++;
 
     } while (errno == 0);
 
@@ -153,7 +157,8 @@ static const struct rbh_mut_iterator NO_DEDUP_ITERATOR = {
 };
 
 struct rbh_mut_iterator *
-deduplicator_new(size_t batch_size, struct source *source, size_t nb_workers)
+deduplicator_new(size_t batch_size, struct source *source, size_t nb_workers,
+                 struct rbh_fsevents_metadata *fsevents_md)
 {
     struct deduplicator *deduplicator;
 
@@ -161,6 +166,7 @@ deduplicator_new(size_t batch_size, struct source *source, size_t nb_workers)
 
     deduplicator->source = source;
     deduplicator->nb_workers = nb_workers;
+    deduplicator->fsevents_md = fsevents_md;
     if (batch_size == 0) {
         deduplicator->batches = NO_DEDUP_ITERATOR;
     } else {

@@ -57,6 +57,9 @@ print_value(const struct rbh_value *value, const char *header)
     case RBH_VT_INT64:
         printf(" - %-*s: %ld\n", WIDTH, header, value->int64);
         break;
+    case RBH_VT_DOUBLE:
+        printf(" - %-*s: %f\n", WIDTH, header, value->float64);
+        break;
     default:
         error(EXIT_FAILURE, EINVAL, "Unexpected key type to print '%s': %d",
               header, value->type);
