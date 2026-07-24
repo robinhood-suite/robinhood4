@@ -25,6 +25,7 @@
 
 START_TEST(dedup_basic)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_mut_iterator *events;
@@ -32,7 +33,7 @@ START_TEST(dedup_basic)
     fake_source = empty_source();
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -45,6 +46,7 @@ END_TEST
 
 START_TEST(dedup_one_event)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_mut_iterator *events;
@@ -61,7 +63,7 @@ START_TEST(dedup_one_event)
     fake_source = event_list_source(&fake_event, 1);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -85,6 +87,7 @@ END_TEST
 
 START_TEST(dedup_many_events)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[5];
@@ -103,7 +106,7 @@ START_TEST(dedup_many_events)
     fake_source = event_list_source(fake_events, 5);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -135,6 +138,7 @@ END_TEST
 
 START_TEST(dedup_no_dedup)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
@@ -152,7 +156,7 @@ START_TEST(dedup_no_dedup)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -181,6 +185,7 @@ END_TEST
 
 START_TEST(dedup_link_unlink)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
@@ -197,7 +202,7 @@ START_TEST(dedup_link_unlink)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -213,6 +218,7 @@ END_TEST
 
 START_TEST(dedup_link_unlink_same_entry_different_parents)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
@@ -232,7 +238,7 @@ START_TEST(dedup_link_unlink_same_entry_different_parents)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -263,6 +269,7 @@ END_TEST
 
 START_TEST(dedup_create_delete)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[4];
@@ -281,7 +288,7 @@ START_TEST(dedup_create_delete)
     fake_source = event_list_source(fake_events, 4);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -297,6 +304,7 @@ END_TEST
 
 START_TEST(dedup_last_unlink)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[4];
@@ -316,7 +324,7 @@ START_TEST(dedup_last_unlink)
     fake_source = event_list_source(fake_events, 3);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -344,6 +352,7 @@ END_TEST
 
 START_TEST(dedup_upsert_no_statx)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
@@ -360,7 +369,7 @@ START_TEST(dedup_upsert_no_statx)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -389,6 +398,7 @@ END_TEST
 
 START_TEST(dedup_upsert_statx)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[4];
@@ -417,7 +427,7 @@ START_TEST(dedup_upsert_statx)
     fake_source = event_list_source(fake_events, 4);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -455,6 +465,7 @@ END_TEST
 
 START_TEST(dedup_upsert_statx_symlink)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
@@ -476,7 +487,7 @@ START_TEST(dedup_upsert_statx_symlink)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -515,6 +526,7 @@ END_TEST
 
 START_TEST(dedup_same_xattr)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
@@ -531,7 +543,7 @@ START_TEST(dedup_same_xattr)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -557,6 +569,7 @@ END_TEST
 
 START_TEST(dedup_different_xattrs)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
@@ -574,7 +587,7 @@ START_TEST(dedup_different_xattrs)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -616,6 +629,7 @@ END_TEST
 
 START_TEST(dedup_same_xattr_different_values)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[4];
@@ -634,7 +648,7 @@ START_TEST(dedup_same_xattr_different_values)
     fake_source = event_list_source(fake_events, 4);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -672,6 +686,7 @@ END_TEST
 
 START_TEST(dedup_lustre_xattr)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
@@ -688,7 +703,7 @@ START_TEST(dedup_lustre_xattr)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -714,6 +729,7 @@ END_TEST
 
 START_TEST(dedup_xattr_merge_lustre_with_xattr)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
@@ -731,7 +747,7 @@ START_TEST(dedup_xattr_merge_lustre_with_xattr)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -769,6 +785,7 @@ END_TEST
 
 START_TEST(dedup_xattr_merge_xattrs_with_lustre)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
@@ -785,7 +802,7 @@ START_TEST(dedup_xattr_merge_xattrs_with_lustre)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -817,6 +834,7 @@ END_TEST
 
 START_TEST(dedup_xattr_merge_fid_with_lustre)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
@@ -834,7 +852,7 @@ START_TEST(dedup_xattr_merge_fid_with_lustre)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -869,6 +887,7 @@ END_TEST
 
 START_TEST(dedup_xattr_merge_lustre_with_fid)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
@@ -885,7 +904,7 @@ START_TEST(dedup_xattr_merge_lustre_with_fid)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -914,6 +933,7 @@ END_TEST
 
 START_TEST(dedup_xattr_merge_xattrs_with_fid)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
@@ -930,7 +950,7 @@ START_TEST(dedup_xattr_merge_xattrs_with_fid)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -959,6 +979,7 @@ END_TEST
 
 START_TEST(dedup_xattr_merge_xattrs_fid_and_lustre)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     const struct rbh_value_pair *pairs;
     struct source *fake_source = NULL;
@@ -977,7 +998,7 @@ START_TEST(dedup_xattr_merge_xattrs_fid_and_lustre)
     fake_source = event_list_source(fake_events, 3);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -1012,6 +1033,7 @@ END_TEST
 
 START_TEST(dedup_check_flush_order)
 {
+    struct rbh_fsevents_metadata fsevents_md;
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[6];
@@ -1043,7 +1065,7 @@ START_TEST(dedup_check_flush_order)
     fake_source = event_list_source(fake_events, 6);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source, 1);
+    deduplicator = deduplicator_new(20, fake_source, 1, &fsevents_md);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);

@@ -910,6 +910,8 @@ rbh_fsevent_pool_push(struct rbh_fsevent_pool *pool,
         rc = deduplicate_event(pool, events, event);
         if (rc)
             return POOL_INSERT_FAILED;
+
+        return POOL_INSERT_DEDUPLICATED_OK;
     } else {
         /* we do not insert NULL values in the map */
         assert(errno == ENOENT);
@@ -923,9 +925,8 @@ rbh_fsevent_pool_push(struct rbh_fsevent_pool *pool,
             return POOL_INSERT_FAILED;
 
         errno = 0;
+        return POOL_INSERT_NEW_OK;
     }
-
-    return POOL_INSERT_OK;
 }
 
 static struct rbh_list_node*

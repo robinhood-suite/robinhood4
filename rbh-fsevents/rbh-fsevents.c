@@ -501,10 +501,11 @@ setup_producer_consumers(struct rbh_mut_iterator **deduplicator,
                          struct deduplicator_options *dedup_opts,
                          pthread_t **consumers, struct consumer_info **cinfos,
                          pthread_mutex_t *mutex_available_for_work,
-                         pthread_cond_t *signal_available_for_work)
+                         pthread_cond_t *signal_available_for_work,
+                         struct rbh_fsevents_metadata *fsevents_md)
 {
     *deduplicator = deduplicator_new(dedup_opts->batch_size, source,
-                                     nb_workers);
+                                     nb_workers, fsevents_md);
     if (deduplicator == NULL)
         error(EXIT_FAILURE, errno, "deduplicator_new");
 
@@ -683,7 +684,8 @@ feed(struct sink **sink, struct source *source,
     /* Setup the producer and consumers */
     setup_producer_consumers(&deduplicator, dedup_opts, &consumers, &cinfos,
                              &mutex_available_for_work,
-                             &signal_available_for_work);
+                             &signal_available_for_work,
+                             fsevents_md);
 
     /* Launch the producer loop */
     rc = producer_thread(deduplicator, builder, allow_partials, cinfos,
