@@ -30,7 +30,7 @@ test_multi_output()
     local second_size="$(stat -c %s second)"
     local third_size="$(stat -c %s third)"
     local sum_size="$((root_size + first_size + second_size + third_size))"
-    local avg_size="$((sum_size / 4))"
+    local avg_size="$(avg $root_size $first_size $second_size $third_size)"
 
     local min_ino="$(find -printf "%i\n" | sort -n | head -n 1)"
     local max_mtime="$(stat -c %Y third)"
