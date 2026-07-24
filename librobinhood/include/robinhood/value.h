@@ -24,6 +24,7 @@ enum rbh_value_type {
     RBH_VT_UINT32,
     RBH_VT_INT64,
     RBH_VT_UINT64,
+    RBH_VT_DOUBLE,
     RBH_VT_STRING,
     RBH_VT_BINARY,
     RBH_VT_REGEX,
@@ -68,6 +69,9 @@ struct rbh_value {
         /* RBH_VT_UINT64 */
         uint64_t uint64;
 
+        /* RBH_VT_DOUBLE */
+        double float64;
+
         /* RBH_VT_STRING */
         const char *string;
 
@@ -100,6 +104,7 @@ static const char * const VALUE_TYPE_NAMES[] = {
     [RBH_VT_UINT32] = "unsigned int32",
     [RBH_VT_INT64] = "int64",
     [RBH_VT_UINT64] = "unsigned int64",
+    [RBH_VT_DOUBLE] = "float64",
     [RBH_VT_STRING] = "string",
     [RBH_VT_BINARY] = "binary",
     [RBH_VT_REGEX] = "regex",
@@ -207,6 +212,19 @@ rbh_value_int64_new(int64_t int64);
  */
 struct rbh_value *
 rbh_value_uint64_new(uint64_t uint64);
+
+/**
+ * Create a new double value
+ *
+ * @param float64   a double
+ *
+ * @return          a pointer to a newly allocated struct rbh_value on success,
+ *                  -1 on error and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ */
+struct rbh_value *
+rbh_value_double_new(double float64);
 
 /**
  * Create a new string value

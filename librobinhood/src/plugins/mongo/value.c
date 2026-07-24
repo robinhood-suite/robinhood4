@@ -83,6 +83,8 @@ bson_append_rbh_value(bson_t *bson, const char *key, size_t key_length,
         return bson_append_int64(bson, key, key_length, value->int64);
     case RBH_VT_UINT64:
         return bson_append_int64(bson, key, key_length, value->uint64);
+    case RBH_VT_DOUBLE:
+        return bson_append_double(bson, key, key_length, value->float64);
     case RBH_VT_STRING:
         return bson_append_utf8(bson, key, key_length, value->string,
                                 strlen(value->string));
@@ -262,11 +264,8 @@ bson_iter_rbh_value(bson_iter_t *iter, struct rbh_value *value,
         value->int32 = bson_iter_int32(iter);
         break;
     case BSON_TYPE_DOUBLE:
-        /* Handle floating types as truncated integers, maybe we'll have to add
-         * the proper float type for rbh-value, but right now that's good enough
-         */
-        value->type = RBH_VT_INT64;
-        value->int64 = bson_iter_double(iter);
+        value->type = RBH_VT_DOUBLE;
+        value->float64 = bson_iter_double(iter);
         break;
     case BSON_TYPE_INT64:
         value->type = RBH_VT_INT64;

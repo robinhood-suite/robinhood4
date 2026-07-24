@@ -374,6 +374,54 @@ parse_int32(const yaml_event_t *event, int32_t *i)
 }
 
 /*----------------------------------------------------------------------------*
+ |                                   double                                   |
+ *----------------------------------------------------------------------------*/
+
+#define DOUBLE_TAG "!double"
+
+static bool
+emit_double(yaml_emitter_t *emitter, double d)
+{
+    char buffer[sizeof(d) * 4];
+    int n;
+
+    n = snprintf(buffer, sizeof(buffer), "%f", d);
+    return yaml_emit_scalar(emitter, DOUBLE_TAG, buffer, n,
+                            YAML_PLAIN_SCALAR_STYLE);
+}
+
+bool
+parse_double(const yaml_event_t *event, double *d)
+{
+    const char *value = yaml_scalar_value(event);
+    const char *tag = yaml_scalar_tag(event);
+    double float64;
+    int save_errno;
+    char *end;
+
+    assert(event->type == YAML_SCALAR_EVENT);
+
+    if (tag ? strcmp(tag, DOUBLE_TAG) : !yaml_scalar_is_plain(event)) {
+        errno = EINVAL;
+        return false;
+    }
+
+    save_errno = errno;
+    errno = 0;
+    float64 = strtod(value, &end);
+    if (float64 == 0.0 && end == value) {
+        errno = EINVAL;
+        return false;
+    } else if (errno == ERANGE) {
+        return false;
+    }
+
+    *d = float64;
+    errno = save_errno;
+    return true;
+}
+
+/*----------------------------------------------------------------------------*
  |                                     id                                     |
  *----------------------------------------------------------------------------*/
 
@@ -871,6 +919,8 @@ emit_rbh_value(yaml_emitter_t *emitter, const struct rbh_value *value)
         return emit_int32(emitter, value->int32);
     case RBH_VT_INT64:
         return emit_int64(emitter, value->int64);
+    case RBH_VT_DOUBLE:
+        return emit_double(emitter, value->float64);
     case RBH_VT_STRING:
         return YAML_EMIT_STRING(emitter, value->string);
     case RBH_VT_REGEX:
@@ -927,6 +977,9 @@ parse_rbh_value(yaml_parser_t *parser, yaml_event_t *event,
         break;
     case RBH_VT_INT64:
         success = parse_int64(event, &value->int64);
+        break;
+    case RBH_VT_DOUBLE:
+        success = parse_double(event, &value->float64);
         break;
     case RBH_VT_STRING:
         if (yaml_parse_string(event, &value->string, NULL))
