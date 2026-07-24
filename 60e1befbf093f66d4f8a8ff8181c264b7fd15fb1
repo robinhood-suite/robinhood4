@@ -39,6 +39,30 @@
       },
       "revId": "60e1befbf093f66d4f8a8ff8181c264b7fd15fb1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06efdab4_13217ef4",
+        "filename": "packaging/make_rpm.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-24T12:04:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2c847c9_392de4bb",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 2
+      },
+      "revId": "60e1befbf093f66d4f8a8ff8181c264b7fd15fb1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
