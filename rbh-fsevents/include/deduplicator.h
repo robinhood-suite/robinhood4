@@ -11,11 +11,13 @@
 #include <stddef.h>
 
 #include <robinhood/iterator.h>
+#include <robinhood/log.h>
 
 #include "source.h"
 
 struct rbh_mut_iterator *
-deduplicator_new(size_t batch_size, struct source *source, size_t nb_workers);
+deduplicator_new(size_t batch_size, struct source *source, size_t nb_workers,
+                 struct rbh_fsevents_metadata *fsevents_md);
 
 struct sub_batch {
     /** Iterator containing all the fsevents of this sub-batch */

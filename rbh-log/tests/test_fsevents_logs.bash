@@ -36,35 +36,38 @@ check_log_result()
         "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb"
 
     echo "$output" | grep "Enrichment" > /dev/null ||
-        error "enrich_mountpoint should have been retrieved"
+        error "enrich_mountpoint should have been retrieved, got '$output'"
 
     echo "$output" | grep "Source" > /dev/null ||
-        error "source_read should have been retrieved"
+        error "source_read should have been retrieved, got '$output'"
 
     echo "$output" | grep "Number" > /dev/null ||
-        error "worker_count should have been retrieved"
+        error "worker_count should have been retrieved, got '$output'"
 
     echo "$output" | grep "Amount" > /dev/null ||
-        error "changelog_read should have been retrieved"
+        error "changelog_read should have been retrieved, got '$output'"
 
     echo "$output" | grep "Starting" > /dev/null ||
-        error "start_index should have been retrieved"
+        error "start_index should have been retrieved, got '$output'"
 
     echo "$output" | grep "reading/deduplicating" > /dev/null ||
-        error "time_read_dedup should have been retrieved"
+        error "time_read_dedup should have been retrieved, got '$output'"
 
     echo "$output" | grep "enriching/updating" > /dev/null ||
-        error "time_enrich_update should have been retrieved"
+        error "time_enrich_update should have been retrieved, got '$output'"
 
     echo "$output" | grep "skipped" > /dev/null ||
-        error "enrich_skip_count should have been retrieved"
+        error "enrich_skip_count should have been retrieved, got '$output'"
+
+    echo "$output" | grep "Ratio" > /dev/null ||
+        error "deduplication_ratio should have been retrieved, got '$output'"
 }
 
 test_N_logs()
 {
     local requested=$1
     local expected=$2
-    local count=14
+    local count=15
 
     touch blob
     for i in $(seq 1 $expected); do

@@ -33,6 +33,8 @@ struct rbh_fsevents_metadata {
     size_t changelog_read;
     int64_t start_index;
     size_t enrich_skip_count;
+    size_t deduplicated_event_amount;
+    size_t event_amount;
 };
 
 struct rbh_find_metadata {

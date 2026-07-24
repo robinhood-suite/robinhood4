@@ -11,6 +11,7 @@
 
 enum fsevents_log_value {
     CHANGELOG_READ,
+    DEDUPLICATION_RATIO,
     ENRICH_MOUNTPOINT,
     ENRICH_SKIP_COUNT,
     SOURCE_READ,
@@ -27,6 +28,11 @@ key2fsevents_log_value(const char *key)
     case 'c':
         if (!strcmp(&key[1], "hangelog_read"))
             return CHANGELOG_READ;
+
+        break;
+    case 'd':
+        if (!strcmp(&key[1], "eduplication_ratio"))
+            return DEDUPLICATION_RATIO;
 
         break;
     case 'e':
@@ -71,22 +77,24 @@ key2fsevents_log_value(const char *key)
 }
 
 static const struct formatted_log_value fsevents_log_value[] = {
-    [CHANGELOG_READ] =     { .header = "Amount of changelog read",
-                             .print_log_value = print_value },
-    [ENRICH_MOUNTPOINT] =  { .header = "Enrichment mountpoint",
-                             .print_log_value = print_value },
-    [ENRICH_SKIP_COUNT] =  { .header = "Number of skipped entries in enrichment",
-                             .print_log_value = print_value },
-    [SOURCE_READ] =        { .header = "Source of the events",
-                             .print_log_value = print_value },
-    [START_INDEX] =        { .header = "Starting index for reading changelogs",
-                             .print_log_value = print_value },
-    [TIME_READ_DEDUP] =    { .header = "Time spent reading/deduplicating events",
-                             .print_log_value = print_timespec },
-    [TIME_ENRICH_UPDATE] = { .header = "Time spent enriching/updating mirror (on average between all workers)",
-                             .print_log_value = print_timespec },
-    [WORKER_COUNT] =       { .header = "Number of parallel workers used",
-                             .print_log_value = print_value },
+    [CHANGELOG_READ] =      { .header = "Amount of changelog read",
+                              .print_log_value = print_value },
+    [DEDUPLICATION_RATIO] = { .header = "Ratio of events deduplicated",
+                              .print_log_value = print_value },
+    [ENRICH_MOUNTPOINT] =   { .header = "Enrichment mountpoint",
+                              .print_log_value = print_value },
+    [ENRICH_SKIP_COUNT] =   { .header = "Number of skipped entries in enrichment",
+                              .print_log_value = print_value },
+    [SOURCE_READ] =         { .header = "Source of the events",
+                              .print_log_value = print_value },
+    [START_INDEX] =         { .header = "Starting index for reading changelogs",
+                              .print_log_value = print_value },
+    [TIME_READ_DEDUP] =     { .header = "Time spent reading/deduplicating events",
+                              .print_log_value = print_timespec },
+    [TIME_ENRICH_UPDATE] =  { .header = "Time spent enriching/updating mirror (on average between all workers)",
+                              .print_log_value = print_timespec },
+    [WORKER_COUNT] =        { .header = "Number of parallel workers used",
+                              .print_log_value = print_value },
 };
 
 void
