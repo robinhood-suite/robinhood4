@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cec4748_1dbab225",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl_xattr.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-24T07:33:29Z",
+      "side": 1,
+      "message": "style: space to remove",
+      "range": {
+        "startLine": 37,
+        "startChar": 27,
+        "endLine": 37,
+        "endChar": 35
+      },
+      "revId": "9a82dbce59cf561d0fa3924a9c232bbaf23e96c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59b99b54_c8e99889",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl_xattr.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-24T07:33:29Z",
+      "side": 1,
+      "message": "comment: why does this mean the ACL is invalid? this only means the output structure is not allocated",
+      "range": {
+        "startLine": 46,
+        "startChar": 20,
+        "endLine": 46,
+        "endChar": 23
+      },
+      "revId": "9a82dbce59cf561d0fa3924a9c232bbaf23e96c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
