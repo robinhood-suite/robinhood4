@@ -438,7 +438,7 @@ bson_append_array_filter(bson_t *bson, const struct rbh_filter *filter,
                 return false;
 
             if (!BSON_APPEND_RBH_VALUE(&subdocument,
-                                       fop2str(subfilter->op, negate),
+                                       fop2str(subfilter->op, false),
                                        &subfilter->compare.value))
                 return false;
 
@@ -446,7 +446,7 @@ bson_append_array_filter(bson_t *bson, const struct rbh_filter *filter,
                 return false;
         } else {
             if (!BSON_APPEND_RBH_VALUE(&subdocuments,
-                                       fop2str(subfilter->op, negate),
+                                       fop2str(subfilter->op, false),
                                        &subfilter->compare.value))
                 return false;
         }
