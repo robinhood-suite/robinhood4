@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5bcab57_af6d281a",
+        "filename": "rbh-fsevents/src/log.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-27T08:56:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12641620_9fb8b2b6",
+      "range": {
+        "startLine": 52,
+        "startChar": 37,
+        "endLine": 52,
+        "endChar": 38
+      },
+      "revId": "2d2d7b500a54ca40d028497aa877957b052397bd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98a59818_cbcd76a6",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-07-27T07:25:28Z",
       "side": 1,
       "message": "typo: to be",
+      "range": {
+        "startLine": 82,
+        "startChar": 21,
+        "endLine": 82,
+        "endChar": 24
+      },
+      "revId": "2d2d7b500a54ca40d028497aa877957b052397bd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba335b45_a008ecf1",
+        "filename": "rbh-log/include/log.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-27T08:56:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98a59818_cbcd76a6",
       "range": {
         "startLine": 82,
         "startChar": 21,
