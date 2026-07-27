@@ -204,6 +204,7 @@ struct fsentry2gc_iterator {
     struct rbh_fsevent delete;
     const char *mnt_path;
     char *check_cmd;
+    struct rbh_gc_metadata *gc_md;
 };
 
 static bool
@@ -261,6 +262,8 @@ fsentry2delete_iter_next(void *iterator)
 
         assert((fsentry->mask & RBH_FP_ID) == RBH_FP_ID);
 
+        deletes->gc_md->total_entry_count++;
+
         if ((deletes->check_cmd &&
              rbh_action_exec_command(
                  deletes->check_cmd,
@@ -295,6 +298,8 @@ fsentry2print_iter_next(void *iterator)
             return NULL;
 
         assert((fsentry->mask & RBH_FP_ID) == RBH_FP_ID);
+
+        prints->gc_md->total_entry_count++;
 
         if ((prints->check_cmd &&
              rbh_action_exec_command(
@@ -345,7 +350,7 @@ static const struct rbh_iterator FSENTRY2PRINT_ITERATOR = {
 
 static struct rbh_iterator *
 iter_fsentry2delete(struct rbh_iterator *fsentries, const char *mnt_path,
-                    const char *check_cmd)
+                    struct rbh_gc_metadata *gc_md)
 {
     struct fsentry2gc_iterator *deletes;
 
@@ -355,9 +360,10 @@ iter_fsentry2delete(struct rbh_iterator *fsentries, const char *mnt_path,
     deletes->fsentries = fsentries;
     deletes->delete.type = RBH_FET_UNLINK;
     deletes->mnt_path = mnt_path;
+    deletes->gc_md = gc_md;
 
-    if (check_cmd)
-        asprintf(&deletes->check_cmd, "%s '{}'", check_cmd);
+    if (gc_md->check_command)
+        asprintf(&deletes->check_cmd, "%s '{}'", gc_md->check_command);
     else
         deletes->check_cmd = NULL;
 
@@ -366,7 +372,7 @@ iter_fsentry2delete(struct rbh_iterator *fsentries, const char *mnt_path,
 
 static struct rbh_iterator *
 iter_fsentry2print(struct rbh_iterator *fsentries, const char *mnt_path,
-                   const char *check_cmd)
+                   struct rbh_gc_metadata *gc_md)
 {
     struct fsentry2gc_iterator *prints;
 
@@ -375,9 +381,10 @@ iter_fsentry2print(struct rbh_iterator *fsentries, const char *mnt_path,
     prints->iterator = FSENTRY2PRINT_ITERATOR;
     prints->fsentries = fsentries;
     prints->mnt_path = mnt_path;
+    prints->gc_md = gc_md;
 
-    if (check_cmd)
-        asprintf(&prints->check_cmd, "%s '{}'", check_cmd);
+    if (gc_md->check_command)
+        asprintf(&prints->check_cmd, "%s '{}'", gc_md->check_command);
     else
         prints->check_cmd = NULL;
 
@@ -416,8 +423,8 @@ print_entries(struct rbh_iterator *iterator)
 }
 
 static void
-gc(char *mnt_path, bool dry_run_mode, bool verbose_mode, int64_t sync_time,
-   char *check_cmd, struct rbh_filter *filter)
+gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
+   struct rbh_gc_metadata *gc_md, struct rbh_filter *filter)
 {
     const struct rbh_filter_options OPTIONS = {
         .verbose = verbose_mode,
@@ -444,12 +451,12 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode, int64_t sync_time,
     struct rbh_filter *_filter = NULL;
     struct rbh_iterator *constify;
 
-    if (sync_time >= 0) {
+    if (gc_md->sync_time >= 0) {
         const struct rbh_filter_field *field;
 
         field = str2filter_field("ns-xattrs.sync_time");
         _filter = rbh_filter_compare_int64_new(RBH_FOP_STRICTLY_LOWER, field,
-                                               sync_time);
+                                               gc_md->sync_time);
         if (_filter == NULL)
             error(EXIT_FAILURE, errno, "sync_time2filter");
 
@@ -474,7 +481,7 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode, int64_t sync_time,
         struct rbh_mut_iterator *chunks;
         struct rbh_iterator *deletes;
 
-        deletes = iter_fsentry2delete(constify, mnt_path, check_cmd);
+        deletes = iter_fsentry2delete(constify, mnt_path, gc_md);
 
         chunks = rbh_iter_chunkify(deletes, RBH_ITER_CHUNK_SIZE);
         if (chunks == NULL)
@@ -499,6 +506,7 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode, int64_t sync_time,
                 assert(errno != ENODATA);
                 break;
             }
+            gc_md->deleted_entry_count += count;
         } while (true);
 
         switch (errno) {
@@ -514,7 +522,7 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode, int64_t sync_time,
     } else {
         struct rbh_iterator *prints;
 
-        prints = iter_fsentry2print(constify, mnt_path, check_cmd);
+        prints = iter_fsentry2print(constify, mnt_path, gc_md);
         if (print_entries(prints) == -1)
             error(EXIT_FAILURE, errno, "print_entries");
 
@@ -532,8 +540,6 @@ main(int _argc, char *_argv[])
     bool dry_run_mode = false;
     bool verbose_mode = false;
     struct rbh_filter *filter;
-    char *check_cmd = NULL;
-    int64_t sync_time = -1;
     int others_count = 0;
     char **others = NULL;
     int index = 1;
@@ -542,6 +548,7 @@ main(int _argc, char *_argv[])
     int argc;
     int rc;
 
+    metadata.gc_md.sync_time = -1;
     metadata.common_md.command_line = get_command_line(_argc, _argv);
 
     argc = _argc - 1;
@@ -573,10 +580,11 @@ main(int _argc, char *_argv[])
             if (i + 1 >= argc)
                 error(EXIT_FAILURE, EINVAL, "Missing argument for %s", arg);
 
-            check_cmd = argv[++i];
-            if (!verify_cmd_is_launchable(check_cmd))
+            metadata.gc_md.check_command = argv[++i];
+            if (!verify_cmd_is_launchable(metadata.gc_md.check_command))
                 error(EXIT_FAILURE, errno,
-                      "Check command '%s' is not valid", check_cmd);
+                      "Check command '%s' is not valid",
+                      metadata.gc_md.check_command);
 
         } else if (strcmp(arg, "--dry-run") == 0 || strcmp(arg, "-d") == 0) {
             dry_run_mode = true;
@@ -585,7 +593,7 @@ main(int _argc, char *_argv[])
             if (i + 1 >= argc)
                 error(EXIT_FAILURE, EINVAL, "Missing argument for %s", arg);
 
-            if (str2int64_t(argv[++i], &sync_time))
+            if (str2int64_t(argv[++i], &metadata.gc_md.sync_time))
                 error(EXIT_FAILURE, errno, "str2int64_t");
 
         } else if (strcmp(arg, "--verbose") == 0 || strcmp(arg, "-v") == 0) {
@@ -634,7 +642,7 @@ main(int _argc, char *_argv[])
         error(EXIT_FAILURE, errno, "Failed to open mountpoint '%s'", path);
 
     metadata.common_md.start_time = time(NULL);
-    gc(path, dry_run_mode, verbose_mode, sync_time, check_cmd, filter);
+    gc(path, dry_run_mode, verbose_mode, &metadata.gc_md, filter);
     metadata.common_md.end_time = time(NULL);
 
     insert_gc_log(&metadata);
