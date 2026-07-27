@@ -13,6 +13,7 @@ executable(
         'src/common.c',
         'src/find.c',
         'src/fsevents.c',
+        'src/report.c',
         'src/sync.c',
     ],
     dependencies: [librobinhood_dep],
