@@ -43,6 +43,7 @@ usage(void)
         "   -h, --help              show this message and exit\n"
         "   -i, --find N            print the last N logs of rbh-find runs\n"
         "   -f, --fsevents N        print the last N logs of rbh-fsevents runs\n"
+        "   -g, --gc N              print the last N logs of rbh-gc runs\n"
         "   -l, --last N            print the last N logs\n"
         "   -r, --report N          print the last N logs of rbh-report runs\n"
         "   -s, --sync N            print the last N logs of rbh-sync runs\n"
@@ -68,6 +69,9 @@ print_logs(const struct rbh_value_map *logs)
             break;
         case RBH_FSEVENTS_LOG:
             print_fsevents_log(&logs->pairs[i].value->map);
+            break;
+        case RBH_GC_LOG:
+            print_gc_log(&logs->pairs[i].value->map);
             break;
         case RBH_REPORT_LOG:
             print_report_log(&logs->pairs[i].value->map);
@@ -104,6 +108,11 @@ main(int argc, char *argv[])
             .val = 'f',
         },
         {
+            .name = "gc",
+            .has_arg = required_argument,
+            .val = 'g',
+        },
+        {
             .name = "help",
             .val = 'h',
         },
@@ -138,7 +147,7 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:i:f:hr:s:z",
+    while ((c = getopt_long(argc, argv, "c:i:f:g:hr:s:z",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
@@ -153,6 +162,13 @@ main(int argc, char *argv[])
             break;
         case 'f':
             options.type = RBH_FSEVENTS_LOG;
+            if (str2uint64_t(optarg, &options.count))
+                error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
+                      optarg);
+
+            break;
+        case 'g':
+            options.type = RBH_GC_LOG;
             if (str2uint64_t(optarg, &options.count))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
                       optarg);
