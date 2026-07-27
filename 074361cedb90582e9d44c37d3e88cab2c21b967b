@@ -16,6 +16,24 @@
       "message": "question: Do we have the same information for rbh-sync ?",
       "revId": "074361cedb90582e9d44c37d3e88cab2c21b967b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3324b1f1_6347a1ef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-27T08:56:37Z",
+      "side": 1,
+      "message": "Yes, \"skipped entries\" for rbh-sync",
+      "parentUuid": "23cbd4f5_8995cab9",
+      "revId": "074361cedb90582e9d44c37d3e88cab2c21b967b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
