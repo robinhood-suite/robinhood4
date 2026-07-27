@@ -42,6 +42,13 @@ struct rbh_find_metadata {
     int64_t exec_success_count;
 };
 
+struct rbh_gc_metadata {
+    int64_t sync_time;
+    char *check_command;
+    size_t deleted_entry_count;
+    size_t total_entry_count;
+};
+
 /**
  * Metadata storage structure
  */
@@ -51,6 +58,7 @@ struct rbh_metadata {
         struct rbh_sync_metadata sync_md;
         struct rbh_fsevents_metadata fsevents_md;
         struct rbh_find_metadata find_md;
+        struct rbh_gc_metadata gc_md;
     };
 };
 
