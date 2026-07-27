@@ -83,6 +83,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0bc31b9_88ca5717",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-27T07:04:16Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4c125477_46dd7204",
+      "revId": "a8913a95046605dd45c4bdd270faeb9ac557cdc9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09564f49_9a589a28",
@@ -161,6 +179,24 @@
       "side": 1,
       "message": "The function returns the number of pairs produced. Acl extension produces only one pair.",
       "parentUuid": "baba2a65_708a5286",
+      "revId": "a8913a95046605dd45c4bdd270faeb9ac557cdc9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6826eefd_e6988d56",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-27T07:04:16Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1b9bce6c_c87dc4aa",
       "revId": "a8913a95046605dd45c4bdd270faeb9ac557cdc9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
