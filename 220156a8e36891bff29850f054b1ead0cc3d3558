@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0573839_a1943b4f",
+        "filename": "librobinhood/include/robinhood/value.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-27T08:57:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9110489f_06c4c1ec",
+      "range": {
+        "startLine": 219,
+        "startChar": 19,
+        "endLine": 219,
+        "endChar": 27
+      },
+      "revId": "220156a8e36891bff29850f054b1ead0cc3d3558",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dcd38fba_1df9dfd3",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-07-27T07:29:54Z",
       "side": 1,
       "message": "minor: debug message to remove",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 219,
+        "endChar": 2
+      },
+      "revId": "220156a8e36891bff29850f054b1ead0cc3d3558",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67cdd702_e5c49c94",
+        "filename": "librobinhood/src/plugins/mongo/value.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-27T08:57:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcd38fba_1df9dfd3",
       "range": {
         "startLine": 219,
         "startChar": 0,
