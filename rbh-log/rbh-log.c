@@ -44,6 +44,7 @@ usage(void)
         "   -i, --find N            print the last N logs of rbh-find runs\n"
         "   -f, --fsevents N        print the last N logs of rbh-fsevents runs\n"
         "   -l, --last N            print the last N logs\n"
+        "   -r, --report N          print the last N logs of rbh-report runs\n"
         "   -s, --sync N            print the last N logs of rbh-sync runs\n"
         "    --version              print RobinHood 4's version\n"
         "\n"
@@ -67,6 +68,9 @@ print_logs(const struct rbh_value_map *logs)
             break;
         case RBH_FSEVENTS_LOG:
             print_fsevents_log(&logs->pairs[i].value->map);
+            break;
+        case RBH_REPORT_LOG:
+            print_report_log(&logs->pairs[i].value->map);
             break;
         case RBH_SYNC_LOG:
             print_sync_log(&logs->pairs[i].value->map);
@@ -109,6 +113,11 @@ main(int argc, char *argv[])
             .val = 'l',
         },
         {
+            .name = "report",
+            .has_arg = required_argument,
+            .val = 'r',
+        },
+        {
             .name = "sync",
             .has_arg = required_argument,
             .val = 's',
@@ -129,7 +138,7 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:i:f:hs:z",
+    while ((c = getopt_long(argc, argv, "c:i:f:hr:s:z",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
@@ -154,6 +163,13 @@ main(int argc, char *argv[])
             return 0;
         case 'l':
             options.type = RBH_ALL_LOG;
+            if (str2uint64_t(optarg, &options.count))
+                error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
+                      optarg);
+
+            break;
+        case 'r':
+            options.type = RBH_REPORT_LOG;
             if (str2uint64_t(optarg, &options.count))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
                       optarg);

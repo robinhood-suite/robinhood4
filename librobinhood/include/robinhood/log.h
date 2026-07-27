@@ -61,6 +61,7 @@ enum rbh_log_type {
     RBH_ALL_LOG,
     RBH_FIND_LOG,
     RBH_FSEVENTS_LOG,
+    RBH_REPORT_LOG,
     RBH_SYNC_LOG,
 };
 
@@ -74,6 +75,8 @@ rbh_log_type2str(enum rbh_log_type type)
         return "find";
     case RBH_FSEVENTS_LOG:
         return "fsevents";
+    case RBH_REPORT_LOG:
+        return "report";
     case RBH_SYNC_LOG:
         return "sync";
     default:
@@ -90,6 +93,8 @@ str2rbh_log_type(const char *str)
         return RBH_FIND_LOG;
     if (!strcmp(str, "fsevents"))
         return RBH_FSEVENTS_LOG;
+    if (!strcmp(str, "report"))
+        return RBH_REPORT_LOG;
     if (!strcmp(str, "sync"))
         return RBH_SYNC_LOG;
 
