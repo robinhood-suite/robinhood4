@@ -20,6 +20,7 @@
 #include <robinhood/action.h>
 #include <robinhood/config.h>
 #include <robinhood/filters/parser.h>
+#include <robinhood/log.h>
 #include <robinhood/open.h>
 #include <robinhood/utils.h>
 
@@ -27,6 +28,8 @@
 # define RBH_ITER_CHUNK_SIZE (1 << 12)
 #endif
 
+#define MIN_VALUES_SSTACK_ALLOC (1 << 6)
+static __thread struct rbh_sstack *metadata_sstack;
 static struct rbh_backend *backend;
 int mount_fd = -1;
 
@@ -42,6 +45,13 @@ destroy_backend(void)
 {
     if (backend)
         rbh_backend_destroy(backend);
+}
+
+static void __attribute__ ((destructor))
+destroy_metadata_sstack(void)
+{
+    if (metadata_sstack)
+        rbh_sstack_destroy(metadata_sstack);
 }
 
 static void
@@ -71,6 +81,49 @@ usage(void)
         "    --version                  print RobinHood 4's version\n";
 
     printf(message, program_invocation_short_name);
+}
+
+struct rbh_value_map *
+gc_metadata_value_map(struct rbh_metadata *metadata)
+{
+    struct rbh_value_map *value_map;
+    struct rbh_value_pair *pairs;
+    struct rbh_value *values;
+    int count = 4;
+
+    if (metadata_sstack == NULL)
+        metadata_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
+                                         (sizeof(struct rbh_value_map *)));
+
+    value_map = RBH_SSTACK_PUSH(metadata_sstack, NULL, sizeof(*value_map));
+    values = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*values));
+    pairs = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*pairs));
+
+    rbh_set_common_metadata_pairs(&metadata->common_md, values, pairs);
+
+    value_map->pairs = pairs;
+    value_map->count = count;
+
+    return value_map;
+}
+
+static void
+insert_gc_log(struct rbh_metadata *metadata)
+{
+    if (!rbh_backend_insert_log(backend, "gc", gc_metadata_value_map(metadata)))
+        return;
+
+    switch (errno) {
+    case 0:
+        fprintf(stderr, "failed to insert gc log\n");
+        break;
+    case RBH_BACKEND_ERROR:
+        fprintf(stderr, "failed to insert gc log: %s\n", rbh_backend_error);
+        break;
+    default:
+        fprintf(stderr, "failed to insert gc log: %s\n", strerror(errno));
+        break;
+    }
 }
 
 static bool
@@ -474,6 +527,7 @@ main(int _argc, char *_argv[])
 {
     struct rbh_filter_options options = {0};
     struct filters_context f_ctx = {0};
+    struct rbh_metadata metadata = {0};
     struct rbh_value_map *info_map;
     bool dry_run_mode = false;
     bool verbose_mode = false;
@@ -487,6 +541,8 @@ main(int _argc, char *_argv[])
     char *path;
     int argc;
     int rc;
+
+    metadata.common_md.command_line = get_command_line(_argc, _argv);
 
     argc = _argc - 1;
     argv = &_argv[1];
@@ -577,7 +633,13 @@ main(int _argc, char *_argv[])
     if (mount_fd < 0)
         error(EXIT_FAILURE, errno, "Failed to open mountpoint '%s'", path);
 
+    metadata.common_md.start_time = time(NULL);
     gc(path, dry_run_mode, verbose_mode, sync_time, check_cmd, filter);
+    metadata.common_md.end_time = time(NULL);
+
+    insert_gc_log(&metadata);
+
+    free(metadata.common_md.command_line);
 
     free(path);
     rbh_config_free();
