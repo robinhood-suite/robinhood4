@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a81f4a7_e642227e",
+        "filename": "packaging/robinhood4.spec.in",
+        "patchSetId": 5
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-27T09:18:50Z",
+      "side": 1,
+      "message": "minor: should be SELinux here",
+      "range": {
+        "startLine": 207,
+        "startChar": 60,
+        "endLine": 207,
+        "endChar": 66
+      },
+      "revId": "fa3c2b6cb5ca67cff76affbd0a57587e064f7d5a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
