@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9110489f_06c4c1ec",
+        "filename": "librobinhood/include/robinhood/value.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-27T07:56:00Z",
+      "side": 1,
+      "message": "style: alignement",
+      "range": {
+        "startLine": 219,
+        "startChar": 19,
+        "endLine": 219,
+        "endChar": 27
+      },
+      "revId": "220156a8e36891bff29850f054b1ead0cc3d3558",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dcd38fba_1df9dfd3",
         "filename": "librobinhood/src/plugins/mongo/value.c",
         "patchSetId": 1
