@@ -93,6 +93,30 @@
       },
       "revId": "9a82dbce59cf561d0fa3924a9c232bbaf23e96c5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c212688a_b6e7c738",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl_xattr.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-27T09:04:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ec0733f_755986cf",
+      "range": {
+        "startLine": 46,
+        "startChar": 20,
+        "endLine": 46,
+        "endChar": 23
+      },
+      "revId": "9a82dbce59cf561d0fa3924a9c232bbaf23e96c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
