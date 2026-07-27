@@ -11,6 +11,7 @@ executable(
     sources: [
         'rbh-report.c',
         'src/columns.c',
+        'src/log.c',
         'src/parser/group_by.c',
         'src/parser/output.c',
         'src/printer/common_print.c',

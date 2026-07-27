@@ -18,8 +18,10 @@
 #include <robinhood/filter.h>
 #include <robinhood/filters/parser.h>
 #include <robinhood/uri.h>
+#include <robinhood/utils.h>
 #include <robinhood/value.h>
 
+#include "log.h"
 #include "report.h"
 
 #define MIN_VALUES_SSTACK_ALLOC (1 << 6)
@@ -308,6 +310,7 @@ main(int _argc, char *_argv[])
 {
     struct command_context command_context = {0};
     struct rbh_filter_options options = {0};
+    struct rbh_metadata metadata = {0};
     struct filters_context f_ctx = {0};
     struct rbh_value_map *info_map;
     bool ascending_sort = true;
@@ -321,6 +324,8 @@ main(int _argc, char *_argv[])
     int index = 1;
     char **argv;
     int argc;
+
+    metadata.common_md.command_line = get_command_line(_argc, _argv);
 
     argc = _argc - 1;
     argv = &_argv[1];
@@ -398,7 +403,13 @@ main(int _argc, char *_argv[])
     if (f_ctx.need_prefetch && complete_rbh_filter(filter, from, &options))
         error(EXIT_FAILURE, errno, "Failed to complete filters");
 
+    metadata.common_md.start_time = time(NULL);
     report(group, output, ascending_sort, csv_print, filter, &options);
+    metadata.common_md.end_time = time(NULL);
+
+    insert_report_log(from, &metadata);
+
+    free(metadata.common_md.command_line);
 
     cleanup(others, output, group);
     filters_ctx_finish(&f_ctx);
