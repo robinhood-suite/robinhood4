@@ -89,7 +89,12 @@ gc_metadata_value_map(struct rbh_metadata *metadata)
     struct rbh_value_map *value_map;
     struct rbh_value_pair *pairs;
     struct rbh_value *values;
-    int count = 4;
+    int count = 7;
+
+    if (metadata->gc_md.sync_time >= 0)
+        count++;
+    if (metadata->gc_md.check_command)
+        count++;
 
     if (metadata_sstack == NULL)
         metadata_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
@@ -100,6 +105,42 @@ gc_metadata_value_map(struct rbh_metadata *metadata)
     pairs = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*pairs));
 
     rbh_set_common_metadata_pairs(&metadata->common_md, values, pairs);
+
+    pairs[4].key = "deleted_entries";
+    values[4].type = RBH_VT_UINT64;
+    values[4].uint64 = metadata->gc_md.deleted_entry_count;
+    pairs[4].value = &values[4];
+
+    pairs[5].key = "not_deleted_entries";
+    values[5].type = RBH_VT_UINT64;
+    values[5].uint64 =
+        metadata->gc_md.total_entry_count - metadata->gc_md.deleted_entry_count;
+    pairs[5].value = &values[5];
+
+    pairs[6].key = "total_entries";
+    values[6].type = RBH_VT_UINT64;
+    values[6].uint64 = metadata->gc_md.total_entry_count;
+    pairs[6].value = &values[6];
+
+    count = 7;
+
+    if (metadata->gc_md.sync_time >= 0) {
+        pairs[count].key = "sync_time";
+        values[count].type = RBH_VT_UINT64;
+        values[count].uint64 = (uint64_t) metadata->gc_md.sync_time;
+        pairs[count].value = &values[count];
+
+        count++;
+    }
+
+    if (metadata->gc_md.check_command) {
+        pairs[count].key = "check_command";
+        values[count].type = RBH_VT_STRING;
+        values[count].string = metadata->gc_md.check_command;
+        pairs[count].value = &values[count];
+
+        count++;
+    }
 
     value_map->pairs = pairs;
     value_map->count = count;
