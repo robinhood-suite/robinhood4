@@ -59,8 +59,8 @@ print_sync_log(const struct rbh_value_map *log)
 {
     for (size_t i = 0 ; i < log->count ; i++) {
         const struct rbh_value_pair *pair = &log->pairs[i];
-        struct formatted_log_value log_value;
         enum common_log_value common_log_value;
+        struct formatted_log_value log_value;
 
         common_log_value = key2common_log_value(pair->key);
         if (common_log_value != CLV_UNKNOWN) {

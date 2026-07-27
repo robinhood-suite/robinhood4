@@ -32,13 +32,26 @@ check_log_result()
     local output="$1"
 
     check_common_logs "$output" rbh-gc "rbh-gc rbh:$db:$testdb -size +1M -s 42"
+
+    echo "$output" | grep " deleted " > /dev/null ||
+        error "deleted_entries should have been retrieved, got '$output'"
+
+    echo "$output" | grep "non-deleted" > /dev/null ||
+        error "non_deleted_entries should have been retrieved, got '$output'"
+
+    echo "$output" | grep "Sync" > /dev/null ||
+        error "sync_time should have been retrieved, got '$output'"
+
+    echo "$output" | grep "seen" > /dev/null ||
+        error "total_entries should have been retrieved, got '$output'"
+
 }
 
 test_N_logs()
 {
     local requested=$1
     local expected=$2
-    local count=6
+    local count=10
 
     rbh_sync rbh:posix:. rbh:$db:$testdb
     sleep 1
