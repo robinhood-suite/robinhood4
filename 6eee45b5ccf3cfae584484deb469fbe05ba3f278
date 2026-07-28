@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47f69659_68e26919",
+        "filename": "rbh-log/tests/test_report_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-28T07:07:52Z",
+      "side": 1,
+      "message": "minor: must test `report` here and below.",
+      "range": {
+        "startLine": 21,
+        "startChar": 30,
+        "endLine": 21,
+        "endChar": 36
+      },
+      "revId": "6eee45b5ccf3cfae584484deb469fbe05ba3f278",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
