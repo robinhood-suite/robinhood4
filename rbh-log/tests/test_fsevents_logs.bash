@@ -72,7 +72,6 @@ test_N_logs()
     touch blob
     for i in $(seq 1 $expected); do
         invoke_rbh-fsevents
-        sleep 1
     done
 
     local output=$(rbh_log "rbh:$db:$testdb" --fsevents $requested)

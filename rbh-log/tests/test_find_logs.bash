@@ -60,13 +60,11 @@ test_N_logs()
     rbh_sync rbh:posix:. rbh:$db:$testdb
     for i in $(seq 1 $with_exec); do
         rbh_find "rbh:$db:$testdb" -exec ls "{}" \; > /dev/null
-        sleep 1
         expected_line_count=$(( expected_line_count + 6 + 2 ))
     done
 
     for i in $(seq 1 $without_exec); do
         rbh_find "rbh:$db:$testdb" > /dev/null
-        sleep 1
         expected_line_count=$(( expected_line_count + 5 + 2 ))
     done
 

@@ -25,6 +25,74 @@ destroy_sstack(void)
         rbh_sstack_destroy(logs_sstack);
 }
 
+static int64_t
+get_current_id(struct mongo_backend *mongo)
+{
+    mongoc_find_and_modify_opts_t *opts;
+    bson_iter_t child_iter;
+    bson_t *filter = NULL;
+    bson_error_t error;
+    bson_iter_t iter;
+    char *error_str;
+    bson_t *update;
+    bson_t reply;
+    bool success;
+    int rc;
+
+    /* Find and update the log_id atomically */
+    filter = BCON_NEW("_id", "log_id");
+    update = BCON_NEW("$inc", "{", "log_id", BCON_INT32(1), "}");
+
+    opts = mongoc_find_and_modify_opts_new();
+    mongoc_find_and_modify_opts_set_update(opts, update);
+    /* Create the document if it didn't exist, and return the updated document */
+    mongoc_find_and_modify_opts_set_flags(opts,
+                                          MONGOC_FIND_AND_MODIFY_UPSERT |
+                                          MONGOC_FIND_AND_MODIFY_RETURN_NEW);
+
+    success = mongoc_collection_find_and_modify_with_opts(mongo->info, filter,
+                                                          opts, &reply, &error);
+    if (!success) {
+        fprintf(stderr, "Failed to retrieve log id: %s\n", error.message);
+        rc = -1;
+        goto out;
+    }
+
+    /* Convoluted, but that's bson for you... 'reply' looks like this:
+     * { "lastErrorObject" :
+     *      { "n" : { "$numberInt" : "1" },
+     *        "updatedExisting" : true
+     *      },
+     *   "value" :
+     *      { "_id" : "log_id",
+     *        "log_id" : { "$numberInt" : "3" }
+     *      },
+     *   "ok" : { "$numberDouble" : "1.0" }
+     * }
+     * So we have to find the "value" document which contains the "log_id" value
+     * we updated and convert it.
+     */
+    if (!bson_iter_init(&iter, &reply) || !bson_iter_find(&iter, "value") ||
+        !bson_iter_recurse(&iter, &child_iter) || !bson_iter_find(&child_iter,
+                                                                  "log_id")) {
+        error_str = bson_as_canonical_extended_json(&reply, NULL);
+        fprintf(stderr, "Failed to find log id in iterator: %s\n", error_str);
+        bson_free(error_str);
+        rc = -1;
+        goto out;
+    }
+
+    rc = bson_iter_as_int64(&child_iter);
+
+out:
+    bson_destroy(&reply);
+    bson_destroy(update);
+    mongoc_find_and_modify_opts_destroy(opts);
+    bson_destroy(filter);
+
+    return rc;
+}
+
 int
 mongo_backend_insert_log(void *backend, const char *command,
                          const struct rbh_value_map *map)
@@ -36,13 +104,21 @@ mongo_backend_insert_log(void *backend, const char *command,
     bson_t *opts = NULL;
     bson_t metadata_doc;
     bson_error_t error;
+    int64_t log_id;
     int result;
     int rc = 0;
+
+    log_id = get_current_id(mongo);
+    if (log_id < 0) {
+        fprintf(stderr, "Failed to retrieve log id to insert new log\n");
+        rc = -1;
+        goto skip_insert;
+    }
 
     collection = mongo->log;
     update = bson_new();
 
-    filter = BCON_NEW("_id", BCON_INT64(time(NULL)));
+    filter = BCON_NEW("_id", BCON_INT64(log_id));
     opts = BCON_NEW("upsert", BCON_BOOL(true));
 
     if (!(BSON_APPEND_DOCUMENT_BEGIN(update, "$set", &metadata_doc)
