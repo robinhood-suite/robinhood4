@@ -35,6 +35,18 @@ test_acl_user()
     rbh_find "rbh:$db:$testdb" \
         -acl-user 12349 | sort |
         difflines
+
+    rbh_find "rbh:$db:$testdb" \
+        -acl-user 12345:r | sort |
+        difflines "/match"
+
+    rbh_find "rbh:$db:$testdb" \
+        -acl-user 12346:x | sort |
+        difflines "/match" "/no_match"
+
+    rbh_find "rbh:$db:$testdb" \
+        -acl-user 12346:w | sort |
+        difflines "/match"
 }
 
 test_acl_group()
@@ -58,6 +70,14 @@ test_acl_group()
     rbh_find "rbh:$db:$testdb" \
         -acl-group 23427 | sort |
         difflines
+
+    rbh_find "rbh:$db:$testdb" \
+        -acl-group 23467:x | sort |
+        difflines "/match" "/no_match"
+
+    rbh_find "rbh:$db:$testdb" \
+        -acl-group 23467:r | sort |
+        difflines "/match"
 }
 
 test_acl_default_user()
@@ -81,6 +101,14 @@ test_acl_default_user()
     rbh_find "rbh:$db:$testdb" \
         -acl-default-user 424262 | sort |
         difflines
+
+    rbh_find "rbh:$db:$testdb" \
+        -acl-default-user 434343:wx | sort |
+        difflines "/match" "/no_match"
+
+    rbh_find "rbh:$db:$testdb" \
+        -acl-default-user 434343:r | sort |
+        difflines "/match"
 }
 
 test_acl_default_group()
@@ -104,6 +132,18 @@ test_acl_default_group()
     rbh_find "rbh:$db:$testdb" \
         -acl-default-group 42428 | sort |
         difflines
+
+    rbh_find "rbh:$db:$testdb" \
+        -acl-default-group 43438:wx | sort |
+        difflines "/match" "/no_match"
+
+    rbh_find "rbh:$db:$testdb" \
+        -acl-default-group 43438:r | sort |
+        difflines "/no_match"
+
+    rbh_find "rbh:$db:$testdb" \
+        -acl-default-group 43438:rw | sort |
+        difflines "/no_match"
 }
 
 ################################################################################

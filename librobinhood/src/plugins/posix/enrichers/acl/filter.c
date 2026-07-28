@@ -60,6 +60,38 @@ parse_acl_id(const char *arg)
     return id;
 }
 
+static uint32_t
+parse_acl_entry(char *arg, int *perms)
+{
+    char *str;
+
+    *perms = -1;
+    str = strchr(arg, ':');
+    if (str == NULL)
+        return parse_acl_id(arg);
+
+    *str++ = '\0';
+    *perms = 0;
+
+    for (; *str; str++) {
+        switch (*str) {
+        case 'r':
+            *perms |= 4;
+            break;
+        case 'w':
+            *perms |= 2;
+            break;
+        case 'x':
+            *perms |= 1;
+            break;
+        case '-':
+            break;
+        default:
+            error(EX_USAGE, 0, "invalid ACL permission '%c'", *str);
+        }
+    }
+    return parse_acl_id(arg);
+}
 
 /*
  * Match a named ACL entry by ID and permissions if a
@@ -388,10 +420,15 @@ rbh_acl_build_filter(struct filters_context *context, int *index)
         case APRED_USER:
         case APRED_GROUP:
         case APRED_DEFAULT_USER:
-        case APRED_DEFAULT_GROUP:
+        case APRED_DEFAULT_GROUP: {
+            uint32_t id;
+            int perms;
+
+            id = parse_acl_entry(argv[++i], &perms);
             filter = acl_named_entry2filter(&predicate2filter_field[predicate],
-                                            parse_acl_id(argv[++i]), -1);
+                                            id, perms);
             break;
+        }
         case APRED_READABLE:
             filter = acl_access2filter(argv[++i], 4, S_IRUSR, S_IRGRP, S_IROTH);
             break;
