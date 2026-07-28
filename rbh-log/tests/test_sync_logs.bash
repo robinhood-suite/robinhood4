@@ -71,7 +71,6 @@ test_N_logs()
 
     for i in $(seq 1 $expected); do
         rbh_sync "rbh:posix:." "rbh:$db:$testdb"
-        sleep 1
     done
 
     local output=$(rbh_log "rbh:$db:$testdb" --sync $requested)
