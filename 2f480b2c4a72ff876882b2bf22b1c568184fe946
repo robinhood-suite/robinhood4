@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e944ea02_fbbb928d",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/README.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-28T08:43:52Z",
+      "side": 1,
+      "message": "major: I think they should replace the POSIX \"readable/writable/executable\" if available. If the ACLs extension is available, it should define override the \"readable/writable/executable\" filters of POSIX and do its checks + the ACLs one.",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 35
+      },
+      "revId": "2f480b2c4a72ff876882b2bf22b1c568184fe946",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

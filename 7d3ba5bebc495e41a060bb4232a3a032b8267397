@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f51e77ec_533633af",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-28T08:43:52Z",
+      "side": 1,
+      "message": "I think it could be added to all the filters, to check that the given user/group has read/write/exec rights on the entry. For how it should be written, I think Gauthier\u0027s proposal is good, `-acl-user N[:wrx]` to check for multiple rights at the same time",
+      "parentUuid": "8aea51ad_66ba19f5",
+      "revId": "7d3ba5bebc495e41a060bb4232a3a032b8267397",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5ddedbaa_04af5e80",
         "filename": "librobinhood/src/plugins/posix/enrichers/acl/README.rst",
         "patchSetId": 1
