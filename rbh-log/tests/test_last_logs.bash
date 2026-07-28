@@ -77,7 +77,6 @@ check_find_log_result()
 test_last_logs()
 {
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
-    sleep 1
     rbh_find "rbh:$db:$testdb" > /dev/null
 
     local output=$(rbh_log "rbh:$db:$testdb" --last 2)

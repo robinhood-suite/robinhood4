@@ -42,11 +42,9 @@ test_N_logs()
     local count=6
 
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
-    sleep 1
     for i in $(seq 1 $expected); do
         rbh_report "rbh:$db:$testdb" \
             --group-by "statx.uid" --output "sum(statx.size)" > /dev/null
-        sleep 1
     done
 
     local output=$(rbh_log "rbh:$db:$testdb" --report $requested)
