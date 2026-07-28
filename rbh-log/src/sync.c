@@ -50,7 +50,7 @@ static const struct formatted_log_value sync_formatted_log_value[] = {
                             .print_log_value = print_value },
     [SKIPPED_ENTRIES] =   { .header = "Amount of entries skipped",
                             .print_log_value = print_value },
-    [TOTAL_ENTRIES] =     { .header = "Total entries seen by the sync",
+    [TOTAL_ENTRIES] =     { .header = "Amount of entries seen",
                             .print_log_value = print_value },
 };
 

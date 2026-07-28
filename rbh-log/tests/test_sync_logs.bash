@@ -11,6 +11,43 @@ test_dir=$(dirname $(readlink -e $0))
 . $test_dir/common_logs.bash
 
 ################################################################################
+#                                    UTILS                                     #
+################################################################################
+
+set_permission()
+{
+    local path=$1
+    local sign=$2
+
+    while [[ "$path" != "/home" ]] && [[ "$path" != "/" ]]; do
+        if [[ "$sign" == "+" ]]; then
+            chmod o+rx $path
+        else
+            chmod o-rx $path
+        fi
+        path="$(dirname $path)"
+    done
+}
+
+sync_with_other_user()
+{
+    local skip_option=$1
+    local path="$(dirname $__rbh_sync)"
+    set_permission $path "+"
+
+    local path_config="$(realpath $RBH_CONFIG_PATH)"
+    set_permission $path_config "+"
+
+    local output="$(sudo -E -H -u "$test_user" bash -c "\
+                    LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
+                    $__rbh_sync --config $path_config $skip_option \
+                    rbh:posix:. rbh:$db:$testdb" 2>&1)"
+
+    set_permission $path "-"
+    set_permission $path_config "-"
+}
+
+################################################################################
 #                                    TESTS                                     #
 ################################################################################
 
@@ -41,13 +78,13 @@ check_log_result()
     fi
 
     local converted_entries=$(echo "$output" | grep "converted" |
-                              cut -d':' -f2- |xargs)
+                              cut -d':' -f2- | xargs)
 
     local skipped_entries=$(echo "$output" | grep "skipped" |
-                            cut -d':' -f2- |xargs)
+                            cut -d':' -f2- | xargs)
 
-    local total_entries=$(echo "$output" | grep "Total entries seen" |
-                          cut -d':' -f2- |xargs)
+    local total_entries=$(echo "$output" | grep "seen" |
+                          cut -d':' -f2- | xargs)
 
     local sum_entries=$((skipped_entries + converted_entries))
 
@@ -102,14 +139,102 @@ test_more_than_N()
     test_N_logs 6 3
 }
 
+test_entry_count()
+{
+    local first_file="test1"
+    local second_file="test2"
+    local third_file="test3"
+    local dir="dir"
+
+    mongo_only_test
+
+    touch $first_file
+    touch $second_file
+    mkdir $dir
+    touch $dir/$third_file
+
+    chmod o-rw $second_file
+    chmod o-rw $dir
+
+    # Here, we run a rbh-sync on the files created above as a fake user. Since
+    # that user doesn't have the read or write access to the second file and
+    # the directory, it cannot synchronize both, the command should skip the
+    # second file and the directory
+    sync_with_other_user
+
+    local output=$(rbh_log "rbh:$db:$testdb" --sync 1)
+
+    check_expected_log_value "$output" "skipped" "3"
+    check_expected_log_value "$output" "converted" "2"
+    check_expected_log_value "$output" "seen" "5"
+
+    rbh_sync rbh:posix:. rbh:$db:$testdb
+    local output=$(rbh_log "rbh:$db:$testdb" --sync 1)
+
+    check_expected_log_value "$output" "skipped" "0"
+    check_expected_log_value "$output" "converted" "5"
+    check_expected_log_value "$output" "seen" "5"
+
+    rm -rf $dir
+    do_db clear_entries $testdb
+    rbh_sync "rbh:posix:." rbh:$db:$testdb
+    rbh_log "rbh:$db:$testdb" --sync 3 | grep "Amount" | sort | cut -d':' -f2 |
+        # The sort makes it so that all converted counts are shown first,
+        # then total count, then skipped
+        sed 's/^[ \t]*//' | difflines "2" "3" "5" \
+                                      "3" "5" "5" \
+                                      "0" "0" "3"
+}
+
+test_mountpoint()
+{
+
+    local first_file="test1"
+    local second_file="test2"
+    local third_file="test3"
+    local dir="dir"
+
+    touch $first_file
+    touch $second_file
+    mkdir $dir
+    touch $dir/$third_file
+
+    rbh_sync rbh:posix:. rbh:$db:$testdb
+    local output=$(rbh_log "rbh:$db:$testdb" --sync 1)
+    check_expected_log_value "$output" "Mountpoint" "$(pwd)"
+
+    rbh_sync rbh:posix:$(pwd)/$first_file rbh:$db:$testdb
+    local output=$(rbh_log "rbh:$db:$testdb" --sync 1)
+    check_expected_log_value "$output" "Mountpoint" "$(pwd)/$first_file"
+
+    rbh_sync rbh:posix:$(pwd)/$dir/$third_file rbh:$db:$testdb
+    local output=$(rbh_log "rbh:$db:$testdb" --sync 1)
+    check_expected_log_value "$output" "Mountpoint" "$(pwd)/$dir/$third_file"
+
+    rbh_sync "rbh:posix:$(pwd)#$dir" rbh:$db:$testdb
+    local output=$(rbh_log "rbh:$db:$testdb" --sync 1)
+    check_expected_log_value "$output" "Mountpoint" "$(pwd)"
+
+    rbh_sync "rbh:posix:." rbh:$db:$testdb
+    rbh_log "rbh:$db:$testdb" --sync 5 | grep "Mountpoint" | cut -d':' -f2 |
+        sed 's/^[ \t]*//' | difflines "$(pwd)" \
+                                      "$(pwd)" \
+                                      "$(pwd)/$dir/$third_file" \
+                                      "$(pwd)/$first_file" \
+                                      "$(pwd)"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N)
+declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
+                  test_entry_count test_mountpoint)
 
 tmpdir=$(mktemp --directory)
-trap -- "rm -rf '$tmpdir'" EXIT
+test_user="$(get_test_user "$(basename "$0")")"
+add_test_user $test_user
+trap -- "rm -rf '$tmpdir'; delete_test_user $test_user" EXIT
 cd "$tmpdir"
 
 run_tests ${tests[@]}

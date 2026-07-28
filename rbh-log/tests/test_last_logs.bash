@@ -46,7 +46,7 @@ check_sync_log_result()
     local skipped_entries=$(echo "$output" | grep "skipped" |
                             cut -d':' -f2- |xargs)
 
-    local total_entries=$(echo "$output" | grep "Total entries seen" |
+    local total_entries=$(echo "$output" | grep "seen" |
                           cut -d':' -f2- |xargs)
 
     local sum_entries=$((skipped_entries + converted_entries))
