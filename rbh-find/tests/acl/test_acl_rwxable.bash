@@ -10,6 +10,16 @@ test_dir=$(dirname $(readlink -e $0))
 . $test_dir/../../../utils/tests/framework.bash
 . $test_dir/../../../rbh-sync/tests/acl/acl_utils.bash
 
+setup_acl_files()
+{
+    touch owner named_user owning_group group_masked \
+        named_group other masked named_user_denied \
+        group_denied denied owner_denied named_group_denied
+
+    chmod 000 ./*
+}
+
+
 ################################################################################
 #                                    TESTS                                     #
 ################################################################################
@@ -36,11 +46,7 @@ test_acl_rwxable()
     gid=$(id -g "$test_user")
     group_gid=$(getent group "$test_group" | cut -d: -f3)
 
-    touch owner named_user owning_group group_masked \
-        named_group other masked named_user_denied \
-        group_denied denied owner_denied named_group_denied
-
-    chmod 000 ./*
+    setup_acl_files
 
     chown "$uid:$group_gid" owner
     chmod "u+$mode_perm" owner
@@ -78,7 +84,7 @@ test_acl_rwxable()
     fi
 
     rbh_find "rbh:$db:$testdb" \
-        "-acl-$predicate" "$uid:$gid,$group_gid" | sort |
+        "-$predicate" "$uid:$gid,$group_gid" | sort |
         difflines "${expected[@]}"
 }
 
@@ -97,12 +103,31 @@ test_executable()
     test_acl_rwxable executable x --x rw- true
 }
 
+test_username()
+{
+    local group_gid
+
+    group_gid=$(getent group "$test_group" | cut -d: -f3)
+
+    setup_acl_files
+
+    setfacl -m "g:$group_gid:r--" named_group
+
+    rbh_sync_acl "." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" \
+        -readable "$test_user" | sort |
+        difflines \
+        "/" \
+        "/named_group"
+}
+
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_readable test_writable test_executable)
+declare -a tests=(test_readable test_writable test_executable test_username)
 
 tmpdir=$(mktemp --directory)
 test_user="$(get_test_user "$(basename "$0")")"
