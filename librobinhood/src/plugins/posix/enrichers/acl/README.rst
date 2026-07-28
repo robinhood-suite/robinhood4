@@ -91,9 +91,20 @@ Below are listed the predicates defined by the ACL extension.
 A predicate that filters entries which have an access ACL entry for a
 given named user.
 
+The identifier can optionnaly be followed by the permissions that the
+entry must contain::
+
+    ID[:PERMS]
+
+`PERMS` is a combination of `r`, `w` and `x`. When omitted, only the
+presence of the entry is checked.
+
 .. code:: bash
 
     rbh-find rbh:mongo:test -acl-user 424242
+    ./dir/user-acl-file
+
+    rbh-find rbh:mongo:test -acl-user 424242:rw
     ./dir/user-acl-file
 
 -acl-group
@@ -107,6 +118,9 @@ given named group.
     rbh-find rbh:mongo:test -acl-group 434343
     ./dir/group-acl-file
 
+    rbh-find rbh:mongo:test -acl-group 434343:w
+    ./dir/group-acl-file
+
 -acl-defaul-user
 ----------------
 
@@ -118,6 +132,9 @@ given named user.
     rbh-find rbh:mongo:test -acl-default-user 424242
     ./dir-acl-user
 
+    rbh-find rbh:mongo:test -acl-default-user 424242:rx
+    ./dir-acl-user
+
 -acl-defaul-group
 -----------------
 
@@ -127,6 +144,9 @@ given named group.
 .. code:: bash
 
     rbh-find rbh:mongo:test -acl-default-user 434343
+    ./dir-acl-group
+
+    rbh-find rbh:mongo:test -acl-default-user 434343:wx
     ./dir-acl-group
 
 -[readable|writable|executable]
