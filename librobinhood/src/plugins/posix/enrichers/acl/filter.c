@@ -6,11 +6,12 @@
  */
 
 #include <assert.h>
-#include <ctype.h>
 #include <error.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <sysexits.h>
+#include <grp.h>
+#include <pwd.h>
 
 #include <robinhood/utils.h>
 #include <robinhood/filter.h>
@@ -144,6 +145,30 @@ parse_acl_subject(char *string, struct acl_subject *subject)
 
         group = comma + 1;
     }
+}
+
+static void
+username2acl_subject(const char *username, struct acl_subject *subject)
+{
+    struct passwd *pwd;
+    int gid_count = 0;
+
+    memset(subject, 0, sizeof(*subject));
+
+    pwd = getpwnam(username);
+    if (pwd == NULL)
+        error(EXIT_FAILURE, errno, "getpwnam");
+
+    getgrouplist(username, pwd->pw_gid, NULL, &gid_count);
+
+    subject->gids = xreallocarray(NULL, gid_count, sizeof(*subject->gids));
+
+    if (getgrouplist(username, pwd->pw_gid,
+                     (gid_t *)subject->gids, &gid_count) == -1)
+        error(EXIT_FAILURE, errno, "getgrouplist");
+
+    subject->uid = (uint32_t)pwd->pw_uid;
+    subject->gid_count = gid_count;
 }
 
 static struct rbh_filter *
@@ -318,7 +343,10 @@ acl_access2filter(char *arg, uint32_t acl_perm, uint32_t owner_bit,
     struct acl_subject subject;
     struct rbh_filter *filter;
 
-    parse_acl_subject(arg, &subject);
+    if (strchr(arg, ':') != NULL)
+        parse_acl_subject(arg, &subject);
+    else
+        username2acl_subject(arg, &subject);
 
     filter = owner2filter(&subject, owner_bit);
 

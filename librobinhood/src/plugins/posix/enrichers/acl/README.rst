@@ -119,7 +119,7 @@ given named user.
     ./dir-acl-user
 
 -acl-defaul-group
-----------------
+-----------------
 
 A predicate that filters directories which have a defaul ACL entry for a
 given named group.
@@ -129,17 +129,30 @@ given named group.
     rbh-find rbh:mongo:test -acl-default-user 434343
     ./dir-acl-group
 
--acl-[readable|writable|executable]
------------------------------------
+-[readable|writable|executable]
+-------------------------------
 
 A predicate that filters entries which are [readable|writable|executable] by
 a given subject according to UNIX mode bits and POSIX access ACLs.
 
-The subject is written with a UID and a list of GIDs::
+The subject can be specified as a local user name::
+
+    USER
+
+or with a UID and a list of GIDs::
+
     UID:GID[,GID...]
-This form allows the check of the full ACL access algorithm.
+
+The explicit form allows the check of the full ACL access algorithm without
+depending on the local user database.
+
+When the ACL extension was used during synchronization, these predicates
+override the POSIX corresponding predicates.
 
 .. code:: bash
+
+    rbh-find rbh:mongo:test -acl-readable username
+    ./dir/readable-file
 
     rbh-find rbh:mongo:test -acl-readable 424242:23456,38363
     ./dir/readable-file
