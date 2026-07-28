@@ -68,7 +68,7 @@ test_readable()
     rbh_sync_acl "." "rbh:$db:$testdb"
 
     rbh_find "rbh:$db:$testdb" \
-        -acl-readable "$uid:$gid,$group_gid" | sort |
+        -readable "$uid:$gid,$group_gid" | sort |
         difflines \
         "/" \
         "/named_group" \
@@ -122,7 +122,7 @@ test_writable()
     rbh_sync_acl "." "rbh:$db:$testdb"
 
     rbh_find "rbh:$db:$testdb" \
-        -acl-writable "$uid:$gid,$group_gid" | sort |
+        -writable "$uid:$gid,$group_gid" | sort |
         difflines \
         "/named_group" \
         "/named_user" \
@@ -175,7 +175,7 @@ test_executable()
     rbh_sync_acl "." "rbh:$db:$testdb"
 
     rbh_find "rbh:$db:$testdb" \
-        -acl-executable "$uid:$gid,$group_gid" | sort |
+        -executable "$uid:$gid,$group_gid" | sort |
         difflines \
         "/" \
         "/named_group" \
@@ -185,12 +185,31 @@ test_executable()
         "/owning_group"
 }
 
+test_username()
+{
+    local group_gid
+
+    group_gid=$(getent group "$test_group" | cut -d: -f3)
+
+    setup_acl_files
+
+    setfacl -m "g:$group_gid:r--" named_group
+
+    rbh_sync_acl "." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" \
+        -readable "$test_user" | sort |
+        difflines \
+        "/" \
+        "/named_group"
+}
+
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_readable test_writable test_executable)
+declare -a tests=(test_readable test_writable test_executable test_username)
 
 tmpdir=$(mktemp --directory)
 test_user="$(get_test_user "$(basename "$0")")"
