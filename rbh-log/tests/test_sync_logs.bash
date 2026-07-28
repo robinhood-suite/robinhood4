@@ -139,6 +139,27 @@ test_more_than_N()
     test_N_logs 6 3
 }
 
+test_timestamps()
+{
+    local start_timestamp
+    local end_timestamp
+    local output
+
+    start_timestamp="$(date -u +%s)"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+    stop_timestamp="$(date -u +%s)"
+    output=$(rbh_log "rbh:$db:$testdb" --sync 1)
+    check_timestamps "$output" "$start_timestamp" "$end_timestamp"
+
+    sleep 1
+
+    start_timestamp="$(date +%s)"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+    stop_timestamp="$(date +%s)"
+    output=$(rbh_log "rbh:$db:$testdb" --sync 1)
+    check_timestamps "$output" "$start_timestamp" "$end_timestamp"
+}
+
 test_entry_count()
 {
     local first_file="test1"
@@ -229,7 +250,7 @@ test_mountpoint()
 ################################################################################
 
 declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
-                  test_entry_count test_mountpoint)
+                  test_timestamps test_entry_count test_mountpoint)
 
 tmpdir=$(mktemp --directory)
 test_user="$(get_test_user "$(basename "$0")")"
