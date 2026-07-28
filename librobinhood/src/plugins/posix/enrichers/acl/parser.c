@@ -31,14 +31,18 @@ str2acl_predicate(const char *string)
         if (strcmp(&string[2], "cl-default-group") == 0)
             return APRED_DEFAULT_GROUP;
 
-        if (strcmp(&string[2], "cl-readable") == 0)
+    case 'r':
+        if (strcmp(&string[2], "eadable") == 0)
             return APRED_READABLE;
 
-        if (strcmp(&string[2], "cl-writable") == 0)
+    case 'w':
+        if (strcmp(&string[2], "ritable") == 0)
             return APRED_WRITABLE;
 
-        if (strcmp(&string[2], "cl-executable") == 0)
+    case 'e':
+        if (strcmp(&string[2], "xecutable") == 0)
             return APRED_EXECUTABLE;
+
         break;
     }
 
@@ -59,9 +63,9 @@ static const char *__acl_predicate2str[] = {
     [APRED_GROUP]            = "acl-group",
     [APRED_DEFAULT_USER]     = "acl-default-user",
     [APRED_DEFAULT_GROUP]    = "acl-default-group",
-    [APRED_READABLE]         = "acl-readable",
-    [APRED_WRITABLE]         = "acl-writable",
-    [APRED_EXECUTABLE]       = "acl-executable",
+    [APRED_READABLE]         = "readable",
+    [APRED_WRITABLE]         = "writable",
+    [APRED_EXECUTABLE]       = "executable",
 };
 
 const char *
