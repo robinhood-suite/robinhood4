@@ -277,7 +277,7 @@ rbh_posix_check_valid_token(const char *token)
                 return RBH_TOKEN_PREDICATE;
             break;
         case 'r':
-            if (strcmp(&token[3], "iteable") == 0)
+            if (strcmp(&token[3], "itable") == 0)
                 return RBH_TOKEN_PREDICATE;
             break;
         }
@@ -561,8 +561,8 @@ str2predicate(const char *string)
                 return PRED_WHOLENAME;
             break;
         case 'r':
-            if (strcmp(&string[3], "iteable") == 0)
-                return PRED_WRITEABLE;
+            if (strcmp(&string[3], "itable") == 0)
+                return PRED_WRITABLE;
             break;
         }
         break;
@@ -628,7 +628,7 @@ static const char *__predicate2str[] = {
     [PRED_USED]         = "used",
     [PRED_USER]         = "user",
     [PRED_WHOLENAME]    = "wholename",
-    [PRED_WRITEABLE]    = "writeable",
+    [PRED_WRITABLE]    = "writable",
     [PRED_XATTR]        = "xattr",
     [PRED_XTYPE]        = "xtype",
 };

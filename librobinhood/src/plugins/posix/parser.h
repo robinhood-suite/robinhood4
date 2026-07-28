@@ -53,7 +53,7 @@ enum predicate {
     PRED_USED,
     PRED_USER,
     PRED_WHOLENAME,
-    PRED_WRITEABLE,
+    PRED_WRITABLE,
     PRED_XATTR,
     PRED_XTYPE,
 
