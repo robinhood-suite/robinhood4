@@ -641,11 +641,11 @@ username2filter(const char *username)
 }
 
 static const char *readable[] = { "/u=r", "/o=r", "/g=r" };
-static const char *writeable[] = { "/u=w", "/o=w", "/g=w" };
+static const char *writable[] = { "/u=w", "/o=w", "/g=w" };
 static const char *executable[] = { "/u=x", "/o=x", "/g=x" };
 static const char **modes[] = {
     [PRED_READABLE] = readable,
-    [PRED_WRITEABLE] = writeable,
+    [PRED_WRITABLE] = writable,
     [PRED_EXECUTABLE] = executable,
 };
 
@@ -892,7 +892,7 @@ rbh_posix_build_filter(struct filters_context *context, int *index)
         filter = mode2filter(argv[++i]);
         break;
     case PRED_READABLE:
-    case PRED_WRITEABLE:
+    case PRED_WRITABLE:
     case PRED_EXECUTABLE:
         filter = rwxable2filter(argv[++i], predicate);
         break;
