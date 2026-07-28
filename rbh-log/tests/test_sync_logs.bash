@@ -139,6 +139,11 @@ test_more_than_N()
     test_N_logs 6 3
 }
 
+test_timestamps()
+{
+    check_common_timestamps "--sync" "rbh_sync rbh:posix:. rbh:$db:$testdb"
+}
+
 test_entry_count()
 {
     local first_file="test1"
@@ -229,7 +234,7 @@ test_mountpoint()
 ################################################################################
 
 declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
-                  test_entry_count test_mountpoint)
+                  test_timestamps test_entry_count test_mountpoint)
 
 tmpdir=$(mktemp --directory)
 test_user="$(get_test_user "$(basename "$0")")"
