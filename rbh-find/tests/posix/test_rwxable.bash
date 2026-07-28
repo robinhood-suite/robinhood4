@@ -52,7 +52,7 @@ test_readable()
         difflines "/" "/other_file" "/second_user_file"
 }
 
-test_writeable()
+test_writable()
 {
     # Only the root can write on it
     touch "file"
@@ -89,10 +89,10 @@ test_writeable()
 
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:$db:$testdb" -writeable $test_user | sort |
+    rbh_find "rbh:$db:$testdb" -writable $test_user | sort |
         difflines "/group_file" "/other_file" "/user_file"
 
-    rbh_find "rbh:$db:$testdb" -writeable $second_user | sort |
+    rbh_find "rbh:$db:$testdb" -writable $second_user | sort |
         difflines "/other_file" "/second_user_file"
 }
 
@@ -144,7 +144,7 @@ test_executable()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_readable test_writeable test_executable)
+declare -a tests=(test_readable test_writable test_executable)
 
 tmpdir=$(mktemp --directory)
 test_user="$(get_test_user "$(basename "$0")")"
