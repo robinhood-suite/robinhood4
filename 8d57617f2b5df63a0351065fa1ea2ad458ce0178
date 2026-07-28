@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d73a300e_9b3a689d",
+        "filename": "rbh-log/src/gc.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-28T07:22:34Z",
+      "side": 1,
+      "message": "minor: should be `gc` here",
+      "range": {
+        "startLine": 51,
+        "startChar": 54,
+        "endLine": 51,
+        "endChar": 58
+      },
+      "revId": "8d57617f2b5df63a0351065fa1ea2ad458ce0178",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
