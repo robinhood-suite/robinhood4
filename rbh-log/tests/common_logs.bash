@@ -6,6 +6,21 @@
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
+check_expected_log_value()
+{
+    local output="$1"
+    local to_find="$2"
+    local expected="$3"
+
+    local log_value="$(echo "$output" | grep "$to_find")"
+    # Get the string after the first ':'
+    log_value="$(echo "${log_value#*:}" | xargs)"
+
+    if [ "$log_value" != "$expected" ]; then
+        error "Log value for '$to_find' in '$output' is not '$expected'"
+    fi
+}
+
 check_common_logs()
 {
     local output="$1"
@@ -24,8 +39,7 @@ check_common_logs()
     local command_line=$(grep 'Command used' <<< "$output" |
                          sed -n "s/.*$command/$command/p")
 
-    if [ "$command_line" != "$expected" ];
-    then
+    if [ "$command_line" != "$expected" ]; then
         error "command lines are not matching, expected '$expected', got '$command_line'"
     fi
 }
