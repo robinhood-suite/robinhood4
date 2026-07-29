@@ -22,6 +22,30 @@
       },
       "revId": "3a901c3ffe38a648a1c1a219505157c44c289afd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "badec9a8_8cf3bbe0",
+        "filename": "rbh-find/tests/acl/test_acl_rwxable.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-29T13:54:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6966b6bd_840a1991",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 13
+      },
+      "revId": "3a901c3ffe38a648a1c1a219505157c44c289afd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
