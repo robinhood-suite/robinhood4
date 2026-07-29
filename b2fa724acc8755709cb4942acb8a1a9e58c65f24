@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cec5e888_065b154f",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T09:16:20Z",
+      "side": 1,
+      "message": "question: what does the \u0027m\u0027 correspond to here ? \u0027mode\u0027 ?",
+      "range": {
+        "startLine": 23,
+        "startChar": 49,
+        "endLine": 23,
+        "endChar": 50
+      },
+      "revId": "b2fa724acc8755709cb4942acb8a1a9e58c65f24",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8148b880_13783496",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T09:16:20Z",
+      "side": 1,
+      "message": "question: just so that I understand ACL properly, here this line means:\n```\nusers have rw rights\nuser 424242 has rw rights\ngroups have r rights\ngroup 434343 has rx rights\n? have rwx rights\nothers has no rights\n```\n\nAm i correct ?",
+      "range": {
+        "startLine": 23,
+        "startChar": 8,
+        "endLine": 23,
+        "endChar": 63
+      },
+      "revId": "b2fa724acc8755709cb4942acb8a1a9e58c65f24",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bee4375_1751e092",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T09:16:20Z",
+      "side": 1,
+      "message": "question: I\u0027m confused, are some parts of the extended attribute ignored depending on the key used ? If you use \"access\", are \"u::rw-\", \"g::r-x\" and \"o\" ignored ? And the contrary for default acl ?",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 11
+      },
+      "revId": "b2fa724acc8755709cb4942acb8a1a9e58c65f24",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
