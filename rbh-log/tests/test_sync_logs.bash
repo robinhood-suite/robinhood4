@@ -144,6 +144,36 @@ test_timestamps()
     check_common_timestamps "--sync" "rbh_sync rbh:posix:. rbh:$db:$testdb"
 }
 
+test_command_line()
+{
+    local conf="conf"
+    local file="file"
+    local dir="dir"
+    local command="rbh-sync"
+
+    mkdir $dir
+    touch $file
+
+    echo "---
+ mongo:
+     address: \"mongodb://localhost:27017\"
+---" > $conf
+
+    rbh_sync rbh:posix:. rbh:$db:$testdb
+    rbh_sync rbh:posix:$dir rbh:$db:$testdb
+    rbh_sync --config $conf rbh:posix:. rbh:$db:$testdb
+    rbh_sync --config $conf rbh:posix:. rbh:$db:$testdb --no-skip
+    rbh_sync --config $conf rbh:posix:$file rbh:$db:$testdb --no-skip --one
+
+    rbh_log rbh:$db:$testdb --sync 5 | grep "Command" | cut -d':' -f2- |
+        sed 's/^[ \t]*//' | sed -n "s/.*$command/$command/p" |
+        difflines "rbh-sync --config $conf rbh:posix:$file rbh:$db:$testdb --no-skip --one" \
+                  "rbh-sync --config $conf rbh:posix:. rbh:$db:$testdb --no-skip" \
+                  "rbh-sync --config $conf rbh:posix:. rbh:$db:$testdb" \
+                  "rbh-sync rbh:posix:$dir rbh:$db:$testdb" \
+                  "rbh-sync rbh:posix:. rbh:$db:$testdb"
+}
+
 test_entry_count()
 {
     local first_file="test1"
@@ -233,7 +263,8 @@ test_mountpoint()
 ################################################################################
 
 declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
-                  test_timestamps test_entry_count test_mountpoint)
+                  test_timestamps test_command_line test_entry_count
+                  test_mountpoint)
 
 tmpdir=$(mktemp --directory)
 test_user="$(get_test_user "$(basename "$0")")"
