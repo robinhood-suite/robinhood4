@@ -167,6 +167,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe231b89_acd8af8e",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T09:52:23Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3d7c3fbb_e0f5ab70",
+      "range": {
+        "startLine": 23,
+        "startChar": 49,
+        "endLine": 23,
+        "endChar": 50
+      },
+      "revId": "b2fa724acc8755709cb4942acb8a1a9e58c65f24",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bee4375_1751e092",
@@ -252,6 +276,30 @@
       "side": 1,
       "message": "Yes, default ACLs can be only defined for directories",
       "parentUuid": "b4ee3cd5_f4912c97",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 11
+      },
+      "revId": "b2fa724acc8755709cb4942acb8a1a9e58c65f24",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a51e6d7_6a518e87",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T09:52:23Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a286ca43_1587278d",
       "range": {
         "startLine": 64,
         "startChar": 4,
