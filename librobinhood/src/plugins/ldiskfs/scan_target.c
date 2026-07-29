@@ -150,7 +150,7 @@ link_dentry(struct rbh_dentry *parent, struct rbh_dentry *child)
 
     child->parent = parent;
     g_queue_push_tail(child->parents, pair);
-    parent->children = g_list_append(parent->children, child);
+    parent->children = g_list_prepend(parent->children, child);
 }
 
 static int
