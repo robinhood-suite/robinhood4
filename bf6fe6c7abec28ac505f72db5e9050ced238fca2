@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e5cea6b_ffa5c950",
+        "filename": "rbh-find/tests/acl/test_acl.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T09:25:41Z",
+      "side": 1,
+      "message": "suggest: in each function, add a check that the other kind of filter do not match the entries, i.e. here that -acl-user 424242 does not match anything, and in `test_acl_user` that -acl-default-user does not match anything either",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 21
+      },
+      "revId": "bf6fe6c7abec28ac505f72db5e9050ced238fca2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
