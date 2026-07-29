@@ -22,6 +22,30 @@
       },
       "revId": "81da3c8763ef139c5619465e7c8c6179db4b4f18",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94610cc4_cc34aa40",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl_xattr.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-29T09:30:54Z",
+      "side": 1,
+      "message": "We need to keep the three booleans: a single boolean would only indicate that at least one of them was found.",
+      "parentUuid": "50ae43a6_d12eaf9a",
+      "range": {
+        "startLine": 112,
+        "startChar": 9,
+        "endLine": 112,
+        "endChar": 47
+      },
+      "revId": "81da3c8763ef139c5619465e7c8c6179db4b4f18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
