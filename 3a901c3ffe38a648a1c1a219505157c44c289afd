@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6966b6bd_840a1991",
+        "filename": "rbh-find/tests/acl/test_acl_rwxable.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T09:47:06Z",
+      "side": 1,
+      "message": "major: all of these could be a single function, as only the rights differ (mostly)",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 13
+      },
+      "revId": "3a901c3ffe38a648a1c1a219505157c44c289afd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
