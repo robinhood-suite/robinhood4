@@ -184,7 +184,7 @@ find_attribute()
 
 difflines()
 {
-    diff -y - <([ $# -eq 0 ] && printf '' || printf '%s\n' "$@")
+    diff -y -W 200 - <([ $# -eq 0 ] && printf '' || printf '%s\n' "$@")
 }
 
 archive_file()
