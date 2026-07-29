@@ -143,12 +143,46 @@ test_command_line()
                   "rbh-find rbh:mongo:test_find_logs-test_command_line"
 }
 
+test_entry_count()
+{
+    local first_file="test1"
+    local second_file="test2"
+    local third_file="test3"
+    local dir="dir"
+
+    touch $first_file
+    echo "blob" > $second_file
+    mkdir $dir
+    touch $dir/$third_file
+
+    rbh_sync rbh:posix:. rbh:$db:$testdb
+
+    rbh_find rbh:$db:$testdb > /dev/null
+    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    check_expected_log_value "$output" "post-filtering" "5"
+
+    rbh_find rbh:$db:$testdb -name "*test*" > /dev/null
+    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    check_expected_log_value "$output" "post-filtering" "3"
+
+    rbh_find rbh:$db:$testdb -type d > /dev/null
+    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    check_expected_log_value "$output" "post-filtering" "2"
+
+    rbh_find rbh:$db:$testdb -type f -size +0 > /dev/null
+    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    check_expected_log_value "$output" "post-filtering" "1"
+
+    rbh_log "rbh:$db:$testdb" --find 4 | grep "post-filtering" | cut -d':' -f2 |
+        sed 's/^[ \t]*//' | difflines "1" "2" "3" "5"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
-                  test_timestamps test_command_line)
+                  test_timestamps test_command_line test_entry_count)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
