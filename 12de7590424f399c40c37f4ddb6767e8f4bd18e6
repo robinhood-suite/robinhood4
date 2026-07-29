@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1acaff1_88292fc4",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl_internals.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-29T13:51:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6ac086e_6c97eb1a",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 6
+      },
+      "revId": "12de7590424f399c40c37f4ddb6767e8f4bd18e6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "66343502_8f772dee",
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "04822131_b798e2d7",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/filter.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-29T13:51:31Z",
+      "side": 1,
+      "message": "No, `id` is relative to each entry inside the permissions arrays.\nIt is usefull to build elemmatch filters, like I did it in the SELinux extension.",
+      "parentUuid": "66343502_8f772dee",
+      "range": {
+        "startLine": 31,
+        "startChar": 38,
+        "endLine": 31,
+        "endChar": 42
+      },
+      "revId": "12de7590424f399c40c37f4ddb6767e8f4bd18e6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e33f87f1_79f94e3c",
         "filename": "librobinhood/src/plugins/posix/enrichers/acl/parser.c",
         "patchSetId": 3
@@ -60,6 +108,30 @@
       "writtenOn": "2026-07-29T09:23:27Z",
       "side": 1,
       "message": "suggest: do a first assert that `strncmp(\u0026string[1], \"acl-\", 4)` is true, then a switch on the 5th character and strcmp inside",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 22,
+        "endChar": 38
+      },
+      "revId": "12de7590424f399c40c37f4ddb6767e8f4bd18e6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44ba3353_8c02dc1c",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/parser.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-29T13:51:31Z",
+      "side": 1,
+      "message": "I prefer keeping this like it is because `-acl-rwxable` filters will become just `-rwxable` to override posix rwxable filters",
+      "parentUuid": "e33f87f1_79f94e3c",
       "range": {
         "startLine": 20,
         "startChar": 4,
