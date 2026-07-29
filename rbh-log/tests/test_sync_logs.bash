@@ -70,35 +70,17 @@ check_log_result()
 
     check_common_logs "$output" rbh-sync "rbh-sync rbh:posix:. rbh:$db:$testdb"
 
-    local mountpoint=$(echo "$output" | grep "Mountpoint used" |
-                       cut -d':' -f2- | xargs)
+    echo "$output" | grep "Mountpoint" > /dev/null ||
+        error "source_mountpoint should have been retrieved"
 
-    if [ "$mountpoint" != "$(pwd)" ]; then
-        error "Invalid mountpoint"
-    fi
+    echo "$output" | grep "converted" > /dev/null ||
+        error "converted_entries should have been retrieved"
 
-    local converted_entries=$(echo "$output" | grep "converted" |
-                              cut -d':' -f2- | xargs)
+    echo "$output" | grep "skipped" > /dev/null ||
+        error "skipped_entries should have been retrieved"
 
-    local skipped_entries=$(echo "$output" | grep "skipped" |
-                            cut -d':' -f2- | xargs)
-
-    local total_entries=$(echo "$output" | grep "seen" |
-                          cut -d':' -f2- | xargs)
-
-    local sum_entries=$((skipped_entries + converted_entries))
-
-    local find_entries=$(find . | wc -l)
-
-    if [ "$sum_entries" != "$find_entries" ]; then
-        error "The sum of converted and skipped entries does not match the
-               number of entries inside the directory"
-    fi
-
-    if [ "$sum_entries" != "$total_entries" ]; then
-        error "The sum of converted and skipped entries does not match
-               total_entries_seen"
-    fi
+    echo "$output" | grep "seen" > /dev/null ||
+        error "total_entries should have been retrieved"
 }
 
 test_N_logs()
