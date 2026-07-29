@@ -25,8 +25,11 @@ rbh_ldiskfs_backend_new(const struct rbh_backend_plugin *self,
                         struct rbh_config *config,
                         bool read_only)
 {
+    pthread_mutex_t mutex_dblist = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t mutex_dcache = PTHREAD_MUTEX_INITIALIZER;
     struct ldiskfs_backend *ldiskfs;
     char *io_opts = NULL;
+    char *thr_str;
     errcode_t rc;
 
     ldiskfs = xcalloc(1, sizeof(*ldiskfs));
@@ -42,6 +45,19 @@ rbh_ldiskfs_backend_new(const struct rbh_backend_plugin *self,
         return NULL;
     }
 
+    thr_str = (char *)rbh_config_get_string("ldiskfs/num_threads", "1");
+    if (!thr_str) {
+        fprintf(stderr, "failed to get num_threads from provided configuration"
+                        "defaulting to monothread process\n");
+        ldiskfs->nthreads = 1;
+    } else {
+        if(str2int64_t(thr_str, &ldiskfs->nthreads) || ldiskfs->nthreads < 1){
+            fprintf(stderr, "ldiskfs/num_threads is not a valid positive integer in the provided configuration, "
+                            "defaulting to monothread process\n");
+            ldiskfs->nthreads = 1;
+        }
+    }
+
     ldiskfs->dcache = rbh_dcache_new();
     if (!ldiskfs->dcache) {
         int save_errno = errno;
@@ -52,6 +68,9 @@ rbh_ldiskfs_backend_new(const struct rbh_backend_plugin *self,
         return NULL;
     }
 
+    ldiskfs->dblist_lock = mutex_dblist;
+    ldiskfs->dcache_lock = mutex_dcache;
+
     return &ldiskfs->backend;
 }
 
@@ -59,6 +78,9 @@ void
 ldiskfs_backend_destroy(void *backend)
 {
     struct ldiskfs_backend *ldiskfs = backend;
+
+    pthread_mutex_destroy(&ldiskfs->dblist_lock);
+    pthread_mutex_destroy(&ldiskfs->dcache_lock);
 
     rbh_dcache_destroy(ldiskfs->dcache);
     ext2fs_close(ldiskfs->fs);

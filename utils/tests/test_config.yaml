@@ -43,6 +43,9 @@ backends:
             - lustre
             - selinux
 
+ldiskfs:
+    num_threads: 16
+
 s3:
     address: 127.0.0.1:9000
     user: minioadmin
