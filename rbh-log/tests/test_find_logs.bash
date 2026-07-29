@@ -103,11 +103,18 @@ test_more_than_N()
     test_N_logs 6 3
 }
 
+test_timestamps()
+{
+    rbh_sync rbh:posix:. rbh:$db:$testdb
+    check_common_timestamps "--find" "rbh_find rbh:$db:$testdb"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N)
+declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
+                  test_timestamps)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
