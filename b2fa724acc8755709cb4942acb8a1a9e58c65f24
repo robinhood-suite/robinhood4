@@ -95,6 +95,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b4d43a2_433b5c2f",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T09:41:41Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f1d0e724_829f8bec",
+      "range": {
+        "startLine": 23,
+        "startChar": 8,
+        "endLine": 23,
+        "endChar": 63
+      },
+      "revId": "b2fa724acc8755709cb4942acb8a1a9e58c65f24",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "123040e8_b499a46e",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T09:41:41Z",
+      "side": 1,
+      "message": "So if this mask is only for read rights, noone will have anything but read rights at most ?",
+      "parentUuid": "8b63dffa_fbab83d0",
+      "range": {
+        "startLine": 23,
+        "startChar": 49,
+        "endLine": 23,
+        "endChar": 50
+      },
+      "revId": "b2fa724acc8755709cb4942acb8a1a9e58c65f24",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bee4375_1751e092",
@@ -132,6 +180,30 @@
       "side": 1,
       "message": "Here, the access ACL applies to the directory itself. The default ACL is used as a template for the permissions of new files and directories created inside it.\n\nThey contain the same kind of entries, but they are stored and used separately.\nSo nothing is ignored, it depends on the usecase",
       "parentUuid": "1bee4375_1751e092",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 11
+      },
+      "revId": "b2fa724acc8755709cb4942acb8a1a9e58c65f24",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4ee3cd5_f4912c97",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T09:41:41Z",
+      "side": 1,
+      "message": "OK I see. So does that mean that default ACLs do not matter for regular files ?",
+      "parentUuid": "09e72c4b_c5bd61e5",
       "range": {
         "startLine": 64,
         "startChar": 4,
