@@ -134,3 +134,15 @@ rbh_dcache_foreach(struct rbh_dcache *dcache, rbh_dcache_cb_t cb, void *udata)
     };
     g_hash_table_foreach(dcache->dentries, glib_foreach_cb, &data);
 }
+
+static void
+glib_insert_hash_table(gpointer ino, gpointer dentry, gpointer udata)
+{
+    g_hash_table_insert(udata, ino, dentry);
+}
+
+void
+rbh_dcache_merge(void *src, void *dest)
+{
+    g_hash_table_foreach(src, glib_insert_hash_table, dest);
+}
