@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa24d179_fe700fae",
+        "filename": "rbh-log/tests/common_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-29T07:14:33Z",
+      "side": 1,
+      "message": "major: `timestamp` two times",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 2
+      },
+      "revId": "42b55aa0d2f68c691da2abf98e17f0470ba28dba",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2af20678_ab62749c",
+        "filename": "rbh-log/tests/common_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-29T07:14:33Z",
+      "side": 1,
+      "message": "typo: too much brackets here",
+      "range": {
+        "startLine": 79,
+        "startChar": 32,
+        "endLine": 79,
+        "endChar": 33
+      },
+      "revId": "42b55aa0d2f68c691da2abf98e17f0470ba28dba",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e739e2f5_bd8640ed",
+        "filename": "rbh-log/tests/test_sync_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-29T07:14:33Z",
+      "side": 1,
+      "message": "major: here and below should be `end_timestamp`",
+      "range": {
+        "startLine": 150,
+        "startChar": 4,
+        "endLine": 150,
+        "endChar": 18
+      },
+      "revId": "42b55aa0d2f68c691da2abf98e17f0470ba28dba",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
