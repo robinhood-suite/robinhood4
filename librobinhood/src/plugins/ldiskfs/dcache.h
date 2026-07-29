@@ -65,6 +65,9 @@ rbh_dcache_find_or_create(struct rbh_dcache *dcache, ext2_ino_t ino);
 typedef void (*rbh_dcache_cb_t)(struct rbh_fsentry *fsentry, void *udata);
 
 void
+rbh_dcache_merge(void *src, void *dest);
+
+void
 rbh_dcache_foreach(struct rbh_dcache *dcache, rbh_dcache_cb_t cb, void *udata);
 
 struct rbh_dentry *

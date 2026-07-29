@@ -18,6 +18,11 @@ dup_inode(struct ext2_inode *src, size_t inode_size)
     return dst;
 }
 
+struct db_data {
+    ext2_ino_t ino;
+    ext2_dblist dblist;
+};
+
 static int
 scan_dir_cb(ext2_filsys fs,
             blk64_t *block_nr,
@@ -26,7 +31,9 @@ scan_dir_cb(ext2_filsys fs,
             int ref_offset,
             void *udata)
 {
-    ext2_ino_t ino = *(ext2_ino_t *)udata;
+    struct db_data _udata = *(struct db_data *)udata;
+    ext2_dblist dblist = _udata.dblist;
+    ext2_ino_t ino = _udata.ino;
 
     (void) ref_block;
     (void) ref_offset;
@@ -34,7 +41,7 @@ scan_dir_cb(ext2_filsys fs,
     if ((int) block_count < 0)
         return 0;
 
-    if (ext2fs_add_dir_block2(fs->dblist, ino, *block_nr, block_count))
+    if (ext2fs_add_dir_block2(dblist, ino, *block_nr, block_count))
         return BLOCK_ABORT;
 
     return 0;
@@ -44,13 +51,15 @@ static bool
 add_dir_blocks(struct ldiskfs_backend *ldiskfs,
                ext2_ino_t ino,
                struct ext2_inode *inode,
-               size_t inode_size)
+               size_t inode_size,
+               struct rbh_dcache *dcache,
+               ext2_dblist dblist)
 {
     struct rbh_dentry *dentry;
     errcode_t rc;
     char *buf;
 
-    dentry = rbh_dcache_find_or_create(ldiskfs->dcache, ino);
+    dentry = rbh_dcache_find_or_create(dcache, ino);
     dentry->inode = dup_inode(inode, inode_size);
 
     /* TODO this could be moved to the ldiskfs_backend struct to do a single
@@ -62,7 +71,13 @@ add_dir_blocks(struct ldiskfs_backend *ldiskfs,
      */
     buf = xmalloc(ldiskfs->fs->blocksize * 3);
 
-    rc = ext2fs_block_iterate3(ldiskfs->fs, ino, 0, buf, scan_dir_cb, &ino);
+    struct db_data udata = {
+        .ino = ino,
+        .dblist = dblist,
+    };
+
+    // XXX bad behaviour is probably caused by this line
+    rc = ext2fs_block_iterate3(ldiskfs->fs, ino, 0, buf, scan_dir_cb, &udata);
     if (rc) {
         free(buf);
         return ldiskfs_error(
@@ -76,6 +91,112 @@ add_dir_blocks(struct ldiskfs_backend *ldiskfs,
     return true;
 }
 
+void *scan_inodes_thr (void *arg)
+{
+    struct ldiskfs_backend *backend;
+    struct rbh_dcache *dcache;
+    struct rbh_dentry *dentry;
+    struct ext2_inode *inode;
+    ext2_inode_scan iscan;
+    ext2_dblist dblist;
+    size_t inode_size;
+    ext2_ino_t ino;
+    int num_groups;
+    int curr_group;
+    errcode_t rc;
+    int thr_id;
+    bool *ret;
+
+    backend = (struct ldiskfs_backend *)arg;
+    thr_id = backend->thread_counter++;
+    ret = malloc(sizeof(bool));
+    dcache = rbh_dcache_new();
+
+    num_groups = backend->fs->super->s_inodes_count
+                 / backend->fs->super->s_inodes_per_group;
+
+    ext2fs_init_dblist(backend->fs, &dblist);
+    /**
+      * necessary mutex lock because ext2fs_open_inode_scan edits then restores
+      * the fs struct
+      */
+    pthread_mutex_lock(&backend->dblist_lock);
+    rc = ext2fs_open_inode_scan(backend->fs,
+                                backend->fs->inode_blocks_per_group,
+                                &iscan);
+    pthread_mutex_unlock(&backend->dblist_lock);
+    if (rc) {
+        *ret = ldiskfs_error("failed to init inode scan: %s",
+                             error_message(rc));
+        pthread_exit(ret);
+    }
+
+    inode_size = EXT2_INODE_SIZE(backend->fs->super);
+    inode = malloc(inode_size);
+    if (!inode) {
+        *ret = false;
+        pthread_exit(ret);
+    }
+
+    curr_group = thr_id;
+    if (curr_group >= num_groups)
+        goto free;
+    ext2fs_inode_scan_goto_blockgroup(iscan, curr_group);
+
+    rc = ext2fs_get_next_inode_full(iscan, &ino, inode, inode_size);
+
+    while (!rc && (curr_group < num_groups)) {
+        if (ino == 0)
+            break;
+
+        if (ino < EXT2_GOOD_OLD_FIRST_INO && ino != EXT2_ROOT_INO)
+            /* skip reserved inodes except the root */
+            goto next;
+
+        if (!ext2fs_fast_test_inode_bitmap2(backend->fs->inode_map, ino))
+            /* skip deleted inodes */
+            goto next;
+
+        if (LINUX_S_ISDIR(inode->i_mode)) {
+            if (!add_dir_blocks(backend, ino, inode, inode_size, dcache, dblist)) {
+                *ret = false;
+                pthread_exit(ret);
+            }
+        } else {
+            dentry = rbh_dcache_find_or_create(dcache, ino);
+            dentry->inode = dup_inode(inode, inode_size);
+        }
+
+next:
+        rc = ext2fs_get_next_inode_full(iscan, &ino, inode, inode_size);
+        if (!rc &&
+            ino > ((curr_group + 1) * backend->fs->super->s_inodes_per_group)) {
+            curr_group += backend->nthreads;
+            if (curr_group >= num_groups)
+                break;
+            ext2fs_inode_scan_goto_blockgroup(iscan, curr_group);
+            rc = ext2fs_get_next_inode_full(iscan, &ino, inode, inode_size);
+        }
+    }
+
+    pthread_mutex_lock(&backend->dcache_lock);
+    rbh_dcache_merge(*(void **)dcache, *(void **)(backend->dcache));
+    pthread_mutex_unlock(&backend->dcache_lock);
+
+    pthread_mutex_lock(&backend->dblist_lock);
+    ext2fs_merge_dblist(dblist, backend->fs->dblist);
+    pthread_mutex_unlock(&backend->dblist_lock);
+
+free:
+    free(inode);
+    rbh_dcache_destroy(dcache);
+    ext2fs_close_inode_scan(iscan);
+    ext2fs_free_dblist(dblist);
+
+    *ret = true;
+    pthread_exit(ret);
+}
+
 
 /* Scan all the inodes from all the groups and fetch inline xattrs (xattrs
  * stored alongside the inode). Inodes containing external xattrs are kept in
@@ -84,10 +205,8 @@ add_dir_blocks(struct ldiskfs_backend *ldiskfs,
 static bool
 scan_inodes(struct ldiskfs_backend *backend)
 {
-    struct rbh_dentry *dentry;
-    struct ext2_inode *inode;
-    size_t inode_size;
-    ext2_ino_t ino;
+    bool ret = true;
+    void * thr_ret;
     errcode_t rc;
 
     rc = ext2fs_read_inode_bitmap(backend->fs);
@@ -100,44 +219,24 @@ scan_inodes(struct ldiskfs_backend *backend)
         return ldiskfs_error("failed to init directory block list: %s",
                              error_message(rc));
 
-    rc = ext2fs_open_inode_scan(backend->fs,
-                                backend->fs->inode_blocks_per_group,
-                                &backend->iscan);
-    if (rc)
-        return ldiskfs_error("failed to init inode scan: %s",
-                             error_message(rc));
+    pthread_t *threads = malloc(backend->nthreads * sizeof(pthread_t));
 
-    inode_size = EXT2_INODE_SIZE(backend->fs->super);
-    inode = malloc(inode_size);
-    if (!inode)
-        return false;
+    for(int i = 0; i < backend->nthreads; i++)
+        pthread_create(&threads[i], NULL, &scan_inodes_thr, backend);
 
-    while (!ext2fs_get_next_inode_full(backend->iscan, &ino, inode,
-                                       inode_size)) {
-        if (ino == 0)
-            break;
+    for(int i = 0; i < backend->nthreads; i++) {
+        rc = (pthread_join(threads[i], &thr_ret));
+        if (rc)
+            return ldiskfs_error("Failed to join thread during inode scan: %s",
+                                 error_message(rc));
+        ret = ret && *(bool *)thr_ret;
 
-        if (ino < EXT2_GOOD_OLD_FIRST_INO && ino != EXT2_ROOT_INO)
-            /* skip reserved inodes except the root */
-            continue;
-
-        if (!ext2fs_fast_test_inode_bitmap2(backend->fs->inode_map, ino))
-            /* skip deleted inodes */
-            continue;
-
-        if (LINUX_S_ISDIR(inode->i_mode)) {
-            if (!add_dir_blocks(backend, ino, inode, inode_size))
-                return false;
-        } else {
-            dentry = rbh_dcache_find_or_create(backend->dcache, ino);
-            dentry->inode = dup_inode(inode, inode_size);
-        }
+        free(thr_ret);
     }
 
-    free(inode);
-    ext2fs_close_inode_scan(backend->iscan);
+    free(threads);
 
-    return true;
+    return ret;
 }
 
 static void
