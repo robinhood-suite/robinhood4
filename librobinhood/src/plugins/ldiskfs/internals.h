@@ -18,6 +18,8 @@
 #include <value.h>
 #include <ext2fs/ext2fs.h>
 #include <lustre/lustre_user.h>
+#include <pthread.h>
+#include <stdatomic.h>
 
 #include "robinhood/backends/posix_extension.h"
 #include "robinhood/backends/lustre.h"
@@ -45,6 +47,10 @@ struct ldiskfs_backend {
     ext2_filsys fs;
     ext2_inode_scan iscan;
     struct rbh_dcache *dcache;
+    int nthreads;
+    _Atomic int thread_counter;
+    pthread_mutex_t dblist_lock;
+    pthread_mutex_t dcache_lock;
 };
 
 struct ldiskfs_iter {
