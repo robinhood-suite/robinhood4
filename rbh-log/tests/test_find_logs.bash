@@ -109,12 +109,46 @@ test_timestamps()
     check_common_timestamps "--find" "rbh_find rbh:$db:$testdb"
 }
 
+test_command_line()
+{
+    local conf="conf"
+    local file="file"
+    local dir="dir"
+    local command="rbh-find"
+
+    mkdir $dir
+    touch $file
+
+    rbh_sync rbh:posix:. rbh:$db:$testdb
+
+    echo "---
+ mongo:
+     address: \"mongodb://localhost:27017\"
+ alias:
+     blob: \"-size +42 -user root\"
+---" > $conf
+
+    rbh_find rbh:$db:$testdb > /dev/null
+    rbh_find --config $conf rbh:$db:$testdb > /dev/null
+    rbh_find --config $conf --verbose rbh:$db:$testdb -size +3 > /dev/null
+    rbh_find --config $conf rbh:$db:$testdb -size +3 -uid 30 -printf "blob\n" > /dev/null
+    rbh_find --config $conf rbh:$db:$testdb --alias blob -count > /dev/null
+
+    rbh_log rbh:$db:$testdb --find 6 | grep "Command" | cut -d':' -f2- |
+        sed 's/^[ \t]*//' | sed -n "s/.*$command/$command/p" |
+        difflines "rbh-find --config $conf rbh:$db:$testdb --alias blob -count" \
+                  "rbh-find --config $conf rbh:$db:$testdb -size +3 -uid 30 -printf blob\n" \
+                  "rbh-find --config $conf --verbose rbh:$db:$testdb -size +3" \
+                  "rbh-find --config $conf rbh:$db:$testdb" \
+                  "rbh-find rbh:$db:$testdb"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
-                  test_timestamps)
+                  test_timestamps test_command_line)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
