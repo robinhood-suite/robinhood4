@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15b2e745_be1ac335",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T09:39:40Z",
+      "side": 1,
+      "message": "major: I don\u0027t think you need to re-define those, because they already exist as POSIX filters. Since the rbh_acl_build_filter function has access to the filters_context structure, it should also have access to the POSIX plugin, and thus the filtering functions. So I\u0027d rather you don\u0027t define these here, and instead ask the POSIX plugin for filters for these values instead.",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 2
+      },
+      "revId": "8691d25f35edc57f0e742f00ab8efbec395f1c8e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5e038ad_515f9fde",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T09:39:40Z",
+      "side": 1,
+      "message": "style: order",
+      "range": {
+        "startLine": 343,
+        "startChar": 4,
+        "endLine": 343,
+        "endChar": 37
+      },
+      "revId": "8691d25f35edc57f0e742f00ab8efbec395f1c8e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
