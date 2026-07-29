@@ -145,6 +145,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3d7c3fbb_e0f5ab70",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-29T09:45:44Z",
+      "side": 1,
+      "message": "Yes that\u0027s correct.\n(to be precise, others and owning user car have more that read rights bcs the mask don\u0027t apply to them)",
+      "parentUuid": "123040e8_b499a46e",
+      "range": {
+        "startLine": 23,
+        "startChar": 49,
+        "endLine": 23,
+        "endChar": 50
+      },
+      "revId": "b2fa724acc8755709cb4942acb8a1a9e58c65f24",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1bee4375_1751e092",
         "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
         "patchSetId": 4
@@ -204,6 +228,30 @@
       "side": 1,
       "message": "OK I see. So does that mean that default ACLs do not matter for regular files ?",
       "parentUuid": "09e72c4b_c5bd61e5",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 11
+      },
+      "revId": "b2fa724acc8755709cb4942acb8a1a9e58c65f24",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a286ca43_1587278d",
+        "filename": "rbh-sync/tests/acl/test_acl_db_sync.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-29T09:45:44Z",
+      "side": 1,
+      "message": "Yes, default ACLs can be only defined for directories",
+      "parentUuid": "b4ee3cd5_f4912c97",
       "range": {
         "startLine": 64,
         "startChar": 4,
