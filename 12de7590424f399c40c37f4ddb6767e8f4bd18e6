@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6ac086e_6c97eb1a",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl_internals.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T09:23:27Z",
+      "side": 1,
+      "message": "style: add empty line above",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 6
+      },
+      "revId": "12de7590424f399c40c37f4ddb6767e8f4bd18e6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66343502_8f772dee",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/filter.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T09:23:27Z",
+      "side": 1,
+      "message": "defect? shouldn\u0027t it be `acl.id` ?",
+      "range": {
+        "startLine": 31,
+        "startChar": 38,
+        "endLine": 31,
+        "endChar": 42
+      },
+      "revId": "12de7590424f399c40c37f4ddb6767e8f4bd18e6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e33f87f1_79f94e3c",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/parser.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T09:23:27Z",
+      "side": 1,
+      "message": "suggest: do a first assert that `strncmp(\u0026string[1], \"acl-\", 4)` is true, then a switch on the 5th character and strcmp inside",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 22,
+        "endChar": 38
+      },
+      "revId": "12de7590424f399c40c37f4ddb6767e8f4bd18e6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
