@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c2ec7da_e419f51a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-29T08:08:04Z",
+      "side": 1,
+      "message": "question: Why not using the random ObjectID, put a timestamp in each log and sort by this timestamp when getting the logs ?",
+      "revId": "c176b8c413469ef8529d6fb44336d22302783f88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
