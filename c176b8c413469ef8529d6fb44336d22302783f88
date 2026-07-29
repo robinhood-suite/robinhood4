@@ -16,6 +16,24 @@
       "message": "question: Why not using the random ObjectID, put a timestamp in each log and sort by this timestamp when getting the logs ?",
       "revId": "c176b8c413469ef8529d6fb44336d22302783f88",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "488d0575_3aab48c3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T10:18:27Z",
+      "side": 1,
+      "message": "That doesn\u0027t solve the issue because then two commands happening at the same time would still have the same timestamp. And while it would solve the issue of logs being overwritten, it would add an issue of \"which log came first\" which I don\u0027t want to deal with either (also if we sort by the timestamp, we wouldn\u0027t have any guarantee the logs are always given in the same order).\n\nAlso the timestamp is already available in the logs themselves, as \"start_timestamp\"",
+      "parentUuid": "6c2ec7da_e419f51a",
+      "revId": "c176b8c413469ef8529d6fb44336d22302783f88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
