@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a258843f_e911237d",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/acl.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-29T08:59:15Z",
+      "side": 1,
+      "message": "minor: since it does nothing, no need to define the setup function for this enricher. POSIX checks if it is NULL before calling the setup_enricher callback",
+      "range": {
+        "startLine": 321,
+        "startChar": 0,
+        "endLine": 321,
+        "endChar": 13
+      },
+      "revId": "059e47b92d8a236740b44836b023325c6626a8a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
