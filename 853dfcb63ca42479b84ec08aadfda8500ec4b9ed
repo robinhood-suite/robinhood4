@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1a06277_6d3fdcc2",
+        "filename": "rbh-log/tests/test_sync_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-30T07:30:39Z",
+      "side": 1,
+      "message": "nit: remove empty line",
+      "revId": "853dfcb63ca42479b84ec08aadfda8500ec4b9ed",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
