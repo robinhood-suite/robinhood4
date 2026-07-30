@@ -50,11 +50,11 @@ check_timestamps()
     local start_timestamp="$2"
     local end_timestamp="$3"
 
-    local log_start="$(echo "$output" | grep "Start")"
+    local log_start="$(echo "$output" | grep "Start of the command")"
     log_start="${log_start#*:}"
     log_start="$(date +%s -d "$log_start")"
 
-    local log_end="$(echo "$output" | grep "End")"
+    local log_end="$(echo "$output" | grep "End of the command")"
     log_end="${log_end#*:}"
     log_end="$(date +%s -d "$log_end")"
 
