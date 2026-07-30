@@ -53,20 +53,27 @@ fsevents_metadata_value_map(struct rbh_metadata *metadata)
 
     rbh_set_common_metadata_pairs(&metadata->common_md, values, pairs);
 
-    pairs[4].key = "source_read";
-    values[4].type = RBH_VT_STRING;
-    values[4].string = metadata->fsevents_md.source_read;
-    pairs[4].value = &values[4];
+    count = 4;
 
-    pairs[5].key = "enrich_mountpoint";
-    values[5].type = RBH_VT_STRING;
-    values[5].string = metadata->fsevents_md.enrich_mountpoint;
-    pairs[5].value = &values[5];
+    pairs[count].key = "source_read";
+    values[count].type = RBH_VT_STRING;
+    values[count].string = metadata->fsevents_md.source_read;
+    pairs[count].value = &values[count];
+    count++;
 
-    pairs[6].key = "worker_count";
-    values[6].type = RBH_VT_UINT64;
-    values[6].uint64 = metadata->fsevents_md.worker_count;
-    pairs[6].value = &values[6];
+    if (metadata->fsevents_md.enrich_mountpoint) {
+        pairs[count].key = "enrich_mountpoint";
+        values[count].type = RBH_VT_STRING;
+        values[count].string = metadata->fsevents_md.enrich_mountpoint;
+        pairs[count].value = &values[count];
+        count++;
+    }
+
+    pairs[count].key = "worker_count";
+    values[count].type = RBH_VT_UINT64;
+    values[count].uint64 = metadata->fsevents_md.worker_count;
+    pairs[count].value = &values[count];
+    count++;
 
     pairs_timespec[0].key = "tv_sec";
     values_timespec[0].type = RBH_VT_UINT64;
@@ -83,10 +90,11 @@ fsevents_metadata_value_map(struct rbh_metadata *metadata)
     timespec_map[0].pairs = &pairs_timespec[0];
     timespec_map[0].count = 2;
 
-    pairs[7].key = "time_read_dedup";
-    values[7].type = RBH_VT_MAP;
-    values[7].map = timespec_map[0];
-    pairs[7].value = &values[7];
+    pairs[count].key = "time_read_dedup";
+    values[count].type = RBH_VT_MAP;
+    values[count].map = timespec_map[0];
+    pairs[count].value = &values[count];
+    count++;
 
     pairs_timespec[2].key = "tv_sec";
     values_timespec[2].type = RBH_VT_UINT64;
@@ -103,37 +111,44 @@ fsevents_metadata_value_map(struct rbh_metadata *metadata)
     timespec_map[1].pairs = &pairs_timespec[2];
     timespec_map[1].count = 2;
 
-    pairs[8].key = "time_enrich_update";
-    values[8].type = RBH_VT_MAP;
-    values[8].map = timespec_map[1];
-    pairs[8].value = &values[8];
+    pairs[count].key = "time_enrich_update";
+    values[count].type = RBH_VT_MAP;
+    values[count].map = timespec_map[1];
+    pairs[count].value = &values[count];
+    count++;
 
-    pairs[9].key = "changelog_read";
-    values[9].type = RBH_VT_UINT64;
-    values[9].uint64 = metadata->fsevents_md.changelog_read;
-    pairs[9].value = &values[9];
+    pairs[count].key = "changelog_read";
+    values[count].type = RBH_VT_UINT64;
+    values[count].uint64 = metadata->fsevents_md.changelog_read;
+    pairs[count].value = &values[count];
+    count++;
 
-    pairs[10].key = "start_index";
-    values[10].type = RBH_VT_INT64;
-    values[10].int64 = metadata->fsevents_md.start_index;
-    pairs[10].value = &values[10];
+    pairs[count].key = "start_index";
+    values[count].type = RBH_VT_INT64;
+    values[count].int64 = metadata->fsevents_md.start_index;
+    pairs[count].value = &values[count];
+    count++;
 
-    pairs[11].key = "enrich_skip_count";
-    values[11].type = RBH_VT_UINT64;
-    values[11].uint64 = metadata->fsevents_md.enrich_skip_count;
-    pairs[11].value = &values[11];
+    if (metadata->fsevents_md.enrich_mountpoint) {
+        pairs[count].key = "enrich_skip_count";
+        values[count].type = RBH_VT_UINT64;
+        values[count].uint64 = metadata->fsevents_md.enrich_skip_count;
+        pairs[count].value = &values[count];
+        count++;
+    }
 
-    pairs[12].key = "deduplication_ratio";
-    values[12].type = RBH_VT_DOUBLE;
+    pairs[count].key = "deduplication_ratio";
+    values[count].type = RBH_VT_DOUBLE;
 
     if (metadata->fsevents_md.event_amount)
-        values[12].float64 =
+        values[count].float64 =
             (double) (metadata->fsevents_md.deduplicated_event_amount * 100) /
                 (double) metadata->fsevents_md.event_amount;
     else
-        values[12].float64 = 0.0;
+        values[count].float64 = 0.0;
 
-    pairs[12].value = &values[12];
+    pairs[count].value = &values[count];
+    count++;
 
     value_map->pairs = pairs;
     value_map->count = count;
