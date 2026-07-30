@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f057439f_b15bf309",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-30T08:50:04Z",
+      "side": 1,
+      "message": "question: I don’t understand what guarantees that it will use the ACL readable,... rather than the POSIX one.",
+      "revId": "5c5f7086ca2a487ac927e5fe717e08704f1e98dd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
