@@ -403,10 +403,13 @@ iter_fsentry2delete(struct rbh_iterator *fsentries, const char *mnt_path,
     deletes->mnt_path = mnt_path;
     deletes->gc_md = gc_md;
 
-    if (gc_md->check_command)
-        asprintf(&deletes->check_cmd, "%s '{}'", gc_md->check_command);
-    else
+    if (gc_md->check_command) {
+        if (asprintf(&deletes->check_cmd, "%s '{}'",
+                     gc_md->check_command) == -1)
+            error(EXIT_FAILURE, ENOMEM, "Failed to asprintf check_cmd");
+    } else {
         deletes->check_cmd = NULL;
+    }
 
     return &deletes->iterator;
 }
@@ -424,10 +427,12 @@ iter_fsentry2print(struct rbh_iterator *fsentries, const char *mnt_path,
     prints->mnt_path = mnt_path;
     prints->gc_md = gc_md;
 
-    if (gc_md->check_command)
-        asprintf(&prints->check_cmd, "%s '{}'", gc_md->check_command);
-    else
+    if (gc_md->check_command) {
+        if (asprintf(&prints->check_cmd, "%s '{}'", gc_md->check_command) == -1)
+            error(EXIT_FAILURE, ENOMEM, "Failed to asprintf check_cmd");
+    } else {
         prints->check_cmd = NULL;
+    }
 
     return &prints->iterator;
 }
