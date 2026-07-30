@@ -16,6 +16,24 @@
       "message": "question: I don’t understand what guarantees that it will use the ACL readable,... rather than the POSIX one.",
       "revId": "5c5f7086ca2a487ac927e5fe717e08704f1e98dd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8bbaa22_7f6c4a72",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-07-30T09:29:06Z",
+      "side": 1,
+      "message": "Extensions are stored before the POSIX plugin in the backend source, and rbh-find processes them in the same order. The first plugin or extension that recognizes a token is selected.",
+      "parentUuid": "f057439f_b15bf309",
+      "revId": "5c5f7086ca2a487ac927e5fe717e08704f1e98dd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
