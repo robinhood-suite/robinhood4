@@ -16,6 +16,24 @@
       "message": "nit: remove empty line",
       "revId": "853dfcb63ca42479b84ec08aadfda8500ec4b9ed",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27023f6f_ecff7e78",
+        "filename": "rbh-log/tests/test_sync_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-30T10:11:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1a06277_6d3fdcc2",
+      "revId": "853dfcb63ca42479b84ec08aadfda8500ec4b9ed",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
