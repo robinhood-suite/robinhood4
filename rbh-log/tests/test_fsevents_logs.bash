@@ -111,12 +111,51 @@ test_timestamps()
          src:lustre:$LUSTRE_MDT rbh:$db:$testdb"
 }
 
+test_command_line()
+{
+    local conf="conf"
+    local file="file"
+    local dir="dir"
+    local command="rbh-fsevents"
+
+    echo "---
+ mongo:
+     address: \"mongodb://localhost:27017\"
+---" > $conf
+
+    touch file
+
+    # These two commands will fail because we can't push events to the DB
+    # without enriching them first. But since we don't care about these commands
+    # actually suceeding, just keep them as-is just for proper testing of the
+    # logs
+    set +e
+    rbh_fsevents src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
+    rbh_fsevents --config $conf src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
+    set -e
+    rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
+    rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb -b 400 -d blob --no-estale-logs > /dev/null
+    rbh_fsevents src:lustre:$LUSTRE_MDT - > tmp
+    cat tmp | rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR - - > tmp
+    cat tmp | rbh_fsevents - rbh:$db:$testdb > /dev/null
+
+    rbh_log rbh:$db:$testdb --fsevents 7 | grep "Command" | cut -d':' -f2- |
+        sed 's/^[ \t]*//' | sed -n "s/.*$command/$command/p" |
+        # Two of the commands above are not here because their output was a file
+        # and not the database, so there is no log associated
+        difflines "rbh-fsevents - rbh:$db:$testdb" \
+                  "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb -b 400 -d blob --no-estale-logs" \
+                  "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb" \
+                  "rbh-fsevents --config $conf src:lustre:$LUSTRE_MDT rbh:$db:$testdb" \
+                  "rbh-fsevents src:lustre:$LUSTRE_MDT rbh:$db:$testdb"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_fsevents_1 test_fsevents_N test_more_than_N
-                  test_timestamps)
+                  test_timestamps test_command_line)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
