@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a57599e_10a810a4",
+        "filename": "librobinhood/src/plugins/ldiskfs/backend.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-30T08:14:45Z",
+      "side": 1,
+      "message": "minor: use `str2int64_t` instead",
+      "range": {
+        "startLine": 70,
+        "startChar": 8,
+        "endLine": 72,
+        "endChar": 80
+      },
+      "revId": "8c3753c42422092cd89d4fbc37379b9a336aaccc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
