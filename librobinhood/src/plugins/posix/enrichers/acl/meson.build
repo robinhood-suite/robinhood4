@@ -6,6 +6,10 @@
 
 test_acl = false
 
+if get_option('acl').disabled()
+    subdir_done()
+endif
+
 getfacl_prog = find_program('getfacl', required: false)
 setfacl_prog = find_program('setfacl', required: false)
 
