@@ -95,6 +95,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7bba2ee_69efb72f",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/filter.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-30T07:26:45Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "04822131_b798e2d7",
+      "range": {
+        "startLine": 31,
+        "startChar": 38,
+        "endLine": 31,
+        "endChar": 42
+      },
+      "revId": "12de7590424f399c40c37f4ddb6767e8f4bd18e6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e33f87f1_79f94e3c",
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "I prefer keeping this like it is because `-acl-rwxable` filters will become just `-rwxable` to override posix rwxable filters",
       "parentUuid": "e33f87f1_79f94e3c",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 22,
+        "endChar": 38
+      },
+      "revId": "12de7590424f399c40c37f4ddb6767e8f4bd18e6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1be10bf_73b3d637",
+        "filename": "librobinhood/src/plugins/posix/enrichers/acl/parser.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-07-30T07:26:45Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "44ba3353_8c02dc1c",
       "range": {
         "startLine": 20,
         "startChar": 4,
