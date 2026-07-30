@@ -1,3 +1,4 @@
+option('acl', type: 'feature', value: 'disabled')
 option('ldiskfs', type: 'feature', value: 'disabled')
 option('lustre', type: 'feature', value: 'disabled')
 option('man', type: 'feature', value: 'enabled')
