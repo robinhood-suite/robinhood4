@@ -177,12 +177,55 @@ test_entry_count()
         sed 's/^[ \t]*//' | difflines "1" "2" "3" "5"
 }
 
+test_exec_success_count()
+{
+    local first_file="test1"
+    local second_file="test2"
+    local third_file="test3"
+    local dir="dir"
+
+    touch $first_file
+    echo "blob" > $second_file
+    mkdir $dir
+    echo "something" > $dir/$third_file
+
+    rbh_sync rbh:posix:. rbh:$db:$testdb
+
+    rbh_find rbh:$db:$testdb -exec cat {} \; > /dev/null
+    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    check_expected_log_value "$output" "exec command" "3"
+
+    rbh_find rbh:$db:$testdb -exec grep -H "test" {} \; > /dev/null
+    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    check_expected_log_value "$output" "exec command" "0"
+
+    rbh_find rbh:$db:$testdb -exec grep -H "blob" {} \; > /dev/null
+    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    check_expected_log_value "$output" "exec command" "1"
+
+    rbh_find rbh:$db:$testdb -type f -exec grep -H "o" {} \; > /dev/null
+    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    check_expected_log_value "$output" "exec command" "2"
+
+    rbh_find rbh:$db:$testdb -type l -exec echo "{}" \; > /dev/null
+    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    check_expected_log_value "$output" "exec command" "0"
+
+    rbh_find rbh:$db:$testdb -exec ls {} \; > /dev/null
+    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    check_expected_log_value "$output" "exec command" "5"
+
+    rbh_log "rbh:$db:$testdb" --find 6 | grep "exec command" | cut -d':' -f2 |
+        sed 's/^[ \t]*//' | difflines "5" "0" "2" "1" "0" "3"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
-                  test_timestamps test_command_line test_entry_count)
+                  test_timestamps test_command_line test_entry_count
+                  test_exec_success_count)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
