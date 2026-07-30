@@ -148,6 +148,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6995cffe_17e3b44a",
+        "filename": "packaging/robinhood4.spec.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-07-30T11:22:47Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3303efff_0ec12cc2",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 27
+      },
+      "revId": "8afccde680ef4bd3cb954ae61d0786a8e19a6d07",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "614bf0d9_b9c0f06a",
