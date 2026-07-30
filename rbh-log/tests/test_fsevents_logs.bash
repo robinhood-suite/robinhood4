@@ -104,11 +104,19 @@ test_more_than_N()
     test_N_logs 6 3
 }
 
+test_timestamps()
+{
+    check_common_timestamps "--fsevents" \
+        "rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR
+         src:lustre:$LUSTRE_MDT rbh:$db:$testdb"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid test_fsevents_1 test_fsevents_N test_more_than_N)
+declare -a tests=(test_invalid test_fsevents_1 test_fsevents_N test_more_than_N
+                  test_timestamps)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
