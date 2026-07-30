@@ -150,12 +150,53 @@ test_command_line()
                   "rbh-fsevents src:lustre:$LUSTRE_MDT rbh:$db:$testdb"
 }
 
+test_source_and_enrichment()
+{
+    >&2 echo "$LINENO"
+    local other_mdt="lustre-MDT0001"
+    local other_mdt_user=$(start_changelogs "$other_mdt")
+    local entry="test_entry"
+
+    # Clear changelogs from previous tests
+    clear_changelogs "$LUSTRE_MDT" "$userid"
+    clear_changelogs "$other_mdt" "$other_mdt_user"
+
+    mkdir $entry
+    lfs migrate -m 1 $entry
+    lfs migrate -m 0 $entry
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" src:lustre:"$other_mdt" \
+        "rbh:$db:$testdb"
+    set +e
+    rbh_fsevents --enrich rbh:lustre:. src:lustre:"$other_mdt" \
+        "rbh:$db:$testdb"
+    set -e
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
+
+    stop_changelogs "$other_mdt" "$other_mdt_user"
+
+    rbh_log rbh:$db:$testdb --fsevents 4 | grep "Source of the events" |
+        cut -d':' -f2- | sed 's/^[ \t]*//' |
+        difflines "$LUSTRE_MDT" "$other_mdt" "$other_mdt" "$LUSTRE_MDT"
+
+    # LUSTRE_DIR without last slash
+    local ldwls="${LUSTRE_DIR::-1}"
+    rbh_log rbh:$db:$testdb --fsevents 4 | grep "Enrichment mountpoint" |
+        cut -d':' -f2- | sed 's/^[ \t]*//' |
+        difflines "$ldwls" "." "$ldwls" "$ldwls"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_fsevents_1 test_fsevents_N test_more_than_N
-                  test_timestamps test_command_line)
+                  test_timestamps test_command_line test_source_and_enrichment)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
