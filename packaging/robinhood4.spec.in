@@ -20,6 +20,7 @@ Source0: %{name}-%{version}.tar.xz
 # --with mpi       || %%_with_mpi 1      || build mpi extension
 # --with s3        || %%_with_s3 1       || build s3 plugin
 # --with selinux   || %%_with_selinux 1  || build selinux plugin
+# --with acl       || %%_with_acl 1      || build acl plugin
 
 %bcond_with ldiskfs
 %bcond_without lustre
@@ -29,6 +30,7 @@ Source0: %{name}-%{version}.tar.xz
 %bcond_with mpi
 %bcond_with s3
 %bcond_with selinux
+%bcond_with acl
 
 Conflicts: robinhood
 
@@ -208,6 +210,25 @@ This package contains header files and libraries to use the SELinux extension
 for POSIX from a C program.
 %endif
 
+%if %{with acl}
+%package posix-acl
+Summary: ACL extension of the POSIX plugin for the RobinHood V4 tool suite
+Requires: robinhood4 == %{version}
+
+%description posix-acl
+The ACL plugin for POSIX for the RobinHood V4 tool suite, usable by rbh-sync
+and rbh-find.
+
+%package posix-acl-devel
+Summary: C API of the ACL extension of the POSIX plugin for the RobinHood V4 tool suite
+Requires: robinhood4-devel
+Requires: robinhood4-posix-acl
+
+%description posix-acl-devel
+This package contains header files and libraries to use the ACL extension
+for POSIX from a C program.
+%endif
+
 %package posix-sparse
 Summary: Sparse extension of the POSIX plugin for the RobinHood V4 tool suite
 Requires: robinhood4 == 1.5.2
@@ -316,6 +337,12 @@ OPTS=""
     OPTS+="-Dselinux=enabled "
 %else
     OPTS+="-Dselinux=disabled "
+%endif
+
+%if %{with acl}
+    OPTS+="-Dacl=enabled "
+%else
+    OPTS+="-Dacl=disabled "
 %endif
 
 %meson $OPTS
@@ -442,6 +469,14 @@ OPTS=""
 
 %files posix-selinux-devel
 %{_includedir}/robinhood/backends/selinux.h
+%endif
+
+%if %{with acl}
+%files posix-acl
+%{_libdir}/librbh-posix-acl-ext.so*
+
+%files posix-acl-devel
+%{_includedir}/robinhood/backends/acl.h
 %endif
 
 %files posix-sparse

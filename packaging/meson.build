@@ -23,6 +23,7 @@ build_options.set('mongo', get_option('mongo').enabled())
 build_options.set('mpi', get_option('mpi').enabled())
 build_options.set('s3', get_option('s3').enabled())
 build_options.set('selinux', get_option('selinux').enabled())
+build_options.set('acl', get_option('acl').enabled())
 
 configure_file(
     input: 'build_options.sh.in',
