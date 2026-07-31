@@ -95,6 +95,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae02465b_478688b3",
+        "filename": "librobinhood/src/plugins/ldiskfs/backend.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-07-31T09:43:29Z",
+      "side": 1,
+      "message": "Done, I put them in the iter not in the backend because we need the enricher in `ldiskfs_iter_next` which only takes the iterator as an argument.",
+      "parentUuid": "21b22645_0c9a23f8",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 16
+      },
+      "revId": "cb45895806a95318060ed3599bcd1c411dce311b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87646cf9_b78da85d",
