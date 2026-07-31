@@ -127,7 +127,7 @@ Summary: MongoDB plugin for the RobinHood V4 tool suite
 Requires: robinhood4 == 1.5.2
 Requires: mongo-c-driver-libs
 # The MongoDB dependency can be found here: https://repo.mongo.org/yum/redhat/
-Requires: (mongo-org or mongo)
+Requires: (mongodb-org or mongodb)
 BuildRequires: mongo-c-driver-devel
 
 %description mongo
