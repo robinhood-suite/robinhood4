@@ -78,10 +78,9 @@ users.
 %package ldiskfs
 Summary: Ldiskfs plugin for the RobinHood V4 tool suite
 Requires: robinhood4 == 1.5.2
-Requires: lustre-client
-BuildRequires: lustre-devel
-BuildRequires: libcom_err
-BuildRequires: libext2fs
+Requires: glib2-devel
+BuildRequires: (lustre-devel or lustre-client)
+BuildRequires: e2fsprogs-devel
 
 %description ldiskfs
 The ldiskfs plugin for the RobinHood V4 tool suite, usable by rbh-sync.
