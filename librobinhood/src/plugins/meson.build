@@ -18,6 +18,7 @@ ld_library_path = ''
 # .. and also add paths for plugins required by tests that require one
 library_dirs = [
     '..',
+    'ldiskfs',
     'mongo',
     'mpi_file',
     'posix',

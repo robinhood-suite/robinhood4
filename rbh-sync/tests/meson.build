@@ -12,6 +12,10 @@ if test_lustre
     subdir('lustre')
 endif
 
+if test_ldiskfs
+    subdir('ldiskfs')
+endif
+
 if test_mpi_file
     subdir('mpifile')
 endif
