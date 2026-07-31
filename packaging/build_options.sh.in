@@ -13,3 +13,4 @@ BUILD_MONGO=@mongo@
 BUILD_MPI=@mpi@
 BUILD_S3=@s3@
 BUILD_SELINUX=@selinux@
+BUILD_ACL=@acl@

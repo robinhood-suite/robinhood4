@@ -43,6 +43,9 @@ fi
 if [ "$BUILD_SELINUX" == "True" ]; then
     opts+="--with selinux "
 fi
+if [ "$BUILD_ACL" == "True" ]; then
+    opts+="--with acl "
+fi
 
 rpmbuild --define="_topdir $PWD/rpms" $opts \
     -ta "$BUILDDIR/meson-dist/robinhood4-$VERSION.tar.xz"
