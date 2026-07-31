@@ -62,7 +62,7 @@ rbh-undelete, rbh-update-retention and rbh-policy.
 %package devel
 Summary: C API for RobinHood V4 tool suite.
 Conflicts: robinhood
-Requires: robinhood4 == 1.5.2
+Requires: robinhood4 == %{version}
 Requires: pkgconf-pkg-config
 
 %description devel
@@ -79,7 +79,7 @@ users.
 %if %{with ldiskfs}
 %package ldiskfs
 Summary: Ldiskfs plugin for the RobinHood V4 tool suite
-Requires: robinhood4 == 1.5.2
+Requires: robinhood4 == %{version}
 Requires: glib2-devel
 BuildRequires: (lustre-devel or lustre-client)
 BuildRequires: e2fsprogs-devel
@@ -101,7 +101,7 @@ a C program.
 %if %{with mfu}
 %package mfu
 Summary: MPI-File-Utils plugin and POSIX extension for the RobinHood V4 tool suite
-Requires: robinhood4 == 1.5.2
+Requires: robinhood4 == %{version}
 Requires: openmpi
 Requires: libmfu
 BuildRequires: openmpi-devel
@@ -126,7 +126,7 @@ MFU extension for POSIX from a C program.
 %if %{with mongo}
 %package mongo
 Summary: MongoDB plugin for the RobinHood V4 tool suite
-Requires: robinhood4 == 1.5.2
+Requires: robinhood4 == %{version}
 Requires: mongo-c-driver-libs
 # The MongoDB dependency can be found here: https://repo.mongo.org/yum/redhat/
 Requires: (mongodb-org or mongodb)
@@ -149,7 +149,7 @@ a C program.
 %if %{with lustre}
 %package posix-lustre
 Summary: Lustre extension of the POSIX plugin for the RobinHood V4 tool suite
-Requires: robinhood4 == 1.5.2
+Requires: robinhood4 == %{version}
 Requires: lustre-client
 # Should be the following line, but there is currently an issue with repository
 # priority and yum that makes it so that lustre-client is always used if
@@ -175,7 +175,7 @@ for POSIX from a C program.
 
 %package posix-retention
 Summary: Retention extension of the POSIX plugin for the RobinHood V4 tool suite
-Requires: robinhood4 == 1.5.2
+Requires: robinhood4 == %{version}
 
 %description posix-retention
 The Retention plugin for POSIX for the RobinHood V4 tool suite, usable by
@@ -193,7 +193,7 @@ for POSIX from a C program.
 %if %{with selinux}
 %package posix-selinux
 Summary: SELinux extension of the POSIX plugin for the RobinHood V4 tool suite
-Requires: robinhood4 == 1.5.2
+Requires: robinhood4 == %{version}
 
 %description posix-selinux
 The SELinux plugin for POSIX for the RobinHood V4 tool suite, usable by rbh-sync
@@ -230,7 +230,7 @@ for POSIX from a C program.
 
 %package posix-sparse
 Summary: Sparse extension of the POSIX plugin for the RobinHood V4 tool suite
-Requires: robinhood4 == 1.5.2
+Requires: robinhood4 == %{version}
 
 %description posix-sparse
 The Sparse plugin for POSIX for the RobinHood V4 tool suite, usable by rbh-sync
@@ -248,7 +248,7 @@ for POSIX from a C program.
 %if %{with s3}
 %package s3
 Summary: S3 plugin for the RobinHood V4 tool suite
-Requires: robinhood4 == 1.5.2
+Requires: robinhood4 == %{version}
 Requires: aws-cpp-sdk-s3
 
 %description s3
