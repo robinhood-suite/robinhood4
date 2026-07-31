@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a81d4848_ac470fc0",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 11
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-07-31T07:26:14Z",
+      "side": 1,
+      "message": "nit: check and cast not needed",
+      "range": {
+        "startLine": 285,
+        "startChar": 0,
+        "endLine": 286,
+        "endChar": 40
+      },
+      "revId": "58713a83cfb2ce7f47debfd531ef002ecfb6a711",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
