@@ -152,7 +152,6 @@ test_command_line()
 
 test_source_and_enrichment()
 {
-    >&2 echo "$LINENO"
     local other_mdt="lustre-MDT0001"
     local other_mdt_user=$(start_changelogs "$other_mdt")
     local entry="test_entry"
@@ -191,12 +190,50 @@ test_source_and_enrichment()
         difflines "$ldwls" "." "$ldwls" "$ldwls"
 }
 
+test_worker_count_start_index()
+{
+    local entry="test_entry"
+    local entry2="test_entry2"
+
+    mkdir $entry
+    echo "blob" > $entry2
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
+        --nb-workers 1 --index 0
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
+        --nb-workers 2 --index 0
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
+        --nb-workers 2 --index 2
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
+        --nb-workers 1 --index 4
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
+        --nb-workers 4 --index 2
+
+    rbh_log rbh:$db:$testdb --fsevents 5 | grep "parallel" |
+        cut -d':' -f2- | sed 's/^[ \t]*//' |
+        difflines "4" "1" "2" "2" "1"
+
+    rbh_log rbh:$db:$testdb --fsevents 5 | grep "Starting index" |
+        cut -d':' -f2- | sed 's/^[ \t]*//' |
+        difflines "2" "4" "2" "0" "0"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_fsevents_1 test_fsevents_N test_more_than_N
-                  test_timestamps test_command_line test_source_and_enrichment)
+                  test_timestamps test_command_line test_source_and_enrichment
+                  test_worker_count_start_index)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
