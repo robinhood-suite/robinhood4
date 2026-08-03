@@ -7,6 +7,7 @@
 integration_tests = [
     'test_acl',
     'test_printf',
+    'test_helper',
 ]
 
 foreach t: integration_tests
