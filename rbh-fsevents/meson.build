@@ -40,6 +40,13 @@ if get_option('selinux').enabled()
     extra_args += ['-DHAVE_SELINUX']
 endif
 
+if get_option('acl').enabled()
+    extra_sources += [
+        'src/enrichers/posix/acl.c',
+    ]
+    extra_args += ['-DHAVE_ACL']
+endif
+
 includes = include_directories('.', 'include')
 
 fsevents_lib = static_library(
