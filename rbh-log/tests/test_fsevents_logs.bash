@@ -227,13 +227,59 @@ test_worker_count_start_index()
         difflines "2" "4" "2" "0" "0"
 }
 
+test_changelog_amount()
+{
+    local entry1="test_entry1"
+    local entry2="test_entry2"
+    local entry3="test_entry3"
+    local entry4="test_entry4"
+
+    mkdir $entry1
+
+    local changelog_count1="$(lfs changelog $LUSTRE_MDT | wc -l)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
+
+    echo "blob" > $entry2
+
+    local changelog_count2="$(lfs changelog $LUSTRE_MDT | wc -l)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
+
+    touch $entry1/$entry3
+
+    local changelog_count3="$(lfs changelog $LUSTRE_MDT | wc -l)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
+
+    lfs migrate -c 3 $entry2
+
+    local changelog_count4="$(lfs changelog $LUSTRE_MDT | wc -l)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
+
+    ln $entry2 $entry4
+
+    local changelog_count5="$(lfs changelog $LUSTRE_MDT | wc -l)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
+
+    rbh_log rbh:$db:$testdb --fsevents 5 | grep "changelog read" |
+        cut -d':' -f2- | sed 's/^[ \t]*//' |
+        difflines "$changelog_count5" \
+                  "$changelog_count4" \
+                  "$changelog_count3" \
+                  "$changelog_count2" \
+                  "$changelog_count1"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_fsevents_1 test_fsevents_N test_more_than_N
                   test_timestamps test_command_line test_source_and_enrichment
-                  test_worker_count_start_index)
+                  test_worker_count_start_index test_changelog_amount)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
