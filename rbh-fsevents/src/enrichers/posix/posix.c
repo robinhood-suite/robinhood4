@@ -785,6 +785,11 @@ setup_enrichers(struct enricher *enricher, const char *type,
             enricher->extension_enrichers[i].enrich_xattr =
                 sparse_enrich_fsevent;
             continue;
+        } else if (!strcmp(name, "acl")) {
+            enricher->extension_enrichers[i].name = "acl";
+            enricher->extension_enrichers[i].enrich_xattr =
+                acl_enrich_fsevent;
+            continue;
 #ifdef HAVE_SELINUX
         } else if (!strcmp(name, "selinux")) {
             enricher->extension_enrichers[i].name = "selinux";
