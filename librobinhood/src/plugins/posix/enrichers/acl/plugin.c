@@ -16,7 +16,7 @@ static const struct rbh_pe_common_operations ACL_EXTENSION_COMMON_OPS = {
     .build_filter = rbh_acl_build_filter,
     .fill_entry_info = rbh_acl_fill_entry_info,
     .fill_projection = rbh_acl_fill_projection,
-
+    .helper = rbh_acl_helper,
 };
 
 const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, ACL) = {
