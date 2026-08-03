@@ -46,6 +46,12 @@ backends:
         extends: posix
         enrichers:
             - acl
+    lustre-acl:
+        extends: posix
+        iterator: fts
+        enrichers:
+            - lustre
+            - acl
 
 s3:
     address: 127.0.0.1:9000
