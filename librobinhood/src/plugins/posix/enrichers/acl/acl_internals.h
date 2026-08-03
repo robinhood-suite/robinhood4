@@ -49,4 +49,9 @@ enum known_directive
 rbh_acl_fill_projection(struct rbh_filter_projection *projection,
                         const char *format_string, size_t *index);
 
+void
+rbh_acl_helper(__attribute__((unused)) const char *backend,
+               __attribute__((unused)) struct rbh_config *config,
+               char **predicate_helper, char **directive_helper);
+
 #endif
