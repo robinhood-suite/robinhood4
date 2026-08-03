@@ -316,3 +316,42 @@ out:
     free(default_buffer);
     return rc;
 }
+
+void
+rbh_acl_helper(__attribute__((unused)) const char *backend,
+               __attribute__((unused)) struct rbh_config *config,
+               char **predicate_helper, char **directive_helper)
+{
+    int rc;
+    rc = asprintf(predicate_helper,
+        " - ACL:\n"
+        "    -acl-user ID[:PERMS] filter entries with an access ACL\n"
+        "                         entry for a named user\n"
+        "    -acl-group ID[:PERMS]\n"
+        "                         filter entries with an access ACL\n"
+        "                         entry for a named group\n"
+        "    -acl-default-user ID[:PERMS]\n"
+        "                         filter directories with a default ACL\n"
+        "                         entry for a named user\n"
+        "    -acl-default-group ID[:PERMS]\n"
+        "                         filter directories with a default ACL\n"
+        "                         entry for a named group\n"
+        "    -readable SUBJECT    filter entries readable by SUBJECT\n"
+        "    -writable SUBJECT    filter entries writable by SUBJECT\n"
+        "    -executable SUBJECT  filter entries executable by SUBJECT\n"
+        "\n"
+        "    ID is a numeric UID or GID. PERMS is a combination of\n"
+        "    r, w and x. SUBJECT is either a local user name or\n"
+        "    UID:GID[,GID...].\n");
+
+    if (rc == -1)
+        *predicate_helper = NULL;
+
+    rc = asprintf(directive_helper,
+        "  - ACL, directive category 'A':\n"
+        "    %%RAa The POSIX access ACL\n"
+        "    %%RAd The POSIX default ACL\n");
+
+    if (rc == -1)
+        *directive_helper = NULL;
+}
