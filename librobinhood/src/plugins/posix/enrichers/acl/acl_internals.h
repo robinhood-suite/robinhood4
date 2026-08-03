@@ -20,6 +20,8 @@
 #include <robinhood/fsentry.h>
 #include <robinhood/action.h>
 #include <robinhood/projection.h>
+#include <robinhood/action.h>
+#include <robinhood/projection.h>
 
 struct entry_info;
 struct rbh_value_pair;
@@ -36,5 +38,15 @@ rbh_acl_check_valid_token(const char *token);
 
 struct rbh_filter *
 rbh_acl_build_filter(struct filters_context *context, int *index);
+
+enum known_directive
+rbh_acl_fill_entry_info(const struct rbh_fsentry *fsentry,
+                        const char *format_string, size_t *index,
+                        char *output, size_t *output_length, int max_length,
+                        __attribute__((unused)) const char *backend);
+
+enum known_directive
+rbh_acl_fill_projection(struct rbh_filter_projection *projection,
+                        const char *format_string, size_t *index);
 
 #endif
