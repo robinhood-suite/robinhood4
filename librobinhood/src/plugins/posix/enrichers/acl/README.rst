@@ -176,3 +176,25 @@ override the POSIX corresponding predicates.
 
     rbh-find rbh:mongo:test -acl-readable 424242:23456,38363
     ./dir/readable-file
+
+Printing
+========
+
+The ACL extension defines directives that will be used with rbh-find_.
+They correspond to which data is printed when using the `-printf` and
+`-fprintf` actions of rbh-find_.
+
+.. _rbh-find: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find
+
+ACLs are printed using the same representation as the output of `getfacl -c`
+(where `-c` means without the header containing the owner and the filename).
+
+Below are defined the directives allowed by the ACL extension.
+
++--------------+-------------------------------------------+
+|  Directive   |   Information printed                     |
++==============+===========================================+
+|    '%RAa'    |   The POSIX access ACL                    |
++--------------+-------------------------------------------+
+|    '%RAd'    |   The POSIX default ACL                   |
++--------------+-------------------------------------------+

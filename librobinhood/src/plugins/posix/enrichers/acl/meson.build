@@ -23,6 +23,7 @@ librbh_posix_acl_ext = library(
         'acl.c',
         'filter.c',
         'parser.c',
+        'action.c',
     ],
     version: librbh_acl_version, # defined in include/robinhood/backends
     link_with: librobinhood,
