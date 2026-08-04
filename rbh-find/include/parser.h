@@ -53,8 +53,8 @@ const char *
 action2str(enum action action);
 
 /**
- * find_parse_callback - parse an expression  that have a specific handle for
- *                       find
+ * find_parse_clt_callback - parse an expression  that have a specific handle
+ *                           for find
  *
  * @param ctx           filters context
  * @param arg_idx       a pointer to the index of argv to start parsing at
@@ -64,9 +64,23 @@ action2str(enum action action);
  * @param param         callback argument
  */
 void
-find_parse_callback(struct filters_context *ctx, int *arg_idx,
-                    const struct rbh_filter *filter,
-                    struct rbh_filter_options *options,
-                    enum command_line_token token, void *param);
+find_parse_clt_callback(struct filters_context *ctx, int *arg_idx,
+                        const struct rbh_filter *filter,
+                        struct rbh_filter_options *options,
+                        enum command_line_token token, void *param);
+
+/**
+ * find_parse_om_callback - parse an rbh-find output modifier
+ *
+ * @param ctx           filters context
+ * @param arg_idx       a pointer to the index of argv to start parsing at
+ * @param options       filter options and modifiers
+ * @param modifier      the output modifier to parse
+ * @param param         callback argument
+ */
+void
+find_parse_om_callback(struct filters_context *ctx, int *arg_idx,
+                       struct rbh_filter_options *options,
+                       enum output_modifier modifier, void *param);
 
 #endif

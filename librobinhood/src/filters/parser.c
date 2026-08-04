@@ -13,6 +13,26 @@
 
 #include "robinhood/filters/parser.h"
 
+enum output_modifier
+str2output_modifier(const char *string)
+{
+    if (string[0] != '-')
+        return OUTPUT_MODIFIER_NONE;
+
+    switch (string[1]) {
+    case 'r':
+        if (strcmp(&string[2], "sort") == 0)
+            return OUTPUT_MODIFIER_RSORT;
+        break;
+    case 's':
+        if (strcmp(&string[2], "ort") == 0)
+            return OUTPUT_MODIFIER_SORT;
+        break;
+    }
+
+    return OUTPUT_MODIFIER_NONE;
+}
+
 enum command_line_token
 str2command_line_token(struct filters_context *ctx, const char *string,
                        int *pe_index)
@@ -44,14 +64,6 @@ str2command_line_token(struct filters_context *ctx, const char *string,
             if (strcmp(&string[2], "ot") == 0)
                 return CLT_NOT;
             break;
-        case 'r':
-            if (strcmp(&string[2], "sort") == 0)
-                return CLT_RSORT;
-            break;
-        case 's':
-            if (strcmp(&string[2], "ort") == 0)
-                return CLT_SORT;
-            break;
         }
 
         for (int i = 0; i < ctx->info_pe_count; ++i) {
@@ -75,7 +87,9 @@ struct rbh_filter *
 parse_expression(struct filters_context *ctx, int *arg_idx,
                  const struct rbh_filter *_filter,
                  struct rbh_filter_options *options,
-                 parse_callback cb, void *cb_param)
+                 parse_clt_callback clt_cb,
+                 parse_om_callback om_cb,
+                 void *cb_param)
 {
     static enum command_line_token token = CLT_URI;
     struct rbh_filter *filter = NULL;
@@ -100,8 +114,17 @@ parse_expression(struct filters_context *ctx, int *arg_idx,
             },
         };
         enum command_line_token previous_token = token;
+        enum output_modifier modifier;
         struct rbh_filter *tmp;
         int pe_index = -1;
+
+        modifier = str2output_modifier(ctx->argv[i]);
+
+        if (modifier != OUTPUT_MODIFIER_NONE) {
+            if (om_cb)
+                om_cb(ctx, &i, options, modifier, cb_param);
+            continue;
+        }
 
         token = str2command_line_token(ctx, ctx->argv[i], &pe_index);
         switch (token) {
@@ -150,7 +173,7 @@ parse_expression(struct filters_context *ctx, int *arg_idx,
 
             /* Parse the filter at the right of -o/-or */
             tmp = parse_expression(ctx, &i, &negated_left_filter,
-                                   options, cb, cb_param);
+                                   options, clt_cb, om_cb, cb_param);
             /* parse_expression() returned, so it must have seen a closing
              * parenthesis or reached the end of the command line, we should
              * return here too.
@@ -173,7 +196,7 @@ parse_expression(struct filters_context *ctx, int *arg_idx,
 
             /* Parse the sub-expression */
             tmp = parse_expression(ctx, &i, &left_filter, options,
-                                   cb, cb_param);
+                                   clt_cb, om_cb, cb_param);
             if (i >= ctx->argc || token != CLT_PARENTHESIS_CLOSE)
                 error(EX_USAGE, 0,
                       "invalid expression; I was expecting to find a ')' somewhere but did not see one.");
@@ -217,8 +240,8 @@ parse_expression(struct filters_context *ctx, int *arg_idx,
                 filter = rbh_filter_and(filter, tmp);
             break;
         default:
-            if (cb)
-                cb(ctx, &i, &left_filter, options, token, cb_param);
+            if (clt_cb)
+                clt_cb(ctx, &i, &left_filter, options, token, cb_param);
             break;
         }
 
