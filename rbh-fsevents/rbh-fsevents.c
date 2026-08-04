@@ -427,16 +427,14 @@ consumer_thread(void *arg) {
         node = consumer_get_iterator(cinfo->list);
         pthread_mutex_unlock(&cinfo->mutex_list);
 
-        if (verbose) {
-            rc = clock_gettime(CLOCK_REALTIME, &start);
-            if (rc) {
-                fprintf(stderr,
-                        "Enricher/update thread %d failed to get start time\n",
-                        cinfo->id);
-                rbh_iter_destroy(node->enricher);
-                free(node);
-                break;
-            }
+        rc = clock_gettime(CLOCK_REALTIME, &start);
+        if (rc) {
+            fprintf(stderr,
+                    "Enricher/update thread %d failed to get start time\n",
+                    cinfo->id);
+            rbh_iter_destroy(node->enricher);
+            free(node);
+            break;
         }
 
         if (sink_process(cinfo->sink, node->enricher)) {
@@ -445,19 +443,17 @@ consumer_thread(void *arg) {
             break;
         }
 
-        if (verbose) {
-            rc = clock_gettime(CLOCK_REALTIME, &end);
-            if (rc) {
-                fprintf(stderr,
-                        "Enricher/update thread %d failed to get end time\n",
-                        cinfo->id);
-                rbh_iter_destroy(node->enricher);
-                free(node);
-                break;
-            }
-
-            timespec_accumulate(&cinfo->total_enrich, start, end);
+        rc = clock_gettime(CLOCK_REALTIME, &end);
+        if (rc) {
+            fprintf(stderr,
+                    "Enricher/update thread %d failed to get end time\n",
+                    cinfo->id);
+            rbh_iter_destroy(node->enricher);
+            free(node);
+            break;
         }
+
+        timespec_accumulate(&cinfo->total_enrich, start, end);
 
         if (source->ack_batch != NULL)
             source->ack_batch(source, node->batch_id, cinfo->sink);
@@ -560,13 +556,11 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
     uint64_t batch_id = 1;
     int rc;
 
-    if (verbose) {
-        rc = clock_gettime(CLOCK_REALTIME, &start);
-        if (rc) {
-            fprintf(stderr, "Failed to get start time\n");
-            signal_shutdown(NULL);
-            return rc;
-        }
+    rc = clock_gettime(CLOCK_REALTIME, &start);
+    if (rc) {
+        fprintf(stderr, "Failed to get start time\n");
+        signal_shutdown(NULL);
+        return rc;
     }
 
     for (batch = rbh_mut_iter_next(deduplicator); batch != NULL;
@@ -615,17 +609,15 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
 end:
     done_producing = true;
 
-    if (verbose) {
-        rc = clock_gettime(CLOCK_REALTIME, &end);
-        if (rc) {
-            fprintf(stderr, "Failed to get end time\n");
-            signal_shutdown(NULL);
-            return rc;
-        }
-
-        timespec_accumulate(&fsevents_md->time_spent_read_and_dedup,
-                            start, end);
+    rc = clock_gettime(CLOCK_REALTIME, &end);
+    if (rc) {
+        fprintf(stderr, "Failed to get end time\n");
+        signal_shutdown(NULL);
+        return rc;
     }
+
+    timespec_accumulate(&fsevents_md->time_spent_read_and_dedup,
+                        start, end);
 
     if (batch == NULL && errno != ENODATA)
         fprintf(stderr, "Could not get the next batch of fsevents\n");
