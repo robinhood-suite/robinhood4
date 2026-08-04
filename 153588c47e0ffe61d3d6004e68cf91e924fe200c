@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "295ca619_0e47a468",
+        "filename": "rbh-find/tests/acl/test_helper.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-08-04T08:54:07Z",
+      "side": 1,
+      "message": "defect: wrong grep",
+      "range": {
+        "startLine": 24,
+        "startChar": 32,
+        "endLine": 24,
+        "endChar": 35
+      },
+      "revId": "153588c47e0ffe61d3d6004e68cf91e924fe200c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
