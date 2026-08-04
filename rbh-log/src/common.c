@@ -58,7 +58,8 @@ print_value(const struct rbh_value *value, const char *header)
         printf(" - %-*s: %ld\n", WIDTH, header, value->int64);
         break;
     case RBH_VT_DOUBLE:
-        printf(" - %-*s: %f\n", WIDTH, header, value->float64);
+        printf(" - %-*s: %.3f\n", WIDTH, header,
+               ((int) (10000 * value->float64)) / 10000.0);
         break;
     default:
         error(EXIT_FAILURE, EINVAL, "Unexpected key type to print '%s': %d",
