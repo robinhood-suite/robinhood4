@@ -20,7 +20,7 @@ print_timespec(const struct rbh_value *value, const char *header)
     timespec.tv_sec = value->map.pairs[0].value->int64;
     timespec.tv_nsec = value->map.pairs[1].value->int64;
 
-    printf(" - %-*s: %lu.%lu\n", WIDTH, header,
+    printf(" - %-*s: %lu.%09lu\n", WIDTH, header,
            timespec.tv_sec, timespec.tv_nsec);
 }
 
