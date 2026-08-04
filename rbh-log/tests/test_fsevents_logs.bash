@@ -273,13 +273,86 @@ test_changelog_amount()
                   "$changelog_count1"
 }
 
+test_work_timestamps()
+{
+    local entry1="test_entry1"
+    local entry2="test_entry2"
+    local entry3="test_entry3"
+    local entry4="test_entry4"
+    local timestamps=()
+
+    mkdir $entry1
+    echo "blob" > $entry2
+    touch $entry1/$entry3
+    lfs migrate -c 3 $entry2
+    ln $entry2 $entry4
+
+    local start="$(date -u +%s.%N)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" -w 2
+    local end="$(date -u +%s.%N)"
+    timestamps=($(bc <<< "$end - $start"))
+
+    local start="$(date -u +%s.%N)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" -w 2
+    local end="$(date -u +%s.%N)"
+    timestamps=("$(bc <<< "$end - $start")" "${timestamps[@]}")
+
+    local start="$(date -u +%s.%N)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" -w 2
+    local end="$(date -u +%s.%N)"
+    timestamps=("$(bc <<< "$end - $start")" "${timestamps[@]}")
+
+    local start="$(date -u +%s.%N)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" -w 2
+    local end="$(date -u +%s.%N)"
+    timestamps=("$(bc <<< "$end - $start")" "${timestamps[@]}")
+
+    local start="$(date -u +%s.%N)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" -w 2
+    local end="$(date -u +%s.%N)"
+    timestamps=("$(bc <<< "$end - $start")" "${timestamps[@]}")
+
+    # No way to check the real times against what rbh-log says, so just check
+    # they seem like normal times
+    local output="$(rbh_log rbh:$db:$testdb --fsevents 5 |
+                        grep "reading/deduplicating" |
+                        cut -d':' -f2- | sed 's/^[ \t]*//')"
+    for i in $(seq 1 5); do
+        local log_time="$(echo "$output" | head -$i | tail -1)"
+
+        i=$(($i - 1))
+        if [ "$(echo "$log_time > ${timestamps[$i]}" | bc -l)" -eq 1 ]; then
+            error "Command time for read/dedup (${timestamps[$i]}) should be greater than reported log time ($log_time)"
+        fi
+    done
+
+    local output="$(rbh_log rbh:$db:$testdb --fsevents 5 |
+                        grep "enriching/updating" |
+                        cut -d':' -f2- | sed 's/^[ \t]*//')"
+    for i in $(seq 1 5); do
+        local log_time="$(echo "$output" | head -$i | tail -1)"
+
+        i=$(($i - 1))
+        if [ "$(echo "$log_time > ${timestamps[$i]}" | bc -l)" -eq 1 ]; then
+            error "Command time for enrich/update (${timestamps[$i]}) should be greater than reported log time ($log_time)"
+        fi
+    done
+
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_fsevents_1 test_fsevents_N test_more_than_N
                   test_timestamps test_command_line test_source_and_enrichment
-                  test_worker_count_start_index test_changelog_amount)
+                  test_worker_count_start_index test_changelog_amount
+                  test_work_timestamps)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
