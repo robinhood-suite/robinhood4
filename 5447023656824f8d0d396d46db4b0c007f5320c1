@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34294ff2_04f2de1b",
+        "filename": "rbh-find/tests/acl/test_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-08-04T08:46:54Z",
+      "side": 1,
+      "message": "minor: need more entry tests, here we cannot ensure that the `rbh-find -printf` doesn\u0027t just always return the same value as $expected, even if you change the entry\u0027s ACLs.",
+      "range": {
+        "startLine": 38,
+        "startChar": 26,
+        "endLine": 38,
+        "endChar": 35
+      },
+      "revId": "5447023656824f8d0d396d46db4b0c007f5320c1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
