@@ -342,7 +342,43 @@ test_work_timestamps()
             error "Command time for enrich/update (${timestamps[$i]}) should be greater than reported log time ($log_time)"
         fi
     done
+}
 
+test_deduplication_ratio()
+{
+    local entry1="test_entry1"
+    local entry2="test_entry2"
+    local entry3="test_entry3"
+    local entry4="test_entry4"
+    local timestamps=()
+
+    mkdir $entry1
+    echo "blob" > $entry2
+    touch $entry1/$entry3
+    lfs migrate -c 3 $entry2
+    ln $entry2 $entry4
+
+    # Get the number of ID seen and the number of ID that should be deduplicated
+    local output="$(rbh_fsevents -b 0 src:lustre:"$LUSTRE_MDT" -)"
+    local full_id_count="$(echo "$output" | grep "\"id\"" | wc -l)"
+    local dedup_id_count="$(echo "$output" | grep "\"id\"" | sort | uniq |
+                            wc -l)"
+
+    # Run two commands just to have more logs to show
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" -b 0
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" -b 100
+
+    local expected_dedup_ratio="$(\
+        echo "(1.0 - ${dedup_id_count}.0 / ${full_id_count}.0) * 100.0" |
+        bc -l)"
+
+    rbh_log rbh:$db:$testdb --fsevents 2 | grep "Ratio" |
+        cut -d':' -f2- | sed 's/^[ \t]*//' |
+        difflines "$(printf "%.3f" $expected_dedup_ratio)" \
+                  "0.000"
 }
 
 ################################################################################
@@ -352,7 +388,7 @@ test_work_timestamps()
 declare -a tests=(test_invalid test_fsevents_1 test_fsevents_N test_more_than_N
                   test_timestamps test_command_line test_source_and_enrichment
                   test_worker_count_start_index test_changelog_amount
-                  test_work_timestamps)
+                  test_work_timestamps test_deduplication_ratio)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
