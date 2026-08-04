@@ -20,6 +20,10 @@ str2output_modifier(const char *string)
         return OUTPUT_MODIFIER_NONE;
 
     switch (string[1]) {
+    case 'l':
+        if (strcmp(&string[2], "imit") == 0)
+            return OUTPUT_MODIFIER_LIMIT;
+        break;
     case 'r':
         if (strcmp(&string[2], "sort") == 0)
             return OUTPUT_MODIFIER_RSORT;

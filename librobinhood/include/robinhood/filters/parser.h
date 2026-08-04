@@ -26,6 +26,7 @@ enum output_modifier {
     OUTPUT_MODIFIER_NONE,
     OUTPUT_MODIFIER_SORT,
     OUTPUT_MODIFIER_RSORT,
+    OUTPUT_MODIFIER_LIMIT,
 };
 
 /**

@@ -20,6 +20,8 @@
 #include "filters.h"
 #include "parser.h"
 
+#include <robinhood/utils.h>
+
 enum action
 str2action(const char *string)
 {
@@ -220,6 +222,22 @@ find_parse_callback(struct filters_context *ctx, int *arg_idx,
                           "Unknown sort field '%s'", ctx->argv[*arg_idx]);
 
                 sort_options_append(options, field, ascending);
+            }
+            break;
+
+        case OUTPUT_MODIFIER_LIMIT:
+            {
+                if (options->limit != 0)
+                    error(EX_USAGE, 0, "'-limit' may only be specified once");
+
+                if (*arg_idx + 1 >= ctx->argc)
+                    error(EX_USAGE, 0,
+                          "missing argument to '%s'", ctx->argv[*arg_idx]);
+
+                (*arg_idx)++;
+
+                if (str2uint64_t(ctx->argv[*arg_idx], &options->limit) != 0)
+                    error(EX_USAGE, 0, "invalid limit '%s'", ctx->argv[*arg_idx]);
             }
             break;
 
