@@ -68,6 +68,8 @@ usage(const char *backend)
         "Output modifier arguments:\n"
         "    -sort FIELD          sort entries in ascending order based on FIELD\n"
         "    -rsort FIELD         sort entries in descending order based on FIELD\n"
+        "    -limit COUNT         limit the number of returned entries to COUNT\n"
+        "                         (the default value is 0, meaning no limit)\n"
         "\n"
         "Action arguments:\n"
         "    -count               count the number of entries that match the\n"
