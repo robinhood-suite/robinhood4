@@ -12,6 +12,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <limits.h>
+#include <ctype.h>
 
 #include "robinhood/uri.h"
 #include "robinhood/utils.h"
@@ -42,7 +43,16 @@ str2int64_t(const char *input, int64_t *result)
 int
 str2uint64_t(const char *input, uint64_t *result)
 {
+    const char *number = input;
     char *end;
+
+    while (isspace(*number))
+        number++;
+
+    if (*number == '-') {
+        errno = EINVAL;
+        return -1;
+    }
 
     errno = 0;
     *result = strtoull(input, &end, 0);
