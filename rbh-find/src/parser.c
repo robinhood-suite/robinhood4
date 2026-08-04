@@ -177,20 +177,39 @@ sort_options_append(struct rbh_filter_options *options,
 }
 
 void
-find_parse_callback(struct filters_context *ctx, int *arg_idx,
-                    const struct rbh_filter *filter,
-                    struct rbh_filter_options *options,
-                    enum command_line_token token, void *param)
+find_parse_clt_callback(struct filters_context *ctx, int *arg_idx,
+                        const struct rbh_filter *filter,
+                        struct rbh_filter_options *options,
+                        enum command_line_token token, void *param)
 {
     struct find_context *find_ctx = (struct find_context *)param;
-    bool ascending = true;
 
     switch (token) {
-    case CLT_RSORT:
+    case CLT_ACTION:
+        find_ctx->action_done = true;
+        find(find_ctx, str2action(ctx->argv[*arg_idx]), arg_idx,
+             filter, options);
+        break;
+    default:
+        break;
+    }
+}
+
+void
+find_parse_om_callback(struct filters_context *ctx, int *arg_idx,
+                       struct rbh_filter_options *options,
+                       enum output_modifier modifier, void *param)
+{
+    bool ascending = true;
+    (void)param;
+
+    switch (modifier) {
+    case OUTPUT_MODIFIER_RSORT:
         /* Set a descending sort option */
         ascending = false;
         __attribute__((fallthrough));
-    case CLT_SORT:
+
+    case OUTPUT_MODIFIER_SORT:
         {
             struct rbh_filter_field field;
 
@@ -218,12 +237,8 @@ find_parse_callback(struct filters_context *ctx, int *arg_idx,
             sort_options_append(options, field, ascending);
         }
         break;
-    case CLT_ACTION:
-        find_ctx->action_done = true;
-        find(find_ctx, str2action(ctx->argv[*arg_idx]), arg_idx,
-             filter, options);
-        break;
-    default:
-        break;
+
+    case OUTPUT_MODIFIER_NONE:
+        __builtin_unreachable();
     }
 }
