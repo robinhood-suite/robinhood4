@@ -76,11 +76,59 @@ test_more_than_N()
     test_N_logs 6 3
 }
 
+test_timestamps()
+{
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+    check_common_timestamps "--report" \
+        "rbh_report rbh:$db:$testdb
+            --group-by \"statx.uid\" --output \"sum(statx.size)\""
+}
+
+test_command_line()
+{
+    local conf="conf"
+    local file="file"
+    local dir="dir"
+    local command="rbh-report"
+
+    mkdir $dir
+    touch $file
+
+    rbh_sync rbh:posix:. rbh:$db:$testdb
+
+    echo "---
+ mongo:
+     address: \"mongodb://localhost:27017\"
+---" > $conf
+
+    rbh_report rbh:$db:$testdb \
+            --group-by "statx.uid" --output "sum(statx.size)" > /dev/null
+    rbh_report --config $conf rbh:$db:$testdb \
+            --group-by "statx.uid" --output "sum(statx.size)" > /dev/null
+    rbh_report --config $conf rbh:$db:$testdb -v \
+            --group-by "statx.uid" --output "sum(statx.size)" > /dev/null
+    rbh_report rbh:$db:$testdb \
+            --group-by "statx.uid" --output "sum(statx.size)" --csv > /dev/null
+    rbh_report rbh:$db:$testdb \
+            --group-by "statx.uid,statx.gid,statx.type" \
+            --output "sum(statx.size),min(statx.uid),avg(statx.gid)" \
+            --csv --rsort > /dev/null
+
+    rbh_log rbh:$db:$testdb --report 5 | grep "Command" | cut -d':' -f2- |
+        sed 's/^[ \t]*//' | sed -n "s/.*$command/$command/p" |
+        difflines "rbh-report rbh:$db:$testdb --group-by statx.uid,statx.gid,statx.type --output sum(statx.size),min(statx.uid),avg(statx.gid) --csv --rsort" \
+                  "rbh-report rbh:$db:$testdb --group-by statx.uid --output sum(statx.size) --csv" \
+                  "rbh-report --config $conf rbh:$db:$testdb -v --group-by statx.uid --output sum(statx.size)" \
+                  "rbh-report --config $conf rbh:$db:$testdb --group-by statx.uid --output sum(statx.size)" \
+                  "rbh-report rbh:$db:$testdb --group-by statx.uid --output sum(statx.size)"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N)
+declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
+                  test_timestamps test_command_line)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
