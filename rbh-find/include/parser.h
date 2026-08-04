@@ -53,7 +53,7 @@ const char *
 action2str(enum action action);
 
 /**
- * find_parse_callback - parse an expression  that have a specific handle for
+ * find_parse_callback - parse an expression that have a specific handle for
  *                       find
  *
  * @param ctx           filters context

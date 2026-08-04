@@ -13,6 +13,26 @@
 
 #include "robinhood/filters/parser.h"
 
+enum output_modifier
+str2output_modifier(const char *string)
+{
+    if (string[0] != '-')
+        return OUTPUT_MODIFIER_NONE;
+
+    switch (string[1]) {
+    case 'r':
+        if (strcmp(&string[2], "sort") == 0)
+            return OUTPUT_MODIFIER_RSORT;
+        break;
+    case 's':
+        if (strcmp(&string[2], "ort") == 0)
+            return OUTPUT_MODIFIER_SORT;
+        break;
+    }
+
+    return OUTPUT_MODIFIER_NONE;
+}
+
 enum command_line_token
 str2command_line_token(struct filters_context *ctx, const char *string,
                        int *pe_index)
@@ -44,15 +64,10 @@ str2command_line_token(struct filters_context *ctx, const char *string,
             if (strcmp(&string[2], "ot") == 0)
                 return CLT_NOT;
             break;
-        case 'r':
-            if (strcmp(&string[2], "sort") == 0)
-                return CLT_RSORT;
-            break;
-        case 's':
-            if (strcmp(&string[2], "ort") == 0)
-                return CLT_SORT;
-            break;
         }
+
+        if (str2output_modifier(string) != OUTPUT_MODIFIER_NONE)
+            return CLT_OUTPUT_MODIFIER;
 
         for (int i = 0; i < ctx->info_pe_count; ++i) {
             const struct rbh_pe_common_operations *common_ops =

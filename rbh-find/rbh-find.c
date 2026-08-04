@@ -41,7 +41,8 @@ static int
 usage(const char *backend)
 {
     const char *message =
-        "Usage: %s [PRE_URI_OPTIONS] SOURCE [PREDICATES] [ACTION]\n"
+        "Usage: %s [PRE_URI_OPTIONS] SOURCE [PREDICATES] [OUTPUT_MODIFIERS]"
+        " [ACTION]\n"
         "       %s [ALIAS]\n"
         "\n"
         "Query SOURCE's entries according to PREDICATE and do ACTION on each.\n"
@@ -64,6 +65,10 @@ usage(const char *backend)
         "%s"
         "%s"
         "\n"
+        "Output modifier arguments:\n"
+        "    -sort FIELD          sort entries in ascending order based on FIELD\n"
+        "    -rsort FIELD         sort entries in descending order based on FIELD\n"
+        "\n"
         "Action arguments:\n"
         "    -count               count the number of entries that match the\n"
         "                         requested predicates\n"
@@ -85,8 +90,6 @@ usage(const char *backend)
         "               %%p       path\n"
         "               %%P       path without starting point\n"
         "               %%        literal percent sign\n"
-        "    -[r]sort FIELD       sort or reverse sort entries based of the FIELD\n"
-        "                         requested\n"
         "\n"
         "%s"
         "%s"

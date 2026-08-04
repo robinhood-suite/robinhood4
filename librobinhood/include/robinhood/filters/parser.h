@@ -19,8 +19,13 @@ enum command_line_token {
     CLT_PARENTHESIS_CLOSE,
     CLT_PREDICATE,
     CLT_ACTION,
-    CLT_SORT,
-    CLT_RSORT,
+    CLT_OUTPUT_MODIFIER,
+};
+
+enum output_modifier {
+    OUTPUT_MODIFIER_NONE,
+    OUTPUT_MODIFIER_SORT,
+    OUTPUT_MODIFIER_RSORT,
 };
 
 /**
@@ -38,6 +43,16 @@ enum command_line_token {
 enum command_line_token
 str2command_line_token(struct filters_context *ctx, const char *string,
                        int *pe_index);
+
+/**
+ * str2output_modifier - output modifier classifier
+ *
+ * @param string           the string to classify
+ *
+ * @return                 the output_modifier that represents \p string
+ */
+enum output_modifier
+str2output_modifier(const char *string);
 
 typedef void (*parse_callback)(struct filters_context *ctx,
                                int *arg_idx, const struct rbh_filter *filter,

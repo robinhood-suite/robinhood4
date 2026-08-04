@@ -186,38 +186,48 @@ find_parse_callback(struct filters_context *ctx, int *arg_idx,
     bool ascending = true;
 
     switch (token) {
-    case CLT_RSORT:
-        /* Set a descending sort option */
-        ascending = false;
-        __attribute__((fallthrough));
-    case CLT_SORT:
-        {
-            struct rbh_filter_field field;
+    case CLT_OUTPUT_MODIFIER:
+        switch (str2output_modifier(ctx->argv[*arg_idx])) {
+        case OUTPUT_MODIFIER_RSORT:
+            /* Set a descending sort option */
+            ascending = false;
+            __attribute__((fallthrough));
 
-            /* Build an options filter from the sort option and its arguments */
-            if (*arg_idx + 1 >= ctx->argc)
-                error(EX_USAGE, 0,
-                      "missing argument to '%s'", ctx->argv[*arg_idx]);
+        case OUTPUT_MODIFIER_SORT:
+            {
+                struct rbh_filter_field field;
 
-            (*arg_idx)++;
-            for (int i = 0; i < ctx->info_pe_count; ++i) {
-                const struct rbh_pe_common_operations *common_ops =
-                    get_common_operations(&ctx->info_pe[i]);
+                /* Build an options filter from the sort option and
+                 * its arguments */
+                if (*arg_idx + 1 >= ctx->argc)
+                    error(EX_USAGE, 0,
+                          "missing argument to '%s'", ctx->argv[*arg_idx]);
 
-                field = rbh_pe_common_ops_sort2field(common_ops,
-                                                     ctx->argv[*arg_idx]);
+                (*arg_idx)++;
+                for (int i = 0; i < ctx->info_pe_count; ++i) {
+                    const struct rbh_pe_common_operations *common_ops =
+                        get_common_operations(&ctx->info_pe[i]);
 
-                if (field.fsentry)
-                    break;
+                    field = rbh_pe_common_ops_sort2field(common_ops,
+                                                         ctx->argv[*arg_idx]);
+
+                    if (field.fsentry)
+                        break;
+                }
+
+                if (!field.fsentry)
+                    error(EX_USAGE, 0,
+                          "Unknown sort field '%s'", ctx->argv[*arg_idx]);
+
+                sort_options_append(options, field, ascending);
             }
+            break;
 
-            if (!field.fsentry)
-                error(EX_USAGE, 0,
-                      "Unknown sort field '%s'", ctx->argv[*arg_idx]);
-
-            sort_options_append(options, field, ascending);
+        case OUTPUT_MODIFIER_NONE:
+            __builtin_unreachable();
         }
         break;
+
     case CLT_ACTION:
         find_ctx->action_done = true;
         find(find_ctx, str2action(ctx->argv[*arg_idx]), arg_idx,
