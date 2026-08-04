@@ -55,6 +55,9 @@ struct find_context {
 
     /** Find metadata to prepare rbh-find log */
     struct rbh_find_metadata *find_md;
+
+    /** If a limit was already specified in this execution */
+    bool limit_specified;
 };
 
 /**
