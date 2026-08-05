@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb90f28b_b6cccb53",
+        "filename": "librobinhood/src/utils/utils.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-08-05T10:46:18Z",
+      "side": 1,
+      "message": "minor: no need for an additional variable, just increment input directly",
+      "range": {
+        "startLine": 46,
+        "startChar": 10,
+        "endLine": 46,
+        "endChar": 31
+      },
+      "revId": "4e89ed55f2099d0b4126a6811a03d3a32c37b875",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
