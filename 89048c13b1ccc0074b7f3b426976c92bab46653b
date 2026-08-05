@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "486fb189_ab226b1e",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-08-05T10:49:22Z",
+      "side": 1,
+      "message": "minor: add a mention about the default value",
+      "range": {
+        "startLine": 72,
+        "startChar": 59,
+        "endLine": 72,
+        "endChar": 60
+      },
+      "revId": "89048c13b1ccc0074b7f3b426976c92bab46653b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "494f1332_d05c2953",
+        "filename": "rbh-find/src/parser.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-08-05T10:49:22Z",
+      "side": 1,
+      "message": "suggest: check instead that options-\u003elimit is not already different than 0, that way you can check if a limit has been given without an additional variable (I\u0027d say `-limit 0 -limit 12` shouldn\u0027t be an issue, it\u0027s not gonna happen anyway)",
+      "range": {
+        "startLine": 247,
+        "startChar": 22,
+        "endLine": 247,
+        "endChar": 42
+      },
+      "revId": "89048c13b1ccc0074b7f3b426976c92bab46653b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
