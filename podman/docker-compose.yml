@@ -1,0 +1,17 @@
+services:
+  mongodb:
+    container_name: mongodb
+    tty: true
+    build:
+      context: .
+      dockerfile : mongodb.Dockerfile
+    command: ["mongod", "--bind_ip_all", "--dbpath", "/data/db"]
+
+  robinhood:
+    container_name: robinhood
+    tty: true
+    build:
+      context: ..
+      dockerfile: podman/robinhood.Dockerfile
+    volumes:
+      - /tmp/test_dir:/test_dir:Z
