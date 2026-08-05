@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a66a98e0_ac6712a7",
+        "filename": "librobinhood/src/filters/parser.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-08-05T13:27:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0cbf3c5_9a934952",
+      "range": {
+        "startLine": 121,
+        "startChar": 9,
+        "endLine": 121,
+        "endChar": 53
+      },
+      "revId": "c48915918cb966889c096552bdcb8afe689f6fa7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce82e43c_7340055c",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-08-05T10:45:31Z",
       "side": 1,
       "message": "question: why not use the same helper text as the other one ?",
+      "range": {
+        "startLine": 69,
+        "startChar": 13,
+        "endLine": 70,
+        "endChar": 84
+      },
+      "revId": "c48915918cb966889c096552bdcb8afe689f6fa7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5328760_7bc97834",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-08-05T13:27:31Z",
+      "side": 1,
+      "message": "The only reason is that I didn\u0027t find the previous helper very clear.",
+      "parentUuid": "ce82e43c_7340055c",
       "range": {
         "startLine": 69,
         "startChar": 13,
