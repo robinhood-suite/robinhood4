@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0cbf3c5_9a934952",
+        "filename": "librobinhood/src/filters/parser.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-08-05T10:45:31Z",
+      "side": 1,
+      "message": "major: I don\u0027t think it should be done like this, because this way creates an exception for output modifiers when they are valid command line tokens. Instead, I think you should add an OUTPUT_MODIFIER value to enum the command line token enum, and handle them in the switch case below. That way you wouldn\u0027t need any additional callback, and could simply keep the sort options for later, as is already done",
+      "range": {
+        "startLine": 121,
+        "startChar": 9,
+        "endLine": 121,
+        "endChar": 53
+      },
+      "revId": "c48915918cb966889c096552bdcb8afe689f6fa7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce82e43c_7340055c",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-08-05T10:45:31Z",
+      "side": 1,
+      "message": "question: why not use the same helper text as the other one ?",
+      "range": {
+        "startLine": 69,
+        "startChar": 13,
+        "endLine": 70,
+        "endChar": 84
+      },
+      "revId": "c48915918cb966889c096552bdcb8afe689f6fa7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
