@@ -10,6 +10,7 @@ integration_tests = [
   'test_empty',
   'test_posix_helper',
   'test_inum',
+  'test_limit',
   'test_links',
   'test_newer',
   'test_perm',
