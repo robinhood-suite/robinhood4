@@ -34,6 +34,7 @@ from rbhpolicy.config.cpython import (
     rbh_filter_validate,
     rbh_filter_free,
     set_backend,
+    set_config_override,
     config
 )
 from rbhpolicy.config.config_validator import validate_config
@@ -137,6 +138,18 @@ class TestConfigDSL(unittest.TestCase):
             validate_config("rbh:fs:1", "rbh:db:2", 30)
         with self.assertRaises(TypeError):
             validate_config("rbh:fs:1", "rbh:db:2", None)
+
+    def test_config_override(self):
+        """Test CLI backend and database overrides."""
+        set_config_override("rbh:posix:override", "rbh:mongo:override")
+
+        config(filesystem="rbh:posix:dft",
+               database="rbh:mongo:dft",
+               evaluation_interval="60s")
+
+        from rbhpolicy.config import cpython
+        self.assertEqual(cpython.backend, "rbh:posix:override")
+        self.assertEqual(cpython.database, "rbh:mongo:override")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
