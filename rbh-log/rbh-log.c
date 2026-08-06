@@ -42,13 +42,17 @@ usage(void)
         "   -c, --config PATH       the configuration file to use\n"
         "   --count                 print the number of logs currently recorded\n"
         "   -h, --help              show this message and exit\n"
-        "   -i, --find N            print the last N logs of rbh-find runs\n"
-        "   -f, --fsevents N        print the last N logs of rbh-fsevents runs\n"
-        "   -g, --gc N              print the last N logs of rbh-gc runs\n"
-        "   -l, --last N            print the last N logs\n"
-        "   -r, --report N          print the last N logs of rbh-report runs\n"
-        "   -s, --sync N            print the last N logs of rbh-sync runs\n"
+        "   -i, --find [-]N         print the first or last N logs of rbh-find runs\n"
+        "   -f, --fsevents [-]N     print the first or last N logs of rbh-fsevents runs\n"
+        "   -g, --gc [-]N           print the first or last N logs of rbh-gc runs\n"
+        "   -l, --last [-]N         print the first or last N logs\n"
+        "   -r, --report [-]N       print the first or last N logs of rbh-report runs\n"
+        "   -s, --sync [-]N         print the first or last N logs of rbh-sync runs\n"
         "    --version              print RobinHood 4's version\n"
+        "\n"
+        "All optional arguments taking in a number will show the last logs of\n"
+        "the given command if the number is positive, and the first logs if\n"
+        "it is positive.\n"
         "\n"
         "A robinhood URI is built as follows:\n"
         "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n";
@@ -175,6 +179,11 @@ main(int argc, char *argv[])
             break;
         case 'i':
             options.type = RBH_FIND_LOG;
+            if (*optarg == '-') {
+                options.ascending = true;
+                optarg++;
+            }
+
             if (str2uint64_t(optarg, &options.count))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
                       optarg);
@@ -182,6 +191,11 @@ main(int argc, char *argv[])
             break;
         case 'f':
             options.type = RBH_FSEVENTS_LOG;
+            if (*optarg == '-') {
+                options.ascending = true;
+                optarg++;
+            }
+
             if (str2uint64_t(optarg, &options.count))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
                       optarg);
@@ -189,6 +203,11 @@ main(int argc, char *argv[])
             break;
         case 'g':
             options.type = RBH_GC_LOG;
+            if (*optarg == '-') {
+                options.ascending = true;
+                optarg++;
+            }
+
             if (str2uint64_t(optarg, &options.count))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
                       optarg);
@@ -199,6 +218,11 @@ main(int argc, char *argv[])
             return 0;
         case 'l':
             options.type = RBH_ALL_LOG;
+            if (*optarg == '-') {
+                options.ascending = true;
+                optarg++;
+            }
+
             if (str2uint64_t(optarg, &options.count))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
                       optarg);
@@ -206,6 +230,11 @@ main(int argc, char *argv[])
             break;
         case 'r':
             options.type = RBH_REPORT_LOG;
+            if (*optarg == '-') {
+                options.ascending = true;
+                optarg++;
+            }
+
             if (str2uint64_t(optarg, &options.count))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
                       optarg);
@@ -213,6 +242,11 @@ main(int argc, char *argv[])
             break;
         case 's':
             options.type = RBH_SYNC_LOG;
+            if (*optarg == '-') {
+                options.ascending = true;
+                optarg++;
+            }
+
             if (str2uint64_t(optarg, &options.count))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
                       optarg);
