@@ -353,6 +353,9 @@ mongo_backend_insert_log(void *backend, const char *command,
                          const struct rbh_value_map *map);
 
 struct rbh_value_map *
+mongo_backend_get_log_count(void *backend);
+
+struct rbh_value_map *
 mongo_backend_get_logs(void *backend, struct rbh_log_options options);
 
 #endif
