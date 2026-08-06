@@ -171,12 +171,30 @@ test_entries_seen_deleted()
         difflines "3" "3" "2" "6"
 }
 
+test_sync_time()
+{
+    local current_date="$(date +%s)"
+
+    rbh_sync rbh:posix:. rbh:$db:$testdb
+
+    rbh_gc rbh:$db:$testdb --sync-time 1
+    rbh_gc rbh:$db:$testdb --sync-time 42
+    rbh_gc rbh:$db:$testdb --sync-time 620
+    rbh_gc rbh:$db:$testdb --sync-time $current_date
+    rbh_gc rbh:$db:$testdb --sync-time 9999999
+
+    rbh_log rbh:$db:$testdb --gc 5 | grep "Sync" | cut -d':' -f2- |
+        sed 's/^[ \t]*//' |
+        difflines "9999999" "$current_date" "620" "42" "1"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
-                  test_timestamps test_command_line test_entries_seen_deleted)
+                  test_timestamps test_command_line test_entries_seen_deleted
+                  test_sync_time)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
