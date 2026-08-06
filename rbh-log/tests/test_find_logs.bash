@@ -219,13 +219,64 @@ test_exec_success_count()
         sed 's/^[ \t]*//' | difflines "5" "0" "2" "1" "0" "3"
 }
 
+test_order()
+{
+    local order="$1"
+
+    local command="rbh-find"
+    local flag="find"
+
+    if [ "$order" == "descending" ]; then
+        local count="4"
+    else
+        local count="-4"
+    fi
+
+    rbh_sync rbh:posix:. rbh:$db:$testdb
+
+    rbh_find rbh:$db:$testdb > /dev/null
+    rbh_find --verbose rbh:$db:$testdb -size +3 > /dev/null
+    rbh_find rbh:$db:$testdb -size +3 -uid 30 -printf "blob\n" > /dev/null
+    rbh_find rbh:$db:$testdb -count > /dev/null
+
+    local output="$(rbh_log rbh:$db:$testdb --$flag $count | grep "Command" |
+                    cut -d':' -f2- | sed 's/^[ \t]*//' |
+                    sed -n "s/.*$command/$command/p")"
+
+    if [ "$order" == "descending" ]; then
+        echo "$output" |
+            difflines "rbh-find rbh:$db:$testdb -count" \
+                      "rbh-find rbh:$db:$testdb -size +3 -uid 30 -printf blob\n" \
+                      "rbh-find --verbose rbh:$db:$testdb -size +3" \
+                      "rbh-find rbh:$db:$testdb"
+    else
+        echo "$output" |
+            difflines "rbh-find rbh:$db:$testdb" \
+                      "rbh-find --verbose rbh:$db:$testdb -size +3" \
+                      "rbh-find rbh:$db:$testdb -size +3 -uid 30 -printf blob\n" \
+                      "rbh-find rbh:$db:$testdb -count"
+    fi
+}
+
+test_ascending()
+{
+    test_order ascending
+}
+
+test_descending()
+{
+    test_order descending
+}
+
+################################################################################
+#                                     MAIN                                     #
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
                   test_timestamps test_command_line test_entry_count
-                  test_exec_success_count)
+                  test_exec_success_count test_ascending test_descending)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
