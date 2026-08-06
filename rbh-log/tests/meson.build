@@ -12,7 +12,9 @@ parallel_integration_tests = [
 ]
 
 if test_lustre
-    parallel_integration_tests += ['test_last_logs', 'test_fsevents_logs']
+    parallel_integration_tests += ['test_fsevents_logs',
+                                   'test_last_logs',
+                                   'test_log_count']
 endif
 
 foreach t: parallel_integration_tests
