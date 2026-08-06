@@ -15,7 +15,7 @@
 
 #include "mongo.h"
 
-#define MIN_VALUES_SSTACK_ALLOC (1 << 6)
+#define MIN_VALUES_SSTACK_ALLOC (1 << 12)
 static __thread struct rbh_sstack *logs_sstack;
 
 static void __attribute__((destructor))
@@ -165,9 +165,6 @@ get_logs(const struct mongo_backend *mongo, struct rbh_value_pair *pair,
     char *buffer;
     int rc = 0;
 
-    buffer = _buffer;
-    bufsize = sizeof(_buffer);
-
     if (options->type == RBH_ALL_LOG)
         filter = bson_new();
     else
@@ -210,6 +207,9 @@ get_logs(const struct mongo_backend *mongo, struct rbh_value_pair *pair,
 
         while (bson_iter_next(&iter)) {
             const char *key = bson_iter_key(&iter);
+
+            buffer = _buffer;
+            bufsize = sizeof(_buffer);
 
             /* If we request a specific log type, check the given key is of that
              * type. If we don't request a specific log type, check the key
