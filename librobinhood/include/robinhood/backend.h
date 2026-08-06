@@ -329,6 +329,9 @@ struct rbh_backend_operations {
             const char *command,
             const struct rbh_value_map *map
             );
+    struct rbh_value_map *(*get_log_count)(
+            void *backend
+            );
     struct rbh_value_map *(*get_logs)(
             void *backend,
             struct rbh_log_options options
@@ -759,6 +762,23 @@ rbh_backend_insert_log(struct rbh_backend *backend,
     }
 
     return backend->ops->insert_log(backend, command, map);
+}
+
+/**
+ * Retrieve the number of logs of each type from a given backend.
+ *
+ * @param backend   a pointer to the struct rbh_backend to get log count from
+ *
+ * @return          the number of logs of each type in a value_map
+ */
+static inline struct rbh_value_map *
+rbh_backend_get_log_count(struct rbh_backend *backend)
+{
+    if (backend->ops->get_log_count == NULL) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+    return backend->ops->get_log_count(backend);
 }
 
 /**
