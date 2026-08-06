@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5d89934_1ad87f80",
+        "filename": "rbh-find/src/parser.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-08-06T14:05:55Z",
+      "side": 1,
+      "message": "style: alignment is invalid (sorry :p)",
+      "range": {
+        "startLine": 241,
+        "startChar": 27,
+        "endLine": 241,
+        "endChar": 28
+      },
+      "revId": "88bc691ad30f273de3051dcfc00f2c6373699ab9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
