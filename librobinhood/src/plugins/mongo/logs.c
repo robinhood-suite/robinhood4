@@ -293,3 +293,59 @@ out:
     errno = EINVAL;
     return NULL;
 }
+
+struct rbh_value_map *
+mongo_backend_get_log_count(void *backend)
+{
+    struct mongo_backend *mongo = backend;
+    struct rbh_value_map *map_value;
+    struct rbh_value_pair *pairs;
+    bson_t *opts = bson_new();
+    struct rbh_value *values;
+    bson_error_t error;
+    int index = 0;
+
+    if (logs_sstack == NULL)
+        logs_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
+                                     (sizeof(struct rbh_value_map *)));
+
+    values = RBH_SSTACK_PUSH(logs_sstack, NULL,
+                             RBH_LOG_TYPE_LAST * sizeof(*values));
+    pairs = RBH_SSTACK_PUSH(logs_sstack, NULL,
+                            RBH_LOG_TYPE_LAST * sizeof(*pairs));
+    map_value = RBH_SSTACK_PUSH(logs_sstack, NULL, sizeof(*map_value));
+
+    for (enum rbh_log_type type = RBH_LOG_TYPE_FIRST;
+         type <= RBH_LOG_TYPE_LAST;
+         type++) {
+        const char *key = rbh_log_type2str(type);
+        bson_t *filter;
+        int64_t count;
+
+        filter = BCON_NEW(key, "{", "$exists", BCON_BOOL(true), "}");
+        count = mongoc_collection_count_documents(mongo->log, filter, opts,
+                                                  NULL, NULL, &error);
+        bson_destroy(filter);
+        if (count < 0) {
+            map_value = NULL;
+            goto out;
+        }
+
+        values[index].type = RBH_VT_INT64;
+        values[index].int64 = count;
+
+        pairs[index].key = RBH_SSTACK_PUSH(logs_sstack, key,
+                                           strlen(key) + 1);
+        pairs[index].value = &values[index];
+
+        index++;
+    }
+
+    map_value->pairs = pairs;
+    map_value->count = index;
+
+out:
+    bson_destroy(opts);
+
+    return map_value;
+}
