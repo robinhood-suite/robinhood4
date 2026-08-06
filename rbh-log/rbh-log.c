@@ -89,6 +89,20 @@ print_logs(const struct rbh_value_map *logs)
     }
 }
 
+static void
+print_log_count(const struct rbh_value_map *counts)
+{
+    int64_t count = 0;
+
+    for (size_t i = 0 ; i < counts->count ; i++) {
+        printf("Log count for the '%s' command: '%ld'\n",
+               counts->pairs[i].key, counts->pairs[i].value->int64);
+        count += counts->pairs[i].value->int64;
+    }
+
+    printf("Total log count: '%ld'\n", count);
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -234,7 +248,7 @@ main(int argc, char *argv[])
             error(EXIT_FAILURE, EINVAL,
                   "Failed to retrieve log count\n");
 
-        (void) logs_map;
+        print_log_count(logs_map);
     } else {
         logs_map = rbh_backend_get_logs(backend, options);
         if (logs_map == NULL)
