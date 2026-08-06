@@ -240,13 +240,60 @@ test_mountpoint()
                                       "$(pwd)"
 }
 
+test_order()
+{
+    local order="$1"
+
+    local command="rbh-sync"
+    local flag="sync"
+
+    if [ "$order" == "descending" ]; then
+        local count="4"
+    else
+        local count="-4"
+    fi
+
+    rbh_sync rbh:posix:. rbh:$db:$testdb
+    rbh_sync rbh:posix:$(pwd) rbh:$db:$testdb
+    rbh_sync rbh:posix:. rbh:$db:$testdb --no-skip
+    rbh_sync rbh:posix:$file rbh:$db:$testdb --no-skip --one
+
+    local output="$(rbh_log rbh:$db:$testdb --$flag $count | grep "Command" |
+                    cut -d':' -f2- | sed 's/^[ \t]*//' |
+                    sed -n "s/.*$command/$command/p")"
+
+    if [ "$order" == "descending" ]; then
+        echo "$output" |
+            difflines "rbh-sync rbh:posix:$file rbh:$db:$testdb --no-skip --one" \
+                      "rbh-sync rbh:posix:. rbh:$db:$testdb --no-skip" \
+                      "rbh-sync rbh:posix:$(pwd) rbh:$db:$testdb" \
+                      "rbh-sync rbh:posix:. rbh:$db:$testdb"
+    else
+        echo "$output" |
+            difflines "rbh-sync rbh:posix:. rbh:$db:$testdb" \
+                      "rbh-sync rbh:posix:$(pwd) rbh:$db:$testdb" \
+                      "rbh-sync rbh:posix:. rbh:$db:$testdb --no-skip" \
+                      "rbh-sync rbh:posix:$file rbh:$db:$testdb --no-skip --one"
+    fi
+}
+
+test_ascending()
+{
+    test_order ascending
+}
+
+test_descending()
+{
+    test_order descending
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
                   test_timestamps test_command_line test_entry_count
-                  test_mountpoint)
+                  test_mountpoint test_ascending test_descending)
 
 tmpdir=$(mktemp --directory)
 test_user="$(get_test_user "$(basename "$0")")"
