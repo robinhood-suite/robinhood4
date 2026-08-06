@@ -24,6 +24,9 @@ STOP_CB_TYPE = CFUNCTYPE(c_int)
 # Keep references to callback wrappers alive to avoid GC while C may call them
 _stop_cb_refs = {}
 
+backend_override = None
+database_override = None
+
 librbh = ctypes.CDLL("librobinhood.so")
 
 libc = ctypes.CDLL(ctypes.util.find_library('c'))
@@ -356,6 +359,13 @@ def set_evaluation_interval(interval):
     global evaluation_interval
     evaluation_interval = interval
 
+def set_config_override(backend=None, database=None):
+    global backend_override
+    global database_override
+
+    backend_override = backend
+    database_override = database
+
 # Initialize global policy engine settings used by admin config scripts.
 # Sets `backend`, `database` and `evaluation_interval` variables.
 # The `filesystem` field represents the URI of the actual underlying storage
@@ -367,6 +377,13 @@ def set_evaluation_interval(interval):
 def config(*, filesystem, database, evaluation_interval):
     """Initialize backend, database and evaluation interval."""
     from rbhpolicy.config.config_validator import validate_config
+
+    if backend_override is not None:
+        filesystem = backend_override
+
+    if database_override is not None:
+        database = database_override
+
     validate_config(filesystem, database, evaluation_interval)
     set_backend(filesystem)
     set_database(database)
