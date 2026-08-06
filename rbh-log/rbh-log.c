@@ -39,7 +39,8 @@ usage(void)
         "    SOURCE                 a robinhood URI\n"
         "\n"
         "Optional arguments:\n"
-        "   -c, --config PATH       the configuration file to use.\n"
+        "   -c, --config PATH       the configuration file to use\n"
+        "   --count                 print the number of logs currently recorded\n"
         "   -h, --help              show this message and exit\n"
         "   -i, --find N            print the last N logs of rbh-find runs\n"
         "   -f, --fsevents N        print the last N logs of rbh-fsevents runs\n"
@@ -98,6 +99,10 @@ main(int argc, char *argv[])
             .val = 'c',
         },
         {
+            .name = "count",
+            .val = 'Z',
+        },
+        {
             .name = "find",
             .has_arg = required_argument,
             .val = 'i',
@@ -140,6 +145,7 @@ main(int argc, char *argv[])
     };
     struct rbh_log_options options = { 0 };
     struct rbh_value_map *logs_map = NULL;
+    bool print_count = false;
     int rc;
     char c;
 
@@ -147,7 +153,7 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:i:f:g:hr:s:z",
+    while ((c = getopt_long(argc, argv, "c:i:f:g:hr:s:zZ",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
@@ -201,6 +207,9 @@ main(int argc, char *argv[])
         case 'z':
             rbh_print_version();
             return EXIT_SUCCESS;
+        case 'Z':
+            print_count = true;
+            break;
         case '?':
         default:
             /* getopt_long() prints meaningful error messages itself */
@@ -219,12 +228,21 @@ main(int argc, char *argv[])
 
     backend = rbh_backend_from_uri(argv[0], false);
 
-    logs_map = rbh_backend_get_logs(backend, options);
-    if (logs_map == NULL)
-        error(EXIT_FAILURE, EINVAL,
-              "Failed to retrieve requested logs\n");
+    if (print_count) {
+        logs_map = rbh_backend_get_log_count(backend);
+        if (logs_map == NULL)
+            error(EXIT_FAILURE, EINVAL,
+                  "Failed to retrieve log count\n");
 
-    print_logs(logs_map);
+        (void) logs_map;
+    } else {
+        logs_map = rbh_backend_get_logs(backend, options);
+        if (logs_map == NULL)
+            error(EXIT_FAILURE, EINVAL,
+                  "Failed to retrieve requested logs\n");
+
+        print_logs(logs_map);
+    }
 
     return EXIT_SUCCESS;
 }
