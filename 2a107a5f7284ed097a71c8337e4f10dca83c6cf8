@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36947a5c_713b8777",
+        "filename": "rbh-policy/rbh-policy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-08-06T13:15:39Z",
+      "side": 1,
+      "message": "suggest: \"source\"",
+      "range": {
+        "startLine": 24,
+        "startChar": 31,
+        "endLine": 24,
+        "endChar": 38
+      },
+      "revId": "2a107a5f7284ed097a71c8337e4f10dca83c6cf8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42c31dd4_a759b30a",
+        "filename": "rbh-policy/rbh-policy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-08-06T13:15:39Z",
+      "side": 1,
+      "message": "suggest: \"mirror\"",
+      "range": {
+        "startLine": 26,
+        "startChar": 31,
+        "endLine": 26,
+        "endChar": 39
+      },
+      "revId": "2a107a5f7284ed097a71c8337e4f10dca83c6cf8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
