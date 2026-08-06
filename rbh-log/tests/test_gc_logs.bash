@@ -128,12 +128,55 @@ test_command_line()
                   "rbh-gc rbh:$db:$testdb"
 }
 
+test_entries_seen_deleted()
+{
+    local entry1="file1"
+    local entry2="file2"
+    local entry3="file3"
+    local entry4="file4"
+    local entry5="file5"
+
+    touch $entry1
+    echo "blob" > $entry2
+    mkdir $entry3
+    ln $entry1 $entry4
+    echo "thelazyfoxjumpsoverthebrowndog" > $entry5
+
+    rbh_sync rbh:posix:. rbh:$db:$testdb
+
+    rm $entry1 $entry2 $entry4 $entry5
+    rmdir $entry3
+
+    # There are 6 entries in total: the five above + root
+
+    # First gc should see all entries and only remove $entry1
+    rbh_gc rbh:$db:$testdb --check "$test_dir/letter_check.sh"
+    # Second gc should only see the 2 non-empty files and remove both
+    rbh_gc rbh:$db:$testdb -size +0 -type f
+    # Third gc should see the 3 remaining entries and remove none
+    rbh_gc rbh:$db:$testdb --dry-run
+    # Last gc should see the 3 remaining entries and remove 2
+    rbh_gc rbh:$db:$testdb
+
+    rbh_log rbh:$db:$testdb --gc 4 | grep " deleted entries" | cut -d':' -f2- |
+        sed 's/^[ \t]*//' |
+        difflines "2" "0" "2" "1"
+
+    rbh_log rbh:$db:$testdb --gc 4 | grep "non-deleted entries" |
+        cut -d':' -f2- | sed 's/^[ \t]*//' |
+        difflines "1" "3" "0" "5"
+
+    rbh_log rbh:$db:$testdb --gc 4 | grep "entries seen" | cut -d':' -f2- |
+        sed 's/^[ \t]*//' |
+        difflines "3" "3" "2" "6"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
-                  test_timestamps test_command_line)
+                  test_timestamps test_command_line test_entries_seen_deleted)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
