@@ -72,6 +72,9 @@ enum rbh_log_type {
     RBH_GC_LOG,
     RBH_REPORT_LOG,
     RBH_SYNC_LOG,
+
+    RBH_LOG_TYPE_FIRST = RBH_FIND_LOG,
+    RBH_LOG_TYPE_LAST = RBH_SYNC_LOG,
 };
 
 static inline const char *
