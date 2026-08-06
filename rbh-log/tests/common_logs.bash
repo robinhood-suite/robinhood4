@@ -28,13 +28,13 @@ check_common_logs()
     local expected="$3"
 
     echo "$output" | grep "Start" > /dev/null ||
-        error "start_time should have been retrieved"
+        error "start_time should have been retrieved, got '$output'"
 
     echo "$output" | grep "Duration" > /dev/null ||
-        error "duration should have been retrieved"
+        error "duration should have been retrieved, got '$output'"
 
     echo "$output" | grep "End" > /dev/null ||
-        error "end_time should have been retrieved"
+        error "end_time should have been retrieved, got '$output'"
 
     local command_line=$(grep 'Command used' <<< "$output" |
                          sed -n "s/.*$command/$command/p")

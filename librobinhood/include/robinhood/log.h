@@ -124,6 +124,7 @@ str2rbh_log_type(const char *str)
 struct rbh_log_options {
     enum rbh_log_type type;
     size_t count;
+    bool ascending;
 };
 
 static inline void
