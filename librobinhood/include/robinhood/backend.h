@@ -336,6 +336,10 @@ struct rbh_backend_operations {
             void *backend,
             struct rbh_log_options options
             );
+    int (*delete_logs)(
+            void *backend,
+            struct rbh_log_options options
+            );
     struct rbh_fsentry *(*undelete)(
             void *backend,
             const char *path,
@@ -799,6 +803,25 @@ rbh_backend_get_logs(struct rbh_backend *backend,
         return NULL;
     }
     return backend->ops->get_logs(backend, options);
+}
+
+/**
+ * Delete logs from a given backend.
+ *
+ * @param backend   a pointer to the struct rbh_backend to delete logs from
+ * @param options   options to determine the logs to delete
+ *
+ * @return          0 on success, any other value on error and errno set
+ */
+static inline int
+rbh_backend_delete_logs(struct rbh_backend *backend,
+                        struct rbh_log_options options)
+{
+    if (backend->ops->delete_logs == NULL) {
+        errno = ENOTSUP;
+        return 1;
+    }
+    return backend->ops->delete_logs(backend, options);
 }
 
 /**
