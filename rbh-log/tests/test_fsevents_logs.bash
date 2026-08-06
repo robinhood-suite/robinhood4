@@ -381,6 +381,52 @@ test_deduplication_ratio()
                   "0.000"
 }
 
+test_order()
+{
+    local order="$1"
+
+    local command="rbh-fsevents"
+    local flag="fsevents"
+
+    if [ "$order" == "descending" ]; then
+        local count="3"
+    else
+        local count="-3"
+    fi
+
+    set +e
+    rbh_fsevents src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
+    set -e
+    rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
+    rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb -b 400 -d blob --no-estale-logs > /dev/null
+
+    local output="$(rbh_log rbh:$db:$testdb --$flag $count | grep "Command" |
+                    cut -d':' -f2- | sed 's/^[ \t]*//' |
+                    sed -n "s/.*$command/$command/p")"
+
+    if [ "$order" == "descending" ]; then
+        echo "$output" |
+            difflines "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb -b 400 -d blob --no-estale-logs" \
+                      "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb" \
+                      "rbh-fsevents src:lustre:$LUSTRE_MDT rbh:$db:$testdb"
+    else
+        echo "$output" |
+            difflines "rbh-fsevents src:lustre:$LUSTRE_MDT rbh:$db:$testdb" \
+                      "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb" \
+                      "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb -b 400 -d blob --no-estale-logs"
+    fi
+}
+
+test_ascending()
+{
+    test_order ascending
+}
+
+test_descending()
+{
+    test_order descending
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -388,7 +434,8 @@ test_deduplication_ratio()
 declare -a tests=(test_invalid test_fsevents_1 test_fsevents_N test_more_than_N
                   test_timestamps test_command_line test_source_and_enrichment
                   test_worker_count_start_index test_changelog_amount
-                  test_work_timestamps test_deduplication_ratio)
+                  test_work_timestamps test_deduplication_ratio test_ascending
+                  test_descending)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
