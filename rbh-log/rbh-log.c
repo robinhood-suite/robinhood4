@@ -40,7 +40,10 @@ usage(void)
         "\n"
         "Optional arguments:\n"
         "   -c, --config PATH       the configuration file to use\n"
-        "   --count                 print the number of logs currently recorded\n"
+        "   --count                 print the number of logs currently recorded.\n"
+        "                           Cannot be used with '--delete'\n"
+        "   --delete                delete the requested logs instead of printing\n"
+        "                           them. Cannot be used with '--count'\n"
         "   -h, --help              show this message and exit\n"
         "   -i, --find [-]N         print the first or last N logs of rbh-find runs\n"
         "   -f, --fsevents [-]N     print the first or last N logs of rbh-fsevents runs\n"
@@ -122,6 +125,10 @@ main(int argc, char *argv[])
             .val = 'Z',
         },
         {
+            .name = "delete",
+            .val = 'd',
+        },
+        {
             .name = "find",
             .has_arg = required_argument,
             .val = 'i',
@@ -165,6 +172,7 @@ main(int argc, char *argv[])
     struct rbh_log_options options = { 0 };
     struct rbh_value_map *logs_map = NULL;
     bool print_count = false;
+    bool delete_logs = false;
     int rc;
     char c;
 
@@ -172,11 +180,14 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:i:f:g:hr:s:zZ",
+    while ((c = getopt_long(argc, argv, "c:di:f:g:hr:s:zZ",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
             /* already parsed */
+            break;
+        case 'd':
+            delete_logs = true;
             break;
         case 'i':
             options.type = RBH_FIND_LOG;
@@ -274,6 +285,9 @@ main(int argc, char *argv[])
         error(EX_USAGE, 0, "not enough arguments");
     if (argc > 1)
         error(EX_USAGE, 0, "unexpected argument: %s", argv[1]);
+    if (print_count && delete_logs)
+        error(EX_USAGE, 0,
+              "Cannot both print the log count and delete logs. Choose one.");
 
     backend = rbh_backend_from_uri(argv[0], false);
 
@@ -284,6 +298,14 @@ main(int argc, char *argv[])
                   "Failed to retrieve log count\n");
 
         print_log_count(logs_map);
+    } else if (delete_logs) {
+        if (options.count == 0)
+            error(EXIT_FAILURE, EINVAL,
+                  "Cannot delete 0 logs, specify a type and count to delete\n");
+
+        if (rbh_backend_delete_logs(backend, options))
+            error(EXIT_FAILURE, EINVAL,
+                  "Failed to delete requested logs\n");
     } else {
         logs_map = rbh_backend_get_logs(backend, options);
         if (logs_map == NULL)
