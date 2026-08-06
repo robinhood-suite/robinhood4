@@ -6,6 +6,7 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
 from rbhpolicy.config.config_loader import load_config
+from rbhpolicy.config.cpython import set_config_override
 from rbhpolicy.execution.run import run
 from rbhpolicy.execution.show import show
 import argparse
@@ -20,6 +21,10 @@ if __name__ == "__main__":
             help="Path to the configuration file or filesystem name")
     run_parser.add_argument("policies",
             help="Comma-separated list of policies to run")
+    run_parser.add_argument("--backend", metavar="URI",
+            help="Override the backend URI for one execution")
+    run_parser.add_argument("--database", metavar="URI",
+            help="Override the database URI for one execution")
 
     show_parser = subparsers.add_parser("show",
             help="Show policies or fileclasses from a configuration")
@@ -35,6 +40,7 @@ if __name__ == "__main__":
     if args.command == "run":
         fs_name = args.fs_name
         policy_list = args.policies.split(",")
+        set_config_override(backend=args.backend, database=args.database)
         config = load_config(fs_name)
         print(f"Loaded configuration for '{fs_name}'")
         run(policy_list)
