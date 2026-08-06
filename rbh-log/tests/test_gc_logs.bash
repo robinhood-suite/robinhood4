@@ -44,7 +44,6 @@ check_log_result()
 
     echo "$output" | grep "seen" > /dev/null ||
         error "total_entries should have been retrieved, got '$output'"
-
 }
 
 test_N_logs()
