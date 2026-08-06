@@ -116,7 +116,7 @@ test_command_line()
     rbh_gc --config $conf rbh:$db:$testdb --dry-run > /dev/null
     rbh_gc --config $conf rbh:$db:$testdb -s 42 --verbose > /dev/null
     rbh_gc --config $conf rbh:$db:$testdb -type d -size +3 -s 53 > /dev/null
-    rbh_gc --dry-run rbh:$db:$testdb --check "$PWD/blob.sh"> /dev/null
+    rbh_gc --dry-run rbh:$db:$testdb --check "$PWD/blob.sh" > /dev/null
 
     rbh_log rbh:$db:$testdb --gc 6 | grep "Command" | cut -d':' -f2- |
         sed 's/^[ \t]*//' | sed -n "s/.*$command/$command/p" |
@@ -187,13 +187,62 @@ test_sync_time()
         difflines "9999999" "$current_date" "620" "42" "1"
 }
 
+test_order()
+{
+    local order="$1"
+
+    local command="rbh-gc"
+    local flag="gc"
+
+    if [ "$order" == "descending" ]; then
+        local count="5"
+    else
+        local count="-5"
+    fi
+
+    rbh_sync rbh:posix:. rbh:$db:$testdb
+
+    rbh_gc rbh:$db:$testdb > /dev/null
+    rbh_gc rbh:$db:$testdb --dry-run > /dev/null
+    rbh_gc rbh:$db:$testdb -s 42 --verbose > /dev/null
+    rbh_gc rbh:$db:$testdb -type d -size +3 -s 53 > /dev/null
+
+    local output="$(rbh_log rbh:$db:$testdb --$flag $count | grep "Command" |
+                    cut -d':' -f2- | sed 's/^[ \t]*//' |
+                    sed -n "s/.*$command/$command/p")"
+
+    if [ "$order" == "descending" ]; then
+        echo "$output" |
+            difflines "rbh-gc rbh:$db:$testdb -type d -size +3 -s 53" \
+                      "rbh-gc rbh:$db:$testdb -s 42 --verbose" \
+                      "rbh-gc rbh:$db:$testdb --dry-run" \
+                      "rbh-gc rbh:$db:$testdb"
+    else
+        echo "$output" |
+            difflines "rbh-gc rbh:$db:$testdb" \
+                      "rbh-gc rbh:$db:$testdb --dry-run" \
+                      "rbh-gc rbh:$db:$testdb -s 42 --verbose" \
+                      "rbh-gc rbh:$db:$testdb -type d -size +3 -s 53"
+    fi
+}
+
+test_ascending()
+{
+    test_order ascending
+}
+
+test_descending()
+{
+    test_order descending
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
                   test_timestamps test_command_line test_entries_seen_deleted
-                  test_sync_time)
+                  test_sync_time test_ascending test_descending)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
