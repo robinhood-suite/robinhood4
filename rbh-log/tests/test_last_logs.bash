@@ -184,8 +184,8 @@ test_last_logs()
         esac
     done
 
-    local output=$(rbh_log "rbh:$db:$testdb" --last 5)
-    local tmp_output=$(rbh_log "rbh:$db:$testdb" --last 5)
+    local output=$(rbh_log "rbh:$db:$testdb" --last 21)
+    local tmp_output=$(rbh_log "rbh:$db:$testdb" --last 30)
 
     if [ "$output" != "$tmp_output" ]; then
         error "Outputted logs should have been the same, got '$output' and '$tmp_output'"

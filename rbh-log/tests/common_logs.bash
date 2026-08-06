@@ -40,7 +40,8 @@ check_common_logs()
                          sed -n "s/.*$command/$command/p")
 
     if [ "$command_line" != "$expected" ]; then
-        error "command lines are not matching, expected '$expected', got '$command_line'"
+        error "command lines are not matching, expected '$expected'," \
+              "got '$command_line'. Full output is '$output'"
     fi
 }
 
