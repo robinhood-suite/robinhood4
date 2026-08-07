@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd5fd492_4b68bc17",
+        "filename": "rbh-log/tests/test_last_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-08-07T08:03:53Z",
+      "side": 1,
+      "message": "major: `full_output` is never initialized here.",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 16
+      },
+      "revId": "4bb4f92997c2806c6d0373294965ef00d39aeda9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4174c82f_223844d5",
+        "filename": "rbh-log/tests/test_last_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1039469
+      },
+      "writtenOn": "2026-08-07T08:03:53Z",
+      "side": 1,
+      "message": "minor: may be better adding an else here if for some reason the command is nevener matched (avoiding an infinite loop)",
+      "range": {
+        "startLine": 207,
+        "startChar": 8,
+        "endLine": 207,
+        "endChar": 10
+      },
+      "revId": "4bb4f92997c2806c6d0373294965ef00d39aeda9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
