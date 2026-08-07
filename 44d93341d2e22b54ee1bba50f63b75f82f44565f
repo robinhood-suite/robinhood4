@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25333f64_bbec16b9",
+        "filename": "rbh-find/tests/posix/test_limit.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-08-07T06:42:50Z",
+      "side": 1,
+      "message": "comment: reading the code, it seems to me that `-limit 0 -limit 5` will succeed",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 6
+      },
+      "revId": "44d93341d2e22b54ee1bba50f63b75f82f44565f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
