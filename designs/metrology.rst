@@ -29,7 +29,7 @@ command-specific stats and plugin-specific stats.
 Command statistics
 ------------------
 
-The first kind of statistics are about the command themselves and their usage.
+The first kind of statistics is about the command themselves and their usage.
 For instance, when did an invocation of `rbh-fsevents` start or how long did a
 run of `rbh-sync` last for. The commands targeted will only be those which may
 take a long time, i.e. not `rbh-info`-like commands. The statistics will be
@@ -44,9 +44,9 @@ the number of skipped entries.
 
 Both of the source for statistics (command and plugin) are already partly
 implemented, mainly in `rbh-sync`. As an example, it already records the start
-time of its invokation, the duration of a synchronization, the mountpoint, ...
+time of its invocation, the duration of a synchronization, the mountpoint, ...
 Moreover, it uses the `rbh_metadata` structure given to the
-`rbh_backend_filter` function to gather the aforementionned command-related
+`rbh_backend_filter` function to gather the aforementioned command-related
 statistics by the plugin.
 
 We thus plan to extend this structure and its usage. Here is the list of
@@ -63,7 +63,7 @@ removed, depending on if they are needed or not:
 +------------------------------+-----------------------------+--------------------------+
 | rbh-sync                     | source mountpoint           | converted entries        |
 |                              | last sync time              | skipped entries          |
-                               |                             | total entries            |
+|                              |                             | total entries            |
 +------------------------------+-----------------------------+--------------------------+
 | rbh-fsevents                 | source read                 | amount of changelog read |
 |                              | enrich mountpoint           | current changelog index  |
@@ -71,13 +71,13 @@ removed, depending on if they are needed or not:
 |                              | deduplication ratio         |                          |
 +------------------------------+-----------------------------+--------------------------+
 | rbh-find                     | entry-count after filtering |                          |
-                               | -exec entry count success   |                          |
+|                              | -exec entry count success   |                          |
 +------------------------------+-----------------------------+--------------------------+
 | rbh-report                   |                             |                          |
 +------------------------------+-----------------------------+--------------------------+
 | rbh-gc                       | sync-time used              |                          |
 |                              | deleted entry count         |                          |
-                               | non-deleted entry count     |                          |
+|                              | non-deleted entry count     |                          |
 |                              | total entries               |                          |
 +------------------------------+-----------------------------+--------------------------+
 
@@ -94,7 +94,7 @@ that require it, and add additional fields to the `rbh_metadata` structure:
             struct rbh_find_metadata find_md;
             struct rbh_report_metadata report_md;
             struct rbh_gc_metadata gc_md;
-        }
+        };
     };
 
 Each sub-structure will have fields corresponding to the statistics given in the
@@ -129,7 +129,7 @@ record statistics deemed of interest.
             struct rbh_find_metadata find_md;
             struct rbh_report_metadata report_md;
             struct rbh_gc_metadata gc_md;
-        }
+        };
     };
 
 Regarding the C API, there will be modifications to the two main functions for
@@ -172,7 +172,7 @@ Printing statistics
 Regarding the exact statistics printed, they will of course include the ones
 gathered by the command from their usage and the plugins, but also the result
 of calculations done on them. For instance (the main goal of this metrology), we
-will print the number of entries managed by second for each command, the number
+will print the number of entries managed per second for each command, the number
 of entries updated per second, per process, the space taken (if available), ...
 
 While the non-plugin specific statistics are easy enough to manipulate, the same
@@ -209,7 +209,7 @@ a `rbh_value_map`:
     }
 
 Finally, using this function and other conversion functions, we can print out
-the statistics to the standard output, following RobinHood3's formating, which
+the statistics to the standard output, following RobinHood3's formatting, which
 will look like this (adapted for each command of course)::
 
     STATS | ==================== Dumping stats at 2025/02/17 00:01:44 =====================
@@ -258,7 +258,7 @@ The recording of statistics as logs is already implemented with the
 `rbh_backend_insert_metadata` call, meaning it is only a matter of formatting
 the statistics to a `rbh_value_map` structure on the command side, and the
 recording is done at the end of the commands' runtime. Therefore, only the
-equivalent of the last log printed will be recorded, as it contain information
+equivalent of the last log printed will be recorded, as it contains information
 gathered during the whole command runtime.
 
 Viewing statistics as logs
@@ -340,5 +340,5 @@ External monitoring tools
 
 At the time of writing this document, we have no need to interface RobinHood4
 with any monitoring tool, so this will not be implemented. The expected
-behaviour will, until further notice, to run RobinHood4 commands and use their
-output for minotoring.
+behaviour will, until further notice, be to run RobinHood4 commands and use their
+output for monitoring.
