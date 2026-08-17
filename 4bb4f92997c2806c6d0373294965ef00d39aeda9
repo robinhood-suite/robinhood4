@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3088a501_a521ba5c",
+        "filename": "rbh-log/tests/test_last_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-08-17T09:26:49Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "bd5fd492_4b68bc17",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 16
+      },
+      "revId": "4bb4f92997c2806c6d0373294965ef00d39aeda9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4174c82f_223844d5",
         "filename": "rbh-log/tests/test_last_logs.bash",
         "patchSetId": 1
