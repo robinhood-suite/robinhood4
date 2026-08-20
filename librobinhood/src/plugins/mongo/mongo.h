@@ -358,4 +358,7 @@ mongo_backend_get_log_count(void *backend);
 struct rbh_value_map *
 mongo_backend_get_logs(void *backend, struct rbh_log_options options);
 
+int
+mongo_backend_delete_logs(void *backend, struct rbh_log_options options);
+
 #endif
