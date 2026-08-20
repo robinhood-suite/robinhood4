@@ -11,6 +11,7 @@
 
 #include <assert.h>
 
+#include "robinhood/utils.h"
 #include "value.h"
 
 #include "mongo.h"
@@ -350,4 +351,168 @@ out:
     bson_destroy(opts);
 
     return map_value;
+}
+
+int
+mongo_backend_delete_logs(void *backend, struct rbh_log_options options)
+{
+    const char *str_type = rbh_log_type2str(options.type);
+    struct mongo_backend *mongo = backend;
+    mongoc_cursor_t *cursor;
+    bson_t *opts = NULL;
+    bson_error_t error;
+    const bson_t *doc;
+    const char **keys;
+    bson_iter_t iter;
+    bson_t *selector;
+    bson_t *filter;
+    int index = 0;
+    bson_t reply;
+    int64_t *ids;
+    bson_t array;
+    char str[16];
+    bool result;
+    int rc = 0;
+
+    if (options.type == RBH_ALL_LOG)
+        filter = bson_new();
+    else
+        filter = BCON_NEW(str_type, "{", "$exists", "true", "}");
+
+    opts = BCON_NEW("limit", BCON_INT64(options.count),
+                    "projection", "{", "_id", BCON_BOOL(true), "}",
+                    "sort", "{",
+                                "_id", BCON_INT32(options.ascending ? 1 : -1),
+                            "}");
+
+    ids = xmalloc(options.count);
+
+    /**
+     * Mongo is very annoying here, there are three ways to delete entries in
+     * Mongo:
+     *  - deleteOne
+     *  - deleteMany
+     *  - findAndModify with deletion
+     *
+     * The first can only delete one entry with a specific filter, and cannot
+     * sort, so we cannot use it to simply delete the oldest log over and over
+     * again.
+     * The second way has the same issue.
+     * The third way can filter entries and sort them, but it can only delete
+     * one entry at a time, meaning if we want to delete N logs, we have to comb
+     * through all logs N time, and delete one each time,
+     * i.e. N find + deleteOne...
+     *
+     * We chose to use the second way + a find on all the logs for the requested
+     * filter. We first do the find and store the ID of all the logs to find,
+     * then we request a deleteMany with a filter to match all logs with an ID
+     * in the array of stored IDs.
+     */
+    cursor = mongoc_collection_find_with_opts(mongo->log, filter, opts, NULL);
+    bson_destroy(filter);
+    bson_destroy(opts);
+    if (!cursor) {
+        rc = 1;
+        goto out;
+    }
+
+    for (index = 0; index < options.count; ++index) {
+        if (!mongoc_cursor_more(cursor)) {
+            if (mongoc_cursor_error(cursor, &error)) {
+                rc = 1;
+                goto handle_error;
+            }
+
+            rc = 0;
+            break;
+        }
+
+        if (!mongoc_cursor_next(cursor, &doc)) {
+            if (mongoc_cursor_error(cursor, &error)) {
+                rc = 1;
+                goto handle_error;
+            }
+
+            rc = 0;
+            break;
+        }
+
+        if (!bson_iter_init(&iter, doc)) {
+            rc = 1;
+            goto out;
+        }
+
+        while (bson_iter_next(&iter)) {
+            assert(BSON_ITER_HOLDS_INT64(&iter));
+            ids[index] = bson_iter_int64(&iter);;
+        }
+    }
+
+    selector = bson_new();
+    bson_t document;
+
+    if (!bson_append_document_begin(selector, "_id", strlen("_id"), &document))
+        return false;
+
+    if (!bson_append_array_begin(&document, "$in", strlen("$in"), &array)) {
+        rc = -1;
+        goto out;
+    }
+
+    keys = xmalloc(index);
+
+    for (uint32_t i = 0; i < index; i++) {
+        int key_length;
+
+        key_length = bson_uint32_to_string(i, &keys[i], str, sizeof(str));
+        if (!bson_append_int64(&array, keys[i], key_length, ids[i])) {
+            rc = -1;
+            goto out;
+        }
+    }
+
+    if (!bson_append_array_end(&document, &array)) {
+        rc = -1;
+        goto out;
+    }
+
+    if (!bson_append_document_end(selector, &document)) {
+        rc = -1;
+        goto out;
+    }
+
+    result = mongoc_collection_delete_many(mongo->log, selector, NULL, &reply,
+                                           &error);
+    if (!result) {
+        fprintf(stderr, "Failed to delete logs: %s\n", error.message);
+        bson_destroy(&reply);
+        rc = -1;
+    }
+
+out:
+    free(keys);
+    if (cursor)
+        mongoc_cursor_destroy(cursor);
+    if (selector)
+        bson_destroy(selector);
+
+    return rc;
+
+handle_error:
+    mongoc_cursor_destroy(cursor);
+
+    switch (error.domain) {
+    case MONGOC_ERROR_SERVER_SELECTION:
+        switch (error.code) {
+        case MONGOC_ERROR_SERVER_SELECTION_FAILURE:
+            errno = ENOTCONN;
+            return 1;
+        }
+        break;
+    }
+    snprintf(rbh_backend_error, sizeof(rbh_backend_error), "%d.%d: %s",
+             error.domain, error.code, error.message);
+    errno = RBH_BACKEND_ERROR;
+
+    return rc;
 }
