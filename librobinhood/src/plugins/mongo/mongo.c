@@ -1043,6 +1043,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .insert_log = mongo_backend_insert_log,
     .get_log_count = mongo_backend_get_log_count,
     .get_logs = mongo_backend_get_logs,
+    .delete_logs = mongo_backend_delete_logs,
     .insert_info = mongo_insert_info,
     .destroy = mongo_backend_destroy,
 };
@@ -1300,6 +1301,14 @@ mongo_branch_get_logs(void *backend, struct rbh_log_options options)
     return mongo_backend_get_logs(&branch->mongo, options);
 }
 
+static int
+mongo_branch_delete_logs(void *backend, struct rbh_log_options options)
+{
+    struct mongo_branch_backend *branch = backend;
+
+    return mongo_backend_delete_logs(&branch->mongo, options);
+}
+
 static const struct rbh_backend_operations MONGO_BRANCH_BACKEND_OPS = {
     .branch = mongo_backend_branch,
     .root = mongo_branch_root,
@@ -1308,6 +1317,7 @@ static const struct rbh_backend_operations MONGO_BRANCH_BACKEND_OPS = {
     .get_info = mongo_branch_get_info,
     .get_log_count = mongo_branch_get_log_count,
     .get_logs = mongo_branch_get_logs,
+    .delete_logs = mongo_branch_delete_logs,
     .destroy = mongo_backend_destroy,
 };
 
