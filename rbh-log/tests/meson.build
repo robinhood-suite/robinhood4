@@ -13,7 +13,7 @@ parallel_integration_tests = [
 
 if test_lustre
     parallel_integration_tests += ['test_fsevents_logs',
-                                   'test_last_logs',
+                                   'test_all_logs',
                                    'test_log_count']
 endif
 

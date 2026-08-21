@@ -156,8 +156,10 @@ check_rbh_gc()
     echo "$full_output" | tail +$count || true
 }
 
-test_last_logs()
+test_any_logs()
 {
+    local order=$1
+
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     # Output 20 random ints between 0 and 4
@@ -184,8 +186,8 @@ test_last_logs()
         esac
     done
 
-    local output=$(rbh_log "rbh:$db:$testdb" --last 21)
-    local tmp_output=$(rbh_log "rbh:$db:$testdb" --last 30)
+    local output=$(rbh_log "rbh:$db:$testdb" $order 21)
+    local tmp_output=$(rbh_log "rbh:$db:$testdb" $order 30)
 
     if [ "$output" != "$tmp_output" ]; then
         error "Outputted logs should have been the same, got '$output' and '$tmp_output'"
@@ -210,11 +212,21 @@ test_last_logs()
     done
 }
 
+test_first_logs()
+{
+    test_any_logs --first
+}
+
+test_last_logs()
+{
+    test_any_logs --last
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid test_last_logs)
+declare -a tests=(test_invalid test_first_logs test_last_logs)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
