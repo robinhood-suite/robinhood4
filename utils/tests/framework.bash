@@ -182,6 +182,11 @@ find_attribute()
     do_db find "$testdb" "$@"
 }
 
+find_log()
+{
+    do_db find_log "$testdb" "$@"
+}
+
 difflines()
 {
     diff -y -W 200 - <([ $# -eq 0 ] && printf '' || printf '%s\n' "$@")
