@@ -79,6 +79,14 @@ find_attribute()
     return 0
 }
 
+find_log()
+{
+    local db="$1"
+    local id="$2"
+
+    mongo "$db" --eval "db.log.find({\"_id\": $id})"
+}
+
 remove_attribute()
 {
     local db="$1"
@@ -102,6 +110,9 @@ case "$cmd" in
         ;;
     find)
         find_attribute "$db" "$@"
+        ;;
+    find_log)
+        find_log "$db" "$@"
         ;;
     get)
         get_attribute "$db" "$@"

@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
 parallel_integration_tests = [
+  'test_delete',
   'test_find_logs',
   'test_gc_logs',
   'test_report_logs',
