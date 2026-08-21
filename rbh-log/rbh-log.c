@@ -47,16 +47,17 @@ usage(void)
         "   -h, --help              show this message and exit\n"
         "   -i, --find [-]N         print the first or last N logs of rbh-find runs\n"
         "   -f, --fsevents [-]N     print the first or last N logs of rbh-fsevents runs\n"
+        "   -F, --first N           print the first N logs\n"
         "   -g, --gc [-]N           print the first or last N logs of rbh-gc runs\n"
-        "   -l, --last [-]N         print the first or last N logs\n"
+        "   -L, --last N            print the last N logs\n"
         "   -r, --report [-]N       print the first or last N logs of rbh-report runs\n"
         "   -s, --sync [-]N         print the first or last N logs of rbh-sync runs\n"
         "    --version              print RobinHood 4's version\n"
         "\n"
-        "All optional arguments taking in a number will show the last logs of\n"
-        "the given command if the number is positive, and the first logs if\n"
-        "it is negative. For instance, '--sync 3' will show the last 3 rbh-sync\n"
-        "logs, while '--sync -3' will show the first 3.\n"
+        "All optional arguments taking in a number (except '--first' and '--last')\n"
+        "will show the last logs of the given command if the number is positive,\n"
+        "and the first logs if it is negative. For instance, '--sync 3' will show\n"
+        "the last 3 rbh-sync logs, while '--sync -3' will show the first 3.\n"
         "\n"
         "A robinhood URI is built as follows:\n"
         "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n";
@@ -139,6 +140,11 @@ main(int argc, char *argv[])
             .val = 'f',
         },
         {
+            .name = "first",
+            .has_arg = required_argument,
+            .val = 'F',
+        },
+        {
             .name = "gc",
             .has_arg = required_argument,
             .val = 'g',
@@ -150,7 +156,7 @@ main(int argc, char *argv[])
         {
             .name = "last",
             .has_arg = required_argument,
-            .val = 'l',
+            .val = 'L',
         },
         {
             .name = "report",
@@ -180,7 +186,7 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:di:f:g:hr:s:zZ",
+    while ((c = getopt_long(argc, argv, "c:di:f:F:g:hL:r:s:zZ",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
@@ -213,6 +219,14 @@ main(int argc, char *argv[])
                       optarg);
 
             break;
+        case 'F':
+            options.type = RBH_ALL_LOG;
+            options.ascending = true;
+            if (str2uint64_t(optarg, &options.count))
+                error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
+                      optarg);
+
+            break;
         case 'g':
             options.type = RBH_GC_LOG;
             if (*optarg == '-') {
@@ -228,13 +242,8 @@ main(int argc, char *argv[])
         case 'h':
             usage();
             return 0;
-        case 'l':
+        case 'L':
             options.type = RBH_ALL_LOG;
-            if (*optarg == '-') {
-                options.ascending = true;
-                optarg++;
-            }
-
             if (str2uint64_t(optarg, &options.count))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
                       optarg);
