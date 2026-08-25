@@ -40,6 +40,7 @@ librobinhood = library(
         'itertools.c',
         'list.c',
         'lu_fid.c',
+        'log.c',
         'plugin.c',
         'plugins/backend.c',
         'projection.c',

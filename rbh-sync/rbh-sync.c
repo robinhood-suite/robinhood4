@@ -622,6 +622,9 @@ sync(const struct rbh_filter_projection *projection,
             error(EXIT_FAILURE, errno, "while chunkifying SOURCE's entries");
         }
 
+        if (rbh_should_print_log(metadata))
+            rbh_print_log(metadata, RBH_SYNC_LOG);
+
         count = rbh_backend_update(to, chunk);
         save_errno = errno;
         rbh_iter_destroy(chunk);
@@ -642,6 +645,8 @@ sync(const struct rbh_filter_projection *projection,
     default:
         error(EXIT_FAILURE, errno, "while iterating over SOURCE's entries");
     }
+
+    rbh_print_log(metadata, RBH_SYNC_LOG);
 }
 
 /*----------------------------------------------------------------------------*
@@ -818,7 +823,7 @@ main(int argc, char *argv[])
         .fsentry_mask = RBH_FP_ALL,
         .statx_mask = RBH_STATX_ALL & ~RBH_STATX_MNT_ID,
     };
-    struct rbh_metadata metadata = { 0 };
+    struct rbh_metadata metadata = { .last_shown_time = time(NULL) };
     char *cmd_backend;
     int rc;
     char c;
