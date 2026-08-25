@@ -591,7 +591,7 @@ test_stats()
     mkdir -p {1..9}/{1..9}
 
     rbh_sync_posix "." "rbh:$db:$testdb"
-    local output="$(rbh_sync_posix . rbh:$db:$testdb)"
+    local output="$(rbh_sync_posix . rbh:$db:$testdb --stats)"
 
     echo "$output" | grep "rbh-sync" > /dev/null ||
         error "Should have found 'rbh-sync' mentionned, got '$output'"
