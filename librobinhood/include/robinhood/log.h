@@ -60,6 +60,7 @@ struct rbh_metadata {
         struct rbh_find_metadata find_md;
         struct rbh_gc_metadata gc_md;
     };
+    time_t last_shown_time;
 };
 
 /**
@@ -152,5 +153,14 @@ rbh_set_common_metadata_pairs(struct rbh_common_metadata *md,
     values[3].string = md->command_line;
     pairs[3].value = &values[3];
 }
+
+static inline bool
+rbh_should_print_log(struct rbh_metadata *metadata)
+{
+    return time(NULL) - metadata->last_shown_time >= 1;
+}
+
+void
+rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type);
 
 #endif
