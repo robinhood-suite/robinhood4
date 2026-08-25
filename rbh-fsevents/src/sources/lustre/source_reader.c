@@ -712,8 +712,6 @@ lustre_changelog_iter_next(void *iterator)
     int save_errno;
     int rc;
 
-    flush_source_stack();
-
     fsevents_iterator = records->fsevents_iterator;
 
     if (fsevents_iterator) {
@@ -725,6 +723,8 @@ lustre_changelog_iter_next(void *iterator)
         records->fsevents_iterator = NULL;
         errno = 0;
     }
+
+    flush_source_stack();
 
     if (records->max_changelog > 0 &&
         records->max_changelog == records->fsevents_md->changelog_read) {
