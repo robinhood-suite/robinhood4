@@ -557,7 +557,7 @@ iter_convert(struct rbh_iterator *fsentries,
 
 static void
 sync(const struct rbh_filter_projection *projection,
-     struct rbh_metadata *metadata)
+     struct rbh_metadata *metadata, bool print_stats)
 {
     const struct rbh_filter_options OPTIONS = {
         .skip_error = skip_error,
@@ -622,7 +622,7 @@ sync(const struct rbh_filter_projection *projection,
             error(EXIT_FAILURE, errno, "while chunkifying SOURCE's entries");
         }
 
-        if (rbh_should_print_log(metadata))
+        if (print_stats && rbh_should_print_log(metadata))
             rbh_print_log(metadata, RBH_SYNC_LOG);
 
         count = rbh_backend_update(to, chunk);
@@ -646,7 +646,8 @@ sync(const struct rbh_filter_projection *projection,
         error(EXIT_FAILURE, errno, "while iterating over SOURCE's entries");
     }
 
-    rbh_print_log(metadata, RBH_SYNC_LOG);
+    if (print_stats)
+        rbh_print_log(metadata, RBH_SYNC_LOG);
 }
 
 /*----------------------------------------------------------------------------*
@@ -745,6 +746,7 @@ usage(void)
         "    -n, --no-skip          do not skip errors when synchronizing backends,\n"
         "                           instead stop on the first error.\n"
         "    -o, --one              only consider the root of SOURCE\n"
+        "    --stats                show command stats during execution\n"
         "    --version              print RobinHood 4's version\n"
         "\n"
         "Capability arguments:\n"
@@ -809,6 +811,10 @@ main(int argc, char *argv[])
             .val = 'o',
         },
         {
+            .name = "stats",
+            .val = 's',
+        },
+        {
             .name = "dry-run",
             .val = 'd',
         },
@@ -824,6 +830,7 @@ main(int argc, char *argv[])
         .statx_mask = RBH_STATX_ALL & ~RBH_STATX_MNT_ID,
     };
     struct rbh_metadata metadata = { .last_shown_time = time(NULL) };
+    bool print_stats = false;
     char *cmd_backend;
     int rc;
     char c;
@@ -837,12 +844,15 @@ main(int argc, char *argv[])
     rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "c:f:hl:on:dz", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "c:df:hl:n:osz", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
         case 'c':
             /* already parsed */
             break;
+        case 'd':
+            rbh_display_resolved_argv(NULL, &argc, &argv);
+            return EXIT_SUCCESS;
         case 'f':
             switch (optarg[0]) {
             case '+':
@@ -863,15 +873,15 @@ main(int argc, char *argv[])
         case 'l':
             list_capabilities(optarg);
             return EXIT_SUCCESS;
-        case 'o':
-            one = true;
-            break;
         case 'n':
             skip_error = false;
             break;
-        case 'd':
-            rbh_display_resolved_argv(NULL, &argc, &argv);
-            return EXIT_SUCCESS;
+        case 'o':
+            one = true;
+            break;
+        case 's':
+            print_stats = true;
+            break;
         case 'z':
             rbh_print_version();
             return EXIT_SUCCESS;
@@ -904,7 +914,7 @@ main(int argc, char *argv[])
     sync_mountpoint(metadata.sync_md.source_mountpoint);
 
     metadata.common_md.start_time = time(NULL);
-    sync(&projection, &metadata);
+    sync(&projection, &metadata, print_stats);
     metadata.common_md.end_time = time(NULL);
 
     insert_sync_log(to, &metadata);
