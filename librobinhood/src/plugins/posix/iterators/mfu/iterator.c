@@ -322,7 +322,7 @@ mfu_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
         mfu->posix.start_time = time(NULL);
     MPI_Bcast(&mfu->posix.start_time, 1, MPI_INT64_T, 0, MPI_COMM_WORLD);
 
-    mfu->metadata = metadata ? metadata : NULL;
+    mfu->metadata = metadata;
     mfu->posix.iterator = MFU_ITER;
     mfu->backend_id = backend_id;
     mfu->total = mfu_flist_size(mfu->files);
