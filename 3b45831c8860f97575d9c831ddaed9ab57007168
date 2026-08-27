@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3415d8a9_4fa22e95",
+        "filename": "librobinhood/src/plugins/mongo/logs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-08-27T08:14:10Z",
+      "side": 1,
+      "message": "major: Should be `BCON_BOOL(true)`",
+      "range": {
+        "startLine": 380,
+        "startChar": 52,
+        "endLine": 380,
+        "endChar": 58
+      },
+      "revId": "3b45831c8860f97575d9c831ddaed9ab57007168",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7450a26_6507fae3",
+        "filename": "librobinhood/src/plugins/mongo/logs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-08-27T08:14:10Z",
+      "side": 1,
+      "message": "defect: `xmalloc(options.count * sizeof(*ids))`",
+      "revId": "3b45831c8860f97575d9c831ddaed9ab57007168",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8c4dad0_54c378df",
+        "filename": "librobinhood/src/plugins/mongo/logs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-08-27T08:14:10Z",
+      "side": 1,
+      "message": "defect: ids is not freed",
+      "revId": "3b45831c8860f97575d9c831ddaed9ab57007168",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d8a3466_b88b7708",
+        "filename": "librobinhood/src/plugins/mongo/logs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-08-27T08:14:10Z",
+      "side": 1,
+      "message": "major: goto out",
+      "revId": "3b45831c8860f97575d9c831ddaed9ab57007168",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "831d7be7_cae0325d",
+        "filename": "librobinhood/src/plugins/mongo/logs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-08-27T08:14:10Z",
+      "side": 1,
+      "message": "sugest: You don\u0027t need `keys`. You can do:\n```\nfor (uint32_t i \u003d 0; i \u003c index; ++i) {\n    const char *key;\n    int key_length;\n\n    key_length \u003d bson_uint32_to_string(i, \u0026key, str, sizeof(str));\n\n    if (!bson_append_int64(\u0026array, key, key_length, ids[i])) {\n        rc \u003d -1;\n        goto out;\n    }\n}\n```",
+      "revId": "3b45831c8860f97575d9c831ddaed9ab57007168",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "085931bb_fae455a8",
+        "filename": "librobinhood/src/plugins/mongo/logs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-08-27T08:14:10Z",
+      "side": 1,
+      "message": "major: reply should always be destroyed or since you\u0027re not using it, you can replace it by NULL",
+      "revId": "3b45831c8860f97575d9c831ddaed9ab57007168",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
