@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f860e41_bf80ff01",
+        "filename": "librobinhood/src/log.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-08-27T08:21:00Z",
+      "side": 1,
+      "message": "question: These information are only for rbh-sync ?",
+      "revId": "f7ec49e5d60406ac6e8aa4fef1f8fb4db8b2d2c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
