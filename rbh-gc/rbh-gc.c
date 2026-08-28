@@ -572,7 +572,7 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
             error(EXIT_FAILURE, errno, "while iterating over entries");
         }
 
-        if (print_stats && rbh_should_print_log(metadata))
+        if (print_stats)
             rbh_print_log(metadata, RBH_GC_LOG);
     } else {
         struct rbh_iterator *prints;
