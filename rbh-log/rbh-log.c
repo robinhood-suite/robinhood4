@@ -50,6 +50,7 @@ usage(void)
         "   -F, --first N           print the first N logs\n"
         "   -g, --gc [-]N           print the first or last N logs of rbh-gc runs\n"
         "   -L, --last N            print the last N logs\n"
+        "   --oneline               print logs in a shortened format\n"
         "   -r, --report [-]N       print the first or last N logs of rbh-report runs\n"
         "   -s, --sync [-]N         print the first or last N logs of rbh-sync runs\n"
         "    --version              print RobinHood 4's version\n"
@@ -66,7 +67,7 @@ usage(void)
 }
 
 static void
-print_logs(const struct rbh_value_map *logs)
+print_logs(const struct rbh_value_map *logs, bool print_oneline)
 {
     for (size_t i = 0 ; i < logs->count ; i++) {
         enum rbh_log_type type = str2rbh_log_type(logs->pairs[i].key);
@@ -75,19 +76,19 @@ print_logs(const struct rbh_value_map *logs)
 
         switch (type) {
         case RBH_FIND_LOG:
-            print_find_log(&logs->pairs[i].value->map);
+            print_find_log(&logs->pairs[i].value->map, print_oneline);
             break;
         case RBH_FSEVENTS_LOG:
-            print_fsevents_log(&logs->pairs[i].value->map);
+            print_fsevents_log(&logs->pairs[i].value->map, print_oneline);
             break;
         case RBH_GC_LOG:
-            print_gc_log(&logs->pairs[i].value->map);
+            print_gc_log(&logs->pairs[i].value->map, print_oneline);
             break;
         case RBH_REPORT_LOG:
-            print_report_log(&logs->pairs[i].value->map);
+            print_report_log(&logs->pairs[i].value->map, print_oneline);
             break;
         case RBH_SYNC_LOG:
-            print_sync_log(&logs->pairs[i].value->map);
+            print_sync_log(&logs->pairs[i].value->map, print_oneline);
             break;
         default:
             error(EXIT_FAILURE, EINVAL, "Invalid log type retrieved: '%s'",
@@ -159,6 +160,10 @@ main(int argc, char *argv[])
             .val = 'L',
         },
         {
+            .name = "oneline",
+            .val = 'o',
+        },
+        {
             .name = "report",
             .has_arg = required_argument,
             .val = 'r',
@@ -177,6 +182,7 @@ main(int argc, char *argv[])
     };
     struct rbh_log_options options = { 0 };
     struct rbh_value_map *logs_map = NULL;
+    bool print_oneline = false;
     bool print_count = false;
     bool delete_logs = false;
     int rc;
@@ -186,7 +192,7 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:di:f:F:g:hL:r:s:zZ",
+    while ((c = getopt_long(argc, argv, "c:di:f:F:g:hL:or:s:zZ",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
@@ -248,6 +254,9 @@ main(int argc, char *argv[])
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
                       optarg);
 
+            break;
+        case 'o':
+            print_oneline = true;
             break;
         case 'r':
             options.type = RBH_REPORT_LOG;
@@ -321,7 +330,7 @@ main(int argc, char *argv[])
             error(EXIT_FAILURE, EINVAL,
                   "Failed to retrieve requested logs\n");
 
-        print_logs(logs_map);
+        print_logs(logs_map, print_oneline);
     }
 
     return EXIT_SUCCESS;
