@@ -87,6 +87,7 @@ usage(void)
         "                    Set a maximum number of changelog to read\n"
         "    -n, --no-skip   do not skip entries on error, stop instead\n"
         "    -r, --raw       do not enrich changelog records (default)\n"
+        "    --stats         show command stats during execution\n"
         "    -v, --verbose   Set the verbose mode\n"
         "    --version       print RobinHood 4's version\n"
         "    -w, --nb-workers NUMBER\n"
@@ -773,6 +774,10 @@ main(int argc, char *argv[])
             .val = 'r',
         },
         {
+            .name = "stats",
+            .val = 's',
+        },
+        {
             .name = "verbose",
             .has_arg = no_argument,
             .val = 'v',
@@ -790,6 +795,7 @@ main(int argc, char *argv[])
     struct rbh_metadata metadata = { 0 };
     uint64_t max_changelog = 0;
     char *cmd_backend = NULL;
+    bool print_stats = false;
     char *dump_file = NULL;
     int rc;
     char c;
@@ -804,7 +810,7 @@ main(int argc, char *argv[])
     rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "b:c:d:e:hi:lm:nrvw:z", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "b:c:d:e:hi:lm:nrsvw:z", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
         case 'b':
@@ -856,6 +862,9 @@ main(int argc, char *argv[])
             mount_fd_exit();
             mount_fd = -1;
             break;
+        case 's':
+            print_stats = true;
+            break;
         case 'x':
             rbh_display_resolved_argv(NULL, &argc, &argv);
             return EXIT_SUCCESS;
@@ -871,6 +880,8 @@ main(int argc, char *argv[])
             exit(EX_USAGE);
         }
     }
+
+    (void) print_stats;
 
     if (argc - optind < 2)
         error(EX_USAGE, 0, "not enough arguments");
