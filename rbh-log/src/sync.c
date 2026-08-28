@@ -55,7 +55,7 @@ static const struct formatted_log_value sync_formatted_log_value[] = {
 };
 
 void
-print_sync_log(const struct rbh_value_map *log)
+print_sync_log(const struct rbh_value_map *log, bool print_oneline)
 {
     for (size_t i = 0 ; i < log->count ; i++) {
         const struct rbh_value_pair *pair = &log->pairs[i];
@@ -64,7 +64,8 @@ print_sync_log(const struct rbh_value_map *log)
 
         common_log_value = key2common_log_value(pair->key);
         if (common_log_value != CLV_UNKNOWN) {
-            print_common_log_info(pair->value, common_log_value);
+            print_common_log_info(pair->value, common_log_value,
+                                  print_oneline);
             continue;
         }
 

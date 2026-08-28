@@ -110,10 +110,13 @@ static const struct formatted_log_value common_formatted_log_value[] = {
 
 void
 print_common_log_info(const struct rbh_value *value,
-                      enum common_log_value log_value)
+                      enum common_log_value log_value,
+                      bool print_oneline)
 {
     struct formatted_log_value formatted_log_value =
         common_formatted_log_value[log_value];
+
+    (void) print_oneline;
 
     formatted_log_value.print_log_value(value, formatted_log_value.header);
 }

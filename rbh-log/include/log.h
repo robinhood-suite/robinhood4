@@ -41,52 +41,60 @@ key2common_log_value(const char *key);
  *
  * Can correspond to the start time, duration, end time and command line.
  *
- * @param value      the value whose content should be printed as common log info
- * @param log_value  the type of information to print
+ * @param value          the value whose content should be printed as
+ *                       common log info
+ * @param log_value      the type of information to print
+ * @param print_oneline  whether only oneline log info should be printed
  */
 void
 print_common_log_info(const struct rbh_value *value,
-                      enum common_log_value log_value);
+                      enum common_log_value log_value,
+                      bool print_oneline);
 
 /**
  * Print a sync log.
  *
- * @param log       the map whose content should be printed
+ * @param log            the map whose content should be printed
+ * @param print_oneline  whether only oneline log info should be printed
  */
 void
-print_sync_log(const struct rbh_value_map *log);
+print_sync_log(const struct rbh_value_map *log, bool print_oneline);
 
 /**
  * Print a fsevents log.
  *
- * @param log       the map whose content should be printed
+ * @param log            the map whose content should be printed
+ * @param print_oneline  whether only oneline log info should be printed
  */
 void
-print_fsevents_log(const struct rbh_value_map *log);
+print_fsevents_log(const struct rbh_value_map *log, bool print_oneline);
 
 /**
  * Print a find log.
  *
- * @param log       the map whose content should be printed
+ * @param log            the map whose content should be printed
+ * @param print_oneline  whether only oneline log info should be printed
  */
 void
-print_find_log(const struct rbh_value_map *log);
+print_find_log(const struct rbh_value_map *log, bool print_oneline);
 
 /**
  * Print a report log.
  *
- * @param log       the map whose content should be printed
+ * @param log            the map whose content should be printed
+ * @param print_oneline  whether only oneline log info should be printed
  */
 void
-print_report_log(const struct rbh_value_map *log);
+print_report_log(const struct rbh_value_map *log, bool print_oneline);
 
 /**
  * Print a gc log.
  *
- * @param log       the map whose content should be printed
+ * @param log            the map whose content should be printed
+ * @param print_oneline  whether only oneline log info should be printed
  */
 void
-print_gc_log(const struct rbh_value_map *log);
+print_gc_log(const struct rbh_value_map *log, bool print_oneline);
 
 /**
  * All following functions are callback for the `print_log_value` field in the
