@@ -15,7 +15,9 @@
 
 struct formatted_log_value {
     const char *header;
-    void (*print_log_value)(const struct rbh_value *, const char *);
+    void (*print_log_value)(const struct rbh_value *, const char *,
+                            bool);
+    bool oneline;
 };
 
 enum common_log_value {
@@ -98,8 +100,8 @@ print_gc_log(const struct rbh_value_map *log, bool print_oneline);
 
 /**
  * All following functions are callback for the `print_log_value` field in the
- * `formatted_log_value` structure. They each take in a `rbh_value` to print
- * and a header.
+ * `formatted_log_value` structure. They each take in a `rbh_value` to print,
+ * a header and whether the log information should be printed on a single line.
  */
 
 /**
@@ -107,25 +109,29 @@ print_gc_log(const struct rbh_value_map *log, bool print_oneline);
  * timespec with format "tv_sec.tv_nsec".
  */
 void
-print_timespec(const struct rbh_value *value, const char *header);
+print_timespec(const struct rbh_value *value, const char *header,
+               bool print_oneline);
 
 /**
  * Expects the value to be int64, prints it as a timestamp.
  */
 void
-print_time_from_timestamp(const struct rbh_value *value, const char *header);
+print_time_from_timestamp(const struct rbh_value *value, const char *header,
+                          bool print_oneline);
 
 /**
  * Expects the value to be int64, prints it as string representing a time
  * differential.
  */
 void
-print_difftime(const struct rbh_value *value, const char *header);
+print_difftime(const struct rbh_value *value, const char *header,
+               bool print_oneline);
 
 /**
  * Print the value as-is, i.e. string as string, int64 as long int, ....
  */
 void
-print_value(const struct rbh_value *value, const char *header);
+print_value(const struct rbh_value *value, const char *header,
+            bool print_oneline);
 
 #endif
