@@ -77,6 +77,7 @@ usage(void)
         "    --check CMD                command or script to used as checker\n"
         "                               script must receive an entry path as its last argument\n"
         "                               and returns 0 if the entry must be deleted\n"
+        "    --stats                    show command stats during execution\n"
         "    -v, --verbose              verbose mode\n"
         "    --version                  print RobinHood 4's version\n";
 
@@ -470,7 +471,8 @@ print_entries(struct rbh_iterator *iterator)
 
 static void
 gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
-   struct rbh_gc_metadata *gc_md, struct rbh_filter *filter)
+   struct rbh_metadata *metadata, struct rbh_filter *filter,
+   bool print_stats)
 {
     const struct rbh_filter_options OPTIONS = {
         .verbose = verbose_mode,
@@ -497,12 +499,12 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
     struct rbh_filter *_filter = NULL;
     struct rbh_iterator *constify;
 
-    if (gc_md->sync_time >= 0) {
+    if (metadata->gc_md.sync_time >= 0) {
         const struct rbh_filter_field *field;
 
         field = str2filter_field("ns-xattrs.sync_time");
         _filter = rbh_filter_compare_int64_new(RBH_FOP_STRICTLY_LOWER, field,
-                                               gc_md->sync_time);
+                                               metadata->gc_md.sync_time);
         if (_filter == NULL)
             error(EXIT_FAILURE, errno, "sync_time2filter");
 
@@ -527,7 +529,7 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
         struct rbh_mut_iterator *chunks;
         struct rbh_iterator *deletes;
 
-        deletes = iter_fsentry2delete(constify, mnt_path, gc_md);
+        deletes = iter_fsentry2delete(constify, mnt_path, &metadata->gc_md);
 
         chunks = rbh_iter_chunkify(deletes, RBH_ITER_CHUNK_SIZE);
         if (chunks == NULL)
@@ -552,7 +554,11 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
                 assert(errno != ENODATA);
                 break;
             }
-            gc_md->deleted_entry_count += count;
+            metadata->gc_md.deleted_entry_count += count;
+
+            if (print_stats && rbh_should_print_log(metadata))
+                rbh_print_log(metadata, RBH_GC_LOG);
+
         } while (true);
 
         switch (errno) {
@@ -565,10 +571,13 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
         default:
             error(EXIT_FAILURE, errno, "while iterating over entries");
         }
+
+        if (print_stats && rbh_should_print_log(metadata))
+            rbh_print_log(metadata, RBH_GC_LOG);
     } else {
         struct rbh_iterator *prints;
 
-        prints = iter_fsentry2print(constify, mnt_path, gc_md);
+        prints = iter_fsentry2print(constify, mnt_path, &metadata->gc_md);
         if (print_entries(prints) == -1)
             error(EXIT_FAILURE, errno, "print_entries");
 
@@ -579,13 +588,14 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
 int
 main(int _argc, char *_argv[])
 {
+    struct rbh_metadata metadata = { .last_shown_time = time(NULL) };
     struct rbh_filter_options options = {0};
     struct filters_context f_ctx = {0};
-    struct rbh_metadata metadata = {0};
     struct rbh_value_map *info_map;
     bool dry_run_mode = false;
     bool verbose_mode = false;
     struct rbh_filter *filter;
+    bool print_stats = false;
     int others_count = 0;
     char **others = NULL;
     int index = 1;
@@ -641,7 +651,8 @@ main(int _argc, char *_argv[])
 
             if (str2int64_t(argv[++i], &metadata.gc_md.sync_time))
                 error(EXIT_FAILURE, errno, "str2int64_t");
-
+        } else if (strcmp(arg, "--stats") == 0) {
+            print_stats = true;
         } else if (strcmp(arg, "--verbose") == 0 || strcmp(arg, "-v") == 0) {
             verbose_mode = true;
 
@@ -688,7 +699,7 @@ main(int _argc, char *_argv[])
         error(EXIT_FAILURE, errno, "Failed to open mountpoint '%s'", path);
 
     metadata.common_md.start_time = time(NULL);
-    gc(path, dry_run_mode, verbose_mode, &metadata.gc_md, filter);
+    gc(path, dry_run_mode, verbose_mode, &metadata, filter, print_stats);
     metadata.common_md.end_time = time(NULL);
 
     insert_gc_log(&metadata);
