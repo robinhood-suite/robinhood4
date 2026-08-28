@@ -19,12 +19,58 @@ print_sync_log(struct rbh_metadata *metadata, time_t current)
     uint64_t time_spent = current - metadata->common_md.start_time;
 
     printf(
+        "STATS | ======== Backend scan statistics =========\n"
+        "STATS | rbh-sync is running:\n"
         "STATS |      progress: %lu entries scanned (%lu skipped)\n"
         "STATS |      current speed: %.2f entries/sec\n\n",
         total_entry_count,
         metadata->sync_md.skipped_entries,
         time_spent == 0 ? total_entry_count :
                           (double) total_entry_count  / (double) time_spent
+    );
+}
+
+static void
+print_fsevents_log(struct rbh_metadata *metadata, time_t current)
+{
+    struct rbh_fsevents_metadata *fsevents_md = &metadata->fsevents_md;
+    uint64_t eu_nsec =
+        atomic_load(&fsevents_md->time_spent_enrich_and_update).tv_nsec;
+    uint64_t eu_sec =
+        atomic_load(&fsevents_md->time_spent_enrich_and_update).tv_sec;
+    uint64_t rd_nsec = fsevents_md->time_spent_read_and_dedup.tv_nsec;
+    uint64_t rd_sec = fsevents_md->time_spent_read_and_dedup.tv_sec;
+    uint64_t time_spent = current - metadata->common_md.start_time;
+    uint64_t total_rd_ns;
+    uint64_t total_eu_ns;
+    uint64_t avg_rd_ns;
+    uint64_t avg_eu_ns;
+
+    total_rd_ns = ((uint64_t) rd_sec * 1000000000ULL) + rd_nsec;
+    total_eu_ns = ((uint64_t) eu_sec * 1000000000ULL) + eu_nsec;
+
+    avg_rd_ns = total_rd_ns / fsevents_md->changelog_read;
+    avg_eu_ns = total_eu_ns / fsevents_md->changelog_read;
+    avg_eu_ns = avg_eu_ns / fsevents_md->worker_count;
+
+    printf(
+        "STATS | ======== Backend update statistics =========\n"
+        "STATS | rbh-fsevents is running:\n"
+        "STATS |      progress: %lu changelog read\n"
+        "STATS |      worker: %lu\n"
+        "STATS |      current speed:\n"
+        "STATS |          read/dedup: %llu.%09llu changelog/sec\n"
+        "STATS |          enrich/update: %llu.%09llu changelog/sec/worker\n"
+        "STATS |          overall: %.2f changelog/sec\n\n",
+        fsevents_md->changelog_read,
+        fsevents_md->worker_count,
+        avg_rd_ns / 1000000000ULL,
+        avg_rd_ns % 1000000000ULL,
+        avg_eu_ns / 1000000000ULL,
+        avg_eu_ns % 1000000000ULL,
+        time_spent == 0 ? fsevents_md->changelog_read :
+                          (double) fsevents_md->changelog_read  /
+                            (double) time_spent
     );
 }
 
@@ -62,17 +108,17 @@ rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type)
         "STATS | =================== Dumping stats at %s ====================\n"
         "STATS | ======== General statistics =========\n"
         "STATS | Started command: rbh-%s\n"
-        "STATS | Start time: %s (%s ago)\n"
-        "STATS | ======== FS scan statistics =========\n"
-        "STATS | rbh-%s is running:\n",
+        "STATS | Start time: %s (%s ago)\n",
         current_time_string,
         command,
         start_time_string,
-        difftime_buffer,
-        command
+        difftime_buffer
     );
 
     switch (command_type) {
+    case RBH_FSEVENTS_LOG:
+        print_fsevents_log(metadata, current);
+        break;
     case RBH_SYNC_LOG:
         print_sync_log(metadata, current);
         break;
