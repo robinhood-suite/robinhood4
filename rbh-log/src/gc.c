@@ -56,13 +56,15 @@ static const struct formatted_log_value gc_formatted_log_value[] = {
     [CHECK_COMMAND] =       { .header = "Check command used",
                               .print_log_value = print_value },
     [DELETED_ENTRIES] =     { .header = "Amount of deleted entries",
-                              .print_log_value = print_value },
+                              .print_log_value = print_value,
+                              .oneline = true },
     [NOT_DELETED_ENTRIES] = { .header = "Amount of non-deleted entries",
                               .print_log_value = print_value },
     [SYNC_TIME] =           { .header = "Sync-time used",
                               .print_log_value = print_value },
     [TOTAL_ENTRIES] =       { .header = "Amount of entries seen",
-                              .print_log_value = print_value },
+                              .print_log_value = print_value,
+                              .oneline = true },
 };
 
 void
@@ -82,6 +84,9 @@ print_gc_log(const struct rbh_value_map *log, bool print_oneline)
 
         log_value = gc_formatted_log_value[key2gc_log_value(pair->key)];
 
-        log_value.print_log_value(pair->value, log_value.header);
+        if (print_oneline && log_value.oneline)
+            log_value.print_log_value(pair->value, log_value.header, print_oneline);
+        else if (!print_oneline)
+            log_value.print_log_value(pair->value, log_value.header, print_oneline);
     }
 }
