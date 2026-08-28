@@ -16,7 +16,8 @@ integration_tests = ['test_create_close', 'test_mkdir', 'test_symlink',
                      'acknowledgement', 'dump_changelog', 'misc_options',
                      'test_alias', 'test_retention', 'test_backend_source',
                      'test_max_changelog', 'acceptance_workers',
-                     'test_starting_idx', 'test_ack', 'test_project_id']
+                     'test_starting_idx', 'test_ack', 'test_project_id',
+                     'test_stats']
 
 if test_selinux
     integration_tests += ['test_selinux']
