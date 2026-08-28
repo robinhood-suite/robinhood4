@@ -31,6 +31,24 @@ print_sync_log(struct rbh_metadata *metadata, time_t current)
 }
 
 static void
+print_gc_log(struct rbh_metadata *metadata, time_t current)
+{
+    uint64_t total_entry_count = metadata->gc_md.total_entry_count;
+    uint64_t time_spent = current - metadata->common_md.start_time;
+
+    printf(
+        "STATS | ======== Garbage collector statistics =========\n"
+        "STATS | rbh-gc is running:\n"
+        "STATS |      progress: %lu entries deleted from mirror (%lu kept)\n"
+        "STATS |      current speed: %.2f entries/sec\n\n",
+        metadata->gc_md.deleted_entry_count,
+        metadata->gc_md.total_entry_count - metadata->gc_md.deleted_entry_count,
+        time_spent == 0 ? total_entry_count :
+                          (double) total_entry_count  / (double) time_spent
+    );
+}
+
+static void
 print_fsevents_log(struct rbh_metadata *metadata, time_t current)
 {
     struct rbh_fsevents_metadata *fsevents_md = &metadata->fsevents_md;
@@ -118,6 +136,9 @@ rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type)
     switch (command_type) {
     case RBH_FSEVENTS_LOG:
         print_fsevents_log(metadata, current);
+        break;
+    case RBH_GC_LOG:
+        print_gc_log(metadata, current);
         break;
     case RBH_SYNC_LOG:
         print_sync_log(metadata, current);
