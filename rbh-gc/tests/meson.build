@@ -7,6 +7,7 @@
 integration_tests = [
     'test',
     'test_hardlink',
+    'test_stats',
 ]
 
 foreach t: integration_tests
