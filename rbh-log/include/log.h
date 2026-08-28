@@ -47,11 +47,14 @@ key2common_log_value(const char *key);
  *                       common log info
  * @param log_value      the type of information to print
  * @param print_oneline  whether only oneline log info should be printed
+ * @param need_comma     if a comma needs to be added before the next log info
+ *                       is printed, only used when printing on one line
  */
 void
 print_common_log_info(const struct rbh_value *value,
                       enum common_log_value log_value,
-                      bool print_oneline);
+                      bool print_oneline,
+                      bool *need_comma);
 
 /**
  * Print a sync log.
