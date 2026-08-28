@@ -11,6 +11,8 @@ libdl = cc.find_library('dl', required: true)
 glib_dep = dependency('glib-2.0')
 libuuid = cc.find_library('libuuid', has_headers: ['uuid/uuid.h'],
                           required: true)
+libatomic = cc.find_library('libatomic', has_headers: ['stdatomic.h'],
+                            required: true)
 python3_inst = import('python').find_installation('python3')
 python3_dep = python3_inst.dependency(embed: true)
 
@@ -66,8 +68,8 @@ librobinhood = library(
         'value.c',
     ] + extra_sources,
     version: meson.project_version(),
-    dependencies: [ libdl, miniyaml, glib_dep, libuuid, python3_dep ] +
-                  extra_dependencies,
+    dependencies: [ libdl, miniyaml, glib_dep, libuuid, libatomic,
+                    python3_dep ] + extra_dependencies,
     include_directories: rbh_include,
     install: true,
     c_args: '-DHAVE_CONFIG_H',
