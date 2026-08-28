@@ -78,7 +78,8 @@ key2fsevents_log_value(const char *key)
 
 static const struct formatted_log_value fsevents_log_value[] = {
     [CHANGELOG_READ] =      { .header = "Amount of changelog read",
-                              .print_log_value = print_value },
+                              .print_log_value = print_value,
+                              .oneline = true },
     [DEDUPLICATION_RATIO] = { .header = "Ratio of events deduplicated",
                               .print_log_value = print_value },
     [ENRICH_MOUNTPOINT] =   { .header = "Enrichment mountpoint",
@@ -90,9 +91,11 @@ static const struct formatted_log_value fsevents_log_value[] = {
     [START_INDEX] =         { .header = "Starting index for reading changelogs",
                               .print_log_value = print_value },
     [TIME_READ_DEDUP] =     { .header = "Time spent reading/deduplicating events",
-                              .print_log_value = print_timespec },
+                              .print_log_value = print_timespec,
+                              .oneline = true },
     [TIME_ENRICH_UPDATE] =  { .header = "Time spent enriching/updating mirror (on average between all workers)",
-                              .print_log_value = print_timespec },
+                              .print_log_value = print_timespec,
+                              .oneline = true },
     [WORKER_COUNT] =        { .header = "Number of parallel workers used",
                               .print_log_value = print_value },
 };
@@ -114,6 +117,9 @@ print_fsevents_log(const struct rbh_value_map *log, bool print_oneline)
 
         log_value = fsevents_log_value[key2fsevents_log_value(pair->key)];
 
-        log_value.print_log_value(pair->value, log_value.header);
+        if (print_oneline && log_value.oneline)
+            log_value.print_log_value(pair->value, log_value.header, print_oneline);
+        else if (!print_oneline)
+            log_value.print_log_value(pair->value, log_value.header, print_oneline);
     }
 }

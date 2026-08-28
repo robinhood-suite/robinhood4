@@ -72,7 +72,7 @@ print_logs(const struct rbh_value_map *logs, bool print_oneline)
     for (size_t i = 0 ; i < logs->count ; i++) {
         enum rbh_log_type type = str2rbh_log_type(logs->pairs[i].key);
 
-        printf("{ rbh-%s\n", logs->pairs[i].key);
+        printf("{ rbh-%s:%s", logs->pairs[i].key, print_oneline ? " " : "\n");
 
         switch (type) {
         case RBH_FIND_LOG:
@@ -95,7 +95,7 @@ print_logs(const struct rbh_value_map *logs, bool print_oneline)
                   logs->pairs[i].key);
         }
 
-        printf("}\n");
+        printf("%s}\n", print_oneline ? " " : "");
     }
 }
 

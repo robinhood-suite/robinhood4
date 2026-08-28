@@ -47,11 +47,13 @@ static const struct formatted_log_value sync_formatted_log_value[] = {
     [SOURCE_MOUNTPOINT] = { .header = "Mountpoint used",
                             .print_log_value = print_value },
     [CONVERTED_ENTRIES] = { .header = "Amount of entries converted",
-                            .print_log_value = print_value },
+                            .print_log_value = print_value,
+                            .oneline = true },
     [SKIPPED_ENTRIES] =   { .header = "Amount of entries skipped",
                             .print_log_value = print_value },
     [TOTAL_ENTRIES] =     { .header = "Amount of entries seen",
-                            .print_log_value = print_value },
+                            .print_log_value = print_value,
+                            .oneline = true },
 };
 
 void
@@ -71,6 +73,9 @@ print_sync_log(const struct rbh_value_map *log, bool print_oneline)
 
         log_value = sync_formatted_log_value[key2sync_log_value(pair->key)];
 
-        log_value.print_log_value(pair->value, log_value.header);
+        if (print_oneline && log_value.oneline)
+            log_value.print_log_value(pair->value, log_value.header, print_oneline);
+        else if (!print_oneline)
+            log_value.print_log_value(pair->value, log_value.header, print_oneline);
     }
 }
