@@ -553,7 +553,7 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
                 struct consumer_info *cinfos,
                 pthread_mutex_t *mutex_available_for_work,
                 pthread_cond_t *signal_available_for_work,
-                struct rbh_fsevents_metadata *fsevents_md,
+                struct rbh_metadata *metadata,
                 bool print_stats)
 {
     struct rbh_mut_iterator *batch = NULL;
@@ -561,8 +561,6 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
     struct timespec start, end;
     uint64_t batch_id = 1;
     int rc = 0;
-
-    (void) print_stats;
 
     while (true) {
         rc = clock_gettime(CLOCK_REALTIME, &start);
@@ -583,7 +581,7 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
         if (batch == NULL)
             break;
 
-        timespec_accumulate(&fsevents_md->time_spent_read_and_dedup,
+        timespec_accumulate(&metadata->fsevents_md.time_spent_read_and_dedup,
                             start, end);
 
         pthread_mutex_lock(mutex_available_for_work);
@@ -624,6 +622,9 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
 
         rbh_mut_iter_destroy(batch);
         batch_id++;
+
+        if (print_stats && rbh_should_print_log(metadata))
+            rbh_print_log(metadata, RBH_FSEVENTS_LOG);
     }
 
 end:
@@ -688,7 +689,7 @@ feed(struct sink **sink, struct source *source,
     /* Launch the producer loop */
     rc = producer_thread(deduplicator, builder, allow_partials, cinfos,
                          &mutex_available_for_work, &signal_available_for_work,
-                         &metadata->fsevents_md, print_stats);
+                         metadata, print_stats);
 
     /* Cleanup the producer and consumers */
     cleanup_producer_consumers(deduplicator, cinfos, consumers);
@@ -700,24 +701,8 @@ feed(struct sink **sink, struct source *source,
     if (rc == 0 && atomic_load(&should_stop))
         rc = -1;
 
-    if (verbose) {
-        double average =
-            atomic_load(
-                &metadata->fsevents_md.time_spent_enrich_and_update
-            ).tv_sec +
-            atomic_load(
-                &metadata->fsevents_md.time_spent_enrich_and_update
-            ).tv_nsec / 1000000000;
-
-        average = average / nb_workers;
-
-        printf("Total time elapsed to read changelogs and dedup:"
-               "%ld.%09ld seconds\n",
-               metadata->fsevents_md.time_spent_read_and_dedup.tv_sec,
-               metadata->fsevents_md.time_spent_read_and_dedup.tv_nsec);
-        printf("Total time elapsed to enrich and update mongo (average between all workers):"
-               "%.4f seconds\n", average);
-    }
+    if (print_stats)
+        rbh_print_log(metadata, RBH_FSEVENTS_LOG);
 
     return rc;
 }
