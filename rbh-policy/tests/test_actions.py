@@ -622,7 +622,7 @@ declare_policy(
 
             expected_line = (
                 fr"-rw-r--r--\.? \d+ root root {file_size} "
-                fr"\w+\s+\d+\s+\d+:\d+ {file_path}"
+                fr"\w+\s+\w+\s+\d+:\d+ {file_path}"
             )
 
             self.assertRegex(output, expected_line,
@@ -702,7 +702,7 @@ declare_policy(
 
             file_pattern = (
                 fr"-rw-r--r--\.? \d+ root root {file_size} "
-                fr"\w+\s+\d+\s+\d+:\d+ {expected_path}"
+                fr"\w+\s+\w+\s+\d+:\d+ {expected_path}"
             )
             self.assertRegex(output, file_pattern,
                              f"Expected file line for {name} not found in "
