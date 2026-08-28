@@ -140,13 +140,21 @@ static const struct formatted_log_value common_formatted_log_value[] = {
 void
 print_common_log_info(const struct rbh_value *value,
                       enum common_log_value log_value,
-                      bool print_oneline)
+                      bool print_oneline,
+                      bool *need_comma)
 {
     struct formatted_log_value formatted_log_value =
         common_formatted_log_value[log_value];
 
-    if (!print_oneline ||
-        (print_oneline && formatted_log_value.oneline))
+    if (print_oneline && formatted_log_value.oneline) {
+        if (*need_comma)
+            printf(", ");
+
         formatted_log_value.print_log_value(value, formatted_log_value.header,
                                             print_oneline);
+        *need_comma = true;
+    } else if (!print_oneline) {
+        formatted_log_value.print_log_value(value, formatted_log_value.header,
+                                            print_oneline);
+    }
 }
