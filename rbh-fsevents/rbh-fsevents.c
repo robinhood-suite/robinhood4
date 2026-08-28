@@ -549,13 +549,16 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
                 struct consumer_info *cinfos,
                 pthread_mutex_t *mutex_available_for_work,
                 pthread_cond_t *signal_available_for_work,
-                struct rbh_fsevents_metadata *fsevents_md)
+                struct rbh_fsevents_metadata *fsevents_md,
+                bool print_stats)
 {
     struct rbh_mut_iterator *batch = NULL;
     struct sub_batch *sub_batch;
     struct timespec start, end;
     uint64_t batch_id = 1;
     int rc;
+
+    (void) print_stats;
 
     rc = clock_gettime(CLOCK_REALTIME, &start);
     if (rc) {
@@ -662,7 +665,7 @@ static int
 feed(struct sink **sink, struct source *source,
      struct enrich_iter_builder *builder, bool allow_partials,
      struct deduplicator_options *dedup_opts,
-     struct rbh_fsevents_metadata *fsevents_md)
+     struct rbh_metadata *metadata, bool print_stats)
 {
     struct rbh_mut_iterator *deduplicator = NULL;
     pthread_mutex_t mutex_available_for_work;
@@ -678,15 +681,16 @@ feed(struct sink **sink, struct source *source,
     setup_producer_consumers(&deduplicator, dedup_opts, &consumers, &cinfos,
                              &mutex_available_for_work,
                              &signal_available_for_work,
-                             fsevents_md);
+                             &metadata->fsevents_md);
 
     /* Launch the producer loop */
     rc = producer_thread(deduplicator, builder, allow_partials, cinfos,
                          &mutex_available_for_work, &signal_available_for_work,
-                         fsevents_md);
+                         &metadata->fsevents_md, print_stats);
 
     /* Cleanup the producer and consumers */
-    cleanup_producer_consumers(deduplicator, cinfos, consumers, fsevents_md);
+    cleanup_producer_consumers(deduplicator, cinfos, consumers,
+                               &metadata->fsevents_md);
 
     pthread_cond_destroy(&signal_available_for_work);
     pthread_mutex_destroy(&mutex_available_for_work);
@@ -697,15 +701,16 @@ feed(struct sink **sink, struct source *source,
 
     if (verbose) {
         double average =
-            fsevents_md->time_spent_enrich_and_update.tv_sec +
-            fsevents_md->time_spent_enrich_and_update.tv_nsec / 1000000000;
+            metadata->fsevents_md.time_spent_enrich_and_update.tv_sec +
+            metadata->fsevents_md.time_spent_enrich_and_update.tv_nsec /
+                1000000000;
 
         average = average / nb_workers;
 
         printf("Total time elapsed to read changelogs and dedup:"
                "%ld.%09ld seconds\n",
-               fsevents_md->time_spent_read_and_dedup.tv_sec,
-               fsevents_md->time_spent_read_and_dedup.tv_nsec);
+               metadata->fsevents_md.time_spent_read_and_dedup.tv_sec,
+               metadata->fsevents_md.time_spent_read_and_dedup.tv_nsec);
         printf("Total time elapsed to enrich and update mongo (average between all workers):"
                "%.4f seconds\n", average);
     }
@@ -881,8 +886,6 @@ main(int argc, char *argv[])
         }
     }
 
-    (void) print_stats;
-
     if (argc - optind < 2)
         error(EX_USAGE, 0, "not enough arguments");
     if (argc - optind > 2)
@@ -918,7 +921,7 @@ main(int argc, char *argv[])
 
     metadata.common_md.start_time = time(NULL);
     rc = feed(sink, source, enrich_builder, strcmp(sink[0]->name, "backend"),
-              &dedup_opts, &metadata.fsevents_md);
+              &dedup_opts, &metadata, print_stats);
     metadata.common_md.end_time = time(NULL);
 
     insert_fsevents_log(sink[0], &metadata);
