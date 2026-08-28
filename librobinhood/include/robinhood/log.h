@@ -29,7 +29,7 @@ struct rbh_fsevents_metadata {
     const char *enrich_mountpoint;
     size_t worker_count;
     struct timespec time_spent_read_and_dedup;
-    struct timespec time_spent_enrich_and_update;
+    _Atomic(struct timespec) time_spent_enrich_and_update;
     size_t changelog_read;
     int64_t start_index;
     size_t enrich_skip_count;
@@ -162,5 +162,9 @@ rbh_should_print_log(struct rbh_metadata *metadata)
 
 void
 rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type);
+
+void
+rbh_timespec_atomic_accumulate(struct rbh_fsevents_metadata *fsevents_md,
+                               struct timespec to_add);
 
 #endif

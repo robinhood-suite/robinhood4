@@ -394,6 +394,7 @@ struct consumer_info {
     bool working;
     pthread_mutex_t *mutex_available_for_work;
     pthread_cond_t *signal_available_for_work;
+    struct rbh_fsevents_metadata *fsevents_md;
     int id;
 };
 
@@ -401,8 +402,8 @@ struct consumer_info {
 void *
 consumer_thread(void *arg) {
     struct consumer_info *cinfo = (struct consumer_info *) arg;
+    struct timespec start, end, delta;
     struct rbh_node_iterator *node;
-    struct timespec start, end;
     int rc;
 
     if (verbose)
@@ -454,7 +455,8 @@ consumer_thread(void *arg) {
             break;
         }
 
-        timespec_accumulate(&cinfo->total_enrich, start, end);
+        delta = timespec_sub(end, start);
+        rbh_timespec_atomic_accumulate(cinfo->fsevents_md, delta);
 
         if (source->ack_batch != NULL)
             source->ack_batch(source, node->batch_id, cinfo->sink);
@@ -496,7 +498,8 @@ init_consumer_list()
 static void
 setup_producer_consumers(struct rbh_mut_iterator **deduplicator,
                          struct deduplicator_options *dedup_opts,
-                         pthread_t **consumers, struct consumer_info **cinfos,
+                         pthread_t **consumers,
+                         struct consumer_info **cinfos,
                          pthread_mutex_t *mutex_available_for_work,
                          pthread_cond_t *signal_available_for_work,
                          struct rbh_fsevents_metadata *fsevents_md)
@@ -521,6 +524,7 @@ setup_producer_consumers(struct rbh_mut_iterator **deduplicator,
         cinfo->working = false;
         cinfo->mutex_available_for_work = mutex_available_for_work;
         cinfo->signal_available_for_work = signal_available_for_work;
+        cinfo->fsevents_md = fsevents_md;
         cinfo->id = i;
 
         cinfo->list = init_consumer_list();
@@ -556,19 +560,31 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
     struct sub_batch *sub_batch;
     struct timespec start, end;
     uint64_t batch_id = 1;
-    int rc;
+    int rc = 0;
 
     (void) print_stats;
 
-    rc = clock_gettime(CLOCK_REALTIME, &start);
-    if (rc) {
-        fprintf(stderr, "Failed to get start time\n");
-        signal_shutdown(NULL);
-        return rc;
-    }
+    while (true) {
+        rc = clock_gettime(CLOCK_REALTIME, &start);
+        if (rc) {
+            fprintf(stderr, "Failed to get start time\n");
+            goto end;
+        }
 
-    for (batch = rbh_mut_iter_next(deduplicator); batch != NULL;
-         batch = rbh_mut_iter_next(deduplicator)) {
+        batch = rbh_mut_iter_next(deduplicator);
+
+        rc = clock_gettime(CLOCK_REALTIME, &end);
+        if (rc) {
+            fprintf(stderr, "Failed to get end time\n");
+            rbh_mut_iter_destroy(batch);
+            goto end;
+        }
+
+        if (batch == NULL)
+            break;
+
+        timespec_accumulate(&fsevents_md->time_spent_read_and_dedup,
+                            start, end);
 
         pthread_mutex_lock(mutex_available_for_work);
         while (!consumer_available_for_work(cinfos) &&
@@ -594,9 +610,9 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
 
             if (sub_batch->fsevents == NULL) {
                 fprintf(stderr, "Failed to create enricher iterator\n");
-                signal_shutdown(NULL);
+                rc = EINVAL;
                 rbh_mut_iter_destroy(batch);
-                return -1;
+                goto end;
             }
 
             pthread_mutex_lock(&cinfos[sub_batch->index].mutex_list);
@@ -613,20 +629,10 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
 end:
     done_producing = true;
 
-    rc = clock_gettime(CLOCK_REALTIME, &end);
-    if (rc) {
-        fprintf(stderr, "Failed to get end time\n");
-        signal_shutdown(NULL);
-        return rc;
-    }
-
-    timespec_accumulate(&fsevents_md->time_spent_read_and_dedup,
-                        start, end);
-
     if (batch == NULL && errno != ENODATA)
         fprintf(stderr, "Could not get the next batch of fsevents\n");
 
-    if (errno != ENODATA) {
+    if (rc || errno != ENODATA) {
         signal_shutdown(NULL);
         return -1;
     }
@@ -636,8 +642,7 @@ end:
 
 static void
 cleanup_producer_consumers(struct rbh_mut_iterator *deduplicator,
-                           struct consumer_info *cinfos, pthread_t *consumers,
-                           struct rbh_fsevents_metadata *fsevents_md)
+                           struct consumer_info *cinfos, pthread_t *consumers)
 {
     int i;
 
@@ -647,9 +652,6 @@ cleanup_producer_consumers(struct rbh_mut_iterator *deduplicator,
 
     for (i = 0; i < nb_workers; i++) {
         pthread_join(consumers[i], NULL);
-        fsevents_md->time_spent_enrich_and_update =
-            timespec_add(fsevents_md->time_spent_enrich_and_update,
-                         cinfos->total_enrich);
         pthread_cond_destroy(&cinfos[i].signal_list);
         pthread_mutex_destroy(&cinfos[i].mutex_list);
         rbh_list_del(cinfos[i].list);
@@ -689,8 +691,7 @@ feed(struct sink **sink, struct source *source,
                          &metadata->fsevents_md, print_stats);
 
     /* Cleanup the producer and consumers */
-    cleanup_producer_consumers(deduplicator, cinfos, consumers,
-                               &metadata->fsevents_md);
+    cleanup_producer_consumers(deduplicator, cinfos, consumers);
 
     pthread_cond_destroy(&signal_available_for_work);
     pthread_mutex_destroy(&mutex_available_for_work);
@@ -701,9 +702,12 @@ feed(struct sink **sink, struct source *source,
 
     if (verbose) {
         double average =
-            metadata->fsevents_md.time_spent_enrich_and_update.tv_sec +
-            metadata->fsevents_md.time_spent_enrich_and_update.tv_nsec /
-                1000000000;
+            atomic_load(
+                &metadata->fsevents_md.time_spent_enrich_and_update
+            ).tv_sec +
+            atomic_load(
+                &metadata->fsevents_md.time_spent_enrich_and_update
+            ).tv_nsec / 1000000000;
 
         average = average / nb_workers;
 
@@ -794,10 +798,10 @@ main(int argc, char *argv[])
         },
         {}
     };
+    struct rbh_metadata metadata = { .last_shown_time = time(NULL) };
     struct deduplicator_options dedup_opts = {
         .batch_size = DEFAULT_BATCH_SIZE,
     };
-    struct rbh_metadata metadata = { 0 };
     uint64_t max_changelog = 0;
     char *cmd_backend = NULL;
     bool print_stats = false;

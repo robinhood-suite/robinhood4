@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
+#include <stdatomic.h>
 #include <stdio.h>
 
 #include "robinhood/log.h"
@@ -80,4 +81,33 @@ rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type)
     }
 
     metadata->last_shown_time = current;
+}
+
+void
+rbh_timespec_atomic_accumulate(struct rbh_fsevents_metadata *fsevents_md,
+                               struct timespec to_add) {
+    struct timespec current;
+    struct timespec temp;
+
+    current = atomic_load(&fsevents_md->time_spent_enrich_and_update);
+
+    do {
+        temp = current;
+
+        temp.tv_sec += to_add.tv_sec;
+        temp.tv_nsec += to_add.tv_nsec;
+
+        if (temp.tv_nsec >= 1000000000) {
+            temp.tv_nsec -= 1000000000;
+            temp.tv_sec++;
+        }
+
+        /* Atomically replace if 'temp' still matches 'current'. If it changed,
+         * 'current' is updated automatically, and we loop again.
+         */
+    } while (!atomic_compare_exchange_weak(
+        &fsevents_md->time_spent_enrich_and_update,
+        &current,
+        temp)
+    );
 }
