@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
+#include <stdatomic.h>
 #include <stdlib.h>
 
 #include <robinhood/sstack.h>
@@ -99,13 +100,17 @@ fsevents_metadata_value_map(struct rbh_metadata *metadata)
     pairs_timespec[2].key = "tv_sec";
     values_timespec[2].type = RBH_VT_UINT64;
     values_timespec[2].uint64 =
-        metadata->fsevents_md.time_spent_enrich_and_update.tv_sec;
+        atomic_load(
+            &metadata->fsevents_md.time_spent_enrich_and_update
+        ).tv_sec;
     pairs_timespec[2].value = &values_timespec[2];
 
     pairs_timespec[3].key = "tv_nsec";
     values_timespec[3].type = RBH_VT_UINT64;
     values_timespec[3].uint64 =
-        metadata->fsevents_md.time_spent_enrich_and_update.tv_nsec;
+        atomic_load(
+            &metadata->fsevents_md.time_spent_enrich_and_update
+        ).tv_nsec;
     pairs_timespec[3].value = &values_timespec[3];
 
     timespec_map[1].pairs = &pairs_timespec[2];

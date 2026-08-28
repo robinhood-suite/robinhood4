@@ -15,6 +15,8 @@ conf_data.set('HAVE_STATX', have_statx)
 
 configure_file(input: 'config.h.in', output: 'config.h',
                configuration: conf_data)
+libatomic = cc.find_library('libatomic', has_headers: ['stdatomic.h'],
+                            required: true)
 
 # Dependencies
 extra_sources = []
@@ -70,7 +72,7 @@ fsevents_lib = static_library(
     ] + extra_sources,
     include_directories: includes,
     dependencies: [
-        librobinhood_dep, librbh_posix_dep, miniyaml,
+        librobinhood_dep, librbh_posix_dep, libatomic, miniyaml,
     ] + extra_dependencies,
     c_args: ['-DHAVE_CONFIG_H'] + extra_args,
 )
