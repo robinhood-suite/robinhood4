@@ -1,4 +1,5 @@
 *.swp
+*__pycache*
 
 build
 builddir
