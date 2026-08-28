@@ -35,7 +35,8 @@ key2find_log_value(const char *key)
 static const struct formatted_log_value find_log_value[] = {
     [ENTRY_COUNT] =
         { .header = "Number of entries post-filtering",
-          .print_log_value = print_value },
+          .print_log_value = print_value,
+          .oneline  = true },
     [EXEC_SUCCESS_COUNT] =
         { .header = "Number of entries which succeeded the exec command",
           .print_log_value = print_value },
@@ -59,6 +60,9 @@ print_find_log(const struct rbh_value_map *log, bool print_oneline)
 
         log_value = find_log_value[key2find_log_value(pair->key)];
 
-        log_value.print_log_value(pair->value, log_value.header);
+        if (print_oneline && log_value.oneline)
+            log_value.print_log_value(pair->value, log_value.header, print_oneline);
+        else if (!print_oneline)
+            log_value.print_log_value(pair->value, log_value.header, print_oneline);
     }
 }

@@ -10,7 +10,8 @@
 #include "log.h"
 
 void
-print_timespec(const struct rbh_value *value, const char *header)
+print_timespec(const struct rbh_value *value, const char *header,
+               bool print_oneline)
 {
     struct timespec timespec;
 
@@ -20,20 +21,29 @@ print_timespec(const struct rbh_value *value, const char *header)
     timespec.tv_sec = value->map.pairs[0].value->int64;
     timespec.tv_nsec = value->map.pairs[1].value->int64;
 
-    printf(" - %-*s: %lu.%09lu\n", WIDTH, header,
-           timespec.tv_sec, timespec.tv_nsec);
+    if (print_oneline)
+        printf("%s: %lu.%09lu", header,
+               timespec.tv_sec, timespec.tv_nsec);
+    else
+        printf(" - %-*s: %lu.%09lu\n", WIDTH, header,
+               timespec.tv_sec, timespec.tv_nsec);
 }
 
 void
-print_time_from_timestamp(const struct rbh_value *value, const char *header)
+print_time_from_timestamp(const struct rbh_value *value, const char *header,
+                          bool print_oneline)
 {
     time_t time = (time_t) value->int64;
 
-    printf(" - %-*s: %s\n", WIDTH, header, time_from_timestamp(&time));
+    if (print_oneline)
+        printf("%s: %s", header, time_from_timestamp(&time));
+    else
+        printf(" - %-*s: %s\n", WIDTH, header, time_from_timestamp(&time));
 }
 
 void
-print_difftime(const struct rbh_value *value, const char *header)
+print_difftime(const struct rbh_value *value, const char *header,
+               bool print_oneline)
 {
     char _buffer[32];
     size_t bufsize;
@@ -44,22 +54,36 @@ print_difftime(const struct rbh_value *value, const char *header)
 
     difftime_printer(buffer, bufsize, value->int64);
 
-    printf(" - %-*s: %s\n", WIDTH, header, buffer);
+    if (print_oneline)
+        printf("%s: %s", header, buffer);
+    else
+        printf(" - %-*s: %s\n", WIDTH, header, buffer);
 }
 
 void
-print_value(const struct rbh_value *value, const char *header)
+print_value(const struct rbh_value *value, const char *header,
+            bool print_oneline)
 {
     switch (value->type) {
     case RBH_VT_STRING:
-        printf(" - %-*s: %s\n", WIDTH, header, value->string);
+        if (print_oneline)
+            printf("%s: %s", header, value->string);
+        else
+            printf(" - %-*s: %s\n", WIDTH, header, value->string);
         break;
     case RBH_VT_INT64:
-        printf(" - %-*s: %ld\n", WIDTH, header, value->int64);
+        if (print_oneline)
+            printf("%s: %ld", header, value->int64);
+        else
+            printf(" - %-*s: %ld\n", WIDTH, header, value->int64);
         break;
     case RBH_VT_DOUBLE:
-        printf(" - %-*s: %.3f\n", WIDTH, header,
-               ((int) (10000 * value->float64)) / 10000.0);
+        if (print_oneline)
+            printf("%s: %.3f", header,
+                   ((int) (10000 * value->float64)) / 10000.0);
+        else
+            printf(" - %-*s: %.3f\n", WIDTH, header,
+                   ((int) (10000 * value->float64)) / 10000.0);
         break;
     default:
         error(EXIT_FAILURE, EINVAL, "Unexpected key type to print '%s': %d",
@@ -99,9 +123,11 @@ key2common_log_value(const char *key)
 
 static const struct formatted_log_value common_formatted_log_value[] = {
     [CLV_START_TIME] =    { .header = "Start of the command",
-                            .print_log_value = print_time_from_timestamp },
+                            .print_log_value = print_time_from_timestamp,
+                            .oneline = true },
     [CLV_DURATION] =      { .header = "Duration of the command",
-                            .print_log_value = print_difftime },
+                            .print_log_value = print_difftime,
+                            .oneline = true },
     [CLV_END_TIME] =      { .header = "End of the command",
                             .print_log_value = print_time_from_timestamp },
     [CLV_COMMAND_LINE] =  { .header = "Command used",
@@ -116,7 +142,8 @@ print_common_log_info(const struct rbh_value *value,
     struct formatted_log_value formatted_log_value =
         common_formatted_log_value[log_value];
 
-    (void) print_oneline;
-
-    formatted_log_value.print_log_value(value, formatted_log_value.header);
+    if (!print_oneline ||
+        (print_oneline && formatted_log_value.oneline))
+        formatted_log_value.print_log_value(value, formatted_log_value.header,
+                                            print_oneline);
 }
