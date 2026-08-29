@@ -8,6 +8,7 @@
 #ifndef ROBINHOOD_LOG_H
 #define ROBINHOOD_LOG_H
 
+#include <stdio.h>
 #include <time.h>
 
 #include "robinhood/value.h"
@@ -161,7 +162,8 @@ rbh_should_print_log(struct rbh_metadata *metadata)
 }
 
 void
-rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type);
+rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type,
+              FILE *log_file);
 
 void
 rbh_timespec_atomic_accumulate(struct rbh_fsevents_metadata *fsevents_md,

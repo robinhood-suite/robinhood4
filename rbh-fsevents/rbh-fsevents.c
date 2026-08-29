@@ -565,8 +565,6 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
     uint64_t batch_id = 1;
     int rc = 0;
 
-    (void) log_file;
-
     while (true) {
         rc = clock_gettime(CLOCK_REALTIME, &start);
         if (rc) {
@@ -629,7 +627,7 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
         batch_id++;
 
         if (print_stats && rbh_should_print_log(metadata))
-            rbh_print_log(metadata, RBH_FSEVENTS_LOG);
+            rbh_print_log(metadata, RBH_FSEVENTS_LOG, log_file);
     }
 
 end:
@@ -708,7 +706,7 @@ feed(struct sink **sink, struct source *source,
         rc = -1;
 
     if (print_stats)
-        rbh_print_log(metadata, RBH_FSEVENTS_LOG);
+        rbh_print_log(metadata, RBH_FSEVENTS_LOG, log_file);
 
     return rc;
 }
