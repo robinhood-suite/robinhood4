@@ -6,19 +6,24 @@
  */
 
 #include <errno.h>
+#include <fcntl.h>
 #include <fts.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #include <robinhood/backends/posix_extension.h>
-#include "robinhood/utils.h"
+#include <robinhood/fsentry.h>
+#include <robinhood/statx.h>
+#include <robinhood/utils.h>
 #include <robinhood/value.h>
+
+#include "posix_internals.h"
 
 struct fts_iterator {
     struct posix_iterator posix;
-    struct rbh_metadata *metadata;
     FTS *fts_handle;
     FTSENT *ftsent;
 };
@@ -84,13 +89,18 @@ static __thread int children_counter = 0;
 static void *
 fts_iter_next(void *iterator)
 {
+    struct rbh_metadata_posix *posix_md = NULL;
     struct fts_iterator *iter = iterator;
-    bool skip_error = iter->posix.skip_error;
     struct rbh_fsentry *fsentry = NULL;
     int save_errno = errno;
     int current_counter;
+    bool skip_error;
     size_t readable;
     FTSENT *ftsent;
+
+    skip_error = iter->posix.skip_error;
+    if (iter->posix.metadata)
+        posix_md = iter->posix.metadata->plugin_md;
 
     if (sstack == NULL)
         sstack = rbh_sstack_new(1 << 10);
@@ -161,18 +171,19 @@ skip:
         fprintf(stderr, "FTS: failed to read entry '%s': %s (%d)\n",
                 ftsent->fts_path, strerror(errno), errno);
         if (skip_error) {
-             iter->metadata->sync_md.skipped_entries++;
-             fprintf(stderr, "Synchronization of '%s' skipped\n",
-                     ftsent->fts_path);
-             /* If we can't read a directory, retrieve the parent's counter
-              * as we will continue to explore the parent's directory.
-              */
-             if (ftsent->fts_info == FTS_DNR) {
+            if (iter->posix.metadata)
+                iter->posix.metadata->sync_md.skipped_entries++;
+            fprintf(stderr, "Synchronization of '%s' skipped\n",
+                    ftsent->fts_path);
+            /* If we can't read a directory, retrieve the parent's counter
+             * as we will continue to explore the parent's directory.
+             */
+            if (ftsent->fts_info == FTS_DNR) {
                 children_counter = *(int *) rbh_sstack_peek(sstack, &readable);
                 rbh_sstack_pop(sstack, sizeof(int));
                 children_counter--;
-             }
-             goto skip;
+            }
+            goto skip;
         }
         return NULL;
     }
@@ -223,10 +234,22 @@ skip:
                                   iter->posix.prefix_len,
                                   iter->posix.enrichers);
 
+    if (fsentry && fsentry->statx && posix_md) {
+        if (S_ISREG(fsentry->statx->stx_mode))
+            posix_md->file_count++;
+        else if (S_ISDIR(fsentry->statx->stx_mode))
+            posix_md->dir_count++;
+        else if (S_ISLNK(fsentry->statx->stx_mode))
+            posix_md->symlink_count++;
+        else
+            posix_md->other_count++;
+    }
+
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
         /* The entry moved from under our feet */
         if (skip_error) {
-            iter->metadata->sync_md.skipped_entries++;
+            if (iter->posix.metadata)
+                iter->posix.metadata->sync_md.skipped_entries++;
             fprintf(stderr, "Synchronization of '%s' skipped\n",
                     ftsent->fts_path);
             children_counter--;
@@ -236,8 +259,8 @@ skip:
         return NULL;
     }
 
-    if (iter->metadata != NULL)
-        iter->metadata->sync_md.converted_entries++;
+    if (iter->posix.metadata)
+        iter->posix.metadata->sync_md.converted_entries++;
 
     return fsentry;
 }
@@ -300,14 +323,14 @@ fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
 
     iter->posix.iterator = FTS_ITER;
 
+    iter->posix.metadata = metadata;
     if (metadata) {
-        iter->metadata = metadata;
+        iter->posix.metadata->plugin_md =
+            xcalloc(1, sizeof(struct rbh_metadata_posix));
         /* As fts_iter count the parent directory entry twice, we need to
          * substract one converted entries from the final count.
          */
-        iter->metadata->sync_md.converted_entries--;
-    } else {
-        iter->metadata = NULL;
+        iter->posix.metadata->sync_md.converted_entries--;
     }
 
     return (struct rbh_mut_iterator *)iter;
