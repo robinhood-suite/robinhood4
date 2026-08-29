@@ -49,6 +49,25 @@ test_stats()
         error "Invalid worker count, got '$output', expected '4'"
     echo "$output" | grep "changelog/sec" | wc -l | grep "3" > /dev/null ||
         error "Invalid output, missing 3 'changelog/sec' lines, got '$output'"
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" src:lustre:"$LUSTRE_MDT" \
+        "rbh:$db:$testdb" --stats --nb-workers 4 --log-file logs.txt
+    count="$(lfs changelog $LUSTRE_MDT $userid | wc -l)"
+    output="$(cat logs.txt)"
+
+    echo "$output" | grep "rbh-fsevents" > /dev/null ||
+        error "Invalid output, missing 'rbh-fsevents' command, got '$output'"
+    # $count - 1 because the file logs.txt is created by the command, thus it
+    # adds an CREAT changelog to be read, but it is closed after everything is
+    # read, so the corresponding CLOSE changelog is not handled by rbh-fsevents,
+    # so the command only reads $count - 1 changelogs.
+    echo "$output" | grep "changelog read" |
+        grep "$((count - 1))" > /dev/null ||
+        error "Invalid changelog read count, got '$output', expected '$((count - 1))'"
+    echo "$output" | grep "worker" | grep "4" > /dev/null ||
+        error "Invalid worker count, got '$output', expected '4'"
+    echo "$output" | grep "changelog/sec" | wc -l | grep "3" > /dev/null ||
+        error "Invalid output, missing 3 'changelog/sec' lines, got '$output'"
 }
 
 ################################################################################
