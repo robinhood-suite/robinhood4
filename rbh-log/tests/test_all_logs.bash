@@ -11,6 +11,36 @@ test_dir=$(dirname $(readlink -e $0))
 . $test_dir/common_logs.bash
 . $test_dir/lustre_utils.bash
 
+
+generate_commands()
+{
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    # Output 20 random ints between 0 and 4
+    for i in $(shuf -i 0-4 -r -n 20); do
+        case "$i" in
+            0)
+                rbh_sync rbh:posix:. rbh:$db:$testdb
+                ;;
+            1)
+                rbh_find rbh:$db:$testdb -exec ls \; > /dev/null
+                ;;
+            2)
+                rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR \
+                    src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
+                ;;
+            3)
+                rbh_report rbh:$db:$testdb \
+                    --group-by "statx.uid" \
+                    --output "sum(statx.size)" > /dev/null
+                ;;
+            4)
+                rbh_gc rbh:$db:$testdb --sync-time 42
+                ;;
+        esac
+    done
+}
+
 ################################################################################
 #                                    TESTS                                     #
 ################################################################################
@@ -160,31 +190,7 @@ test_any_logs()
 {
     local order=$1
 
-    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
-
-    # Output 20 random ints between 0 and 4
-    for i in $(shuf -i 0-4 -r -n 20); do
-        case "$i" in
-            0)
-                rbh_sync rbh:posix:. rbh:$db:$testdb
-                ;;
-            1)
-                rbh_find rbh:$db:$testdb -exec ls \; > /dev/null
-                ;;
-            2)
-                rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR \
-                    src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
-                ;;
-            3)
-                rbh_report rbh:$db:$testdb \
-                    --group-by "statx.uid" \
-                    --output "sum(statx.size)" > /dev/null
-                ;;
-            4)
-                rbh_gc rbh:$db:$testdb --sync-time 42
-                ;;
-        esac
-    done
+    generate_commands
 
     local output=$(rbh_log "rbh:$db:$testdb" $order 21)
     local tmp_output=$(rbh_log "rbh:$db:$testdb" $order 30)
@@ -222,11 +228,90 @@ test_last_logs()
     test_any_logs --last
 }
 
+test_oneline()
+{
+    local order=$1
+
+    generate_commands
+
+    local output=$(rbh_log "rbh:$db:$testdb" --last 21 --oneline)
+    local tmp_output=$(rbh_log "rbh:$db:$testdb" --last 30 --oneline)
+
+    if [ "$output" != "$tmp_output" ]; then
+        error "Outputted oneline logs should have been the same, got '$output' and '$tmp_output'"
+    fi
+
+    while [ ! -z "$output" ]; do
+        local log="$(echo "$output" | head -n 1)"
+
+        local expected_output=("Start of the command"
+                               "Duration of the command")
+        if [[ $log == *"rbh-sync"* ]]; then
+            expected_output+=("Amount of entries converted"
+                              "Amount of entries seen")
+        elif [[ $log == *"rbh-find"* ]]; then
+            expected_output+=("Number of entries post-filtering")
+        elif [[ $log == *"rbh-fsevents"* ]]; then
+            expected_output+=("Amount of changelog read"
+                              "Time spent reading/deduplicating events"
+                              "Time spent enriching/updating mirror")
+        elif [[ $log == *"rbh-report"* ]]; then
+            # Nothing to add here
+            echo "blob"
+        elif [[ $log == *"rbh-gc"* ]]; then
+            expected_output+=("Amount of deleted entries"
+                              "Amount of entries seen")
+        else
+            error "Invalid command found: '$log'"
+        fi
+
+        if [ "${log:0:1}" != "{" ] || [ "${log: -1}" != "}" ]; then
+            error "Missing initial '{' or ending '}' in '$log'"
+        fi
+
+        log="${log:2}"
+        log="${log::-2}"
+
+        if [[ "$(echo "$log" | cut -d':' -f1)" != *"rbh-"* ]]; then
+            error "First value in log should have been a 'rbh' command, got '$log'"
+        fi
+
+        log="$(echo "$log" | cut -d':' -f2-)"
+
+        export IFS=","
+        for info in $log; do
+            local found=""
+            local new_expected=()
+
+            for i in "${!expected_output[@]}"; do
+                echo "checking against '${expected_output[$i]}'"
+                if [[ "$info" == *"${expected_output[$i]}"* ]]; then
+                    found=$i
+                else
+                    new_expected+=("${expected_output[$i]}")
+                fi
+            done
+
+            if [ -z "$found" ]; then
+                error "Unknown info found in log, got '$info'"
+            fi
+
+            expected_output=(${new_expected[@]})
+        done
+
+        if [[ "${#expected_output[@]}" != "0" ]]; then
+            error "Failed to find all expected info in '$log', missing '${expected_output[@]}'"
+        fi
+
+        output="$(echo "$output" | tail -n +2)"
+    done
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid test_first_logs test_last_logs)
+declare -a tests=(test_invalid test_first_logs test_last_logs test_oneline)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
