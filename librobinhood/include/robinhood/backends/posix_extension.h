@@ -32,6 +32,13 @@ struct rbh_statx;
 struct entry_info;
 struct rbh_sstack;
 
+struct rbh_metadata_posix {
+    size_t file_count;
+    size_t dir_count;
+    size_t symlink_count;
+    size_t other_count;
+};
+
 typedef int (*enricher_t)(struct entry_info *einfo,
                           uint64_t flags,
                           struct rbh_value_pair *pairs,
@@ -49,6 +56,7 @@ struct posix_iterator {
     bool skip_error;
     char *path;
     int64_t start_time;
+    struct rbh_metadata *metadata;
 };
 
 /**
