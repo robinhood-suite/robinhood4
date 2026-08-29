@@ -17,18 +17,18 @@ export PSM3_DEVICES="self"
 rbh_sync_posix()
 {
     if [[ "$WITH_MPI" == "true" ]]; then
-        rbh_sync "rbh:posix-mpi:$1" "$2" $3
+        rbh_sync "rbh:posix-mpi:$1" "$2" ${@:3}
     else
-        rbh_sync "rbh:posix:$1" "$2" $3
+        rbh_sync "rbh:posix:$1" "$2" ${@:3}
     fi
 }
 
 rbh_sync_posix_one()
 {
     if [[ "$WITH_MPI" == "true" ]]; then
-        rbh_sync -o "rbh:posix-mpi:$1" "$2" $3
+        rbh_sync -o "rbh:posix-mpi:$1" "$2" ${@:3}
     else
-        rbh_sync -o "rbh:posix:$1" "$2" $3
+        rbh_sync -o "rbh:posix:$1" "$2" ${@:3}
     fi
 }
 
@@ -590,7 +590,6 @@ test_stats()
 {
     mkdir -p {1..9}/{1..9}
 
-    rbh_sync_posix "." "rbh:$db:$testdb"
     local output="$(rbh_sync_posix . rbh:$db:$testdb --stats)"
 
     echo "$output" | grep "rbh-sync" > /dev/null ||
@@ -599,6 +598,19 @@ test_stats()
     # 9 * 9 + 9 directories + root = 91 entries
     echo "$output" | grep "progress" | grep "91" > /dev/null ||
         error "Last log shown should have found 91 entries in total, got '$output'"
+
+    echo "$output" | grep "current speed" | grep "entries/sec" > /dev/null ||
+        error "Logs should show the current speed in entries per second, got '$output'"
+
+    rbh_sync_posix . rbh:$db:$testdb --stats --log-file logs.txt
+    output="$(cat logs.txt)"
+
+    echo "$output" | grep "rbh-sync" > /dev/null ||
+        error "Should have found 'rbh-sync' mentionned, got '$output'"
+
+    # 9 * 9 + 9 directories + root + logs.txt = 92 entries
+    echo "$output" | grep "progress" | grep "92" > /dev/null ||
+        error "Last log shown should have found 92 entries in total, got '$output'"
 
     echo "$output" | grep "current speed" | grep "entries/sec" > /dev/null ||
         error "Logs should show the current speed in entries per second, got '$output'"

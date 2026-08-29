@@ -49,6 +49,19 @@ test_stats()
         error "Invalid worker count, got '$output', expected '1'"
     echo "$output" | grep "changelog/sec" | wc -l | grep "3" > /dev/null ||
         error "Invalid output, missing 3 'changelog/sec' lines, got '$output'"
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" src:lustre:"$LUSTRE_MDT" \
+        "rbh:$db:$testdb" --stats --nb-workers 4 --log-file logs.txt
+    output="$(cat logs.txt)"
+
+    echo "$output" | grep "rbh-fsevents" > /dev/null ||
+        error "Invalid output, missing 'rbh-fsevents' command, got '$output'"
+    echo "$output" | grep "changelog read" | grep "$count" > /dev/null ||
+        error "Invalid changelog read count, got '$output', expected '1'"
+    echo "$output" | grep "worker" | grep "4" > /dev/null ||
+        error "Invalid worker count, got '$output', expected '1'"
+    echo "$output" | grep "changelog/sec" | wc -l | grep "3" > /dev/null ||
+        error "Invalid output, missing 3 'changelog/sec' lines, got '$output'"
 }
 
 ################################################################################
