@@ -68,15 +68,16 @@ usage(void)
         "    BACKEND  a URI describing a robinhood backend\n"
         "\n"
         "Optional arguments:\n"
-        "    -c, --config PATH          the path to a configuration file\n"
-        "    -d, --dry-run              displays the list of the absent entries\n"
-        "    -h, --help                 print this messsage and exit\n"
-        "    -s, --sync-time SYNC_TIME  instead of checking every entry of the BACKEND,\n"
-        "                               only consider entries with a sync_time lesser\n"
-        "                               than SYNC_TIME\n"
         "    --check CMD                command or script to used as checker\n"
         "                               script must receive an entry path as its last argument\n"
         "                               and returns 0 if the entry must be deleted\n"
+        "    -c, --config PATH          the path to a configuration file\n"
+        "    -d, --dry-run              displays the list of the absent entries\n"
+        "    -h, --help                 print this messsage and exit\n"
+        "    --log-file FILE            redirect command stats printing to given FILE\n"
+        "    -s, --sync-time SYNC_TIME  instead of checking every entry of the BACKEND,\n"
+        "                               only consider entries with a sync_time lesser\n"
+        "                               than SYNC_TIME\n"
         "    --stats                    show command stats during execution\n"
         "    -v, --verbose              verbose mode\n"
         "    --version                  print RobinHood 4's version\n";
@@ -472,7 +473,7 @@ print_entries(struct rbh_iterator *iterator)
 static void
 gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
    struct rbh_metadata *metadata, struct rbh_filter *filter,
-   bool print_stats)
+   bool print_stats, FILE *log_file)
 {
     const struct rbh_filter_options OPTIONS = {
         .verbose = verbose_mode,
@@ -498,6 +499,8 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
     };
     struct rbh_filter *_filter = NULL;
     struct rbh_iterator *constify;
+
+    (void) log_file;
 
     if (metadata->gc_md.sync_time >= 0) {
         const struct rbh_filter_field *field;
@@ -596,6 +599,7 @@ main(int _argc, char *_argv[])
     bool verbose_mode = false;
     struct rbh_filter *filter;
     bool print_stats = false;
+    FILE *log_file = stdout;
     int others_count = 0;
     char **others = NULL;
     int index = 1;
@@ -645,6 +649,15 @@ main(int _argc, char *_argv[])
         } else if (strcmp(arg, "--dry-run") == 0 || strcmp(arg, "-d") == 0) {
             dry_run_mode = true;
 
+        } else if (strcmp(arg, "--log-file") == 0) {
+            if (i + 1 >= argc)
+                error(EXIT_FAILURE, EINVAL,
+                      "Missing argument for '--log-file'");
+
+            log_file = fopen(argv[++i], "w");
+            if (log_file == NULL)
+                error(EXIT_FAILURE, errno, "Failed to open log file '%s'",
+                      argv[i]);
         } else if (strcmp(arg, "--sync-time") == 0 || strcmp(arg, "-s") == 0) {
             if (i + 1 >= argc)
                 error(EXIT_FAILURE, EINVAL, "Missing argument for %s", arg);
@@ -699,7 +712,8 @@ main(int _argc, char *_argv[])
         error(EXIT_FAILURE, errno, "Failed to open mountpoint '%s'", path);
 
     metadata.common_md.start_time = time(NULL);
-    gc(path, dry_run_mode, verbose_mode, &metadata, filter, print_stats);
+    gc(path, dry_run_mode, verbose_mode, &metadata, filter, print_stats,
+       log_file);
     metadata.common_md.end_time = time(NULL);
 
     insert_gc_log(&metadata);
@@ -708,6 +722,9 @@ main(int _argc, char *_argv[])
 
     free(path);
     rbh_config_free();
+
+    if (log_file != stdout)
+        fclose(log_file);
 
     return EXIT_SUCCESS;
 }
