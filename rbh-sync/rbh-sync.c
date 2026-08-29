@@ -557,7 +557,8 @@ iter_convert(struct rbh_iterator *fsentries,
 
 static void
 sync(const struct rbh_filter_projection *projection,
-     struct rbh_metadata *metadata, bool print_stats)
+     struct rbh_metadata *metadata, bool print_stats,
+     FILE *log_file)
 {
     const struct rbh_filter_options OPTIONS = {
         .skip_error = skip_error,
@@ -573,6 +574,8 @@ sync(const struct rbh_filter_projection *projection,
     struct rbh_mut_iterator *_fsentries;
     struct rbh_iterator *fsentries;
     struct rbh_iterator *fsevents;
+
+    (void) log_file;
 
     metadata->sync_md.converted_entries = 0;
     metadata->sync_md.skipped_entries = 0;
@@ -746,7 +749,8 @@ usage(void)
         "    -n, --no-skip          do not skip errors when synchronizing backends,\n"
         "                           instead stop on the first error.\n"
         "    -o, --one              only consider the root of SOURCE\n"
-        "    --stats                show command stats during execution\n"
+        "    --stats                show command stats during execution to stdout\n"
+        "    --log-file FILE        redirect command stats printing to given FILE\n"
         "    --version              print RobinHood 4's version\n"
         "\n"
         "Capability arguments:\n"
@@ -803,6 +807,11 @@ main(int argc, char *argv[])
             .val = 'l',
         },
         {
+            .name = "log-file",
+            .has_arg = required_argument,
+            .val = 'L',
+        },
+        {
             .name = "no-skip",
             .val = 'n',
         },
@@ -831,6 +840,7 @@ main(int argc, char *argv[])
     };
     struct rbh_metadata metadata = { .last_shown_time = time(NULL) };
     bool print_stats = false;
+    FILE *log_file = stdout;
     char *cmd_backend;
     int rc;
     char c;
@@ -844,7 +854,7 @@ main(int argc, char *argv[])
     rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "c:df:hl:n:osz", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "c:df:hl:L:n:osz", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
         case 'c':
@@ -873,6 +883,12 @@ main(int argc, char *argv[])
         case 'l':
             list_capabilities(optarg);
             return EXIT_SUCCESS;
+        case 'L':
+            log_file = fopen(optarg, "w");
+            if (log_file == NULL)
+                error(EXIT_FAILURE, errno, "Failed to open log file '%s'",
+                      optarg);
+            break;
         case 'n':
             skip_error = false;
             break;
@@ -914,7 +930,7 @@ main(int argc, char *argv[])
     sync_mountpoint(metadata.sync_md.source_mountpoint);
 
     metadata.common_md.start_time = time(NULL);
-    sync(&projection, &metadata, print_stats);
+    sync(&projection, &metadata, print_stats, log_file);
     metadata.common_md.end_time = time(NULL);
 
     insert_sync_log(to, &metadata);
@@ -922,6 +938,9 @@ main(int argc, char *argv[])
     free(metadata.sync_md.source_mountpoint);
     free(metadata.common_md.command_line);
     rbh_config_free();
+
+    if (log_file != stdout)
+        fclose(log_file);
 
     return EXIT_SUCCESS;
 }
