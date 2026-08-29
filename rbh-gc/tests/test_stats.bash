@@ -33,6 +33,18 @@ test_stats()
         error "Invalid progress stats, got '$output', expected '2 entries deleted'"
     echo "$output" | grep "progress" | grep "2 kept" > /dev/null ||
         error "Invalid progress stats, got '$output', expected '2 kept'"
+
+    rm fileC
+
+    rbh_gc "rbh:$db:$testdb" --stats --log-file logs.txt
+    output="$(cat logs.txt)"
+
+    echo "$output" | grep "rbh-gc" > /dev/null ||
+        error "Invalid command in stats, got '$output', expected 'rbh-gc'"
+    echo "$output" | grep "progress" | grep "1 entries deleted" > /dev/null ||
+        error "Invalid progress stats, got '$output', expected '1 entries deleted'"
+    echo "$output" | grep "progress" | grep "1 kept" > /dev/null ||
+        error "Invalid progress stats, got '$output', expected '1 kept'"
 }
 
 declare -a tests=(test_stats)
