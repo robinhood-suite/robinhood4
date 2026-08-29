@@ -560,7 +560,7 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
             metadata->gc_md.deleted_entry_count += count;
 
             if (print_stats && rbh_should_print_log(metadata))
-                rbh_print_log(metadata, RBH_GC_LOG);
+                rbh_print_log(metadata, RBH_GC_LOG, log_file);
 
         } while (true);
 
@@ -576,7 +576,7 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
         }
 
         if (print_stats)
-            rbh_print_log(metadata, RBH_GC_LOG);
+            rbh_print_log(metadata, RBH_GC_LOG, log_file);
     } else {
         struct rbh_iterator *prints;
 

@@ -12,13 +12,14 @@
 #include "robinhood/utils.h"
 
 static void
-print_sync_log(struct rbh_metadata *metadata, time_t current)
+print_sync_log(struct rbh_metadata *metadata, time_t current,
+               FILE *log_file)
 {
     uint64_t total_entry_count = metadata->sync_md.converted_entries +
                                  metadata->sync_md.skipped_entries;
     uint64_t time_spent = current - metadata->common_md.start_time;
 
-    printf(
+    fprintf(log_file,
         "STATS | ======== Backend scan statistics =========\n"
         "STATS | rbh-sync is running:\n"
         "STATS |      progress: %lu entries scanned (%lu skipped)\n"
@@ -31,12 +32,13 @@ print_sync_log(struct rbh_metadata *metadata, time_t current)
 }
 
 static void
-print_gc_log(struct rbh_metadata *metadata, time_t current)
+print_gc_log(struct rbh_metadata *metadata, time_t current,
+             FILE *log_file)
 {
     uint64_t total_entry_count = metadata->gc_md.total_entry_count;
     uint64_t time_spent = current - metadata->common_md.start_time;
 
-    printf(
+    fprintf(log_file,
         "STATS | ======== Garbage collector statistics =========\n"
         "STATS | rbh-gc is running:\n"
         "STATS |      progress: %lu entries deleted from mirror (%lu kept)\n"
@@ -49,7 +51,8 @@ print_gc_log(struct rbh_metadata *metadata, time_t current)
 }
 
 static void
-print_fsevents_log(struct rbh_metadata *metadata, time_t current)
+print_fsevents_log(struct rbh_metadata *metadata, time_t current,
+                   FILE *log_file)
 {
     struct rbh_fsevents_metadata *fsevents_md = &metadata->fsevents_md;
     uint64_t eu_nsec =
@@ -71,7 +74,7 @@ print_fsevents_log(struct rbh_metadata *metadata, time_t current)
     avg_eu_ns = total_eu_ns / fsevents_md->changelog_read;
     avg_eu_ns = avg_eu_ns / fsevents_md->worker_count;
 
-    printf(
+    fprintf(log_file,
         "STATS | ======== Backend update statistics =========\n"
         "STATS | rbh-fsevents is running:\n"
         "STATS |      progress: %lu changelog read\n"
@@ -93,7 +96,8 @@ print_fsevents_log(struct rbh_metadata *metadata, time_t current)
 }
 
 void
-rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type)
+rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type,
+              FILE *log_file)
 {
     const char *command = rbh_log_type2str(command_type);
     char current_time_string[128];
@@ -122,7 +126,7 @@ rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type)
     difftime_printer(difftime_buffer, sizeof(difftime_buffer),
                      current - metadata->common_md.start_time);
 
-    printf(
+    fprintf(log_file,
         "STATS | =================== Dumping stats at %s ====================\n"
         "STATS | ======== General statistics =========\n"
         "STATS | Started command: rbh-%s\n"
@@ -135,13 +139,13 @@ rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type)
 
     switch (command_type) {
     case RBH_FSEVENTS_LOG:
-        print_fsevents_log(metadata, current);
+        print_fsevents_log(metadata, current, log_file);
         break;
     case RBH_GC_LOG:
-        print_gc_log(metadata, current);
+        print_gc_log(metadata, current, log_file);
         break;
     case RBH_SYNC_LOG:
-        print_sync_log(metadata, current);
+        print_sync_log(metadata, current, log_file);
         break;
     default:
         break;

@@ -575,8 +575,6 @@ sync(const struct rbh_filter_projection *projection,
     struct rbh_iterator *fsentries;
     struct rbh_iterator *fsevents;
 
-    (void) log_file;
-
     metadata->sync_md.converted_entries = 0;
     metadata->sync_md.skipped_entries = 0;
 
@@ -626,7 +624,7 @@ sync(const struct rbh_filter_projection *projection,
         }
 
         if (print_stats && rbh_should_print_log(metadata))
-            rbh_print_log(metadata, RBH_SYNC_LOG);
+            rbh_print_log(metadata, RBH_SYNC_LOG, log_file);
 
         count = rbh_backend_update(to, chunk);
         save_errno = errno;
@@ -650,7 +648,7 @@ sync(const struct rbh_filter_projection *projection,
     }
 
     if (print_stats)
-        rbh_print_log(metadata, RBH_SYNC_LOG);
+        rbh_print_log(metadata, RBH_SYNC_LOG, log_file);
 }
 
 /*----------------------------------------------------------------------------*
