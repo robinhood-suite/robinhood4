@@ -30,6 +30,7 @@ librbh_posix_dep = declare_dependency(
     include_directories: rbh_include
 )
 
+subdir('iterators/fts')
 subdir('iterators/mfu')
 subdir('enrichers/lustre')
 subdir('enrichers/retention')

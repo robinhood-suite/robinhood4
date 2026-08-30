@@ -25,6 +25,25 @@ install_headers(librbh_posix_h, subdir: 'robinhood/backends')
 
 install_headers('posix_extension.h', subdir: 'robinhood/backends')
 
+# Posix FTS extension plugin
+
+librbh_fts_conf = configuration_data()
+
+librbh_fts_conf.set('RBH_FTS_PLUGIN_MAJOR', 1)
+librbh_fts_conf.set('RBH_FTS_PLUGIN_MINOR', 0)
+librbh_fts_conf.set('RBH_FTS_PLUGIN_RELEASE', 0)
+
+librbh_fts_version = '@0@.@1@.@2@'.format(
+    librbh_fts_conf.get('RBH_FTS_PLUGIN_MAJOR'),
+    librbh_fts_conf.get('RBH_FTS_PLUGIN_MINOR'),
+    librbh_fts_conf.get('RBH_FTS_PLUGIN_RELEASE')
+)
+
+librbh_fts_h = configure_file(input: 'fts.h.in', output: 'fts.h',
+                              configuration: librbh_fts_conf)
+
+install_headers(librbh_fts_h, subdir: 'robinhood/backends')
+
 # Mongo backend
 
 librbh_mongo_conf = configuration_data()
