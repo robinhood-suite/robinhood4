@@ -1,0 +1,25 @@
+/* This file is part of RobinHood 4.
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifier: LGPL-3.0-or-later
+ */
+
+#ifndef ROBINHOOD_FTS_POSIX_H
+#define ROBINHOOD_FTS_POSIX_H
+
+#include <fts.h>
+#include <robinhood/iterator.h>
+#include <robinhood/plugin.h>
+#include <robinhood/backends/posix_extension.h>
+
+#define RBH_FTS_PLUGIN_NAME "fts"
+
+#mesondefine RBH_FTS_PLUGIN_MAJOR
+#mesondefine RBH_FTS_PLUGIN_MINOR
+#mesondefine RBH_FTS_PLUGIN_RELEASE
+#define RBH_FTS_PLUGIN_VERSION RPV(RBH_FTS_PLUGIN_MAJOR, \
+                                   RBH_FTS_PLUGIN_MINOR, \
+                                   RBH_FTS_PLUGIN_RELEASE)
+
+#endif
