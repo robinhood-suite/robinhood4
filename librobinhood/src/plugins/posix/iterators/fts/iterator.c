@@ -20,8 +20,6 @@
 #include <robinhood/utils.h>
 #include <robinhood/value.h>
 
-#include "posix_internals.h"
-
 struct fts_iterator {
     struct posix_iterator posix;
     FTS *fts_handle;
@@ -363,6 +361,7 @@ fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
 
     iter->posix.iterator = FTS_ITER;
     iter->posix.skip_error = skip_error;
+    iter->posix.enrichers = NULL;
 
     iter->posix.metadata = metadata;
     if (metadata) {
