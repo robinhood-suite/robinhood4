@@ -295,56 +295,6 @@ static const struct rbh_mut_iterator FTS_ITER = {
     .ops = &FTS_ITER_OPS,
 };
 
-struct rbh_mut_iterator *
-fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
-             int statx_sync_type)
-{
-    char *paths[2] = {NULL, NULL};
-    struct fts_iterator *iter;
-    int save_errno;
-    int rc;
-
-    iter = xmalloc(sizeof(*iter));
-
-    rc = posix_iterator_setup(&iter->posix, root, entry, statx_sync_type);
-    save_errno = errno;
-    if (rc == -1)
-        goto free_iter;
-
-    iter->posix.start_time = time(NULL);
-    paths[0] = iter->posix.path;
-    iter->fts_handle = fts_open(paths, FTS_PHYSICAL | FTS_NOSTAT | FTS_XDEV,
-                                NULL);
-
-    save_errno = errno;
-    free(iter->posix.path);
-    if (!iter->fts_handle)
-        goto free_iter;
-
-    iter->posix.iterator = FTS_ITER;
-
-    iter->posix.metadata = metadata;
-    if (metadata) {
-        struct rbh_metadata_posix *tmp = xcalloc(1, sizeof(*tmp));
-
-        iter->posix.metadata->plugin_md = tmp;
-        /* As fts_iter count the parent directory entry twice, we need to
-         * substract one converted entries from the final count.
-         */
-        iter->posix.metadata->sync_md.converted_entries--;
-        tmp->dir_count--;
-    }
-
-    return (struct rbh_mut_iterator *)iter;
-
-free_iter:
-    save_errno = errno;
-    free(iter);
-    errno = save_errno;
-
-    return NULL;
-}
-
 static const struct rbh_id ROOT_PARENT_ID = {
     .data = NULL,
     .size = 0,
@@ -367,13 +317,12 @@ set_root_properties(FTSENT *root)
     root->fts_namelen = 0;
 }
 
-int
-fts_iter_root_setup(struct posix_iterator *_iter)
+static int
+fts_iter_root_setup(struct fts_iterator *iter)
 {
-    struct fts_iterator *iter = (struct fts_iterator *)_iter;
     struct rbh_fsentry *fsentry;
 
-    fsentry = rbh_mut_iter_next(&_iter->iterator);
+    fsentry = rbh_mut_iter_next(&iter->posix.iterator);
     if (fsentry == NULL)
         return -1;
 
@@ -386,8 +335,62 @@ fts_iter_root_setup(struct posix_iterator *_iter)
     return 0;
 }
 
-bool
-rbh_posix_iter_is_fts(struct posix_iterator *iter)
+struct rbh_mut_iterator *
+fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
+             int statx_sync_type, bool one, bool skip_error)
 {
-    return iter->iterator.ops == &FTS_ITER_OPS;
+    char *paths[2] = {NULL, NULL};
+    struct fts_iterator *iter;
+    int save_errno;
+    int rc;
+
+    iter = xmalloc(sizeof(*iter));
+
+    rc = posix_iterator_setup(&iter->posix, root, entry, statx_sync_type);
+    if (rc == -1)
+        goto free_iter;
+
+    iter->posix.start_time = time(NULL);
+    paths[0] = iter->posix.path;
+    iter->fts_handle = fts_open(paths, FTS_PHYSICAL | FTS_NOSTAT | FTS_XDEV,
+                                NULL);
+
+    save_errno = errno;
+    free(iter->posix.path);
+    errno = save_errno;
+    if (!iter->fts_handle)
+        goto free_iter;
+
+    iter->posix.iterator = FTS_ITER;
+    iter->posix.skip_error = skip_error;
+
+    iter->posix.metadata = metadata;
+    if (metadata) {
+        struct rbh_metadata_posix *tmp = xcalloc(1, sizeof(*tmp));
+
+        iter->posix.metadata->plugin_md = tmp;
+        /* As fts_iter count the parent directory entry twice, we need to
+         * substract one converted entries from the final count.
+         */
+        iter->posix.metadata->sync_md.converted_entries--;
+        tmp->dir_count--;
+    }
+
+    /* Don't set the root's name to '\0' to keep the real root's name in
+     * case we only sync one entry
+     */
+    if (one)
+        return (struct rbh_mut_iterator *)iter;
+
+    if (fts_iter_root_setup(iter) == -1)
+        goto free_iter;
+
+    return (struct rbh_mut_iterator *)iter;
+
+free_iter:
+    save_errno = errno;
+    free(iter);
+    errno = save_errno;
+
+    return NULL;
 }
