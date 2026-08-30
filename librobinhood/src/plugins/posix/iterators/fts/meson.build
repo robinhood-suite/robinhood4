@@ -7,6 +7,7 @@
 librbh_posix_fts_ext = library(
     'rbh-posix-fts-ext',
     sources: [
+        'iterator.c',
         'plugin.c',
     ],
     version: librbh_fts_version, # defined in include/robinhood/backends

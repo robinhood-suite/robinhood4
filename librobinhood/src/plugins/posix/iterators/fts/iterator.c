@@ -20,8 +20,6 @@
 #include <robinhood/utils.h>
 #include <robinhood/value.h>
 
-#include "posix_internals.h"
-
 struct fts_iterator {
     struct posix_iterator posix;
     FTS *fts_handle;
@@ -337,7 +335,7 @@ fts_iter_root_setup(struct fts_iterator *iter)
 
 struct rbh_mut_iterator *
 fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
-             int statx_sync_type, bool one, bool skip_error)
+             int statx_sync_type, bool one, bool skip_error, bool in_branch)
 {
     char *paths[2] = {NULL, NULL};
     struct fts_iterator *iter;
@@ -363,6 +361,7 @@ fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
 
     iter->posix.iterator = FTS_ITER;
     iter->posix.skip_error = skip_error;
+    iter->posix.enrichers = NULL;
 
     iter->posix.metadata = metadata;
     if (metadata) {
@@ -379,7 +378,7 @@ fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
     /* Don't set the root's name to '\0' to keep the real root's name in
      * case we only sync one entry
      */
-    if (one)
+    if (one || in_branch)
         return (struct rbh_mut_iterator *)iter;
 
     if (fts_iter_root_setup(iter) == -1)

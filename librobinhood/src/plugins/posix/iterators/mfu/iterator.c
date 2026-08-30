@@ -366,11 +366,10 @@ rbh_posix_mfu_iter_new(struct rbh_metadata *metadata,
                        const char *root,
                        const char *entry,
                        int statx_sync_type,
-                       bool one,
-                       bool skip_error)
+                       __attribute__((unused)) bool one,
+                       bool skip_error,
+                       __attribute__((unused)) bool in_branch)
 {
-    (void) one;
-
     return mfu_iter_new(metadata, root, entry, statx_sync_type, 0, NULL,
                         skip_error, RBH_BI_POSIX);
 }

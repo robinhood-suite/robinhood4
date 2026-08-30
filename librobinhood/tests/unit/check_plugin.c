@@ -13,7 +13,9 @@
 
 #include "check-compat.h"
 #include "robinhood/backend.h"
+#include "robinhood/backends/posix.h"
 #include "robinhood/plugin.h"
+#include "robinhood/plugins/backend.h"
 #include "robinhood/uri.h"
 
 /*----------------------------------------------------------------------------*
@@ -48,6 +50,13 @@ END_TEST
  |                            rbh_plugin_import()                             |
  *----------------------------------------------------------------------------*/
 
+static struct rbh_backend_plugin posix_plugin = {
+    .plugin = {
+        .name = RBH_POSIX_BACKEND_NAME,
+        .version = RBH_POSIX_BACKEND_VERSION
+    },
+};
+
 struct rbh_backend_plugin;
 struct rbh_config;
 
@@ -68,7 +77,7 @@ START_TEST(rbi_posix)
     rbh_posix_backend_new = rbh_plugin_import("posix", "rbh_posix_backend_new");
     ck_assert_ptr_nonnull(rbh_posix_backend_new);
 
-    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
+    posix = rbh_posix_backend_new(&posix_plugin, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     rbh_backend_destroy(posix);
