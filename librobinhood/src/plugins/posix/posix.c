@@ -449,7 +449,9 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
         goto out_free_id;
     }
 
-    /* We want the actual type of the file we opened, not the one fts saw */
+    /* We want the actual type of the file we opened, not the one the iterator
+     * saw
+     */
     if (statxbuf.stx_mask & RBH_STATX_TYPE && S_ISLNK(statxbuf.stx_mode)) {
         if ((statxbuf.stx_mask & RBH_STATX_SIZE) == 0) {
             statxbuf.stx_size = page_size - 1;
@@ -699,6 +701,7 @@ static struct rbh_fsentry *
 posix_root(void *backend, const struct rbh_filter_projection *projection,
            struct rbh_metadata *metadata)
 {
+    const struct rbh_posix_extension *extension;
     const struct rbh_filter_options options = {
         .one = true,
     };
@@ -707,6 +710,10 @@ posix_root(void *backend, const struct rbh_filter_projection *projection,
     };
     struct posix_backend *posix = backend;
     struct rbh_mut_iterator *fsentries;
+    struct rbh_plugin plugin = {
+        .name = RBH_POSIX_BACKEND_NAME,
+        .version = RBH_POSIX_BACKEND_VERSION,
+    };
     struct rbh_fsentry *root;
     iter_new_t old_iter_new;
     int save_errno;
@@ -716,7 +723,15 @@ posix_root(void *backend, const struct rbh_filter_projection *projection,
      * just to fetch one entry.
      */
     old_iter_new = posix->iter_new;
-    posix->iter_new = fts_iter_new;
+
+    extension = (const struct rbh_posix_extension *)
+        rbh_plugin_load_extension(&plugin, "fts");
+    if (!extension) {
+        rbh_backend_error_printf("failed to load FTS iterator for POSIX plugin");
+        return NULL;
+    }
+
+    posix->iter_new = extension->iter_new;
 
     fsentries = rbh_backend_filter(backend, NULL, &options, &output, metadata);
     posix->iter_new = old_iter_new;
@@ -787,7 +802,7 @@ posix_backend_filter(
                   posix->iter_new(metadata, options->one ? root : posix->root,
                                   options->one ? full_path + strlen(root) : NULL,
                                   posix->statx_sync_type, options->one,
-                                  options->skip_error);
+                                  options->skip_error, false);
     if (posix_iter == NULL)
         return NULL;
 
@@ -916,7 +931,8 @@ posix_branch_backend_filter(
     posix_iter = (struct posix_iterator *)
                   branch->posix.iter_new(metadata, root, path + strlen(root),
                                          branch->posix.statx_sync_type,
-                                         options->one, options->skip_error);
+                                         options->one, options->skip_error,
+                                         true);
     posix_iter->enrichers = branch->posix.enrichers;
 
 out:
@@ -1421,8 +1437,6 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
     posix->statx_sync_type = AT_RBH_STATX_SYNC_AS_STAT;
     posix->backend = POSIX_BACKEND;
     posix->enrichers = NULL;
-    /* Default to FTS iterator */
-    posix->iter_new = fts_iter_new;
 
     rbh_config_load(config);
 
@@ -1446,6 +1460,10 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
         save_errno = errno;
         goto free_root;
     }
+
+    if (posix->iter_new == NULL)
+        if (rbh_posix_backend_load_iterator(self, posix, "fts", type))
+            goto free_root;
 
     return &posix->backend;
 

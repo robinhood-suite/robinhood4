@@ -10,6 +10,8 @@
 #include <robinhood/backends/posix.h>
 #include <robinhood/plugins/backend.h>
 
+#include "fts_internals.h"
+
 const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, FTS) = {
     .extension = {
         .super       = RBH_POSIX_BACKEND_NAME,
@@ -18,4 +20,5 @@ const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, FTS) = {
         .min_version = RBH_POSIX_BACKEND_VERSION,
         .max_version = RBH_POSIX_BACKEND_VERSION,
     },
+    .iter_new = fts_iter_new,
 };

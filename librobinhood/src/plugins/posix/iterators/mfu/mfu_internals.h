@@ -29,7 +29,8 @@ rbh_posix_mfu_iter_new(struct rbh_metadata *metadata,
                        const char *entry,
                        int statx_sync_type,
                        __attribute__((unused)) bool one,
-                       bool skip_error);
+                       bool skip_error,
+                       __attribute__((unused)) bool in_branch);
 
 /*----------------------------------------------------------------------------*
  |                             Utility functions                              |
