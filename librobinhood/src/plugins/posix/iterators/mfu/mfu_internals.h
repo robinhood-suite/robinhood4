@@ -27,7 +27,9 @@ struct rbh_mut_iterator *
 rbh_posix_mfu_iter_new(struct rbh_metadata *metadata,
                        const char *root,
                        const char *entry,
-                       int statx_sync_type);
+                       int statx_sync_type,
+                       __attribute__((unused)) bool one,
+                       bool skip_error);
 
 /*----------------------------------------------------------------------------*
  |                             Utility functions                              |

@@ -18,14 +18,7 @@
 
 struct rbh_mut_iterator *
 fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
-             int statx_sync_type);
-
-int
-fts_iter_root_setup(struct posix_iterator *_iter);
-
-bool
-rbh_posix_iter_is_fts(struct posix_iterator *iter);
-
+             int statx_sync_type, bool one, bool skip_error);
 
 int
 rbh_posix_backend_load_extensions(const struct rbh_backend_plugin *self,

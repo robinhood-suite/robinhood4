@@ -746,7 +746,6 @@ posix_backend_filter(
     struct posix_iterator *posix_iter;
     char full_path[PATH_MAX];
     char root[PATH_MAX];
-    int save_errno;
 
     /* TODO: make use of `fsentries_mask' and `statx_mask' */
 
@@ -787,30 +786,14 @@ posix_backend_filter(
     posix_iter = (struct posix_iterator *)
                   posix->iter_new(metadata, options->one ? root : posix->root,
                                   options->one ? full_path + strlen(root) : NULL,
-                                  posix->statx_sync_type);
+                                  posix->statx_sync_type, options->one,
+                                  options->skip_error);
     if (posix_iter == NULL)
         return NULL;
 
     posix_iter->enrichers = posix->enrichers;
-    posix_iter->skip_error = options->skip_error;
-
-    if (options->one)
-        /* Doesn't set the root's name to '\0' to keep the real root's name */
-        return &posix_iter->iterator;
-
-    /* FIXME move to iter_new? */
-    if (rbh_posix_iter_is_fts(posix_iter) &&
-        fts_iter_root_setup(posix_iter) == -1)
-        /* This should never happen */
-        goto out_destroy_iter;
 
     return &posix_iter->iterator;
-
-out_destroy_iter:
-    save_errno = errno;
-    rbh_mut_iter_destroy(&posix_iter->iterator);
-    errno = save_errno;
-    return NULL;
 }
 
     /*--------------------------------------------------------------------*
@@ -932,8 +915,8 @@ posix_branch_backend_filter(
     assert(strncmp(root, path, strlen(root)) == 0);
     posix_iter = (struct posix_iterator *)
                   branch->posix.iter_new(metadata, root, path + strlen(root),
-                                         branch->posix.statx_sync_type);
-    posix_iter->skip_error = options->skip_error;
+                                         branch->posix.statx_sync_type,
+                                         options->one, options->skip_error);
     posix_iter->enrichers = branch->posix.enrichers;
 
 out:
