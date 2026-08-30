@@ -4,7 +4,8 @@
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
-integration_tests = ['test_posix_db_sync', 'test_config', 'test_alias']
+integration_tests = ['test_alias', 'test_config', 'test_error_handling',
+                     'test_number_children', 'test_posix_db_sync']
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
@@ -13,7 +14,8 @@ foreach t: integration_tests
 endforeach
 
 if test_mfu
-    integration_tests = ['test_posix_db_sync']
+    integration_tests = ['test_error_handling', 'test_number_children',
+                         'test_posix_db_sync']
 
     foreach t: integration_tests
         e = find_program(t + '.bash')
