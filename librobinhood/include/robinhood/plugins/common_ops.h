@@ -145,16 +145,30 @@ struct rbh_pe_common_operations {
     );
 
     /**
-    * Undelete an entry from a given backend
-    *
-    * @param backend       a pointer to the backend where the metadata of the
-    *                      entry will be retrieved
-    * @param path          path to the entry to undelete
-    * @param fsentry       fsentry containing essential metadata needed to
-    *                      'undelete' a given entry
-    */
+     * Undelete an entry from a given backend
+     *
+     * @param backend       a pointer to the backend where the metadata of the
+     *                      entry will be retrieved
+     * @param path          path to the entry to undelete
+     * @param fsentry       fsentry containing essential metadata needed to
+     *                      'undelete' a given entry
+     *
+     * @return              the newly undeleted fsentry, NULL on error
+     */
     struct rbh_fsentry *(*undelete)(void *backend, const char *path,
                                     struct rbh_fsentry *fsentry);
+
+    /**
+     * Print plugin-specific log information to a buffer
+     *
+     * @param plugin_md     the plugin information to print to \p buffer
+     * @param buffer        the buffer to print information to
+     * @param buffer_size   the size of the buffer available
+     *
+     * @return              the amount of data written to \p buffer,
+     *                      negative value on error
+     */
+    int (*print_logs)(void *plugin_md, char *buffer, size_t buffer_size);
 };
 
 /**
@@ -275,6 +289,18 @@ rbh_pe_common_ops_undelete(
 
     errno = ENOTSUP;
     return NULL;
+}
+
+static inline int
+rbh_pe_common_ops_print_logs(
+    const struct rbh_pe_common_operations *common_ops, void *plugin_md,
+    char *buffer, size_t buffer_size)
+{
+    if (common_ops && common_ops->print_logs)
+        return common_ops->print_logs(plugin_md, buffer, buffer_size);
+
+    errno = ENOTSUP;
+    return -1;
 }
 
 #endif
