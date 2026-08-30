@@ -47,7 +47,7 @@ typedef int (*enricher_t)(struct rbh_entry_info *einfo,
 
 typedef struct rbh_mut_iterator *(*iter_new_t)(struct rbh_metadata *,
                                                const char *, const char *, int,
-                                               bool, bool);
+                                               bool, bool, bool);
 
 struct posix_iterator {
     struct rbh_mut_iterator iterator;

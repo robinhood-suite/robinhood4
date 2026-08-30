@@ -15,7 +15,7 @@
 
 #include "robinhood/backends/posix_extension.h"
 
-static int
+int
 rbh_posix_backend_load_iterator(const struct rbh_backend_plugin *self,
                                 void *backend, const char *iterator,
                                 const char *type)
@@ -23,13 +23,11 @@ rbh_posix_backend_load_iterator(const struct rbh_backend_plugin *self,
     struct posix_backend *posix = (struct posix_backend *) backend;
     const struct rbh_posix_extension *extension;
 
-    if (!strcmp(iterator, "fts"))
-        return 0;
-
     extension = rbh_posix_load_extension(&self->plugin, iterator);
     if (!extension) {
-        rbh_backend_error_printf("failed to load iterator '%s' for backend '%s'",
-                                 iterator, type);
+        rbh_backend_error_printf(
+            "failed to load iterator '%s' for backend '%s'", iterator, type
+        );
         return -1;
     }
 

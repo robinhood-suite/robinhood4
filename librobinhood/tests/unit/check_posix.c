@@ -70,16 +70,23 @@ unchecked_teardown_tmpdir(void)
  |                                posix filter                                |
  *----------------------------------------------------------------------------*/
 
+static struct rbh_backend_plugin posix_plugin = {
+    .plugin = {
+        .name = RBH_POSIX_BACKEND_NAME,
+        .version = RBH_POSIX_BACKEND_VERSION
+    },
+};
+
 START_TEST(pf_missing_root)
 {
-    const struct rbh_filter_options OPTIONS = {};
+    const struct rbh_filter_options OPTIONS = { 0 };
     const struct rbh_uri URI = {
         .backend = NULL,
         .fsname = "missing",
     };
     struct rbh_backend *posix;
 
-    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
+    posix = rbh_posix_backend_new(&posix_plugin, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     errno = 0;
@@ -111,9 +118,10 @@ START_TEST(pf_empty_root)
 
     ck_assert_int_eq(mkdir(EMPTY, S_IRWXU), 0);
 
-    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
+    posix = rbh_posix_backend_new(&posix_plugin, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
+    errno = 0;
     fsentries = rbh_backend_filter(posix, NULL, &OPTIONS, &OUTPUT, &metadata);
     ck_assert_ptr_nonnull(fsentries);
 
@@ -153,7 +161,7 @@ START_TEST(pbo_get_unknown)
     };
     struct rbh_backend *posix;
 
-    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
+    posix = rbh_posix_backend_new(&posix_plugin, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     ck_assert_int_eq(rbh_backend_get_option(posix, PBO_MAX, NULL, NULL),
@@ -172,7 +180,7 @@ START_TEST(pbo_set_unknown)
     };
     struct rbh_backend *posix;
 
-    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
+    posix = rbh_posix_backend_new(&posix_plugin, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     ck_assert_int_eq(rbh_backend_set_option(posix, PBO_MAX, NULL, 0), -1);
@@ -198,7 +206,7 @@ START_TEST(pbo_get_sizes)
     struct rbh_backend *posix;
     void *data;
 
-    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
+    posix = rbh_posix_backend_new(&posix_plugin, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     data = malloc(size + 1);
@@ -237,7 +245,7 @@ START_TEST(pbo_defaults)
     size_t size;
     void *data;
 
-    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
+    posix = rbh_posix_backend_new(&posix_plugin, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     size = PBO_SIZES[BO_INDEX(_i)];
@@ -263,7 +271,7 @@ START_TEST(pbo_set_sizes)
     };
     struct rbh_backend *posix;
 
-    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
+    posix = rbh_posix_backend_new(&posix_plugin, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     /* Too little */
@@ -305,7 +313,7 @@ START_TEST(pbo_set_invalids)
     };
     struct rbh_backend *posix;
 
-    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
+    posix = rbh_posix_backend_new(&posix_plugin, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     for (; *data != NULL; data++) {
@@ -341,7 +349,7 @@ START_TEST(pbo_set_unsupporteds)
     };
     struct rbh_backend *posix;
 
-    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
+    posix = rbh_posix_backend_new(&posix_plugin, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     for (; *data != NULL; data++) {
@@ -381,7 +389,7 @@ START_TEST(pbo_set_valids)
     struct rbh_backend *posix;
     void *value;
 
-    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
+    posix = rbh_posix_backend_new(&posix_plugin, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     value = malloc(size);
