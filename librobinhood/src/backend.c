@@ -80,7 +80,8 @@ rbh_generic_backend_set_option(struct rbh_backend *backend, unsigned int option,
 struct rbh_fsentry *
 rbh_backend_filter_one(struct rbh_backend *backend,
                        const struct rbh_filter *filter,
-                       const struct rbh_filter_projection *projection)
+                       const struct rbh_filter_projection *projection,
+                       struct rbh_metadata *metadata)
 {
     const struct rbh_filter_options options = { 0 };
     const struct rbh_filter_output output = {
@@ -90,7 +91,8 @@ rbh_backend_filter_one(struct rbh_backend *backend,
     struct rbh_fsentry *fsentry;
     int save_errno = errno;
 
-    fsentries = rbh_backend_filter(backend, filter, &options, &output, NULL);
+    fsentries = rbh_backend_filter(backend, filter, &options, &output,
+                                   metadata);
     if (fsentries == NULL)
         return NULL;
 
@@ -153,8 +155,9 @@ fsentry_from_parent_and_name(struct rbh_backend *backend,
             .filters = FILTERS,
         },
     };
+    struct rbh_metadata metadata = { 0 };
 
-    return rbh_backend_filter_one(backend, &FILTER, projection);
+    return rbh_backend_filter_one(backend, &FILTER, projection, &metadata);
 }
 
 static const struct rbh_id ROOT_PARENT_ID = {
@@ -169,6 +172,7 @@ backend_fsentry_from_path(struct rbh_backend *backend, char *path,
     const struct rbh_filter_projection ID_ONLY = {
         .fsentry_mask = RBH_FP_ID,
     };
+    struct rbh_metadata metadata = { 0 };
     struct rbh_fsentry *fsentry;
     struct rbh_fsentry *parent;
     int save_errno;
@@ -187,9 +191,9 @@ backend_fsentry_from_path(struct rbh_backend *backend, char *path,
         parent = fsentry_from_parent_and_name(backend, &ROOT_PARENT_ID, "",
                                               &ID_ONLY);
     } else if (*path == '\0') {
-        return rbh_backend_root(backend, projection);
+        return rbh_backend_root(backend, projection, &metadata);
     } else {
-        parent = rbh_backend_root(backend, &ID_ONLY);
+        parent = rbh_backend_root(backend, &ID_ONLY, &metadata);
     }
     if (parent == NULL)
         return NULL;

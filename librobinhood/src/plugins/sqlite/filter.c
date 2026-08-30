@@ -1148,7 +1148,8 @@ static const struct rbh_filter ROOT_FILTER = {
 
 struct rbh_fsentry *
 sqlite_backend_root(void *backend,
-                    const struct rbh_filter_projection *projection)
+                    const struct rbh_filter_projection *projection,
+                    __attribute__((unused)) struct rbh_metadat *metadata)
 {
     return rbh_backend_filter_one(backend, &ROOT_FILTER, projection);
 }

@@ -13,9 +13,10 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
-#include "robinhood/itertools.h"
-#include "robinhood/ringr.h"
 #include "robinhood/backend.h"
+#include "robinhood/itertools.h"
+#include "robinhood/log.h"
+#include "robinhood/ringr.h"
 #include "robinhood/statx.h"
 
 /* This implementation is almost generic, except for the calls to
@@ -396,7 +397,6 @@ struct rbh_mut_iterator *
 generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
                               const struct rbh_filter_options *options,
                               const struct rbh_filter_output *output,
-                              __attribute__((unused))
                               struct rbh_metadata *metadata)
 {
     const struct rbh_filter_projection ID_ONLY = {
@@ -415,7 +415,7 @@ generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
 
     iter = xmalloc(sizeof(*iter));
 
-    iter->directory = rbh_backend_root(backend, &ID_ONLY);
+    iter->directory = rbh_backend_root(backend, &ID_ONLY, metadata);
     if (iter->directory == NULL) {
         save_errno = errno;
         goto out_free_iter;

@@ -368,6 +368,7 @@ rbh_get_fresh_fsentry(struct rbh_backend *backend,
         .fsentry_mask = RBH_FP_ALL,
         .statx_mask = RBH_STATX_ALL,
     };
+    struct rbh_metadata metadata = { 0 };
     struct rbh_backend *backend_branch;
     struct rbh_fsentry *system_fsentry;
 
@@ -375,7 +376,7 @@ rbh_get_fresh_fsentry(struct rbh_backend *backend,
     if (!backend_branch)
         return NULL;
 
-    system_fsentry = rbh_backend_root(backend_branch, &projection);
+    system_fsentry = rbh_backend_root(backend_branch, &projection, &metadata);
     if (!system_fsentry)
         return NULL;
 

@@ -581,7 +581,7 @@ sync(const struct rbh_filter_projection *projection,
     if (one) {
         struct rbh_fsentry *root;
 
-        root = rbh_backend_root(from, &OUTPUT.projection);
+        root = rbh_backend_root(from, &OUTPUT.projection, metadata);
         if (root == NULL)
             error(EXIT_FAILURE, errno, "rbh_backend_root");
 

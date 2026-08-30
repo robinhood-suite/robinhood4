@@ -696,7 +696,8 @@ posix_backend_set_option(void *backend, unsigned int option, const void *data,
      *--------------------------------------------------------------------*/
 
 static struct rbh_fsentry *
-posix_root(void *backend, const struct rbh_filter_projection *projection)
+posix_root(void *backend, const struct rbh_filter_projection *projection,
+           struct rbh_metadata *metadata)
 {
     const struct rbh_filter_options options = {
         .one = true,
@@ -717,7 +718,7 @@ posix_root(void *backend, const struct rbh_filter_projection *projection)
     old_iter_new = posix->iter_new;
     posix->iter_new = fts_iter_new;
 
-    fsentries = rbh_backend_filter(backend, NULL, &options, &output, NULL);
+    fsentries = rbh_backend_filter(backend, NULL, &options, &output, metadata);
     posix->iter_new = old_iter_new;
     if (fsentries == NULL)
         return NULL;

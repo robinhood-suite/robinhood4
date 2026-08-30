@@ -18,6 +18,7 @@ get_entry_parent(struct rbh_backend *backend, struct rbh_fsentry *entry)
                         RBH_FP_NAMESPACE_XATTRS,
         .statx_mask = 0,
     };
+    struct rbh_metadata metadata = { 0 };
     const struct rbh_filter_field *field;
     struct rbh_fsentry *parent;
     struct rbh_filter *filter;
@@ -29,7 +30,7 @@ get_entry_parent(struct rbh_backend *backend, struct rbh_fsentry *entry)
     if (filter == NULL)
         error(EXIT_FAILURE, errno, "failed to create filter");
 
-    parent = rbh_backend_filter_one(backend, filter, &proj);
+    parent = rbh_backend_filter_one(backend, filter, &proj, &metadata);
 
     free(filter);
 
