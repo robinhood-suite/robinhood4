@@ -55,6 +55,7 @@ struct rbh_gc_metadata {
  */
 struct rbh_metadata {
     struct rbh_common_metadata common_md;
+    void *plugin_md;
     union {
         struct rbh_sync_metadata sync_md;
         struct rbh_fsevents_metadata fsevents_md;
