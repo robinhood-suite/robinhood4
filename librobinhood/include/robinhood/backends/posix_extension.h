@@ -39,7 +39,8 @@ typedef int (*enricher_t)(struct entry_info *einfo,
                           struct rbh_sstack *values);
 
 typedef struct rbh_mut_iterator *(*iter_new_t)(struct rbh_metadata *,
-                                               const char *, const char *, int);
+                                               const char *, const char *, int,
+                                               bool);
 
 struct posix_iterator {
     struct rbh_mut_iterator iterator;
@@ -87,7 +88,7 @@ rbh_posix_enrich_statx(struct rbh_posix_enrich_ctx *ctx, int flags,
 struct posix_backend {
     struct rbh_backend backend;
     struct rbh_mut_iterator *(*iter_new)(struct rbh_metadata *, const char *,
-                                         const char *, int);
+                                         const char *, int, bool);
     char *root;
     int statx_sync_type;
     const struct rbh_posix_extension **enrichers;

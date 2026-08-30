@@ -272,9 +272,49 @@ static const struct rbh_mut_iterator FTS_ITER = {
     .ops = &FTS_ITER_OPS,
 };
 
+static const struct rbh_id ROOT_PARENT_ID = {
+    .data = NULL,
+    .size = 0,
+};
+
+/* Modify the root's name and parent ID to match RobinHood's conventions */
+static void
+set_root_properties(FTSENT *root)
+{
+    /* The content of fts_pointer is only ever read, so casting away the
+     * const modifier of `ROOT_PARENT_ID' is harmless.
+     */
+    root->fts_parent->fts_pointer = (void *)&ROOT_PARENT_ID;
+
+    /* XXX: could this mess up fts' internal buffers?
+     *
+     * It does not seem to.
+     */
+    root->fts_name[0] = '\0';
+    root->fts_namelen = 0;
+}
+
+static int
+fts_iter_root_setup(struct fts_iterator *iter)
+{
+    struct rbh_fsentry *fsentry;
+
+    fsentry = rbh_mut_iter_next(&iter->posix.iterator);
+    if (fsentry == NULL)
+        return -1;
+
+    free(fsentry);
+
+    set_root_properties(iter->ftsent);
+    if (fts_set(iter->fts_handle, iter->ftsent, FTS_AGAIN))
+        return -1;
+
+    return 0;
+}
+
 struct rbh_mut_iterator *
 fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
-             int statx_sync_type)
+             int statx_sync_type, bool one)
 {
     char *paths[2] = {NULL, NULL};
     struct fts_iterator *iter;
@@ -310,6 +350,12 @@ fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
         iter->metadata = NULL;
     }
 
+    /* Don't set the root's name to '\0' to keep the real root's name in
+     * case we only sync one entry
+     */
+    if (!one && fts_iter_root_setup(iter) == -1)
+        goto free_iter;
+
     return (struct rbh_mut_iterator *)iter;
 
 free_iter:
@@ -318,51 +364,4 @@ free_iter:
     errno = save_errno;
 
     return NULL;
-}
-
-static const struct rbh_id ROOT_PARENT_ID = {
-    .data = NULL,
-    .size = 0,
-};
-
-/* Modify the root's name and parent ID to match RobinHood's conventions */
-static void
-set_root_properties(FTSENT *root)
-{
-    /* The content of fts_pointer is only ever read, so casting away the
-     * const modifier of `ROOT_PARENT_ID' is harmless.
-     */
-    root->fts_parent->fts_pointer = (void *)&ROOT_PARENT_ID;
-
-    /* XXX: could this mess up fts' internal buffers?
-     *
-     * It does not seem to.
-     */
-    root->fts_name[0] = '\0';
-    root->fts_namelen = 0;
-}
-
-int
-fts_iter_root_setup(struct posix_iterator *_iter)
-{
-    struct fts_iterator *iter = (struct fts_iterator *)_iter;
-    struct rbh_fsentry *fsentry;
-
-    fsentry = rbh_mut_iter_next(&_iter->iterator);
-    if (fsentry == NULL)
-        return -1;
-
-    free(fsentry);
-
-    set_root_properties(iter->ftsent);
-    if (fts_set(iter->fts_handle, iter->ftsent, FTS_AGAIN))
-        return -1;
-
-    return 0;
-}
-
-bool
-rbh_posix_iter_is_fts(struct posix_iterator *iter)
-{
-    return iter->iterator.ops == &FTS_ITER_OPS;
 }

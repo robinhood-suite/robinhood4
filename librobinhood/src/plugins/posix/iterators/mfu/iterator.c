@@ -343,8 +343,11 @@ struct rbh_mut_iterator *
 rbh_posix_mfu_iter_new(struct rbh_metadata *metadata,
                        const char *root,
                        const char *entry,
-                       int statx_sync_type)
+                       int statx_sync_type,
+                       bool one)
 {
+    (void) one;
+
     return mfu_iter_new(metadata, root, entry, statx_sync_type, 0, NULL,
                         RBH_BI_POSIX);
 }
