@@ -16,10 +16,6 @@
 #include <robinhood/backends/posix_extension.h>
 #include <robinhood/backend.h>
 
-struct rbh_mut_iterator *
-fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
-             int statx_sync_type, bool one);
-
 int
 rbh_posix_backend_load_extensions(const struct rbh_backend_plugin *self,
                                   void *backend, const char *type);

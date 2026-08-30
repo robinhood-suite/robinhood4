@@ -23,9 +23,6 @@ rbh_posix_backend_load_iterator(const struct rbh_backend_plugin *self,
     struct posix_backend *posix = (struct posix_backend *) backend;
     const struct rbh_posix_extension *extension;
 
-    if (!strcmp(iterator, "fts"))
-        return 0;
-
     extension = rbh_posix_load_extension(&self->plugin, iterator);
     if (!extension) {
         rbh_backend_error_printf("failed to load iterator '%s' for backend '%s'",
@@ -86,6 +83,8 @@ rbh_posix_backend_load_extensions(const struct rbh_backend_plugin *self,
             return -1;
         break;
     case KPR_NOT_FOUND:
+        if (rbh_posix_backend_load_iterator(self, backend, "fts", type))
+            return -1;
         break;
     default:
         rbh_backend_error_printf("failed to retrieve 'backends/%s/iterator': %s",
