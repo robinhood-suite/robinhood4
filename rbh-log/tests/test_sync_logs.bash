@@ -38,10 +38,10 @@ sync_with_other_user()
     local path_config="$(realpath $RBH_CONFIG_PATH)"
     set_permission $path_config "+"
 
-    local output="$(sudo -E -H -u "$test_user" bash -c "\
-                    LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
-                    $__rbh_sync --config $path_config $skip_option \
-                    rbh:posix:. rbh:$db:$testdb" 2>&1)"
+    sudo -E -H -u "$test_user" \
+        bash -c "LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
+                 $__rbh_sync --config $path_config $skip_option \
+                 rbh:posix:. rbh:$db:$testdb" 2>&1
 
     set_permission $path "-"
     set_permission $path_config "-"

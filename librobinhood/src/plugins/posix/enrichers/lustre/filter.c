@@ -330,6 +330,7 @@ get_fs_default_dir_lov(struct filters_context *context,
                        const struct rbh_filter_field *field)
 {
     struct rbh_filter_projection projection = { 0 };
+    struct rbh_metadata metadata = { 0 };
     struct rbh_fsentry *root_fsentry;
 
     if (context->backend_count == 0 || context->backend == NULL)
@@ -341,7 +342,7 @@ get_fs_default_dir_lov(struct filters_context *context,
         struct rbh_backend *backend = context->backend[i];
         const struct rbh_value *value;
 
-        root_fsentry = rbh_backend_root(backend, &projection);
+        root_fsentry = rbh_backend_root(backend, &projection, &metadata);
         if (!root_fsentry)
             return NULL;
 

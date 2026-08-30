@@ -98,6 +98,7 @@ START_TEST(pf_empty_root)
             .fsentry_mask = RBH_FP_PARENT_ID,
         },
     };
+    struct rbh_metadata metadata = { 0 };
     static const char *EMPTY = "empty";
     struct rbh_mut_iterator *fsentries;
     const struct rbh_uri URI = {
@@ -113,7 +114,7 @@ START_TEST(pf_empty_root)
     posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
-    fsentries = rbh_backend_filter(posix, NULL, &OPTIONS, &OUTPUT, NULL);
+    fsentries = rbh_backend_filter(posix, NULL, &OPTIONS, &OUTPUT, &metadata);
     ck_assert_ptr_nonnull(fsentries);
 
     fsentry = rbh_mut_iter_next(fsentries);

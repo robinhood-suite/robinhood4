@@ -914,9 +914,10 @@ static const struct rbh_filter ROOT_FILTER = {
 };
 
 static struct rbh_fsentry *
-mongo_root(void *backend, const struct rbh_filter_projection *projection)
+mongo_root(void *backend, const struct rbh_filter_projection *projection,
+           struct rbh_metadata *metadata)
 {
-    return rbh_backend_filter_one(backend, &ROOT_FILTER, projection);
+    return rbh_backend_filter_one(backend, &ROOT_FILTER, projection, metadata);
 }
 
     /*--------------------------------------------------------------------*
@@ -1242,7 +1243,8 @@ struct mongo_branch_backend {
          *------------------------------------------------------------*/
 
 static struct rbh_fsentry *
-mongo_branch_root(void *backend, const struct rbh_filter_projection *projection)
+mongo_branch_root(void *backend, const struct rbh_filter_projection *projection,
+                  struct rbh_metadata *metadata)
 {
     struct mongo_branch_backend *branch = backend;
     const struct rbh_filter id_filter = {
@@ -1265,7 +1267,7 @@ mongo_branch_root(void *backend, const struct rbh_filter_projection *projection)
 
     /* To avoid the infinite recursion root -> branch_filter -> root -> ... */
     branch->mongo.backend.ops = &MONGO_BACKEND_OPS;
-    root = rbh_backend_filter_one(backend, &id_filter, projection);
+    root = rbh_backend_filter_one(backend, &id_filter, projection, metadata);
     branch->mongo.backend.ops = ops;
     return root;
 }
