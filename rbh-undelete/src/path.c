@@ -59,8 +59,9 @@ get_fsentry_from_metadata_source_with_fid(struct rbh_backend *source,
             .value = *fid_value,
         },
     };
+    struct rbh_metadata metadata = { 0 };
 
-    return rbh_backend_filter_one(source, &FID_FILTER, &ALL);
+    return rbh_backend_filter_one(source, &FID_FILTER, &ALL, &metadata);
 }
 
 static char *

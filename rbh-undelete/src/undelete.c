@@ -42,9 +42,11 @@ get_fsentry_from_metadata_source_with_path(struct rbh_backend *metadata_source,
             },
         },
     };
+    struct rbh_metadata metadata = { 0 };
     struct rbh_fsentry *fsentry;
 
-    fsentry = rbh_backend_filter_one(metadata_source, &PATH_FILTER, &ALL);
+    fsentry = rbh_backend_filter_one(metadata_source, &PATH_FILTER, &ALL,
+                                     &metadata);
     if (fsentry == NULL) {
         errno = ENOENT;
         fprintf(stderr, "Failed to find '%s' in source URI: %s (%d)\n",

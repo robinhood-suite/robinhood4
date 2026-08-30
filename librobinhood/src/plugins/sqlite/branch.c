@@ -62,7 +62,8 @@ sqlite_backend_branch(void *backend, const struct rbh_id *id, const char *path)
 
 struct rbh_fsentry *
 sqlite_branch_root(void *backend,
-                   const struct rbh_filter_projection *projection)
+                   const struct rbh_filter_projection *projection,
+                   __attribute__((unused)) struct rbh_metadata *metadata)
 {
     struct sqlite_backend_branch *branch = backend;
     const struct rbh_filter id_filter = {

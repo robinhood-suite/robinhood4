@@ -293,7 +293,8 @@ struct rbh_backend_operations {
             );
     struct rbh_fsentry *(*root)(
             void *backend,
-            const struct rbh_filter_projection *projection
+            const struct rbh_filter_projection *projection,
+            struct rbh_metadata *metadata
             );
     struct rbh_mut_iterator *(*filter)(
             void *backend,
@@ -616,6 +617,7 @@ rbh_backend_branch(struct rbh_backend *backend, const struct rbh_id *id,
  *
  * @param backend       the backend whose root to return
  * @param projection    the fields of the root to fill
+ * @param metadata      the metadata structure the callback should update
  *
  * @return              the root of \p backend
  *
@@ -624,13 +626,14 @@ rbh_backend_branch(struct rbh_backend *backend, const struct rbh_id *id,
  */
 static inline struct rbh_fsentry *
 rbh_backend_root(struct rbh_backend *backend,
-                 const struct rbh_filter_projection *projection)
+                 const struct rbh_filter_projection *projection,
+                 struct rbh_metadata *metadata)
 {
     if (backend->ops->root == NULL) {
         errno = ENOTSUP;
         return NULL;
     }
-    return backend->ops->root(backend, projection);
+    return backend->ops->root(backend, projection, metadata);
 }
 
 /**
@@ -640,7 +643,7 @@ rbh_backend_root(struct rbh_backend *backend,
  * @param filter    a set of criteria that the returned fsentries must match
  * @param options   a set of filtering options (must not be NULL)
  * @param output    the information to be outputted
- * @param metadata  a set of filtering metadata
+ * @param metadata  the metadata structure the callback should update
  *
  * @return          an iterator over mutable fsentries on success, NULL on error
  *                  and errno is set appropriately
@@ -862,6 +865,7 @@ rbh_backend_destroy(struct rbh_backend *backend)
  * @param backend       the backend from which to retrieve the fsentry
  * @param filter        the filter to use
  * @param projection    fields of the fsentry to fill
+ * @param metadata      the metadata structure the callback should update
  *
  * @return              a pointer to a newly allocated fsentry that matches
  *                      \p filter on success, NULL on error and errno is set
@@ -878,7 +882,8 @@ rbh_backend_destroy(struct rbh_backend *backend)
 struct rbh_fsentry *
 rbh_backend_filter_one(struct rbh_backend *backend,
                        const struct rbh_filter *filter,
-                       const struct rbh_filter_projection *projection);
+                       const struct rbh_filter_projection *projection,
+                       struct rbh_metadata *metadata);
 
 /**
  * Retrieve an fsentry from a backend using its path
