@@ -9,6 +9,16 @@
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/../../../utils/tests/framework.bash
 
+__mongo="$(which mongosh 2>&1)"
+if [[ "$__mongo" == *"no mongosh"* ]]; then
+    __mongo=$(which mongo)
+fi
+
+mongo()
+{
+    "$__mongo" --quiet "$@"
+}
+
 mongo_teardown()
 {
     mongo $testdb --eval 'db.dropUser("test")'
