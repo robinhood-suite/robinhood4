@@ -164,7 +164,7 @@ rbh_should_print_log(struct rbh_metadata *metadata)
 
 void
 rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type,
-              FILE *log_file);
+              FILE *log_file, const char *plugin_name);
 
 void
 rbh_timespec_atomic_accumulate(struct rbh_fsevents_metadata *fsevents_md,

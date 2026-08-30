@@ -627,7 +627,7 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
         batch_id++;
 
         if (print_stats && rbh_should_print_log(metadata))
-            rbh_print_log(metadata, RBH_FSEVENTS_LOG, log_file);
+            rbh_print_log(metadata, RBH_FSEVENTS_LOG, log_file, NULL);
     }
 
 end:
@@ -706,7 +706,7 @@ feed(struct sink **sink, struct source *source,
         rc = -1;
 
     if (print_stats)
-        rbh_print_log(metadata, RBH_FSEVENTS_LOG, log_file);
+        rbh_print_log(metadata, RBH_FSEVENTS_LOG, log_file, NULL);
 
     return rc;
 }
