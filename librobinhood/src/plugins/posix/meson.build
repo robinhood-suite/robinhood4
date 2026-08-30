@@ -12,6 +12,7 @@ librbh_posix = library(
         'extension.c',
         'filter.c',
         'fts_iter.c',
+        'log.c',
         'plugin.c',
         'parser.c',
         'posix.c',
