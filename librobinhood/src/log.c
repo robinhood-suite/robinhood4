@@ -8,6 +8,7 @@
 #include <stdatomic.h>
 #include <stdio.h>
 
+#include "robinhood/plugins/backend.h"
 #include "robinhood/log.h"
 #include "robinhood/utils.h"
 
@@ -23,7 +24,7 @@ print_sync_log(struct rbh_metadata *metadata, time_t current,
         "STATS | ======== Backend scan statistics =========\n"
         "STATS | rbh-sync is running:\n"
         "STATS |      progress: %lu entries scanned (%lu skipped)\n"
-        "STATS |      current speed: %.2f entries/sec\n\n",
+        "STATS |      current speed: %.2f entries/sec\n",
         total_entry_count,
         metadata->sync_md.skipped_entries,
         time_spent == 0 ? total_entry_count :
@@ -42,7 +43,7 @@ print_gc_log(struct rbh_metadata *metadata, time_t current,
         "STATS | ======== Garbage collector statistics =========\n"
         "STATS | rbh-gc is running:\n"
         "STATS |      progress: %lu entries deleted from mirror (%lu kept)\n"
-        "STATS |      current speed: %.2f entries/sec\n\n",
+        "STATS |      current speed: %.2f entries/sec\n",
         metadata->gc_md.deleted_entry_count,
         metadata->gc_md.total_entry_count - metadata->gc_md.deleted_entry_count,
         time_spent == 0 ? total_entry_count :
@@ -82,7 +83,7 @@ print_fsevents_log(struct rbh_metadata *metadata, time_t current,
         "STATS |      current speed:\n"
         "STATS |          read/dedup: %llu.%09llu changelog/sec\n"
         "STATS |          enrich/update: %llu.%09llu changelog/sec/worker\n"
-        "STATS |          overall: %.2f changelog/sec\n\n",
+        "STATS |          overall: %.2f changelog/sec\n",
         fsevents_md->changelog_read,
         fsevents_md->worker_count,
         avg_rd_ns / 1000000000ULL,
@@ -97,7 +98,7 @@ print_fsevents_log(struct rbh_metadata *metadata, time_t current,
 
 void
 rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type,
-              FILE *log_file)
+              FILE *log_file, const char *plugin_name)
 {
     const char *command = rbh_log_type2str(command_type);
     char current_time_string[128];
@@ -111,7 +112,7 @@ rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type,
     if (!strftime(current_time_string, sizeof(current_time_string),
                   "%d/%m/%Y %H:%M:%S", current_tm)) {
         fprintf(stderr,
-                "Cannot print log for current command, converion of current timestamp failed");
+                "Cannot print log for current command, converion of current timestamp failed\n");
         return;
     }
 
@@ -119,7 +120,7 @@ rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type,
     if (!strftime(start_time_string, sizeof(start_time_string),
                   "%d/%m/%Y %H:%M:%S", start_tm)) {
         fprintf(stderr,
-                "Cannot print log for current command, converion of start timestamp failed");
+                "Cannot print log for current command, converion of start timestamp failed\n");
         return;
     }
 
@@ -150,6 +151,39 @@ rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type,
     default:
         break;
     }
+
+    if (metadata->plugin_md) {
+        const struct rbh_backend_plugin *plugin;
+        char buffer[4096];
+
+        plugin = rbh_backend_plugin_import(plugin_name);
+        if (plugin == NULL) {
+            if (errno == RBH_BACKEND_ERROR)
+                error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
+
+            error(EXIT_FAILURE, errno,
+                  "failed to load robinhood plugin %s", plugin_name);
+        }
+
+        if (rbh_pe_common_ops_print_logs(plugin->common_ops,
+                                         metadata->plugin_md, buffer,
+                                         sizeof(buffer)) < 0) {
+            fprintf(stderr,
+                    "Cannot print plugin-specific stats for plugin '%s'\n",
+                    plugin_name);
+            return;
+        }
+
+        fprintf(
+            log_file,
+            "STATS | ======== Plugin '%s' statistics =========\n"
+            "%s\n",
+            plugin->plugin.name,
+            buffer
+        );
+    }
+
+    fprintf(log_file, "\n");
 
     metadata->last_shown_time = current;
 }
