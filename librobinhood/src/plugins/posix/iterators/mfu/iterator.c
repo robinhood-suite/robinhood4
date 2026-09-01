@@ -15,6 +15,7 @@
 #include <robinhood/backends/mfu.h>
 #include <robinhood/backends/posix_extension.h>
 #include <robinhood/mpi_rc.h>
+#include <robinhood/statx.h>
 #include <robinhood/utils.h>
 
 static __thread struct rbh_id *current_parent_id = NULL;
@@ -109,7 +110,7 @@ mfu_iter_skip_or_fail(struct mfu_iterator *iter, bool skip_error,
         return false;
     }
 
-    iter->metadata->sync_md.skipped_entries++;
+    iter->posix.metadata->sync_md.skipped_entries++;
     fprintf(stderr, "Synchronization of '%s' skipped\n", path);
     iter->current++;
     current_children--;
@@ -133,16 +134,21 @@ mfu_iter_handle_new_directory(struct mfu_iterator *iter, const char *path)
 static void *
 mfu_iter_next(void *_iter)
 {
+    struct rbh_metadata_posix *posix_md = NULL;
     struct mfu_iterator *iter = _iter;
-    bool skip_error = iter->posix.skip_error;
     struct rbh_fsentry *fsentry = NULL;
     struct file_info fi;
     mfu_filetype type;
     size_t parent_len;
+    bool skip_error;
     size_t path_len;
     char *path_dup;
     char *parent;
     int rank;
+
+    skip_error = iter->posix.skip_error;
+    if (iter->posix.metadata)
+        posix_md = iter->posix.metadata->plugin_md;
 
     if (sstack == NULL)
         sstack = rbh_sstack_new(1 << 16);
@@ -238,6 +244,17 @@ mfu_iter_next(void *_iter)
 
         fsentry = iter->fsentry_new(&fi, &iter->posix);
 
+        if (fsentry && fsentry->statx && posix_md) {
+            if (S_ISREG(fsentry->statx->stx_mode))
+                posix_md->file_count++;
+            else if (S_ISDIR(fsentry->statx->stx_mode))
+                posix_md->dir_count++;
+            else if (S_ISLNK(fsentry->statx->stx_mode))
+                posix_md->symlink_count++;
+            else
+                posix_md->other_count++;
+        }
+
         if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
             /* The entry moved from under our feet */
             if (!mfu_iter_skip_or_fail(iter, skip_error, fi.path))
@@ -248,8 +265,8 @@ mfu_iter_next(void *_iter)
         iter->current++;
         seen_first_time = true;
 
-        if (iter->metadata)
-            iter->metadata->sync_md.converted_entries++;
+        if (iter->posix.metadata)
+            iter->posix.metadata->sync_md.converted_entries++;
 
         return fsentry;
     }
@@ -322,7 +339,11 @@ mfu_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
         mfu->posix.start_time = time(NULL);
     MPI_Bcast(&mfu->posix.start_time, 1, MPI_INT64_T, 0, MPI_COMM_WORLD);
 
-    mfu->metadata = metadata;
+    mfu->posix.metadata = metadata;
+    if (metadata)
+        mfu->posix.metadata->plugin_md =
+            xcalloc(1, sizeof(struct rbh_metadata_posix));
+
     mfu->posix.iterator = MFU_ITER;
     mfu->backend_id = backend_id;
     mfu->total = mfu_flist_size(mfu->files);
