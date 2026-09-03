@@ -20,6 +20,8 @@
 static enum field_accumulator
 str2accumulator(const char *str)
 {
+    const char *oldstr = str;
+
     switch (*str++) {
     case 'a': /* avg */
         if (strcmp(str, "vg"))
@@ -53,7 +55,7 @@ str2accumulator(const char *str)
         return FA_SUM;
     }
 
-    error(EX_USAGE, 0, "invalid accumulator '%s'", str);
+    error(EX_USAGE, 0, "invalid accumulator '%s'", oldstr);
     __builtin_unreachable();
 }
 
