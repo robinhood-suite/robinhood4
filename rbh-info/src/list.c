@@ -174,8 +174,13 @@ list_plugins_and_extensions()
     const char *library_dirs[] = {
         "/lib",
         "/usr/lib",
+        "/usr/local/lib",
         "/lib64",
         "/usr/lib64",
+        "/usr/local/lib64",
+        /*Debian default path*/
+        "/lib/x86_64-linux-gnu",
+        "/lib/x86_64-linux-gnu64",
     };
     int len_library;
 
