@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bccced9a_728d9523",
+        "filename": "rbh-log/tests/test_all_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-09-08T07:25:15Z",
+      "side": 1,
+      "message": "question: Why are these lines commented out ?",
+      "range": {
+        "startLine": 29,
+        "startChar": 16,
+        "endLine": 30,
+        "endChar": 71
+      },
+      "revId": "4c3ff515d7e913e8d6a0b8f9592126d999dd1ee9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d672ffb3_c4d089b5",
+        "filename": "rbh-log/tests/test_all_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-09-08T07:25:15Z",
+      "side": 1,
+      "message": "minor: to remove",
+      "revId": "4c3ff515d7e913e8d6a0b8f9592126d999dd1ee9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aff59d98_41eaa514",
+        "filename": "rbh-log/tests/test_all_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-09-08T07:25:15Z",
+      "side": 1,
+      "message": "question: With the --oneline option, the log start and end with a \u0027{\u0027 or \u0027}\u0027 ?",
+      "revId": "4c3ff515d7e913e8d6a0b8f9592126d999dd1ee9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
