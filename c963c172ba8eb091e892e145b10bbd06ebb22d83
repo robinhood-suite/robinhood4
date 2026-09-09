@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8294c7ae_05f9d075",
+        "filename": "rbh-log/src/common.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-09-09T13:34:28Z",
+      "side": 1,
+      "message": "suggest:\n\n```\n    if (print_oneline)\n    \tprintf(\"%s: \", header);\n    else\n    \tprintf(\" - %-*s: \", WIDTH, header);\n    \t\n    switch (value-\u003etype) {\n    case RBH_VT_STRING:\n        printf(\"%s\", value-\u003estring);\n        break;\n    case RBH_VT_INT64:\n        printf(\"%ld\", value-\u003eint64);\n        break;\n    case RBH_VT_DOUBLE:\n        printf(\"%.3f\", value-\u003efloat64);\n        break;\n    default:\n        error(EXIT_FAILURE, EINVAL, \"...\");\n        __builtin_unreachable();\n    }\n    \n    printf(\"%s\", print_oneline ? \"\\n\" : \"\");\n```",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 14
+      },
+      "revId": "c963c172ba8eb091e892e145b10bbd06ebb22d83",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
