@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b4b049b_f892fe43",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-09-09T07:53:02Z",
+      "side": 1,
+      "message": "suggest: since the timer is set to one second for test purposes",
+      "range": {
+        "startLine": 9,
+        "startChar": 18,
+        "endLine": 9,
+        "endChar": 69
+      },
+      "revId": "0a1d02ca68c940a68907dba7271cfd8b1c6cd925",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a89b1a8_805c9e63",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-09-09T07:53:02Z",
+      "side": 1,
+      "message": "major: need to complete the commit message",
+      "range": {
+        "startLine": 12,
+        "startChar": 58,
+        "endLine": 14,
+        "endChar": 1
+      },
+      "revId": "0a1d02ca68c940a68907dba7271cfd8b1c6cd925",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
