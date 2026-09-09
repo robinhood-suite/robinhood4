@@ -16,6 +16,24 @@
       "message": "I think you forgot to add the modifications",
       "revId": "27eecd4f7f8aeb36b4bbfe903b94a1954c426149",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca15d626_2c3718cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-09T14:34:34Z",
+      "side": 1,
+      "message": "I\u0027ll just remove it entirely, wanted to split the following patch in two, but that\u0027s impossible because the prototypes have to be changed everywhere...",
+      "parentUuid": "c8a251e3_ee688cf8",
+      "revId": "27eecd4f7f8aeb36b4bbfe903b94a1954c426149",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
