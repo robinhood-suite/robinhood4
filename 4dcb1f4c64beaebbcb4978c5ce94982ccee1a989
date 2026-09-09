@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26ed6c07_3c953829",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-09-09T07:15:20Z",
+      "side": 1,
+      "message": "Ok for this test, to see if the right number of logs are deleted. But we do not check that the right logs are deleted i.e. the last or the first ones. Is it already done in a previous test? Will this be added in a future patch?",
+      "revId": "4dcb1f4c64beaebbcb4978c5ce94982ccee1a989",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
