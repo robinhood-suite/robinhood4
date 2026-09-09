@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1faa0774_e9ac7b67",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-09T13:34:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b4b049b_f892fe43",
+      "range": {
+        "startLine": 9,
+        "startChar": 18,
+        "endLine": 9,
+        "endChar": 69
+      },
+      "revId": "0a1d02ca68c940a68907dba7271cfd8b1c6cd925",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a89b1a8_805c9e63",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-09-09T07:53:02Z",
       "side": 1,
       "message": "major: need to complete the commit message",
+      "range": {
+        "startLine": 12,
+        "startChar": 58,
+        "endLine": 14,
+        "endChar": 1
+      },
+      "revId": "0a1d02ca68c940a68907dba7271cfd8b1c6cd925",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a581e195_c3995fab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-09T13:34:01Z",
+      "side": 1,
+      "message": "Since we decided to keep the option and add a timer option, I\u0027ve changed part of this commit message.",
+      "parentUuid": "1a89b1a8_805c9e63",
       "range": {
         "startLine": 12,
         "startChar": 58,
