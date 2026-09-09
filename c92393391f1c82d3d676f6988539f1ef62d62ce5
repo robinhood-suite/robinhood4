@@ -16,6 +16,24 @@
       "message": "I don\u0027t understand why changing \u0027digit\u0027 to \u0027alphanumeric\u0027 allows the capture of french date format?",
       "revId": "c92393391f1c82d3d676f6988539f1ef62d62ce5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4977bc4f_93e57667",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-09T14:00:36Z",
+      "side": 1,
+      "message": "The line that is expected to be found is in english format, which corresponds to `-rw-r--r--. 1 root root 21 Sep  9 13:36 /tmp/rbh_test_jfcnpl2c/filedir/file1.txt` for instance. However, with french format, that line becomes `-rw-r--r--. 1 root root Sep 21 9 13:36 /tmp/rbh_test_jfcnpl2c/filedir/file1.txt`.\n\nSo instead of trying to manage different formats, I just changed the digit to alphanumeric to that both \"Sep 21\" and \"21 Sep\" are understood.",
+      "parentUuid": "789adcaa_e2283bb2",
+      "revId": "c92393391f1c82d3d676f6988539f1ef62d62ce5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
