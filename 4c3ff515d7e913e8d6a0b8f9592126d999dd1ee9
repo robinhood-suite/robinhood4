@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd3eb1d9_9a401c5e",
+        "filename": "rbh-log/tests/test_all_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-09T14:29:02Z",
+      "side": 1,
+      "message": "Didn\u0027t want to force the test to have Lustre enabled, but forgot to remove this comment.",
+      "parentUuid": "bccced9a_728d9523",
+      "range": {
+        "startLine": 29,
+        "startChar": 16,
+        "endLine": 30,
+        "endChar": 71
+      },
+      "revId": "4c3ff515d7e913e8d6a0b8f9592126d999dd1ee9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d672ffb3_c4d089b5",
@@ -41,6 +65,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb681f00_844b5963",
+        "filename": "rbh-log/tests/test_all_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-09T14:29:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d672ffb3_c4d089b5",
+      "revId": "4c3ff515d7e913e8d6a0b8f9592126d999dd1ee9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aff59d98_41eaa514",
@@ -54,6 +96,24 @@
       "writtenOn": "2026-09-08T07:25:15Z",
       "side": 1,
       "message": "question: With the --oneline option, the log start and end with a \u0027{\u0027 or \u0027}\u0027 ?",
+      "revId": "4c3ff515d7e913e8d6a0b8f9592126d999dd1ee9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "695c76d8_12fdbb12",
+        "filename": "rbh-log/tests/test_all_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-09T14:29:02Z",
+      "side": 1,
+      "message": "Yes, starts with a `{` and ends with a `}`",
+      "parentUuid": "aff59d98_41eaa514",
       "revId": "4c3ff515d7e913e8d6a0b8f9592126d999dd1ee9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
