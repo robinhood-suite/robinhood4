@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fb05ff1_085ee6fa",
+        "filename": "podman/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-09T12:28:46Z",
+      "side": 1,
+      "message": "suggest: `$ cd podman` instead, considering the current path is the main dir in the repo",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 27
+      },
+      "revId": "4fb31c5580ae72d416a7b2fa6ac7532854317987",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b494e2d2_745ae8b0",
+        "filename": "podman/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-09T12:28:46Z",
+      "side": 1,
+      "message": "minor: add `$` before each command shown",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 1
+      },
+      "revId": "4fb31c5580ae72d416a7b2fa6ac7532854317987",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4f62a9b_ea2e02e8",
+        "filename": "podman/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-09T12:28:46Z",
+      "side": 1,
+      "message": "minor: use `$` instead",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 3
+      },
+      "revId": "4fb31c5580ae72d416a7b2fa6ac7532854317987",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84cd9784_3fee758e",
+        "filename": "podman/docker-compose.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-09T12:28:46Z",
+      "side": 1,
+      "message": "question: why is this file in the podman directory, but not the other one ? They\u0027re both in the podman directory, but it\u0027s only listed as such for one of them",
+      "range": {
+        "startLine": 15,
+        "startChar": 18,
+        "endLine": 15,
+        "endChar": 45
+      },
+      "revId": "4fb31c5580ae72d416a7b2fa6ac7532854317987",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
