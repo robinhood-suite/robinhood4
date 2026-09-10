@@ -9,9 +9,11 @@
 #define ROBINHOOD_MFU_POSIX_H
 
 #include <mfu.h>
-#include <robinhood/iterator.h>
-#include <robinhood/plugin.h>
+
 #include <robinhood/backends/posix_extension.h>
+#include <robinhood/iterator.h>
+#include <robinhood/log.h>
+#include <robinhood/plugin.h>
 
 #define RBH_MFU_PLUGIN_NAME "mfu"
 
@@ -62,7 +64,8 @@ struct rbh_id *
 mfu_build_parent_id(const char *accpath, size_t prefix_len, bool is_mpifile);
 
 struct rbh_mut_iterator *
-rbh_mpi_file_mfu_iter_new(mfu_flist flist, size_t prefix_len);
+rbh_mpi_file_mfu_iter_new(struct rbh_metadata *metadata,
+                          mfu_flist flist, size_t prefix_len);
 
 void
 rbh_mpi_initialize(void);

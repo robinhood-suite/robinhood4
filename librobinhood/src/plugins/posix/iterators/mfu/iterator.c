@@ -350,8 +350,9 @@ rbh_posix_mfu_iter_new(struct rbh_metadata *metadata,
 }
 
 struct rbh_mut_iterator *
-rbh_mpi_file_mfu_iter_new(mfu_flist flist, size_t prefix_len)
+rbh_mpi_file_mfu_iter_new(struct rbh_metadata *metadata,
+                          mfu_flist flist, size_t prefix_len)
 {
-    return mfu_iter_new(NULL, NULL, NULL, 0, prefix_len, flist,
+    return mfu_iter_new(metadata, NULL, NULL, 0, prefix_len, flist,
                         RBH_BI_MPI_FILE);
 }
