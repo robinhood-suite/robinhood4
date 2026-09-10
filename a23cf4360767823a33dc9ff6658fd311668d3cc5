@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64d1138b_16a7257a",
+        "filename": "librobinhood/include/robinhood/backends/fts.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-09-10T07:07:58Z",
+      "side": 1,
+      "message": "typo: 2026",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "a23cf4360767823a33dc9ff6658fd311668d3cc5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b647fb99_e9478fbd",
+        "filename": "librobinhood/src/plugins/posix/iterators/fts/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-09-10T07:07:58Z",
+      "side": 1,
+      "message": "typo: 2026",
+      "range": {
+        "startLine": 2,
+        "startChar": 16,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "a23cf4360767823a33dc9ff6658fd311668d3cc5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
