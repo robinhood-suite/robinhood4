@@ -398,7 +398,7 @@ mpi_file_backend_filter(
     }
 
     mpi_file_iter = (struct mfu_iterator *)
-         rbh_mpi_file_mfu_iter_new(mpi_file->flist, prefix_len);
+         rbh_mpi_file_mfu_iter_new(metadata, mpi_file->flist, prefix_len);
     if (mpi_file_iter == NULL)
         return NULL;
 
