@@ -14,6 +14,17 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
+test_invalid_stat_options()
+{
+    rbh_sync rbh:posix:$file rbh:$db:$testdb --stats --log-timer blob &&
+        error "Sync with invalid log timer should have failed"
+
+    rbh_sync rbh:posix:$file rbh:$db:$testdb --stats --log-timer -3 &&
+        error "Sync with invalid log timer should have failed"
+
+    return 0
+}
+
 find_expected_values()
 {
     local output="$1"
@@ -118,7 +129,7 @@ test_mpi_stats()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=()
+declare -a tests=(test_invalid_stat_options)
 
 if [[ $WITH_MPI == true ]]; then
     tests+=(test_mpi_stats)

@@ -63,6 +63,8 @@ struct rbh_metadata {
         struct rbh_gc_metadata gc_md;
     };
     time_t last_shown_time;
+    FILE *log_file;
+    int64_t log_timer;
 };
 
 /**
@@ -159,12 +161,13 @@ rbh_set_common_metadata_pairs(struct rbh_common_metadata *md,
 static inline bool
 rbh_should_print_log(struct rbh_metadata *metadata)
 {
-    return time(NULL) - metadata->last_shown_time >= 1;
+    return metadata->log_timer > 0 &&
+           time(NULL) - metadata->last_shown_time >= metadata->log_timer;
 }
 
 void
 rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type,
-              FILE *log_file, const char *plugin_name);
+              const char *plugin_name);
 
 void
 rbh_timespec_atomic_accumulate(struct rbh_fsevents_metadata *fsevents_md,

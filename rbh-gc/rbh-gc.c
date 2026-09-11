@@ -75,6 +75,8 @@ usage(void)
         "    -d, --dry-run              displays the list of the absent entries\n"
         "    -h, --help                 print this messsage and exit\n"
         "    --log-file FILE            redirect command stats printing to given FILE\n"
+        "    --log-timer TIMER          print stats each TIMER seconds, 60 by\n"
+        "                               default, 0 to only print at the end of the command\n"
         "    -s, --sync-time SYNC_TIME  instead of checking every entry of the BACKEND,\n"
         "                               only consider entries with a sync_time lesser\n"
         "                               than SYNC_TIME\n"
@@ -473,7 +475,7 @@ print_entries(struct rbh_iterator *iterator)
 static void
 gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
    struct rbh_metadata *metadata, struct rbh_filter *filter,
-   bool print_stats, FILE *log_file)
+   bool print_stats)
 {
     const struct rbh_filter_options OPTIONS = {
         .verbose = verbose_mode,
@@ -499,8 +501,6 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
     };
     struct rbh_filter *_filter = NULL;
     struct rbh_iterator *constify;
-
-    (void) log_file;
 
     if (metadata->gc_md.sync_time >= 0) {
         const struct rbh_filter_field *field;
@@ -560,7 +560,7 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
             metadata->gc_md.deleted_entry_count += count;
 
             if (print_stats && rbh_should_print_log(metadata))
-                rbh_print_log(metadata, RBH_GC_LOG, log_file, NULL);
+                rbh_print_log(metadata, RBH_GC_LOG, NULL);
 
         } while (true);
 
@@ -576,7 +576,7 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
         }
 
         if (print_stats)
-            rbh_print_log(metadata, RBH_GC_LOG, log_file, NULL);
+            rbh_print_log(metadata, RBH_GC_LOG, NULL);
     } else {
         struct rbh_iterator *prints;
 
@@ -591,7 +591,13 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
 int
 main(int _argc, char *_argv[])
 {
-    struct rbh_metadata metadata = { .last_shown_time = time(NULL) };
+    struct rbh_metadata metadata = {
+        .common_md.command_line = get_command_line(_argc, _argv),
+        .gc_md.sync_time = -1,
+        .last_shown_time = time(NULL),
+        .log_file = stdout,
+        .log_timer = 60,
+    };
     struct rbh_filter_options options = {0};
     struct filters_context f_ctx = {0};
     struct rbh_value_map *info_map;
@@ -599,7 +605,6 @@ main(int _argc, char *_argv[])
     bool verbose_mode = false;
     struct rbh_filter *filter;
     bool print_stats = false;
-    FILE *log_file = stdout;
     int others_count = 0;
     char **others = NULL;
     int index = 1;
@@ -607,9 +612,6 @@ main(int _argc, char *_argv[])
     char *path;
     int argc;
     int rc;
-
-    metadata.gc_md.sync_time = -1;
-    metadata.common_md.command_line = get_command_line(_argc, _argv);
 
     argc = _argc - 1;
     argv = &_argv[1];
@@ -654,10 +656,22 @@ main(int _argc, char *_argv[])
                 error(EXIT_FAILURE, EINVAL,
                       "Missing argument for '--log-file'");
 
-            log_file = fopen(argv[++i], "w");
-            if (log_file == NULL)
+            metadata.log_file = fopen(argv[++i], "w");
+            if (metadata.log_file == NULL)
                 error(EXIT_FAILURE, errno, "Failed to open log file '%s'",
                       argv[i]);
+        } else if (strcmp(arg, "--log-timer") == 0) {
+            if (i + 1 >= argc)
+                error(EXIT_FAILURE, EINVAL,
+                      "Missing argument for '--log-file'");
+
+            if (str2int64_t(optarg, &metadata.log_timer))
+                error(EXIT_FAILURE, errno, "Failed to convert '%s' to int64_t",
+                      optarg);
+
+            if (metadata.log_timer < 0)
+                error(EXIT_FAILURE, EINVAL, "Log timer '%s' cannot be negative",
+                      optarg);
         } else if (strcmp(arg, "--sync-time") == 0 || strcmp(arg, "-s") == 0) {
             if (i + 1 >= argc)
                 error(EXIT_FAILURE, EINVAL, "Missing argument for %s", arg);
@@ -712,8 +726,7 @@ main(int _argc, char *_argv[])
         error(EXIT_FAILURE, errno, "Failed to open mountpoint '%s'", path);
 
     metadata.common_md.start_time = time(NULL);
-    gc(path, dry_run_mode, verbose_mode, &metadata, filter, print_stats,
-       log_file);
+    gc(path, dry_run_mode, verbose_mode, &metadata, filter, print_stats);
     metadata.common_md.end_time = time(NULL);
 
     insert_gc_log(&metadata);
@@ -723,8 +736,8 @@ main(int _argc, char *_argv[])
     free(path);
     rbh_config_free();
 
-    if (log_file != stdout)
-        fclose(log_file);
+    if (metadata.log_file != stdout)
+        fclose(metadata.log_file);
 
     return EXIT_SUCCESS;
 }
