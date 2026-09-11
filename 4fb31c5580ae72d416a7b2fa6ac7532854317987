@@ -91,6 +91,30 @@
       },
       "revId": "4fb31c5580ae72d416a7b2fa6ac7532854317987",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75b2d5c7_02a198f9",
+        "filename": "podman/docker-compose.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1039798
+      },
+      "writtenOn": "2026-09-11T07:51:58Z",
+      "side": 1,
+      "message": "reason: Context is `..` instead of `.`, so the dockerfile path needs to go into `podman/` first to find the Dockerfile. The context differs between the two services (which is needed because robinhood.Dockerfile uses COPY . .).",
+      "parentUuid": "84cd9784_3fee758e",
+      "range": {
+        "startLine": 15,
+        "startChar": 18,
+        "endLine": 15,
+        "endChar": 45
+      },
+      "revId": "4fb31c5580ae72d416a7b2fa6ac7532854317987",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
