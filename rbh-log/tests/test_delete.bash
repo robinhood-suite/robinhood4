@@ -36,17 +36,24 @@ log_shouldnt_exist()
 
 test_delete()
 {
-    rbh_sync "rbh:posix:." "rbh:$db:$testdb" # id 1 in DB
-    rbh_sync "rbh:posix:." "rbh:$db:$testdb" # id 2
-    rbh_sync "rbh:posix:." "rbh:$db:$testdb" # id 3
-    rbh_sync "rbh:posix:." "rbh:$db:$testdb" # id 4
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+    local id1="$(do_db get_last_log_id $testdb)"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+    local id2="$(do_db get_last_log_id $testdb)"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+    local id3="$(do_db get_last_log_id $testdb)"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+    local id4="$(do_db get_last_log_id $testdb)"
 
-    rbh_find rbh:$db:$testdb > /dev/null # id 5
-    rbh_find rbh:$db:$testdb > /dev/null # id 6
+    rbh_find rbh:$db:$testdb > /dev/null
+    local id5="$(do_db get_last_log_id $testdb)"
+    rbh_find rbh:$db:$testdb > /dev/null
+    local id6="$(do_db get_last_log_id $testdb)"
 
     rbh_report rbh:$db:$testdb \
         --group-by "statx.uid" \
-        --output "sum(statx.size)" > /dev/null # id 7
+        --output "sum(statx.size)" > /dev/null
+    local id7="$(do_db get_last_log_id $testdb)"
 
     rbh_log rbh:$db:$testdb --count | sort |
         difflines "Log count for the 'find' command: '2'" \
@@ -56,13 +63,13 @@ test_delete()
                   "Log count for the 'sync' command: '4'" \
                   "Total log count: '7'"
 
-    log_should_exist 1
-    log_should_exist 2
-    log_should_exist 3
-    log_should_exist 4
-    log_should_exist 5
-    log_should_exist 6
-    log_should_exist 7
+    log_should_exist $id1
+    log_should_exist $id2
+    log_should_exist $id3
+    log_should_exist $id4
+    log_should_exist $id5
+    log_should_exist $id6
+    log_should_exist $id7
 
     rbh_log rbh:$db:$testdb --sync 3 --delete
 
@@ -74,13 +81,13 @@ test_delete()
                   "Log count for the 'sync' command: '1'" \
                   "Total log count: '4'"
 
-    log_should_exist 1
-    log_shouldnt_exist 2
-    log_shouldnt_exist 3
-    log_shouldnt_exist 4
-    log_should_exist 5
-    log_should_exist 6
-    log_should_exist 7
+    log_should_exist $id1
+    log_shouldnt_exist $id2
+    log_shouldnt_exist $id3
+    log_shouldnt_exist $id4
+    log_should_exist $id5
+    log_should_exist $id6
+    log_should_exist $id7
 
     rbh_log rbh:$db:$testdb --gc 7 --delete
 
@@ -92,13 +99,13 @@ test_delete()
                   "Log count for the 'sync' command: '1'" \
                   "Total log count: '4'"
 
-    log_should_exist 1
-    log_shouldnt_exist 2
-    log_shouldnt_exist 3
-    log_shouldnt_exist 4
-    log_should_exist 5
-    log_should_exist 6
-    log_should_exist 7
+    log_should_exist $id1
+    log_shouldnt_exist $id2
+    log_shouldnt_exist $id3
+    log_shouldnt_exist $id4
+    log_should_exist $id5
+    log_should_exist $id6
+    log_should_exist $id7
 
     rbh_log rbh:$db:$testdb --last 1 --delete
 
@@ -110,13 +117,13 @@ test_delete()
                   "Log count for the 'sync' command: '1'" \
                   "Total log count: '3'"
 
-    log_should_exist 1
-    log_shouldnt_exist 2
-    log_shouldnt_exist 3
-    log_shouldnt_exist 4
-    log_should_exist 5
-    log_should_exist 6
-    log_shouldnt_exist 7
+    log_should_exist $id1
+    log_shouldnt_exist $id2
+    log_shouldnt_exist $id3
+    log_shouldnt_exist $id4
+    log_should_exist $id5
+    log_should_exist $id6
+    log_shouldnt_exist $id7
 
     rbh_log rbh:$db:$testdb --first 1 --delete
 
@@ -128,13 +135,13 @@ test_delete()
                   "Log count for the 'sync' command: '0'" \
                   "Total log count: '2'"
 
-    log_shouldnt_exist 1
-    log_shouldnt_exist 2
-    log_shouldnt_exist 3
-    log_shouldnt_exist 4
-    log_should_exist 5
-    log_should_exist 6
-    log_shouldnt_exist 7
+    log_shouldnt_exist $id1
+    log_shouldnt_exist $id2
+    log_shouldnt_exist $id3
+    log_shouldnt_exist $id4
+    log_should_exist $id5
+    log_should_exist $id6
+    log_shouldnt_exist $id7
 
     rbh_log rbh:$db:$testdb --find 42 --delete
 
@@ -146,13 +153,13 @@ test_delete()
                   "Log count for the 'sync' command: '0'" \
                   "Total log count: '0'"
 
-    log_shouldnt_exist 1
-    log_shouldnt_exist 2
-    log_shouldnt_exist 3
-    log_shouldnt_exist 4
-    log_shouldnt_exist 5
-    log_shouldnt_exist 6
-    log_shouldnt_exist 7
+    log_shouldnt_exist $id1
+    log_shouldnt_exist $id2
+    log_shouldnt_exist $id3
+    log_shouldnt_exist $id4
+    log_shouldnt_exist $id5
+    log_shouldnt_exist $id6
+    log_shouldnt_exist $id7
 }
 
 ################################################################################
