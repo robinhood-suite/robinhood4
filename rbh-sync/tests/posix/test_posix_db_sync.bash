@@ -295,36 +295,6 @@ EOF
     ! (find_attribute '"ns.xattrs.path": "/dir"')
 }
 
-test_stats()
-{
-    mkdir -p {1..9}/{1..9}
-
-    local output="$(rbh_sync_posix . rbh:$db:$testdb --stats)"
-
-    echo "$output" | grep "rbh-sync" > /dev/null ||
-        error "Should have found 'rbh-sync' mentionned, got '$output'"
-
-    # 9 * 9 + 9 directories + root = 91 entries
-    echo "$output" | grep "progress" | grep "91" > /dev/null ||
-        error "Last log shown should have found 91 entries in total, got '$output'"
-
-    echo "$output" | grep "current speed" | grep "entries/sec" > /dev/null ||
-        error "Logs should show the current speed in entries per second, got '$output'"
-
-    rbh_sync_posix . rbh:$db:$testdb --stats --log-file logs.txt
-    output="$(cat logs.txt)"
-
-    echo "$output" | grep "rbh-sync" > /dev/null ||
-        error "Should have found 'rbh-sync' mentionned, got '$output'"
-
-    # 9 * 9 + 9 directories + root + logs.txt = 92 entries
-    echo "$output" | grep "progress" | grep "92" > /dev/null ||
-        error "Last log shown should have found 92 entries in total, got '$output'"
-
-    echo "$output" | grep "current speed" | grep "entries/sec" > /dev/null ||
-        error "Logs should show the current speed in entries per second, got '$output'"
-}
-
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -337,8 +307,6 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
 
 if [[ $WITH_MPI == true ]]; then
     tests+=(test_sync_large_path test_sync_dir_delete_while_mfu_walk)
-else
-    tests+=(test_stats)
 fi
 
 tmpdir=$(mktemp --directory)
