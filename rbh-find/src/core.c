@@ -42,7 +42,7 @@ open_system_backends(struct rbh_backend **backends, size_t backend_count,
         return;
 
     f_ctx->backend_count = backend_count;
-    f_ctx->backend = xmalloc(f_ctx->backend_count);
+    f_ctx->backend = xmalloc(f_ctx->backend_count * sizeof(*f_ctx->backend));
 
     for (int i = 0; i < backend_count; ++i) {
         struct rbh_value_map *info_map = NULL;
