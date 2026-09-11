@@ -10,6 +10,7 @@
 #endif
 
 #include <assert.h>
+#include <unistd.h>
 
 #include "robinhood/utils.h"
 #include "value.h"
@@ -26,87 +27,15 @@ destroy_sstack(void)
         rbh_sstack_destroy(logs_sstack);
 }
 
-static int64_t
-get_current_id(struct mongo_backend *mongo)
-{
-    mongoc_find_and_modify_opts_t *opts;
-    bson_iter_t child_iter;
-    bson_t *filter = NULL;
-    bson_error_t error;
-    bson_iter_t iter;
-    char *error_str;
-    bson_t *update;
-    bson_t reply;
-    bool success;
-    int rc;
-
-    /* Find and update the log_id atomically */
-    filter = BCON_NEW("_id", "log_id");
-    update = BCON_NEW("$inc", "{", "log_id", BCON_INT32(1), "}");
-
-    opts = mongoc_find_and_modify_opts_new();
-    mongoc_find_and_modify_opts_set_update(opts, update);
-    /* Create the document if it didn't exist, and return the updated document */
-    mongoc_find_and_modify_opts_set_flags(opts,
-                                          MONGOC_FIND_AND_MODIFY_UPSERT |
-                                          MONGOC_FIND_AND_MODIFY_RETURN_NEW);
-
-    success = mongoc_collection_find_and_modify_with_opts(mongo->info, filter,
-                                                          opts, &reply, &error);
-    if (!success) {
-        fprintf(stderr, "Failed to retrieve log id: %s\n", error.message);
-        rc = -1;
-        goto out;
-    }
-
-    /* Convoluted, but that's bson for you... 'reply' looks like this:
-     * { "lastErrorObject" :
-     *      { "n" : { "$numberInt" : "1" },
-     *        "updatedExisting" : true
-     *      },
-     *   "value" :
-     *      { "_id" : "log_id",
-     *        "log_id" : { "$numberInt" : "3" }
-     *      },
-     *   "ok" : { "$numberDouble" : "1.0" }
-     * }
-     * So we have to find the "value" document which contains the "log_id" value
-     * we updated and convert it.
-     */
-    if (!bson_iter_init(&iter, &reply) || !bson_iter_find(&iter, "value") ||
-        !bson_iter_recurse(&iter, &child_iter) || !bson_iter_find(&child_iter,
-                                                                  "log_id")) {
-        error_str = bson_as_canonical_extended_json(&reply, NULL);
-        fprintf(stderr, "Failed to find log id in iterator: %s\n", error_str);
-        bson_free(error_str);
-        rc = -1;
-        goto out;
-    }
-
-    rc = bson_iter_as_int64(&child_iter);
-
-out:
-    bson_destroy(&reply);
-    bson_destroy(update);
-    mongoc_find_and_modify_opts_destroy(opts);
-    bson_destroy(filter);
-
-    return rc;
-}
-
 int
 mongo_backend_insert_log(void *backend, const char *command,
                          const struct rbh_value_map *map)
 {
     struct mongo_backend *mongo = backend;
     mongoc_collection_t *collection;
-    bson_t *filter = NULL;
     bson_t *update = NULL;
-    bson_t *opts = NULL;
-    bson_t metadata_doc;
     bson_error_t error;
     struct timeval now;
-    int64_t log_id;
     int result;
     int rc = 0;
 
@@ -114,29 +43,16 @@ mongo_backend_insert_log(void *backend, const char *command,
     collection = mongo->log;
     update = bson_new();
 
-    log_id = get_current_id(mongo);
-    if (log_id < 0) {
-        fprintf(stderr, "Failed to retrieve log id to insert new log\n");
-        rc = -1;
-        goto skip_insert;
-    }
-
-    filter = BCON_NEW("_id", BCON_INT64(log_id));
-    opts = BCON_NEW("upsert", BCON_BOOL(true));
-
-    if (!(BSON_APPEND_DOCUMENT_BEGIN(update, "$set", &metadata_doc)
-        && BSON_APPEND_RBH_VALUE_MAP(&metadata_doc, command, map)
-        && BSON_APPEND_DATE_TIME(
-                &metadata_doc, "logged_at",
-                (int64_t) (now.tv_sec * 1000 + now.tv_usec / 1000)
-           )
-        && bson_append_document_end(update, &metadata_doc))) {
+    if (!(BSON_APPEND_DATE_TIME(
+            update, "logged_at",
+            (int64_t) (now.tv_sec * 1000 + now.tv_usec / 1000)
+          ) && BSON_APPEND_RBH_VALUE_MAP(update, command, map))) {
         fprintf(stderr, "Error while appending rbh_value to bson\n");
         rc = -1;
         goto skip_insert;
     }
 
-    result = mongoc_collection_update_one(collection, filter, update, opts,
+    result = mongoc_collection_insert_one(collection, update, NULL,
                                           NULL, &error);
     if (!result) {
         fprintf(stderr, "Upsert failed: %s\n", error.message);
@@ -144,12 +60,8 @@ mongo_backend_insert_log(void *backend, const char *command,
     }
 
 skip_insert:
-    if (filter)
-        bson_destroy(filter);
     if (update)
         bson_destroy(update);
-    if (opts)
-        bson_destroy(opts);
 
     return rc;
 }
@@ -179,7 +91,8 @@ get_logs(const struct mongo_backend *mongo, struct rbh_value_pair *pair,
 
     opts = BCON_NEW("limit", BCON_INT64(options->count),
                     "sort", "{",
-                                "_id", BCON_INT32(options->ascending ? 1 : -1),
+                                "logged_at",
+                                    BCON_INT32(options->ascending ? 1 : -1),
                             "}");
 
     cursor = mongoc_collection_find_with_opts(mongo->log, filter, opts, NULL);
@@ -364,11 +277,11 @@ mongo_backend_delete_logs(void *backend, struct rbh_log_options options)
 {
     const char *str_type = rbh_log_type2str(options.type);
     struct mongo_backend *mongo = backend;
+    const bson_oid_t **ids = NULL;
     const char **keys = NULL;
     mongoc_cursor_t *cursor;
     bson_t *selector = NULL;
     bson_t *opts = NULL;
-    int64_t *ids = NULL;
     bson_error_t error;
     const bson_t *doc;
     bson_iter_t iter;
@@ -387,7 +300,8 @@ mongo_backend_delete_logs(void *backend, struct rbh_log_options options)
     opts = BCON_NEW("limit", BCON_INT64(options.count),
                     "projection", "{", "_id", BCON_BOOL(true), "}",
                     "sort", "{",
-                                "_id", BCON_INT32(options.ascending ? 1 : -1),
+                                "logged_at",
+                                    BCON_INT32(options.ascending ? 1 : -1),
                             "}");
 
     ids = xcalloc(options.count, sizeof(*ids));
@@ -448,8 +362,8 @@ mongo_backend_delete_logs(void *backend, struct rbh_log_options options)
         }
 
         while (bson_iter_next(&iter)) {
-            assert(BSON_ITER_HOLDS_INT64(&iter));
-            ids[index] = bson_iter_int64(&iter);;
+            assert(BSON_ITER_HOLDS_OID(&iter));
+            ids[index] = bson_iter_oid(&iter);;
         }
     }
 
@@ -469,7 +383,7 @@ mongo_backend_delete_logs(void *backend, struct rbh_log_options options)
         int key_length;
 
         key_length = bson_uint32_to_string(i, &key, str, sizeof(str));
-        if (!bson_append_int64(&array, key, key_length, ids[i])) {
+        if (!bson_append_oid(&array, key, key_length, ids[i])) {
             rc = -1;
             goto out;
         }
