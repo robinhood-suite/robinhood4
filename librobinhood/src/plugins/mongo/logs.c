@@ -105,9 +105,14 @@ mongo_backend_insert_log(void *backend, const char *command,
     bson_t *opts = NULL;
     bson_t metadata_doc;
     bson_error_t error;
+    struct timeval now;
     int64_t log_id;
     int result;
     int rc = 0;
+
+    gettimeofday(&now, NULL);
+    collection = mongo->log;
+    update = bson_new();
 
     log_id = get_current_id(mongo);
     if (log_id < 0) {
@@ -116,14 +121,15 @@ mongo_backend_insert_log(void *backend, const char *command,
         goto skip_insert;
     }
 
-    collection = mongo->log;
-    update = bson_new();
-
     filter = BCON_NEW("_id", BCON_INT64(log_id));
     opts = BCON_NEW("upsert", BCON_BOOL(true));
 
     if (!(BSON_APPEND_DOCUMENT_BEGIN(update, "$set", &metadata_doc)
         && BSON_APPEND_RBH_VALUE_MAP(&metadata_doc, command, map)
+        && BSON_APPEND_DATE_TIME(
+                &metadata_doc, "logged_at",
+                (int64_t) (now.tv_sec * 1000 + now.tv_usec / 1000)
+           )
         && bson_append_document_end(update, &metadata_doc))) {
         fprintf(stderr, "Error while appending rbh_value to bson\n");
         rc = -1;
