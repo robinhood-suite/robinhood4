@@ -22,6 +22,30 @@
       },
       "revId": "7f9a4d16897e10dae36dfc6277b3c5f2ed02b21e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "830638ff_000ff23b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-11T17:16:19Z",
+      "side": 1,
+      "message": "Removes the different calls and the conditionnal if-s",
+      "parentUuid": "24e7a277_1417bac3",
+      "range": {
+        "startLine": 9,
+        "startChar": 29,
+        "endLine": 9,
+        "endChar": 36
+      },
+      "revId": "7f9a4d16897e10dae36dfc6277b3c5f2ed02b21e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
