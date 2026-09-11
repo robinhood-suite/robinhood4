@@ -557,8 +557,7 @@ iter_convert(struct rbh_iterator *fsentries,
 
 static void
 sync(const struct rbh_filter_projection *projection,
-     struct rbh_metadata *metadata, bool print_stats,
-     FILE *log_file)
+     struct rbh_metadata *metadata, bool print_stats)
 {
     const struct rbh_filter_options OPTIONS = {
         .skip_error = skip_error,
@@ -624,7 +623,7 @@ sync(const struct rbh_filter_projection *projection,
         }
 
         if (print_stats && rbh_should_print_log(metadata))
-            rbh_print_log(metadata, RBH_SYNC_LOG, log_file, from->name);
+            rbh_print_log(metadata, RBH_SYNC_LOG, from->name);
 
         count = rbh_backend_update(to, chunk);
         save_errno = errno;
@@ -648,7 +647,7 @@ sync(const struct rbh_filter_projection *projection,
     }
 
     if (print_stats)
-        rbh_print_log(metadata, RBH_SYNC_LOG, log_file, from->name);
+        rbh_print_log(metadata, RBH_SYNC_LOG, from->name);
 }
 
 /*----------------------------------------------------------------------------*
@@ -749,6 +748,8 @@ usage(void)
         "    -o, --one              only consider the root of SOURCE\n"
         "    --stats                show command stats during execution to stdout\n"
         "    --log-file FILE        redirect command stats printing to given FILE\n"
+        "    --log-timer TIMER      print stats each TIMER seconds, 60 by\n"
+        "                           default, 0 to only print at the end of the command\n"
         "    --version              print RobinHood 4's version\n"
         "\n"
         "Capability arguments:\n"
@@ -792,6 +793,10 @@ main(int argc, char *argv[])
             .val = 'c',
         },
         {
+            .name = "dry-run",
+            .val = 'd',
+        },
+        {
             .name = "field",
             .has_arg = required_argument,
             .val = 'f',
@@ -822,8 +827,9 @@ main(int argc, char *argv[])
             .val = 's',
         },
         {
-            .name = "dry-run",
-            .val = 'd',
+            .name = "log-timer",
+            .has_arg = required_argument,
+            .val = 'T',
         },
         {
             .name = "version",
@@ -836,14 +842,16 @@ main(int argc, char *argv[])
         .fsentry_mask = RBH_FP_ALL,
         .statx_mask = RBH_STATX_ALL & ~RBH_STATX_MNT_ID,
     };
-    struct rbh_metadata metadata = { .last_shown_time = time(NULL) };
+    struct rbh_metadata metadata = {
+        .common_md.command_line = get_command_line(argc, argv),
+        .last_shown_time = time(NULL),
+        .log_file = stdout,
+        .log_timer = 60,
+    };
     bool print_stats = false;
-    FILE *log_file = stdout;
     char *cmd_backend;
     int rc;
     char c;
-
-    metadata.common_md.command_line = get_command_line(argc, argv);
 
     rc = rbh_config_from_args(argc - 1, argv + 1);
     if (rc)
@@ -852,7 +860,7 @@ main(int argc, char *argv[])
     rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "c:df:hl:L:n:osz", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "c:df:hl:L:n:osT:z", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
         case 'c':
@@ -882,8 +890,8 @@ main(int argc, char *argv[])
             list_capabilities(optarg);
             return EXIT_SUCCESS;
         case 'L':
-            log_file = fopen(optarg, "w");
-            if (log_file == NULL)
+            metadata.log_file = fopen(optarg, "w");
+            if (metadata.log_file == NULL)
                 error(EXIT_FAILURE, errno, "Failed to open log file '%s'",
                       optarg);
             break;
@@ -895,6 +903,16 @@ main(int argc, char *argv[])
             break;
         case 's':
             print_stats = true;
+            break;
+        case 'T':
+            if (str2int64_t(optarg, &metadata.log_timer))
+                error(EXIT_FAILURE, errno, "Failed to convert '%s' to int64_t",
+                      optarg);
+
+            if (metadata.log_timer < 0)
+                error(EXIT_FAILURE, EINVAL, "Log timer '%s' cannot be negative",
+                      optarg);
+
             break;
         case 'z':
             rbh_print_version();
@@ -928,7 +946,7 @@ main(int argc, char *argv[])
     sync_mountpoint(metadata.sync_md.source_mountpoint);
 
     metadata.common_md.start_time = time(NULL);
-    sync(&projection, &metadata, print_stats, log_file);
+    sync(&projection, &metadata, print_stats);
     metadata.common_md.end_time = time(NULL);
 
     insert_sync_log(to, &metadata);
@@ -937,8 +955,8 @@ main(int argc, char *argv[])
     free(metadata.common_md.command_line);
     rbh_config_free();
 
-    if (log_file != stdout)
-        fclose(log_file);
+    if (metadata.log_file != stdout)
+        fclose(metadata.log_file);
 
     return EXIT_SUCCESS;
 }

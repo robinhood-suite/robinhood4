@@ -14,6 +14,19 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
+test_invalid_stat_options()
+{
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats --log-timer blob &&
+        error "Fsevents with invalid log timer should have failed"
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats --log-timer -3 &&
+        error "Fsevents with invalid log timer should have failed"
+
+    return 0
+}
+
 test_stats()
 {
     touch test_entry
@@ -75,7 +88,7 @@ test_stats()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_stats)
+declare -a tests=(test_invalid_stat_options test_stats)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"

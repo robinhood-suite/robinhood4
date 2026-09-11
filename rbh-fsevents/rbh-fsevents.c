@@ -85,6 +85,9 @@ usage(void)
         "                    do not print any log on ESTALE errors, quietly skip/quit instead\n"
         "    --log-file FILE\n"
         "                    redirect command stats printing to given FILE\n"
+        "    --log-timer TIMER\n"
+        "                    print stats each TIMER seconds, 60 by default,\n"
+        "                    0 to only print at the end of the command\n"
         "    -m, --max NUMBER\n"
         "                    Set a maximum number of changelog to read\n"
         "    -n, --no-skip   do not skip entries on error, stop instead\n"
@@ -556,8 +559,7 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
                 pthread_mutex_t *mutex_available_for_work,
                 pthread_cond_t *signal_available_for_work,
                 struct rbh_metadata *metadata,
-                bool print_stats,
-                FILE *log_file)
+                bool print_stats)
 {
     struct rbh_mut_iterator *batch = NULL;
     struct sub_batch *sub_batch;
@@ -627,7 +629,7 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
         batch_id++;
 
         if (print_stats && rbh_should_print_log(metadata))
-            rbh_print_log(metadata, RBH_FSEVENTS_LOG, log_file, NULL);
+            rbh_print_log(metadata, RBH_FSEVENTS_LOG, NULL);
     }
 
 end:
@@ -671,8 +673,7 @@ static int
 feed(struct sink **sink, struct source *source,
      struct enrich_iter_builder *builder, bool allow_partials,
      struct deduplicator_options *dedup_opts,
-     struct rbh_metadata *metadata, bool print_stats,
-     FILE *log_file)
+     struct rbh_metadata *metadata, bool print_stats)
 {
     struct rbh_mut_iterator *deduplicator = NULL;
     pthread_mutex_t mutex_available_for_work;
@@ -693,7 +694,7 @@ feed(struct sink **sink, struct source *source,
     /* Launch the producer loop */
     rc = producer_thread(deduplicator, builder, allow_partials, cinfos,
                          &mutex_available_for_work, &signal_available_for_work,
-                         metadata, print_stats, log_file);
+                         metadata, print_stats);
 
     /* Cleanup the producer and consumers */
     cleanup_producer_consumers(deduplicator, cinfos, consumers);
@@ -706,7 +707,7 @@ feed(struct sink **sink, struct source *source,
         rc = -1;
 
     if (print_stats)
-        rbh_print_log(metadata, RBH_FSEVENTS_LOG, log_file, NULL);
+        rbh_print_log(metadata, RBH_FSEVENTS_LOG, NULL);
 
     return rc;
 }
@@ -781,6 +782,11 @@ main(int argc, char *argv[])
             .val = 's',
         },
         {
+            .name = "log-timer",
+            .has_arg = required_argument,
+            .val = 'T',
+        },
+        {
             .name = "verbose",
             .has_arg = no_argument,
             .val = 'v',
@@ -792,21 +798,23 @@ main(int argc, char *argv[])
         },
         {}
     };
-    struct rbh_metadata metadata = { .last_shown_time = time(NULL) };
     struct deduplicator_options dedup_opts = {
         .batch_size = DEFAULT_BATCH_SIZE,
+    };
+    struct rbh_metadata metadata = {
+        .common_md.command_line = get_command_line(argc, argv),
+        .fsevents_md.worker_count = 1,
+        .fsevents_md.start_index = -1,
+        .last_shown_time = time(NULL),
+        .log_file = stdout,
+        .log_timer = 60,
     };
     uint64_t max_changelog = 0;
     char *cmd_backend = NULL;
     bool print_stats = false;
-    FILE *log_file = stdout;
     char *dump_file = NULL;
     int rc;
     char c;
-
-    metadata.fsevents_md.worker_count = 1;
-    metadata.fsevents_md.start_index = -1;
-    metadata.common_md.command_line = get_command_line(argc, argv);
 
     rc = rbh_config_from_args(argc - 1, argv + 1);
     if (rc)
@@ -815,8 +823,8 @@ main(int argc, char *argv[])
     rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "b:c:d:e:hi:lL:m:nrsvw:z", LONG_OPTIONS,
-                            NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "b:c:d:e:hi:lL:m:nrsT:vw:z",
+                            LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'b':
             if (str2uint64_t(optarg, &dedup_opts.batch_size))
@@ -850,8 +858,8 @@ main(int argc, char *argv[])
             estale_logs = false;
             break;
         case 'L':
-            log_file = fopen(optarg, "w");
-            if (log_file == NULL)
+            metadata.log_file = fopen(optarg, "w");
+            if (metadata.log_file == NULL)
                 error(EXIT_FAILURE, errno, "Failed to open log file '%s'",
                       optarg);
             break;
@@ -875,6 +883,16 @@ main(int argc, char *argv[])
             break;
         case 's':
             print_stats = true;
+            break;
+        case 'T':
+            if (str2int64_t(optarg, &metadata.log_timer))
+                error(EXIT_FAILURE, errno, "Failed to convert '%s' to int64_t",
+                      optarg);
+
+            if (metadata.log_timer < 0)
+                error(EXIT_FAILURE, EINVAL, "Log timer '%s' cannot be negative",
+                      optarg);
+
             break;
         case 'x':
             rbh_display_resolved_argv(NULL, &argc, &argv);
@@ -927,7 +945,7 @@ main(int argc, char *argv[])
 
     metadata.common_md.start_time = time(NULL);
     rc = feed(sink, source, enrich_builder, strcmp(sink[0]->name, "backend"),
-              &dedup_opts, &metadata, print_stats, log_file);
+              &dedup_opts, &metadata, print_stats);
     metadata.common_md.end_time = time(NULL);
 
     insert_fsevents_log(sink[0], &metadata);
@@ -937,8 +955,8 @@ main(int argc, char *argv[])
     free(metadata.common_md.command_line);
     rbh_config_free();
 
-    if (log_file != stdout)
-        fclose(log_file);
+    if (metadata.log_file != stdout)
+        fclose(metadata.log_file);
 
     return rc == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
