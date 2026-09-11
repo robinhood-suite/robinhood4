@@ -9,6 +9,17 @@
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/../../utils/tests/framework.bash
 
+test_invalid_stat_options()
+{
+    rbh_gc "rbh:$db:$testdb" --stats --log-timer blob &&
+        error "GC with invalid log timer should have failed"
+
+    rbh_gc "rbh:$db:$testdb" --stats --log-timer -3 &&
+        error "GC with invalid log timer should have failed"
+
+    return 0
+}
+
 test_stats()
 {
     touch fileA
@@ -47,7 +58,7 @@ test_stats()
         error "Invalid progress stats, got '$output', expected '1 kept'"
 }
 
-declare -a tests=(test_stats)
+declare -a tests=(test_invalid_stat_options test_stats)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
