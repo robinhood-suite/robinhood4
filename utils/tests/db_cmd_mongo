@@ -84,7 +84,15 @@ find_log()
     local db="$1"
     local id="$2"
 
-    mongo "$db" --eval "db.log.find({\"_id\": $id})"
+    mongo "$db" --eval "db.log.find({\"_id\": ObjectId(\"$id\")})"
+}
+
+get_last_log_id()
+{
+    local db="$1"
+
+    mongo "$db" --eval "db.log.find().sort({\"logged_at\": -1}).limit(1)" |
+        cut -d'"' -f4
 }
 
 remove_attribute()
@@ -113,6 +121,9 @@ case "$cmd" in
         ;;
     find_log)
         find_log "$db" "$@"
+        ;;
+    get_last_log_id)
+        get_last_log_id "$db" "$@"
         ;;
     get)
         get_attribute "$db" "$@"
