@@ -15,19 +15,6 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-test_invalid()
-{
-    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
-
-    rbh_log "rbh:$db:$testdb" --fsevents blob &&
-        error "log with invalid fsevents count should have failed"
-
-    rbh_log "rbh:$db:$testdb" --fsevents 42invalid &&
-        error "log with invalid fsevents count should have failed"
-
-    return 0
-}
-
 check_log_result()
 {
     local output="$1"
@@ -74,7 +61,7 @@ test_N_logs()
         invoke_rbh-fsevents
     done
 
-    local output=$(rbh_log "rbh:$db:$testdb" --fsevents $requested)
+    local output=$(rbh_log "rbh:$db:$testdb" --fsevents -n $requested)
 
     local n_lines=$(echo "$output" | wc -l)
 
@@ -139,7 +126,7 @@ test_command_line()
     cat tmp | rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR - - > tmp
     cat tmp | rbh_fsevents - rbh:$db:$testdb > /dev/null
 
-    rbh_log rbh:$db:$testdb --fsevents 7 | grep "Command" | cut -d':' -f2- |
+    rbh_log rbh:$db:$testdb --fsevents -n 7 | grep "Command" | cut -d':' -f2- |
         sed 's/^[ \t]*//' | sed -n "s/.*$command/$command/p" |
         # Two of the commands above are not here because their output was a file
         # and not the database, so there is no log associated
@@ -179,13 +166,13 @@ test_source_and_enrichment()
 
     stop_changelogs "$other_mdt" "$other_mdt_user"
 
-    rbh_log rbh:$db:$testdb --fsevents 4 | grep "Source of the events" |
+    rbh_log rbh:$db:$testdb --fsevents -n 4 | grep "Source of the events" |
         cut -d':' -f2- | sed 's/^[ \t]*//' |
         difflines "$LUSTRE_MDT" "$other_mdt" "$other_mdt" "$LUSTRE_MDT"
 
     # LUSTRE_DIR without last slash
     local ldwls="${LUSTRE_DIR::-1}"
-    rbh_log rbh:$db:$testdb --fsevents 4 | grep "Enrichment mountpoint" |
+    rbh_log rbh:$db:$testdb --fsevents -n 4 | grep "Enrichment mountpoint" |
         cut -d':' -f2- | sed 's/^[ \t]*//' |
         difflines "$ldwls" "." "$ldwls" "$ldwls"
 }
@@ -218,11 +205,11 @@ test_worker_count_start_index()
         src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
         --nb-workers 4 --index 2
 
-    rbh_log rbh:$db:$testdb --fsevents 5 | grep "parallel" |
+    rbh_log rbh:$db:$testdb --fsevents -n 5 | grep "parallel" |
         cut -d':' -f2- | sed 's/^[ \t]*//' |
         difflines "4" "1" "2" "2" "1"
 
-    rbh_log rbh:$db:$testdb --fsevents 5 | grep "Starting index" |
+    rbh_log rbh:$db:$testdb --fsevents -n 5 | grep "Starting index" |
         cut -d':' -f2- | sed 's/^[ \t]*//' |
         difflines "2" "4" "2" "0" "0"
 }
@@ -264,7 +251,7 @@ test_changelog_amount()
     rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
         src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
 
-    rbh_log rbh:$db:$testdb --fsevents 5 | grep "changelog read" |
+    rbh_log rbh:$db:$testdb --fsevents -n 5 | grep "changelog read" |
         cut -d':' -f2- | sed 's/^[ \t]*//' |
         difflines "$changelog_count5" \
                   "$changelog_count4" \
@@ -319,7 +306,7 @@ test_work_timestamps()
 
     # No way to check the real times against what rbh-log says, so just check
     # they seem like normal times
-    local output="$(rbh_log rbh:$db:$testdb --fsevents 5 |
+    local output="$(rbh_log rbh:$db:$testdb --fsevents -n 5 |
                         grep "reading/deduplicating" |
                         cut -d':' -f2- | sed 's/^[ \t]*//')"
     for i in $(seq 1 5); do
@@ -331,7 +318,7 @@ test_work_timestamps()
         fi
     done
 
-    local output="$(rbh_log rbh:$db:$testdb --fsevents 5 |
+    local output="$(rbh_log rbh:$db:$testdb --fsevents -n 5 |
                         grep "enriching/updating" |
                         cut -d':' -f2- | sed 's/^[ \t]*//')"
     for i in $(seq 1 5); do
@@ -375,7 +362,7 @@ test_deduplication_ratio()
         echo "(1.0 - ${dedup_id_count}.0 / ${full_id_count}.0) * 100.0" |
         bc -l)"
 
-    rbh_log rbh:$db:$testdb --fsevents 2 | grep "Ratio" |
+    rbh_log rbh:$db:$testdb --fsevents -n 2 | grep "Ratio" |
         cut -d':' -f2- | sed 's/^[ \t]*//' |
         difflines "$(printf "%.3f" $expected_dedup_ratio)" \
                   "0.000"
@@ -387,24 +374,22 @@ test_order()
 
     local command="rbh-fsevents"
     local flag="fsevents"
-
-    if [ "$order" == "descending" ]; then
-        local count="3"
-    else
-        local count="-3"
-    fi
+    local count="3"
 
     set +e
     rbh_fsevents src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
     set -e
-    rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
-    rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb -b 400 -d blob --no-estale-logs > /dev/null
+    rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR \
+        src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
+    rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR \
+        src:lustre:$LUSTRE_MDT rbh:$db:$testdb \
+        -b 400 -d blob --no-estale-logs > /dev/null
 
-    local output="$(rbh_log rbh:$db:$testdb --$flag $count | grep "Command" |
+    local output="$(rbh_log rbh:$db:$testdb $order -n $count | grep "Command" |
                     cut -d':' -f2- | sed 's/^[ \t]*//' |
                     sed -n "s/.*$command/$command/p")"
 
-    if [ "$order" == "descending" ]; then
+    if [ "$order" != "--first" ]; then
         echo "$output" |
             difflines "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb -b 400 -d blob --no-estale-logs" \
                       "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb" \
@@ -419,19 +404,19 @@ test_order()
 
 test_ascending()
 {
-    test_order ascending
+    test_order "--first"
 }
 
 test_descending()
 {
-    test_order descending
+    test_order
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid test_fsevents_1 test_fsevents_N test_more_than_N
+declare -a tests=(test_fsevents_1 test_fsevents_N test_more_than_N
                   test_timestamps test_command_line test_source_and_enrichment
                   test_worker_count_start_index test_changelog_amount
                   test_work_timestamps test_deduplication_ratio test_ascending

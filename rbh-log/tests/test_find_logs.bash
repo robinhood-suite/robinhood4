@@ -14,19 +14,6 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-test_invalid()
-{
-    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
-
-    rbh_log "rbh:$db:$testdb" --find blob &&
-        error "log with invalid find count should have failed"
-
-    rbh_log "rbh:$db:$testdb" --find 42invalid &&
-        error "log with invalid find count should have failed"
-
-    return 0
-}
-
 check_log_result()
 {
     local output="$1"
@@ -68,7 +55,7 @@ test_N_logs()
         expected_line_count=$(( expected_line_count + 5 + 2 ))
     done
 
-    local output=$(rbh_log "rbh:$db:$testdb" --find $requested)
+    local output=$(rbh_log "rbh:$db:$testdb" --find -n $requested)
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != $expected_line_count)); then
@@ -134,7 +121,7 @@ test_command_line()
     rbh_find --config $conf rbh:$db:$testdb -size +3 -uid 30 -printf "blob\n" > /dev/null
     rbh_find --config $conf rbh:$db:$testdb --alias blob -count > /dev/null
 
-    rbh_log rbh:$db:$testdb --find 6 | grep "Command" | cut -d':' -f2- |
+    rbh_log rbh:$db:$testdb --find -n 6 | grep "Command" | cut -d':' -f2- |
         sed 's/^[ \t]*//' | sed -n "s/.*$command/$command/p" |
         difflines "rbh-find --config $conf rbh:$db:$testdb --alias blob -count" \
                   "rbh-find --config $conf rbh:$db:$testdb -size +3 -uid 30 -printf blob\n" \
@@ -158,23 +145,23 @@ test_entry_count()
     rbh_sync rbh:posix:. rbh:$db:$testdb
 
     rbh_find rbh:$db:$testdb > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
     check_expected_log_value "$output" "post-filtering" "5"
 
     rbh_find rbh:$db:$testdb -name "*test*" > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
     check_expected_log_value "$output" "post-filtering" "3"
 
     rbh_find rbh:$db:$testdb -type d > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
     check_expected_log_value "$output" "post-filtering" "2"
 
     rbh_find rbh:$db:$testdb -type f -size +0 > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
     check_expected_log_value "$output" "post-filtering" "1"
 
-    rbh_log "rbh:$db:$testdb" --find 4 | grep "post-filtering" | cut -d':' -f2 |
-        sed 's/^[ \t]*//' | difflines "1" "2" "3" "5"
+    rbh_log "rbh:$db:$testdb" --find -n 4 | grep "post-filtering" |
+        cut -d':' -f2 | sed 's/^[ \t]*//' | difflines "1" "2" "3" "5"
 }
 
 test_exec_success_count()
@@ -192,31 +179,31 @@ test_exec_success_count()
     rbh_sync rbh:posix:. rbh:$db:$testdb
 
     rbh_find rbh:$db:$testdb -exec cat {} \; > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
     check_expected_log_value "$output" "exec command" "3"
 
     rbh_find rbh:$db:$testdb -exec grep -H "test" {} \; > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
     check_expected_log_value "$output" "exec command" "0"
 
     rbh_find rbh:$db:$testdb -exec grep -H "blob" {} \; > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
     check_expected_log_value "$output" "exec command" "1"
 
     rbh_find rbh:$db:$testdb -type f -exec grep -H "o" {} \; > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
     check_expected_log_value "$output" "exec command" "2"
 
     rbh_find rbh:$db:$testdb -type l -exec echo "{}" \; > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
     check_expected_log_value "$output" "exec command" "0"
 
     rbh_find rbh:$db:$testdb -exec ls {} \; > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
     check_expected_log_value "$output" "exec command" "5"
 
-    rbh_log "rbh:$db:$testdb" --find 6 | grep "exec command" | cut -d':' -f2 |
-        sed 's/^[ \t]*//' | difflines "5" "0" "2" "1" "0" "3"
+    rbh_log "rbh:$db:$testdb" --find -n 6 | grep "exec command" |
+        cut -d':' -f2 | sed 's/^[ \t]*//' | difflines "5" "0" "2" "1" "0" "3"
 }
 
 test_order()
@@ -225,12 +212,7 @@ test_order()
 
     local command="rbh-find"
     local flag="find"
-
-    if [ "$order" == "descending" ]; then
-        local count="4"
-    else
-        local count="-4"
-    fi
+    local count="4"
 
     rbh_sync rbh:posix:. rbh:$db:$testdb
 
@@ -239,11 +221,11 @@ test_order()
     rbh_find rbh:$db:$testdb -size +3 -uid 30 -printf "blob\n" > /dev/null
     rbh_find rbh:$db:$testdb -count > /dev/null
 
-    local output="$(rbh_log rbh:$db:$testdb --$flag $count | grep "Command" |
-                    cut -d':' -f2- | sed 's/^[ \t]*//' |
+    local output="$(rbh_log rbh:$db:$testdb --find $order -n $count |
+                    grep "Command" | cut -d':' -f2- | sed 's/^[ \t]*//' |
                     sed -n "s/.*$command/$command/p")"
 
-    if [ "$order" == "descending" ]; then
+    if [ "$order" != "--first" ]; then
         echo "$output" |
             difflines "rbh-find rbh:$db:$testdb -count" \
                       "rbh-find rbh:$db:$testdb -size +3 -uid 30 -printf blob\n" \
@@ -260,12 +242,12 @@ test_order()
 
 test_ascending()
 {
-    test_order ascending
+    test_order "--first"
 }
 
 test_descending()
 {
-    test_order descending
+    test_order
 }
 
 ################################################################################
@@ -274,7 +256,7 @@ test_descending()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
+declare -a tests=(test_last_1 test_last_N test_more_than_N
                   test_timestamps test_command_line test_entry_count
                   test_exec_success_count test_ascending test_descending)
 
