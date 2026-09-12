@@ -67,11 +67,50 @@ skip_insert:
 }
 
 static int
+log_type_to_bson_t(bson_t *filter, size_t types)
+{
+    int type = RBH_LOG_TYPE_FIRST;
+    int counter = 0;
+    bson_t array;
+
+    if (!BSON_APPEND_ARRAY_BEGIN(filter, "$or", &array))
+        return 1;
+
+    while (type <= RBH_LOG_TYPE_LAST) {
+        const char *str_type;
+        bson_t subdocument;
+        size_t key_length;
+        bson_t document;
+        const char *key;
+        char str[16];
+
+        if (!(type & types)) {
+            type = type << 1;
+            continue;
+        }
+
+        str_type = rbh_log_type2str(type);
+        key_length = bson_uint32_to_string(counter, &key, str, sizeof(str));
+
+        if (!(bson_append_document_begin(&array, key, key_length, &document) &&
+              BSON_APPEND_DOCUMENT_BEGIN(&document, str_type, &subdocument) &&
+              BSON_APPEND_BOOL(&subdocument, "$exists", true) &&
+              bson_append_document_end(&document, &subdocument) &&
+              bson_append_document_end(&array, &document)))
+            return 1;
+
+        type = type << 1;
+        counter++;
+    }
+
+    return !bson_append_array_end(filter, &array);
+}
+
+static int
 get_logs(const struct mongo_backend *mongo, struct rbh_value_pair *pair,
          struct rbh_log_options *options)
 {
-    const char *str_type = rbh_log_type2str(options->type);
-    mongoc_cursor_t *cursor;
+    mongoc_cursor_t *cursor = NULL;
     struct rbh_value value;
     bson_t *opts = NULL;
     bson_error_t error;
@@ -84,10 +123,12 @@ get_logs(const struct mongo_backend *mongo, struct rbh_value_pair *pair,
     char *buffer;
     int rc = 0;
 
-    if (options->type == RBH_ALL_LOG)
-        filter = bson_new();
-    else
-        filter = BCON_NEW(str_type, "{", "$exists", "true", "}");
+    filter = bson_new();
+    if (options->type != RBH_ALL_LOG &&
+        log_type_to_bson_t(filter, options->type)) {
+        rc = 1;
+        goto out;
+    }
 
     opts = BCON_NEW("limit", BCON_INT64(options->count),
                     "sort", "{",
@@ -139,9 +180,7 @@ get_logs(const struct mongo_backend *mongo, struct rbh_value_pair *pair,
              * type. If we don't request a specific log type, check the key
              * corresponds to a known log type.
              */
-            if ((options->type != RBH_ALL_LOG && strcmp(key, str_type) == 0) ||
-                (options->type == RBH_ALL_LOG &&
-                    str2rbh_log_type(key) != RBH_ALL_LOG)) {
+            if (str2rbh_log_type(key) != RBH_ALL_LOG) {
                 if (!bson_iter_rbh_value(&iter, &value, &buffer, &bufsize)) {
                     rc = 1;
                     goto out;
@@ -159,8 +198,10 @@ get_logs(const struct mongo_backend *mongo, struct rbh_value_pair *pair,
 out:
     if (cursor)
         mongoc_cursor_destroy(cursor);
-    bson_destroy(filter);
-    bson_destroy(opts);
+    if (filter)
+        bson_destroy(filter);
+    if (opts)
+        bson_destroy(opts);
 
     return rc;
 
@@ -234,14 +275,14 @@ mongo_backend_get_log_count(void *backend)
                                      (sizeof(struct rbh_value_map *)));
 
     values = RBH_SSTACK_PUSH(logs_sstack, NULL,
-                             RBH_LOG_TYPE_LAST * sizeof(*values));
+                             RBH_LOG_TYPE_COUNT * sizeof(*values));
     pairs = RBH_SSTACK_PUSH(logs_sstack, NULL,
-                            RBH_LOG_TYPE_LAST * sizeof(*pairs));
+                            RBH_LOG_TYPE_COUNT * sizeof(*pairs));
     map_value = RBH_SSTACK_PUSH(logs_sstack, NULL, sizeof(*map_value));
 
     for (enum rbh_log_type type = RBH_LOG_TYPE_FIRST;
          type <= RBH_LOG_TYPE_LAST;
-         type++) {
+         type = type << 1) {
         const char *key = rbh_log_type2str(type);
         bson_t *filter;
         int64_t count;
@@ -277,10 +318,9 @@ out:
 int
 mongo_backend_delete_logs(void *backend, struct rbh_log_options options)
 {
-    const char *str_type = rbh_log_type2str(options.type);
     struct mongo_backend *mongo = backend;
+    mongoc_cursor_t *cursor = NULL;
     const char **keys = NULL;
-    mongoc_cursor_t *cursor;
     bson_t *selector = NULL;
     bson_oid_t *ids = NULL;
     bson_t *opts = NULL;
@@ -294,10 +334,12 @@ mongo_backend_delete_logs(void *backend, struct rbh_log_options options)
     bool result;
     int rc = 0;
 
-    if (options.type == RBH_ALL_LOG)
-        filter = bson_new();
-    else
-        filter = BCON_NEW(str_type, "{", "$exists", BCON_BOOL(true), "}");
+    filter = bson_new();
+    if (options.type != RBH_ALL_LOG &&
+        log_type_to_bson_t(filter, options.type)) {
+        rc = -1;
+        goto out;
+    }
 
     opts = BCON_NEW("limit", BCON_INT64(options.count),
                     "projection", "{", "_id", BCON_BOOL(true), "}",
@@ -333,7 +375,9 @@ mongo_backend_delete_logs(void *backend, struct rbh_log_options options)
      */
     cursor = mongoc_collection_find_with_opts(mongo->log, filter, opts, NULL);
     bson_destroy(filter);
+    filter = NULL;
     bson_destroy(opts);
+    opts = NULL;
     if (!cursor) {
         rc = 1;
         goto out;
@@ -374,10 +418,8 @@ mongo_backend_delete_logs(void *backend, struct rbh_log_options options)
     selector = bson_new();
     bson_t document;
 
-    if (!bson_append_document_begin(selector, "_id", strlen("_id"), &document))
-        goto out;
-
-    if (!bson_append_array_begin(&document, "$in", strlen("$in"), &array)) {
+    if (!(BSON_APPEND_DOCUMENT_BEGIN(selector, "_id", &document) &&
+          BSON_APPEND_ARRAY_BEGIN(&document, "$in", &array))) {
         rc = -1;
         goto out;
     }
@@ -393,12 +435,8 @@ mongo_backend_delete_logs(void *backend, struct rbh_log_options options)
         }
     }
 
-    if (!bson_append_array_end(&document, &array)) {
-        rc = -1;
-        goto out;
-    }
-
-    if (!bson_append_document_end(selector, &document)) {
+    if (!(bson_append_array_end(&document, &array) &&
+          bson_append_document_end(selector, &document))) {
         rc = -1;
         goto out;
     }
@@ -417,11 +455,14 @@ out:
     if (selector)
         bson_destroy(selector);
     free(ids);
+    if (filter)
+        bson_destroy(filter);
 
     return rc;
 
 handle_error:
-    mongoc_cursor_destroy(cursor);
+    if (cursor)
+        mongoc_cursor_destroy(cursor);
 
     switch (error.domain) {
     case MONGOC_ERROR_SERVER_SELECTION:

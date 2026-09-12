@@ -71,15 +71,16 @@ struct rbh_metadata {
  * Determines the type of logs to fetch.
  */
 enum rbh_log_type {
-    RBH_ALL_LOG,
-    RBH_FIND_LOG,
-    RBH_FSEVENTS_LOG,
-    RBH_GC_LOG,
-    RBH_REPORT_LOG,
-    RBH_SYNC_LOG,
+    RBH_ALL_LOG      = 0x00,
+    RBH_FIND_LOG     = 0x01,
+    RBH_FSEVENTS_LOG = 0x02,
+    RBH_GC_LOG       = 0x04,
+    RBH_REPORT_LOG   = 0x08,
+    RBH_SYNC_LOG     = 0x10,
 
     RBH_LOG_TYPE_FIRST = RBH_FIND_LOG,
     RBH_LOG_TYPE_LAST = RBH_SYNC_LOG,
+    RBH_LOG_TYPE_COUNT = 5,
 };
 
 static inline const char *
@@ -127,7 +128,7 @@ str2rbh_log_type(const char *str)
  * sorting order.
  */
 struct rbh_log_options {
-    enum rbh_log_type type;
+    size_t type;
     size_t count;
     bool ascending;
 };
