@@ -45,19 +45,6 @@ generate_commands()
 #                                    TESTS                                     #
 ################################################################################
 
-test_invalid()
-{
-    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
-
-    rbh_log "rbh:$db:$testdb" --last blob &&
-        error "log with invalid last count should have failed"
-
-    rbh_log "rbh:$db:$testdb" --last 42invalid &&
-        error "log with invalid last count should have failed"
-
-    return 0
-}
-
 # Each of the following functions will check the associated command look to be
 # outputting the correct lines, and return the whole output with the current
 # command truncated.
@@ -192,8 +179,8 @@ test_any_logs()
 
     generate_commands
 
-    local output=$(rbh_log "rbh:$db:$testdb" $order 21)
-    local tmp_output=$(rbh_log "rbh:$db:$testdb" $order 30)
+    local output=$(rbh_log "rbh:$db:$testdb" $order -n 21)
+    local tmp_output=$(rbh_log "rbh:$db:$testdb" $order -n 30)
 
     if [ "$output" != "$tmp_output" ]; then
         error "Outputted logs should have been the same, got '$output' and '$tmp_output'"
@@ -225,7 +212,7 @@ test_first_logs()
 
 test_last_logs()
 {
-    test_any_logs --last
+    test_any_logs
 }
 
 test_oneline()
@@ -234,8 +221,8 @@ test_oneline()
 
     generate_commands
 
-    local output=$(rbh_log "rbh:$db:$testdb" --last 21 --oneline)
-    local tmp_output=$(rbh_log "rbh:$db:$testdb" --last 30 --oneline)
+    local output=$(rbh_log "rbh:$db:$testdb" $order -n 21 --oneline)
+    local tmp_output=$(rbh_log "rbh:$db:$testdb" $order -n 30 --oneline)
 
     if [ "$output" != "$tmp_output" ]; then
         error "Outputted oneline logs should have been the same, got '$output' and '$tmp_output'"
@@ -311,7 +298,7 @@ test_oneline()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid test_first_logs test_last_logs test_oneline)
+declare -a tests=(test_first_logs test_last_logs test_oneline)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
