@@ -195,16 +195,16 @@ main(int argc, char *argv[])
             delete_logs = true;
             break;
         case 'i':
-            options.type = RBH_FIND_LOG;
+            options.type |= RBH_FIND_LOG;
             break;
         case 'f':
-            options.type = RBH_FSEVENTS_LOG;
+            options.type |= RBH_FSEVENTS_LOG;
             break;
         case 'F':
             options.ascending = true;
             break;
         case 'g':
-            options.type = RBH_GC_LOG;
+            options.type |= RBH_GC_LOG;
             break;
         case 'h':
             usage();
@@ -222,10 +222,10 @@ main(int argc, char *argv[])
             print_oneline = true;
             break;
         case 'r':
-            options.type = RBH_REPORT_LOG;
+            options.type |= RBH_REPORT_LOG;
             break;
         case 's':
-            options.type = RBH_SYNC_LOG;
+            options.type |= RBH_SYNC_LOG;
             break;
         case 'z':
             rbh_print_version();
