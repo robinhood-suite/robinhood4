@@ -40,16 +40,18 @@ usage(void)
         "\n"
         "Optional arguments:\n"
         "   -c, --config PATH       the configuration file to use\n"
-        "   --count                 print the number of logs currently recorded.\n"
-        "                           Cannot be used with '--delete'\n"
+        "   --log-count             print the number of logs currently recorded.\n"
+        "                           Cannot be used with '--delete' and no logs\n"
+        "                           will be printed.\n"
         "   --delete                delete the requested logs instead of printing\n"
-        "                           them. Cannot be used with '--count'\n"
+        "                           them. Cannot be used with '--count' and no\n"
+        "                           logs will be printed.\n"
         "   -h, --help              show this message and exit\n"
         "   -i, --find              print rbh-find logs\n"
         "   -f, --fsevents          print rbh-fsevents logs\n"
         "   -F, --first             print the first log instead of the last\n"
         "   -g, --gc                print rbh-gc logs\n"
-        "   -n N                    print N logs\n"
+        "   -n, --count N           print N logs instead of one\n"
         "   --oneline               print logs in a shortened format\n"
         "   -r, --report            print rbh-report logs\n"
         "   -s, --sync              print rbh-sync logs\n"
@@ -118,10 +120,6 @@ main(int argc, char *argv[])
             .val = 'c',
         },
         {
-            .name = "count",
-            .val = 'Z',
-        },
-        {
             .name = "delete",
             .val = 'd',
         },
@@ -146,7 +144,11 @@ main(int argc, char *argv[])
             .val = 'h',
         },
         {
-            .name = "n",
+            .name = "log-count",
+            .val = 'Z',
+        },
+        {
+            .name = "count",
             .has_arg = required_argument,
             .val = 'n',
         },
@@ -168,7 +170,10 @@ main(int argc, char *argv[])
         },
         {}
     };
-    struct rbh_log_options options = { .type = RBH_ALL_LOG };
+    struct rbh_log_options options = {
+        .type = RBH_ALL_LOG,
+        .count = 1
+    };
     struct rbh_value_map *logs_map = NULL;
     bool print_oneline = false;
     bool print_count = false;
