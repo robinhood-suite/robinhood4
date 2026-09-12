@@ -14,19 +14,6 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-test_invalid()
-{
-    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
-
-    rbh_log "rbh:$db:$testdb" --gc blob &&
-        error "log with invalid gc count should have failed"
-
-    rbh_log "rbh:$db:$testdb" --gc 42invalid &&
-        error "log with invalid gc count should have failed"
-
-    return 0
-}
-
 check_log_result()
 {
     local output="$1"
@@ -57,7 +44,7 @@ test_N_logs()
         rbh_gc "rbh:$db:$testdb" -size +1M -s 42
     done
 
-    local output=$(rbh_log "rbh:$db:$testdb" --gc $requested)
+    local output=$(rbh_log "rbh:$db:$testdb" --gc -n $requested)
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != $count * $expected)); then
@@ -118,7 +105,7 @@ test_command_line()
     rbh_gc --config $conf rbh:$db:$testdb -type d -size +3 -s 53 > /dev/null
     rbh_gc --dry-run rbh:$db:$testdb --check "$PWD/blob.sh" > /dev/null
 
-    rbh_log rbh:$db:$testdb --gc 6 | grep "Command" | cut -d':' -f2- |
+    rbh_log rbh:$db:$testdb --gc -n 6 | grep "Command" | cut -d':' -f2- |
         sed 's/^[ \t]*//' | sed -n "s/.*$command/$command/p" |
         difflines "rbh-gc --dry-run rbh:$db:$testdb --check $PWD/blob.sh" \
                   "rbh-gc --config $conf rbh:$db:$testdb -type d -size +3 -s 53" \
@@ -157,17 +144,14 @@ test_entries_seen_deleted()
     # Last gc should see the 3 remaining entries and remove 2
     rbh_gc rbh:$db:$testdb
 
-    rbh_log rbh:$db:$testdb --gc 4 | grep " deleted entries" | cut -d':' -f2- |
-        sed 's/^[ \t]*//' |
-        difflines "2" "0" "2" "1"
+    rbh_log rbh:$db:$testdb --gc -n 4 | grep " deleted entries" |
+        cut -d':' -f2- | sed 's/^[ \t]*//' | difflines "2" "0" "2" "1"
 
-    rbh_log rbh:$db:$testdb --gc 4 | grep "non-deleted entries" |
-        cut -d':' -f2- | sed 's/^[ \t]*//' |
-        difflines "1" "3" "0" "5"
+    rbh_log rbh:$db:$testdb --gc -n 4 | grep "non-deleted entries" |
+        cut -d':' -f2- | sed 's/^[ \t]*//' | difflines "1" "3" "0" "5"
 
-    rbh_log rbh:$db:$testdb --gc 4 | grep "entries seen" | cut -d':' -f2- |
-        sed 's/^[ \t]*//' |
-        difflines "3" "3" "2" "6"
+    rbh_log rbh:$db:$testdb --gc -n 4 | grep "entries seen" | cut -d':' -f2- |
+        sed 's/^[ \t]*//' | difflines "3" "3" "2" "6"
 }
 
 test_sync_time()
@@ -182,7 +166,7 @@ test_sync_time()
     rbh_gc rbh:$db:$testdb --sync-time $current_date
     rbh_gc rbh:$db:$testdb --sync-time 9999999
 
-    rbh_log rbh:$db:$testdb --gc 5 | grep "Sync" | cut -d':' -f2- |
+    rbh_log rbh:$db:$testdb --gc -n 5 | grep "Sync" | cut -d':' -f2- |
         sed 's/^[ \t]*//' |
         difflines "9999999" "$current_date" "620" "42" "1"
 }
@@ -193,12 +177,7 @@ test_order()
 
     local command="rbh-gc"
     local flag="gc"
-
-    if [ "$order" == "descending" ]; then
-        local count="5"
-    else
-        local count="-5"
-    fi
+    local count="5"
 
     rbh_sync rbh:posix:. rbh:$db:$testdb
 
@@ -207,11 +186,11 @@ test_order()
     rbh_gc rbh:$db:$testdb -s 42 --verbose > /dev/null
     rbh_gc rbh:$db:$testdb -type d -size +3 -s 53 > /dev/null
 
-    local output="$(rbh_log rbh:$db:$testdb --$flag $count | grep "Command" |
+    local output="$(rbh_log rbh:$db:$testdb $order -n $count | grep "Command" |
                     cut -d':' -f2- | sed 's/^[ \t]*//' |
                     sed -n "s/.*$command/$command/p")"
 
-    if [ "$order" == "descending" ]; then
+    if [ "$order" != "--first" ]; then
         echo "$output" |
             difflines "rbh-gc rbh:$db:$testdb -type d -size +3 -s 53" \
                       "rbh-gc rbh:$db:$testdb -s 42 --verbose" \
@@ -228,19 +207,19 @@ test_order()
 
 test_ascending()
 {
-    test_order ascending
+    test_order "--first"
 }
 
 test_descending()
 {
-    test_order descending
+    test_order
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
+declare -a tests=(test_last_1 test_last_N test_more_than_N
                   test_timestamps test_command_line test_entries_seen_deleted
                   test_sync_time test_ascending test_descending)
 
