@@ -58,7 +58,7 @@ test_log_count()
     local total_count=$((find_count + fsevents_count + gc_count +
                          report_count + sync_count))
 
-    rbh_log rbh:$db:$testdb --count | sort |
+    rbh_log rbh:$db:$testdb --log-count | sort |
         difflines "Log count for the 'find' command: '$find_count'" \
                   "Log count for the 'fsevents' command: '$fsevents_count'" \
                   "Log count for the 'gc' command: '$gc_count'" \

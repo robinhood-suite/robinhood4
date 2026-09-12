@@ -55,7 +55,7 @@ test_delete()
         --output "sum(statx.size)" > /dev/null
     local id7="$(do_db get_last_log_id $testdb)"
 
-    rbh_log rbh:$db:$testdb --count | sort |
+    rbh_log rbh:$db:$testdb --log-count | sort |
         difflines "Log count for the 'find' command: '2'" \
                   "Log count for the 'fsevents' command: '0'" \
                   "Log count for the 'gc' command: '0'" \
@@ -73,7 +73,7 @@ test_delete()
 
     rbh_log rbh:$db:$testdb --sync -n 3 --delete
 
-    rbh_log rbh:$db:$testdb --count | sort |
+    rbh_log rbh:$db:$testdb --log-count | sort |
         difflines "Log count for the 'find' command: '2'" \
                   "Log count for the 'fsevents' command: '0'" \
                   "Log count for the 'gc' command: '0'" \
@@ -91,7 +91,7 @@ test_delete()
 
     rbh_log rbh:$db:$testdb --gc -n 7 --delete
 
-    rbh_log rbh:$db:$testdb --count | sort |
+    rbh_log rbh:$db:$testdb --log-count | sort |
         difflines "Log count for the 'find' command: '2'" \
                   "Log count for the 'fsevents' command: '0'" \
                   "Log count for the 'gc' command: '0'" \
@@ -109,7 +109,7 @@ test_delete()
 
     rbh_log rbh:$db:$testdb -n 1 --delete
 
-    rbh_log rbh:$db:$testdb --count | sort |
+    rbh_log rbh:$db:$testdb --log-count | sort |
         difflines "Log count for the 'find' command: '2'" \
                   "Log count for the 'fsevents' command: '0'" \
                   "Log count for the 'gc' command: '0'" \
@@ -127,7 +127,7 @@ test_delete()
 
     rbh_log rbh:$db:$testdb -n 1 --delete
 
-    rbh_log rbh:$db:$testdb --count | sort |
+    rbh_log rbh:$db:$testdb --log-count | sort |
         difflines "Log count for the 'find' command: '1'" \
                   "Log count for the 'fsevents' command: '0'" \
                   "Log count for the 'gc' command: '0'" \
@@ -145,7 +145,7 @@ test_delete()
 
     rbh_log rbh:$db:$testdb -n 42 --delete
 
-    rbh_log rbh:$db:$testdb --count | sort |
+    rbh_log rbh:$db:$testdb --log-count | sort |
         difflines "Log count for the 'find' command: '0'" \
                   "Log count for the 'fsevents' command: '0'" \
                   "Log count for the 'gc' command: '0'" \
