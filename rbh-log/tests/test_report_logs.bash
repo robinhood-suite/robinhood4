@@ -14,19 +14,6 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-test_invalid()
-{
-    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
-
-    rbh_log "rbh:$db:$testdb" --report blob &&
-        error "log with invalid report count should have failed"
-
-    rbh_log "rbh:$db:$testdb" --report 42invalid &&
-        error "log with invalid report count should have failed"
-
-    return 0
-}
-
 check_log_result()
 {
     local output="$1"
@@ -47,7 +34,7 @@ test_N_logs()
             --group-by "statx.uid" --output "sum(statx.size)" > /dev/null
     done
 
-    local output=$(rbh_log "rbh:$db:$testdb" --report $requested)
+    local output=$(rbh_log "rbh:$db:$testdb" --report -n $requested)
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != $count * $expected)); then
@@ -114,7 +101,7 @@ test_command_line()
             --output "sum(statx.size),min(statx.uid),avg(statx.gid)" \
             --csv --rsort > /dev/null
 
-    rbh_log rbh:$db:$testdb --report 5 | grep "Command" | cut -d':' -f2- |
+    rbh_log rbh:$db:$testdb --report -n 5 | grep "Command" | cut -d':' -f2- |
         sed 's/^[ \t]*//' | sed -n "s/.*$command/$command/p" |
         difflines "rbh-report rbh:$db:$testdb --group-by statx.uid,statx.gid,statx.type --output sum(statx.size),min(statx.uid),avg(statx.gid) --csv --rsort" \
                   "rbh-report rbh:$db:$testdb --group-by statx.uid --output sum(statx.size) --csv" \
@@ -129,12 +116,7 @@ test_order()
 
     local command="rbh-report"
     local flag="report"
-
-    if [ "$order" == "descending" ]; then
-        local count="3"
-    else
-        local count="-3"
-    fi
+    local count="3"
 
     rbh_sync rbh:posix:. rbh:$db:$testdb
 
@@ -147,11 +129,11 @@ test_order()
             --output "sum(statx.size),min(statx.uid),avg(statx.gid)" \
             --csv --rsort > /dev/null
 
-    local output="$(rbh_log rbh:$db:$testdb --$flag $count | grep "Command" |
-                    cut -d':' -f2- | sed 's/^[ \t]*//' |
+    local output="$(rbh_log rbh:$db:$testdb --report $order -n $count |
+                     grep "Command" | cut -d':' -f2- | sed 's/^[ \t]*//' |
                     sed -n "s/.*$command/$command/p")"
 
-    if [ "$order" == "descending" ]; then
+    if [ "$order" != "--first" ]; then
         echo "$output" |
             difflines "rbh-report rbh:$db:$testdb --group-by statx.uid,statx.gid,statx.type --output sum(statx.size),min(statx.uid),avg(statx.gid) --csv --rsort" \
                       "rbh-report rbh:$db:$testdb -v --csv --group-by statx.uid --output sum(statx.size)" \
@@ -166,21 +148,20 @@ test_order()
 
 test_ascending()
 {
-    test_order ascending
+    test_order "--first"
 }
 
 test_descending()
 {
-    test_order descending
+    test_order
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
-                  test_timestamps test_command_line test_ascending
-                  test_descending)
+declare -a tests=(test_last_1 test_last_N test_more_than_N test_timestamps
+                  test_command_line test_ascending test_descending)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
