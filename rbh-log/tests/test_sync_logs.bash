@@ -51,19 +51,6 @@ sync_with_other_user()
 #                                    TESTS                                     #
 ################################################################################
 
-test_invalid()
-{
-    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
-
-    rbh_log "rbh:$db:$testdb" --last blob &&
-        error "log with invalid last count should have failed"
-
-    rbh_log "rbh:$db:$testdb" --last 42invalid &&
-        error "log with invalid last count should have failed"
-
-    return 0
-}
-
 check_log_result()
 {
     local output="$1"
@@ -92,7 +79,7 @@ test_N_logs()
         rbh_sync "rbh:posix:." "rbh:$db:$testdb"
     done
 
-    local output=$(rbh_log "rbh:$db:$testdb" --sync $requested)
+    local output=$(rbh_log "rbh:$db:$testdb" --sync -n $requested)
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != 10 * $expected)); then
@@ -147,7 +134,7 @@ test_command_line()
     rbh_sync --config $conf rbh:posix:. rbh:$db:$testdb --no-skip
     rbh_sync --config $conf rbh:posix:$file rbh:$db:$testdb --no-skip --one
 
-    rbh_log rbh:$db:$testdb --sync 5 | grep "Command" | cut -d':' -f2- |
+    rbh_log rbh:$db:$testdb --sync -n 5 | grep "Command" | cut -d':' -f2- |
         sed 's/^[ \t]*//' | sed -n "s/.*$command/$command/p" |
         difflines "rbh-sync --config $conf rbh:posix:$file rbh:$db:$testdb --no-skip --one" \
                   "rbh-sync --config $conf rbh:posix:. rbh:$db:$testdb --no-skip" \
@@ -179,14 +166,14 @@ test_entry_count()
     # second file and the directory
     sync_with_other_user
 
-    local output=$(rbh_log "rbh:$db:$testdb" --sync 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --sync -n 1)
 
     check_expected_log_value "$output" "skipped" "3"
     check_expected_log_value "$output" "converted" "2"
     check_expected_log_value "$output" "seen" "5"
 
     rbh_sync rbh:posix:. rbh:$db:$testdb
-    local output=$(rbh_log "rbh:$db:$testdb" --sync 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --sync -n 1)
 
     check_expected_log_value "$output" "skipped" "0"
     check_expected_log_value "$output" "converted" "5"
@@ -195,7 +182,8 @@ test_entry_count()
     rm -rf $dir
     do_db clear_entries $testdb
     rbh_sync "rbh:posix:." rbh:$db:$testdb
-    rbh_log "rbh:$db:$testdb" --sync 3 | grep "Amount" | sort | cut -d':' -f2 |
+    rbh_log "rbh:$db:$testdb" --sync -n 3 | grep "Amount" | sort |
+        cut -d':' -f2 |
         # The sort makes it so that all converted counts are shown first,
         # then total count, then skipped
         sed 's/^[ \t]*//' | difflines "2" "3" "5" \
@@ -216,23 +204,23 @@ test_mountpoint()
     touch $dir/$third_file
 
     rbh_sync rbh:posix:. rbh:$db:$testdb
-    local output=$(rbh_log "rbh:$db:$testdb" --sync 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --sync -n 1)
     check_expected_log_value "$output" "Mountpoint" "$(pwd)"
 
     rbh_sync rbh:posix:$(pwd)/$first_file rbh:$db:$testdb
-    local output=$(rbh_log "rbh:$db:$testdb" --sync 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --sync -n 1)
     check_expected_log_value "$output" "Mountpoint" "$(pwd)/$first_file"
 
     rbh_sync rbh:posix:$(pwd)/$dir/$third_file rbh:$db:$testdb
-    local output=$(rbh_log "rbh:$db:$testdb" --sync 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --sync -n 1)
     check_expected_log_value "$output" "Mountpoint" "$(pwd)/$dir/$third_file"
 
     rbh_sync "rbh:posix:$(pwd)#$dir" rbh:$db:$testdb
-    local output=$(rbh_log "rbh:$db:$testdb" --sync 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --sync -n 1)
     check_expected_log_value "$output" "Mountpoint" "$(pwd)"
 
     rbh_sync "rbh:posix:." rbh:$db:$testdb
-    rbh_log "rbh:$db:$testdb" --sync 5 | grep "Mountpoint" | cut -d':' -f2 |
+    rbh_log "rbh:$db:$testdb" --sync -n 5 | grep "Mountpoint" | cut -d':' -f2 |
         sed 's/^[ \t]*//' | difflines "$(pwd)" \
                                       "$(pwd)" \
                                       "$(pwd)/$dir/$third_file" \
@@ -246,23 +234,18 @@ test_order()
 
     local command="rbh-sync"
     local flag="sync"
-
-    if [ "$order" == "descending" ]; then
-        local count="4"
-    else
-        local count="-4"
-    fi
+    local count="4"
 
     rbh_sync rbh:posix:. rbh:$db:$testdb
     rbh_sync rbh:posix:$(pwd) rbh:$db:$testdb
     rbh_sync rbh:posix:. rbh:$db:$testdb --no-skip
     rbh_sync rbh:posix:$file rbh:$db:$testdb --no-skip --one
 
-    local output="$(rbh_log rbh:$db:$testdb --$flag $count | grep "Command" |
+    local output="$(rbh_log rbh:$db:$testdb $order -n $count | grep "Command" |
                     cut -d':' -f2- | sed 's/^[ \t]*//' |
                     sed -n "s/.*$command/$command/p")"
 
-    if [ "$order" == "descending" ]; then
+    if [ "$order" != "--first" ]; then
         echo "$output" |
             difflines "rbh-sync rbh:posix:$file rbh:$db:$testdb --no-skip --one" \
                       "rbh-sync rbh:posix:. rbh:$db:$testdb --no-skip" \
@@ -279,19 +262,19 @@ test_order()
 
 test_ascending()
 {
-    test_order ascending
+    test_order "--first"
 }
 
 test_descending()
 {
-    test_order descending
+    test_order
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid test_last_1 test_last_N test_more_than_N
+declare -a tests=(test_last_1 test_last_N test_more_than_N
                   test_timestamps test_command_line test_entry_count
                   test_mountpoint test_ascending test_descending)
 

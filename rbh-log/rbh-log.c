@@ -31,9 +31,9 @@ static void
 usage(void)
 {
     const char *message =
-        "Usage: %s [OPTIONS] SOURCE\n"
+        "Usage: %s SOURCE [OPTIONS]\n"
         "\n"
-        "Print logs from SOURCE's metadata\n"
+        "Print logs from SOURCE's metadata.\n"
         "\n"
         "Positional arguments:\n"
         "    SOURCE                 a robinhood URI\n"
@@ -45,20 +45,15 @@ usage(void)
         "   --delete                delete the requested logs instead of printing\n"
         "                           them. Cannot be used with '--count'\n"
         "   -h, --help              show this message and exit\n"
-        "   -i, --find [-]N         print the first or last N logs of rbh-find runs\n"
-        "   -f, --fsevents [-]N     print the first or last N logs of rbh-fsevents runs\n"
-        "   -F, --first N           print the first N logs\n"
-        "   -g, --gc [-]N           print the first or last N logs of rbh-gc runs\n"
-        "   -L, --last N            print the last N logs\n"
+        "   -i, --find              print rbh-find logs\n"
+        "   -f, --fsevents          print rbh-fsevents logs\n"
+        "   -F, --first             print the first log instead of the last\n"
+        "   -g, --gc                print rbh-gc logs\n"
+        "   -n N                    print N logs\n"
         "   --oneline               print logs in a shortened format\n"
-        "   -r, --report [-]N       print the first or last N logs of rbh-report runs\n"
-        "   -s, --sync [-]N         print the first or last N logs of rbh-sync runs\n"
+        "   -r, --report            print rbh-report logs\n"
+        "   -s, --sync              print rbh-sync logs\n"
         "    --version              print RobinHood 4's version\n"
-        "\n"
-        "All optional arguments taking in a number (except '--first' and '--last')\n"
-        "will show the last logs of the given command if the number is positive,\n"
-        "and the first logs if it is negative. For instance, '--sync 3' will show\n"
-        "the last 3 rbh-sync logs, while '--sync -3' will show the first 3.\n"
         "\n"
         "A robinhood URI is built as follows:\n"
         "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n";
@@ -132,22 +127,18 @@ main(int argc, char *argv[])
         },
         {
             .name = "find",
-            .has_arg = required_argument,
             .val = 'i',
         },
         {
             .name = "fsevents",
-            .has_arg = required_argument,
             .val = 'f',
         },
         {
             .name = "first",
-            .has_arg = required_argument,
             .val = 'F',
         },
         {
             .name = "gc",
-            .has_arg = required_argument,
             .val = 'g',
         },
         {
@@ -155,9 +146,9 @@ main(int argc, char *argv[])
             .val = 'h',
         },
         {
-            .name = "last",
+            .name = "n",
             .has_arg = required_argument,
-            .val = 'L',
+            .val = 'n',
         },
         {
             .name = "oneline",
@@ -165,22 +156,19 @@ main(int argc, char *argv[])
         },
         {
             .name = "report",
-            .has_arg = required_argument,
             .val = 'r',
         },
         {
             .name = "sync",
-            .has_arg = required_argument,
             .val = 's',
         },
         {
             .name = "version",
-            .has_arg = no_argument,
             .val = 'z',
         },
         {}
     };
-    struct rbh_log_options options = { 0 };
+    struct rbh_log_options options = { .type = RBH_ALL_LOG };
     struct rbh_value_map *logs_map = NULL;
     bool print_oneline = false;
     bool print_count = false;
@@ -192,7 +180,7 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:di:f:F:g:hL:or:s:zZ",
+    while ((c = getopt_long(argc, argv, "c:difFghn:orszZ",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
@@ -203,56 +191,26 @@ main(int argc, char *argv[])
             break;
         case 'i':
             options.type = RBH_FIND_LOG;
-            if (*optarg == '-') {
-                options.ascending = true;
-                optarg++;
-            }
-
-            if (str2uint64_t(optarg, &options.count))
-                error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
-                      optarg);
-
             break;
         case 'f':
             options.type = RBH_FSEVENTS_LOG;
-            if (*optarg == '-') {
-                options.ascending = true;
-                optarg++;
-            }
-
-            if (str2uint64_t(optarg, &options.count))
-                error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
-                      optarg);
-
             break;
         case 'F':
-            options.type = RBH_ALL_LOG;
             options.ascending = true;
-            if (str2uint64_t(optarg, &options.count))
-                error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
-                      optarg);
-
             break;
         case 'g':
             options.type = RBH_GC_LOG;
-            if (*optarg == '-') {
-                options.ascending = true;
-                optarg++;
-            }
-
-            if (str2uint64_t(optarg, &options.count))
-                error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
-                      optarg);
-
             break;
         case 'h':
             usage();
             return 0;
-        case 'L':
-            options.type = RBH_ALL_LOG;
+        case 'n':
             if (str2uint64_t(optarg, &options.count))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
                       optarg);
+
+            if (options.count == 0)
+                error(EXIT_FAILURE, EINVAL, "Cannot print 0 logs");
 
             break;
         case 'o':
@@ -260,27 +218,9 @@ main(int argc, char *argv[])
             break;
         case 'r':
             options.type = RBH_REPORT_LOG;
-            if (*optarg == '-') {
-                options.ascending = true;
-                optarg++;
-            }
-
-            if (str2uint64_t(optarg, &options.count))
-                error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
-                      optarg);
-
             break;
         case 's':
             options.type = RBH_SYNC_LOG;
-            if (*optarg == '-') {
-                options.ascending = true;
-                optarg++;
-            }
-
-            if (str2uint64_t(optarg, &options.count))
-                error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
-                      optarg);
-
             break;
         case 'z':
             rbh_print_version();

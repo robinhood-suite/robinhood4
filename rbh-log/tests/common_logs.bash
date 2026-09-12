@@ -96,7 +96,7 @@ check_common_timestamps()
     start_timestamp="$(date -u +%s)"
     eval $full_command
     end_timestamp="$(date -u +%s)"
-    output=$(rbh_log "rbh:$db:$testdb" $log_type 1)
+    output=$(rbh_log "rbh:$db:$testdb" $log_type -n 1)
     check_timestamps "$output" "$start_timestamp" "$end_timestamp"
 
     sleep 1
@@ -104,6 +104,6 @@ check_common_timestamps()
     start_timestamp="$(date +%s)"
     eval $full_command
     end_timestamp="$(date +%s)"
-    output=$(rbh_log "rbh:$db:$testdb" $log_type 1)
+    output=$(rbh_log "rbh:$db:$testdb" $log_type -n 1)
     check_timestamps "$output" "$start_timestamp" "$end_timestamp"
 }
