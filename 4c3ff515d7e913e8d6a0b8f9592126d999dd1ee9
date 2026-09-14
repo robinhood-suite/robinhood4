@@ -116,6 +116,24 @@
       "parentUuid": "aff59d98_41eaa514",
       "revId": "4c3ff515d7e913e8d6a0b8f9592126d999dd1ee9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7dd4949d_bf3f19ce",
+        "filename": "rbh-log/tests/test_all_logs.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-09-14T08:15:21Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "695c76d8_12fdbb12",
+      "revId": "4c3ff515d7e913e8d6a0b8f9592126d999dd1ee9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
