@@ -74,7 +74,7 @@ check_rbh_sync()
     echo "$output" | grep "seen" > /dev/null ||
         error "total_entries should have been retrieved"
 
-    echo "$full_output" | tail +$count || true
+    echo "$full_output" | tail -n +$((count + 1)) || true
 }
 
 check_rbh_find()
@@ -93,7 +93,7 @@ check_rbh_find()
     echo "$output" | grep "exec" > /dev/null ||
         error "exec_success_count should have been retrieved"
 
-    echo "$full_output" | tail +$count || true
+    echo "$full_output" | tail -n +$((count + 1)) || true
 }
 
 check_rbh_fsevents()
@@ -133,7 +133,7 @@ check_rbh_fsevents()
     echo "$output" | grep "Ratio" > /dev/null ||
         error "deduplication_ratio should have been retrieved, got '$output'"
 
-    echo "$full_output" | tail +$count || true
+    echo "$full_output" | tail -n +$((count + 1)) || true
 }
 
 check_rbh_report()
@@ -146,7 +146,7 @@ check_rbh_report()
     check_common_logs "$output" rbh-report \
         "rbh-report rbh:$db:$testdb --group-by statx.uid --output sum(statx.size)"
 
-    echo "$full_output" | tail +$count || true
+    echo "$full_output" | tail -n +$((count + 1)) || true
 }
 
 check_rbh_gc()
@@ -170,7 +170,7 @@ check_rbh_gc()
     echo "$output" | grep "seen" > /dev/null ||
         error "total_entries should have been retrieved, got '$output'"
 
-    echo "$full_output" | tail +$count || true
+    echo "$full_output" | tail -n +$((count + 1)) || true
 }
 
 test_any_logs()
@@ -271,7 +271,6 @@ test_oneline()
             local new_expected=()
 
             for i in "${!expected_output[@]}"; do
-                echo "checking against '${expected_output[$i]}'"
                 if [[ "$info" == *"${expected_output[$i]}"* ]]; then
                     found=$i
                 else
@@ -294,11 +293,73 @@ test_oneline()
     done
 }
 
+_test_multi_tools()
+{
+    IFS=" " read -r -a uniq_tools <<< "$(tr ' ' '\n' <<< "$@" | sort -u |
+                                         tr '\n' ' ')"
+
+    IFS=','
+    local tool_list="$*"
+    local found_tools=()
+
+    local output=$(rbh_log "rbh:$db:$testdb" --tool "$tool_list" -n 21)
+
+    while [ ! -z "$output" ]; do
+        local command="$(echo "$output" | head -n 1)"
+        local subcommand="$(echo "$command" | cut -d'-' -f2 |
+                            cut -d':' -f1)"
+        local found=false
+
+        for tool in "${uniq_tools[@]}"; do
+            if [ "$subcommand" == "$tool" ] ; then
+                found=true
+                found_tools+=("$tool")
+                break
+            fi
+        done
+
+        if [ "$found" != "true" ]; then
+            error "Logged tool '$command' isn't in the expected tool list '${tool_list[@]}'"
+        fi
+
+        if [[ $command == *"rbh-sync"* ]]; then
+            output="$(check_rbh_sync "$output")"
+        elif [[ $command == *"rbh-find"* ]]; then
+            output="$(check_rbh_find "$output")"
+        elif [[ $command == *"rbh-fsevents"* ]]; then
+            output="$(check_rbh_fsevents "$output")"
+        elif [[ $command == *"rbh-report"* ]]; then
+            output="$(check_rbh_report "$output")"
+        elif [[ $command == *"rbh-gc"* ]]; then
+            output="$(check_rbh_gc "$output")"
+        else
+            error "Invalid command found: '$command'"
+        fi
+    done
+
+    IFS=" " read -r -a uniq_found_tools <<< \
+        "$(tr ' ' '\n' <<< "${found_tools[@]}" | sort -u | tr '\n' ' ')"
+
+    if [ "${#uniq_tools[@]}" != "${#uniq_found_tools[@]}" ]; then
+        error "Failed to find all expected tools '${uniq_tools[@]}''"
+    fi
+}
+
+test_multi_tools()
+{
+    generate_commands
+
+    _test_multi_tools "sync"
+    _test_multi_tools "sync" "find"
+    _test_multi_tools "fsevents" "report" "gc"
+    _test_multi_tools "gc" "report" "gc" "find"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_first_logs test_last_logs test_oneline)
+declare -a tests=(test_first_logs test_last_logs test_oneline test_multi_tools)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
