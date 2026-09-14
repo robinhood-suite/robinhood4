@@ -55,6 +55,9 @@ usage(void)
         "   --oneline               print logs in a shortened format\n"
         "   -r, --report            print rbh-report logs\n"
         "   -s, --sync              print rbh-sync logs\n"
+        "   -t, --tool TOOLS        print logs of the requested tools. TOOLS\n"
+        "                           must be a CSV list consisting of the 'rbh'\n"
+        "                           tools 'sync', 'find', 'report', 'gc', 'fsevents'.\n"
         "    --version              print RobinHood 4's version\n"
         "\n"
         "A robinhood URI is built as follows:\n"
@@ -108,6 +111,44 @@ print_log_count(const struct rbh_value_map *counts)
     }
 
     printf("Total log count: '%ld'\n", count);
+}
+
+static int
+parse_tools_list(char *_list, size_t *types)
+{
+    char *list = xstrdup(_list);
+    char *safekeep = list;
+    int rc = 0;
+
+    while (list != NULL) {
+        enum rbh_log_type type;
+        char *comma = strchr(list, ',');
+
+        if (comma == list) {
+            rc = 1;
+            goto out;
+        }
+
+        if (comma)
+            *comma = '\0';
+
+        type = str2rbh_log_type(list);
+        if (type == RBH_ALL_LOG) {
+            rc = 1;
+            goto out;
+        }
+
+        *types |= type;
+
+        if (comma)
+            list = comma + 1;
+        else
+            break;
+    }
+
+out:
+    free(safekeep);
+    return rc;
 }
 
 int
@@ -165,6 +206,11 @@ main(int argc, char *argv[])
             .val = 's',
         },
         {
+            .name = "tools",
+            .has_arg = required_argument,
+            .val = 't',
+        },
+        {
             .name = "version",
             .val = 'z',
         },
@@ -185,7 +231,7 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:difFghn:orszZ",
+    while ((c = getopt_long(argc, argv, "c:difFghn:orst:zZ",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
@@ -226,6 +272,12 @@ main(int argc, char *argv[])
             break;
         case 's':
             options.type |= RBH_SYNC_LOG;
+            break;
+        case 't':
+            if (parse_tools_list(optarg, &options.type))
+                error(EXIT_FAILURE, EINVAL,
+                      "Failed to parse tools list '%s'", optarg);
+
             break;
         case 'z':
             rbh_print_version();
