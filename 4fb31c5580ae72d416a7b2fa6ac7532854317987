@@ -187,6 +187,30 @@
       },
       "revId": "4fb31c5580ae72d416a7b2fa6ac7532854317987",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30448054_0bbf16cf",
+        "filename": "podman/docker-compose.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-15T09:14:26Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "75b2d5c7_02a198f9",
+      "range": {
+        "startLine": 15,
+        "startChar": 18,
+        "endLine": 15,
+        "endChar": 45
+      },
+      "revId": "4fb31c5580ae72d416a7b2fa6ac7532854317987",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
