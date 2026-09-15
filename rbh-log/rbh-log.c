@@ -47,17 +47,13 @@ usage(void)
         "                           them. Cannot be used with '--log-count',\n"
         "                           and no logs will be printed.\n"
         "   -h, --help              show this message and exit\n"
-        "   -i, --find              print rbh-find logs\n"
-        "   -f, --fsevents          print rbh-fsevents logs\n"
         "   -F, --first             print the first log instead of the last\n"
-        "   -g, --gc                print rbh-gc logs\n"
         "   -n, --count N           print N logs instead of one\n"
         "   --oneline               print logs in a shortened format\n"
-        "   -r, --report            print rbh-report logs\n"
-        "   -s, --sync              print rbh-sync logs\n"
-        "   -t, --tool TOOLS        print logs of the requested tools. TOOLS\n"
-        "                           must be a CSV list consisting of the 'rbh'\n"
-        "                           tools 'sync', 'find', 'report', 'gc', 'fsevents'.\n"
+        "   -t, --tool TOOLS        print logs of the requested tools instead\n"
+        "                           of any tool. TOOLS must be a CSV list\n"
+        "                           consisting of the 'rbh' tools 'sync', 'find',\n"
+        "                           'report', 'gc', 'fsevents'.\n"
         "    --version              print RobinHood 4's version\n"
         "\n"
         "A robinhood URI is built as follows:\n"
@@ -165,20 +161,8 @@ main(int argc, char *argv[])
             .val = 'd',
         },
         {
-            .name = "find",
-            .val = 'i',
-        },
-        {
-            .name = "fsevents",
-            .val = 'f',
-        },
-        {
             .name = "first",
             .val = 'F',
-        },
-        {
-            .name = "gc",
-            .val = 'g',
         },
         {
             .name = "help",
@@ -198,15 +182,7 @@ main(int argc, char *argv[])
             .val = 'o',
         },
         {
-            .name = "report",
-            .val = 'r',
-        },
-        {
-            .name = "sync",
-            .val = 's',
-        },
-        {
-            .name = "tools",
+            .name = "tool",
             .has_arg = required_argument,
             .val = 't',
         },
@@ -231,7 +207,7 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:difFghn:orst:zZ",
+    while ((c = getopt_long(argc, argv, "c:dFhn:ot:zZ",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
@@ -240,17 +216,8 @@ main(int argc, char *argv[])
         case 'd':
             delete_logs = true;
             break;
-        case 'i':
-            options.type |= RBH_FIND_LOG;
-            break;
-        case 'f':
-            options.type |= RBH_FSEVENTS_LOG;
-            break;
         case 'F':
             options.ascending = true;
-            break;
-        case 'g':
-            options.type |= RBH_GC_LOG;
             break;
         case 'h':
             usage();
@@ -266,12 +233,6 @@ main(int argc, char *argv[])
             break;
         case 'o':
             print_oneline = true;
-            break;
-        case 'r':
-            options.type |= RBH_REPORT_LOG;
-            break;
-        case 's':
-            options.type |= RBH_SYNC_LOG;
             break;
         case 't':
             if (parse_tools_list(optarg, &options.type))

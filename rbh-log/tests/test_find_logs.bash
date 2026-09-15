@@ -55,7 +55,7 @@ test_N_logs()
         expected_line_count=$(( expected_line_count + 5 + 2 ))
     done
 
-    local output=$(rbh_log "rbh:$db:$testdb" --find -n $requested)
+    local output=$(rbh_log "rbh:$db:$testdb" --tool find -n $requested)
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != $expected_line_count)); then
@@ -93,7 +93,7 @@ test_more_than_N()
 test_timestamps()
 {
     rbh_sync rbh:posix:. rbh:$db:$testdb
-    check_common_timestamps "--find" "rbh_find rbh:$db:$testdb"
+    check_common_timestamps "find" "rbh_find rbh:$db:$testdb"
 }
 
 test_command_line()
@@ -118,10 +118,11 @@ test_command_line()
     rbh_find rbh:$db:$testdb > /dev/null
     rbh_find --config $conf rbh:$db:$testdb > /dev/null
     rbh_find --config $conf --verbose rbh:$db:$testdb -size +3 > /dev/null
-    rbh_find --config $conf rbh:$db:$testdb -size +3 -uid 30 -printf "blob\n" > /dev/null
+    rbh_find --config $conf rbh:$db:$testdb -size +3 -uid 30 \
+        -printf "blob\n" > /dev/null
     rbh_find --config $conf rbh:$db:$testdb --alias blob -count > /dev/null
 
-    rbh_log rbh:$db:$testdb --find -n 6 | grep "Command" | cut -d':' -f2- |
+    rbh_log rbh:$db:$testdb --tool find -n 6 | grep "Command" | cut -d':' -f2- |
         sed 's/^[ \t]*//' | sed -n "s/.*$command/$command/p" |
         difflines "rbh-find --config $conf rbh:$db:$testdb --alias blob -count" \
                   "rbh-find --config $conf rbh:$db:$testdb -size +3 -uid 30 -printf blob\n" \
@@ -145,22 +146,22 @@ test_entry_count()
     rbh_sync rbh:posix:. rbh:$db:$testdb
 
     rbh_find rbh:$db:$testdb > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --tool find -n 1)
     check_expected_log_value "$output" "post-filtering" "5"
 
     rbh_find rbh:$db:$testdb -name "*test*" > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --tool find -n 1)
     check_expected_log_value "$output" "post-filtering" "3"
 
     rbh_find rbh:$db:$testdb -type d > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --tool find -n 1)
     check_expected_log_value "$output" "post-filtering" "2"
 
     rbh_find rbh:$db:$testdb -type f -size +0 > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --tool find -n 1)
     check_expected_log_value "$output" "post-filtering" "1"
 
-    rbh_log "rbh:$db:$testdb" --find -n 4 | grep "post-filtering" |
+    rbh_log "rbh:$db:$testdb" --tool find -n 4 | grep "post-filtering" |
         cut -d':' -f2 | sed 's/^[ \t]*//' | difflines "1" "2" "3" "5"
 }
 
@@ -179,30 +180,30 @@ test_exec_success_count()
     rbh_sync rbh:posix:. rbh:$db:$testdb
 
     rbh_find rbh:$db:$testdb -exec cat {} \; > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --tool find -n 1)
     check_expected_log_value "$output" "exec command" "3"
 
     rbh_find rbh:$db:$testdb -exec grep -H "test" {} \; > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --tool find -n 1)
     check_expected_log_value "$output" "exec command" "0"
 
     rbh_find rbh:$db:$testdb -exec grep -H "blob" {} \; > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --tool find -n 1)
     check_expected_log_value "$output" "exec command" "1"
 
     rbh_find rbh:$db:$testdb -type f -exec grep -H "o" {} \; > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --tool find -n 1)
     check_expected_log_value "$output" "exec command" "2"
 
     rbh_find rbh:$db:$testdb -type l -exec echo "{}" \; > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --tool find -n 1)
     check_expected_log_value "$output" "exec command" "0"
 
     rbh_find rbh:$db:$testdb -exec ls {} \; > /dev/null
-    local output=$(rbh_log "rbh:$db:$testdb" --find -n 1)
+    local output=$(rbh_log "rbh:$db:$testdb" --tool find -n 1)
     check_expected_log_value "$output" "exec command" "5"
 
-    rbh_log "rbh:$db:$testdb" --find -n 6 | grep "exec command" |
+    rbh_log "rbh:$db:$testdb" --tool find -n 6 | grep "exec command" |
         cut -d':' -f2 | sed 's/^[ \t]*//' | difflines "5" "0" "2" "1" "0" "3"
 }
 
@@ -221,7 +222,7 @@ test_order()
     rbh_find rbh:$db:$testdb -size +3 -uid 30 -printf "blob\n" > /dev/null
     rbh_find rbh:$db:$testdb -count > /dev/null
 
-    local output="$(rbh_log rbh:$db:$testdb --find $order -n $count |
+    local output="$(rbh_log rbh:$db:$testdb --tool find $order -n $count |
                     grep "Command" | cut -d':' -f2- | sed 's/^[ \t]*//' |
                     sed -n "s/.*$command/$command/p")"
 

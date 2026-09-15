@@ -44,7 +44,7 @@ test_N_logs()
         rbh_gc "rbh:$db:$testdb" -size +1M -s 42
     done
 
-    local output=$(rbh_log "rbh:$db:$testdb" --gc -n $requested)
+    local output=$(rbh_log "rbh:$db:$testdb" --tool gc -n $requested)
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != $count * $expected)); then
@@ -76,7 +76,7 @@ test_more_than_N()
 test_timestamps()
 {
     rbh_sync rbh:posix:. rbh:$db:$testdb
-    check_common_timestamps "--gc" "rbh_gc rbh:$db:$testdb"
+    check_common_timestamps "gc" "rbh_gc rbh:$db:$testdb"
 }
 
 test_command_line()
@@ -105,7 +105,7 @@ test_command_line()
     rbh_gc --config $conf rbh:$db:$testdb -type d -size +3 -s 53 > /dev/null
     rbh_gc --dry-run rbh:$db:$testdb --check "$PWD/blob.sh" > /dev/null
 
-    rbh_log rbh:$db:$testdb --gc -n 6 | grep "Command" | cut -d':' -f2- |
+    rbh_log rbh:$db:$testdb --tool gc -n 6 | grep "Command" | cut -d':' -f2- |
         sed 's/^[ \t]*//' | sed -n "s/.*$command/$command/p" |
         difflines "rbh-gc --dry-run rbh:$db:$testdb --check $PWD/blob.sh" \
                   "rbh-gc --config $conf rbh:$db:$testdb -type d -size +3 -s 53" \
@@ -144,13 +144,13 @@ test_entries_seen_deleted()
     # Last gc should see the 3 remaining entries and remove 2
     rbh_gc rbh:$db:$testdb
 
-    rbh_log rbh:$db:$testdb --gc -n 4 | grep " deleted entries" |
+    rbh_log rbh:$db:$testdb --tool gc -n 4 | grep " deleted entries" |
         cut -d':' -f2- | sed 's/^[ \t]*//' | difflines "2" "0" "2" "1"
 
-    rbh_log rbh:$db:$testdb --gc -n 4 | grep "non-deleted entries" |
+    rbh_log rbh:$db:$testdb --tool gc -n 4 | grep "non-deleted entries" |
         cut -d':' -f2- | sed 's/^[ \t]*//' | difflines "1" "3" "0" "5"
 
-    rbh_log rbh:$db:$testdb --gc -n 4 | grep "entries seen" | cut -d':' -f2- |
+    rbh_log rbh:$db:$testdb --tool gc -n 4 | grep "entries seen" | cut -d':' -f2- |
         sed 's/^[ \t]*//' | difflines "3" "3" "2" "6"
 }
 
@@ -166,7 +166,7 @@ test_sync_time()
     rbh_gc rbh:$db:$testdb --sync-time $current_date
     rbh_gc rbh:$db:$testdb --sync-time 9999999
 
-    rbh_log rbh:$db:$testdb --gc -n 5 | grep "Sync" | cut -d':' -f2- |
+    rbh_log rbh:$db:$testdb --tool gc -n 5 | grep "Sync" | cut -d':' -f2- |
         sed 's/^[ \t]*//' |
         difflines "9999999" "$current_date" "620" "42" "1"
 }
