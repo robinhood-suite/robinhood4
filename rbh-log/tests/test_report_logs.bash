@@ -34,7 +34,7 @@ test_N_logs()
             --group-by "statx.uid" --output "sum(statx.size)" > /dev/null
     done
 
-    local output=$(rbh_log "rbh:$db:$testdb" --report -n $requested)
+    local output=$(rbh_log "rbh:$db:$testdb" --tool report -n $requested)
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != $count * $expected)); then
@@ -66,7 +66,7 @@ test_more_than_N()
 test_timestamps()
 {
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
-    check_common_timestamps "--report" \
+    check_common_timestamps "report" \
         "rbh_report rbh:$db:$testdb
             --group-by \"statx.uid\" --output \"sum(statx.size)\""
 }
@@ -101,7 +101,7 @@ test_command_line()
             --output "sum(statx.size),min(statx.uid),avg(statx.gid)" \
             --csv --rsort > /dev/null
 
-    rbh_log rbh:$db:$testdb --report -n 5 | grep "Command" | cut -d':' -f2- |
+    rbh_log rbh:$db:$testdb --tool report -n 5 | grep "Command" | cut -d':' -f2- |
         sed 's/^[ \t]*//' | sed -n "s/.*$command/$command/p" |
         difflines "rbh-report rbh:$db:$testdb --group-by statx.uid,statx.gid,statx.type --output sum(statx.size),min(statx.uid),avg(statx.gid) --csv --rsort" \
                   "rbh-report rbh:$db:$testdb --group-by statx.uid --output sum(statx.size) --csv" \
@@ -129,7 +129,7 @@ test_order()
             --output "sum(statx.size),min(statx.uid),avg(statx.gid)" \
             --csv --rsort > /dev/null
 
-    local output="$(rbh_log rbh:$db:$testdb --report $order -n $count |
+    local output="$(rbh_log rbh:$db:$testdb --tool report $order -n $count |
                      grep "Command" | cut -d':' -f2- | sed 's/^[ \t]*//' |
                     sed -n "s/.*$command/$command/p")"
 
