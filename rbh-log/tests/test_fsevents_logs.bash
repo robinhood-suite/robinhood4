@@ -61,7 +61,7 @@ test_N_logs()
         invoke_rbh-fsevents
     done
 
-    local output=$(rbh_log "rbh:$db:$testdb" --fsevents -n $requested)
+    local output=$(rbh_log "rbh:$db:$testdb" --tool fsevents -n $requested)
 
     local n_lines=$(echo "$output" | wc -l)
 
@@ -93,7 +93,7 @@ test_more_than_N()
 
 test_timestamps()
 {
-    check_common_timestamps "--fsevents" \
+    check_common_timestamps "fsevents" \
         "rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR
          src:lustre:$LUSTRE_MDT rbh:$db:$testdb"
 }
@@ -126,7 +126,7 @@ test_command_line()
     cat tmp | rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR - - > tmp
     cat tmp | rbh_fsevents - rbh:$db:$testdb > /dev/null
 
-    rbh_log rbh:$db:$testdb --fsevents -n 7 | grep "Command" | cut -d':' -f2- |
+    rbh_log rbh:$db:$testdb --tool fsevents -n 7 | grep "Command" | cut -d':' -f2- |
         sed 's/^[ \t]*//' | sed -n "s/.*$command/$command/p" |
         # Two of the commands above are not here because their output was a file
         # and not the database, so there is no log associated
@@ -166,13 +166,13 @@ test_source_and_enrichment()
 
     stop_changelogs "$other_mdt" "$other_mdt_user"
 
-    rbh_log rbh:$db:$testdb --fsevents -n 4 | grep "Source of the events" |
+    rbh_log rbh:$db:$testdb --tool fsevents -n 4 | grep "Source of the events" |
         cut -d':' -f2- | sed 's/^[ \t]*//' |
         difflines "$LUSTRE_MDT" "$other_mdt" "$other_mdt" "$LUSTRE_MDT"
 
     # LUSTRE_DIR without last slash
     local ldwls="${LUSTRE_DIR::-1}"
-    rbh_log rbh:$db:$testdb --fsevents -n 4 | grep "Enrichment mountpoint" |
+    rbh_log rbh:$db:$testdb --tool fsevents -n 4 | grep "Enrichment mountpoint" |
         cut -d':' -f2- | sed 's/^[ \t]*//' |
         difflines "$ldwls" "." "$ldwls" "$ldwls"
 }
@@ -205,11 +205,11 @@ test_worker_count_start_index()
         src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
         --nb-workers 4 --index 2
 
-    rbh_log rbh:$db:$testdb --fsevents -n 5 | grep "parallel" |
+    rbh_log rbh:$db:$testdb --tool fsevents -n 5 | grep "parallel" |
         cut -d':' -f2- | sed 's/^[ \t]*//' |
         difflines "4" "1" "2" "2" "1"
 
-    rbh_log rbh:$db:$testdb --fsevents -n 5 | grep "Starting index" |
+    rbh_log rbh:$db:$testdb --tool fsevents -n 5 | grep "Starting index" |
         cut -d':' -f2- | sed 's/^[ \t]*//' |
         difflines "2" "4" "2" "0" "0"
 }
@@ -251,7 +251,7 @@ test_changelog_amount()
     rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
         src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
 
-    rbh_log rbh:$db:$testdb --fsevents -n 5 | grep "changelog read" |
+    rbh_log rbh:$db:$testdb --tool fsevents -n 5 | grep "changelog read" |
         cut -d':' -f2- | sed 's/^[ \t]*//' |
         difflines "$changelog_count5" \
                   "$changelog_count4" \
@@ -306,7 +306,7 @@ test_work_timestamps()
 
     # No way to check the real times against what rbh-log says, so just check
     # they seem like normal times
-    local output="$(rbh_log rbh:$db:$testdb --fsevents -n 5 |
+    local output="$(rbh_log rbh:$db:$testdb --tool fsevents -n 5 |
                         grep "reading/deduplicating" |
                         cut -d':' -f2- | sed 's/^[ \t]*//')"
     for i in $(seq 1 5); do
@@ -318,7 +318,7 @@ test_work_timestamps()
         fi
     done
 
-    local output="$(rbh_log rbh:$db:$testdb --fsevents -n 5 |
+    local output="$(rbh_log rbh:$db:$testdb --tool fsevents -n 5 |
                         grep "enriching/updating" |
                         cut -d':' -f2- | sed 's/^[ \t]*//')"
     for i in $(seq 1 5); do
@@ -362,7 +362,7 @@ test_deduplication_ratio()
         echo "(1.0 - ${dedup_id_count}.0 / ${full_id_count}.0) * 100.0" |
         bc -l)"
 
-    rbh_log rbh:$db:$testdb --fsevents -n 2 | grep "Ratio" |
+    rbh_log rbh:$db:$testdb --tool fsevents -n 2 | grep "Ratio" |
         cut -d':' -f2- | sed 's/^[ \t]*//' |
         difflines "$(printf "%.3f" $expected_dedup_ratio)" \
                   "0.000"

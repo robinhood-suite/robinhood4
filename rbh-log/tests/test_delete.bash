@@ -71,7 +71,7 @@ test_delete()
     log_should_exist $id6
     log_should_exist $id7
 
-    rbh_log rbh:$db:$testdb --sync -n 3 --delete
+    rbh_log rbh:$db:$testdb --tool sync -n 3 --delete
 
     rbh_log rbh:$db:$testdb --log-count | sort |
         difflines "Log count for the 'find' command: '2'" \
@@ -89,7 +89,7 @@ test_delete()
     log_should_exist $id6
     log_should_exist $id7
 
-    rbh_log rbh:$db:$testdb --gc -n 7 --delete
+    rbh_log rbh:$db:$testdb --tool gc -n 7 --delete
 
     rbh_log rbh:$db:$testdb --log-count | sort |
         difflines "Log count for the 'find' command: '2'" \
@@ -140,6 +140,24 @@ test_delete()
     log_shouldnt_exist $id3
     log_shouldnt_exist $id4
     log_should_exist $id5
+    log_shouldnt_exist $id6
+    log_shouldnt_exist $id7
+
+    rbh_log rbh:$db:$testdb --tool "find,report" -n 7 --delete
+
+    rbh_log rbh:$db:$testdb --log-count | sort |
+        difflines "Log count for the 'find' command: '0'" \
+                  "Log count for the 'fsevents' command: '0'" \
+                  "Log count for the 'gc' command: '0'" \
+                  "Log count for the 'report' command: '0'" \
+                  "Log count for the 'sync' command: '1'" \
+                  "Total log count: '1'"
+
+    log_should_exist $id1
+    log_shouldnt_exist $id2
+    log_shouldnt_exist $id3
+    log_shouldnt_exist $id4
+    log_shouldnt_exist $id5
     log_shouldnt_exist $id6
     log_shouldnt_exist $id7
 
