@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cd81371_5a551ff1",
+        "filename": "librobinhood/src/plugins/mongo/logs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-16T08:28:34Z",
+      "side": 1,
+      "message": "question: is millisecond accurate enough to separate all your logs ?",
+      "range": {
+        "startLine": 48,
+        "startChar": 12,
+        "endLine": 48,
+        "endChar": 62
+      },
+      "revId": "73704fc892faceaca625783bcf7b30298f9655e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3748d359_b10a8849",
+        "filename": "librobinhood/src/plugins/mongo/logs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-16T08:28:34Z",
+      "side": 1,
+      "message": "question: if I understand correctly, you still have the ID field in addition of the new timestamp. This id field is incremented internally by mongo.\n\nWhy do you not continue to sort by the id before sorting with the timestamp ? Is it besause you can not sort in mongo by using two fields ?",
+      "range": {
+        "startLine": 303,
+        "startChar": 32,
+        "endLine": 304,
+        "endChar": 75
+      },
+      "revId": "73704fc892faceaca625783bcf7b30298f9655e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
