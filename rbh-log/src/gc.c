@@ -68,7 +68,8 @@ static const struct formatted_log_value gc_log_value[] = {
 };
 
 void
-print_gc_log(const struct rbh_value_map *log, bool print_oneline)
+print_gc_log(const struct rbh_value_map *log,
+             enum output_format output_format)
 {
-    print_log_wrapper(log, print_oneline, gc_log_value, &key2gc_log_value);
+    print_log_wrapper(log, output_format, gc_log_value, &key2gc_log_value);
 }
