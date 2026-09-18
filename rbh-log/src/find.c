@@ -44,7 +44,8 @@ static const struct formatted_log_value find_log_value[] = {
 
 
 void
-print_find_log(const struct rbh_value_map *log, bool print_oneline)
+print_find_log(const struct rbh_value_map *log,
+               enum output_format output_format)
 {
-    print_log_wrapper(log, print_oneline, find_log_value, &key2find_log_value);
+    print_log_wrapper(log, output_format, find_log_value, &key2find_log_value);
 }

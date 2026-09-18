@@ -11,7 +11,7 @@
 
 void
 print_timespec(const struct rbh_value *value, const char *header,
-               bool print_oneline)
+               enum output_format output_format)
 {
     struct timespec timespec;
 
@@ -21,29 +21,37 @@ print_timespec(const struct rbh_value *value, const char *header,
     timespec.tv_sec = value->map.pairs[0].value->int64;
     timespec.tv_nsec = value->map.pairs[1].value->int64;
 
-    if (print_oneline)
-        printf("%s: %lu.%09lu", header,
-               timespec.tv_sec, timespec.tv_nsec);
-    else
+    switch (output_format) {
+    case OF_NORMAL:
         printf(" - %-*s: %lu.%09lu\n", WIDTH, header,
                timespec.tv_sec, timespec.tv_nsec);
+        break;
+    case OF_ONELINE:
+        printf("%s: %lu.%09lu", header,
+               timespec.tv_sec, timespec.tv_nsec);
+        break;
+    }
 }
 
 void
 print_time_from_timestamp(const struct rbh_value *value, const char *header,
-                          bool print_oneline)
+                          enum output_format output_format)
 {
     time_t time = (time_t) value->int64;
 
-    if (print_oneline)
-        printf("%s: %s", header, time_from_timestamp(&time));
-    else
+    switch (output_format) {
+    case OF_NORMAL:
         printf(" - %-*s: %s\n", WIDTH, header, time_from_timestamp(&time));
+        break;
+    case OF_ONELINE:
+        printf("%s: %s", header, time_from_timestamp(&time));
+        break;
+    }
 }
 
 void
 print_difftime(const struct rbh_value *value, const char *header,
-               bool print_oneline)
+               enum output_format output_format)
 {
     char _buffer[32];
     size_t bufsize;
@@ -54,20 +62,28 @@ print_difftime(const struct rbh_value *value, const char *header,
 
     difftime_printer(buffer, bufsize, value->int64);
 
-    if (print_oneline)
-        printf("%s: %s", header, buffer);
-    else
+    switch (output_format) {
+    case OF_NORMAL:
         printf(" - %-*s: %s\n", WIDTH, header, buffer);
+        break;
+    case OF_ONELINE:
+        printf("%s: %s", header, buffer);
+        break;
+    }
 }
 
 void
 print_value(const struct rbh_value *value, const char *header,
-            bool print_oneline)
+            enum output_format output_format)
 {
-    if (print_oneline)
-        printf("%s: ", header);
-    else
+    switch (output_format) {
+    case OF_NORMAL:
         printf(" - %-*s: ", WIDTH, header);
+        break;
+    case OF_ONELINE:
+        printf("%s: ", header);
+        break;
+    }
 
     switch (value->type) {
     case RBH_VT_STRING:
@@ -92,7 +108,13 @@ print_value(const struct rbh_value *value, const char *header,
         __builtin_unreachable();
     }
 
-    printf("%s", print_oneline ? "" : "\n");
+    switch (output_format) {
+    case OF_NORMAL:
+        printf("\n");
+        break;
+    default:
+        break;
+    }
 }
 
 static int
@@ -140,22 +162,29 @@ static const struct formatted_log_value common_formatted_log_value[] = {
 static void
 print_log_info(const struct rbh_value *value,
                const struct formatted_log_value *flv,
-               bool print_oneline,
+               enum output_format output_format,
                bool *need_comma)
 {
-    if (print_oneline && flv->oneline) {
+    switch (output_format) {
+    case OF_NORMAL:
+        flv->print_log_value(value, flv->header, output_format);
+        break;
+    case OF_ONELINE:
+        if (!flv->oneline)
+            break;
+
         if (*need_comma)
             printf(", ");
 
-        flv->print_log_value(value, flv->header, print_oneline);
+        flv->print_log_value(value, flv->header, output_format);
         *need_comma = true;
-    } else if (!print_oneline) {
-        flv->print_log_value(value, flv->header, print_oneline);
+        break;
     }
 }
 
 void
-print_log_wrapper(const struct rbh_value_map *log, bool oneline,
+print_log_wrapper(const struct rbh_value_map *log,
+                  enum output_format output_format,
                   const struct formatted_log_value *flv,
                   int (*key2log_value)(const char *))
 {
@@ -169,7 +198,7 @@ print_log_wrapper(const struct rbh_value_map *log, bool oneline,
         if (common_log_value != CLV_UNKNOWN) {
             print_log_info(pair->value,
                            &common_formatted_log_value[common_log_value],
-                           oneline,
+                           output_format,
                            &need_comma);
             continue;
         }
@@ -182,6 +211,6 @@ print_log_wrapper(const struct rbh_value_map *log, bool oneline,
          * or simply error out. So there is no possible segfault here.
          */
         print_log_info(pair->value, &flv[key2log_value(pair->key)],
-                       oneline, &need_comma);
+                       output_format, &need_comma);
     }
 }

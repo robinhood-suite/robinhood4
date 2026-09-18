@@ -101,8 +101,9 @@ static const struct formatted_log_value fsevents_log_value[] = {
 };
 
 void
-print_fsevents_log(const struct rbh_value_map *log, bool print_oneline)
+print_fsevents_log(const struct rbh_value_map *log,
+                   enum output_format output_format)
 {
-    print_log_wrapper(log, print_oneline, fsevents_log_value,
+    print_log_wrapper(log, output_format, fsevents_log_value,
                       &key2fsevents_log_value);
 }
