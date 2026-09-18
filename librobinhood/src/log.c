@@ -13,6 +13,26 @@
 #include "robinhood/utils.h"
 
 static void
+print_find_log(struct rbh_metadata *metadata, time_t current)
+{
+    char exec_success_count_str[512];
+
+    snprintf(exec_success_count_str, sizeof(exec_success_count_str),
+        "STATS |      successfully executed command on %ld entries\n",
+        metadata->find_md.exec_success_count
+    );
+
+    fprintf(metadata->log_file,
+        "STATS | ======== Backend query statistics =========\n"
+        "STATS | rbh-find has found:\n"
+        "STATS |      %lu entries\n"
+        "%s",
+        metadata->find_md.entry_count,
+        metadata->find_md.exec_success_count < 0 ? "" : exec_success_count_str
+    );
+}
+
+static void
 print_sync_log(struct rbh_metadata *metadata, time_t current)
 {
     uint64_t total_entry_count = metadata->sync_md.converted_entries +
@@ -136,6 +156,9 @@ rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type,
     );
 
     switch (command_type) {
+    case RBH_FIND_LOG:
+        print_find_log(metadata, current);
+        break;
     case RBH_FSEVENTS_LOG:
         print_fsevents_log(metadata, current);
         break;
