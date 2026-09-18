@@ -12,17 +12,5 @@
 void
 print_report_log(const struct rbh_value_map *log, bool print_oneline)
 {
-    bool need_comma = false;
-
-    for (size_t i = 0 ; i < log->count ; i++) {
-        const struct rbh_value_pair *pair = &log->pairs[i];
-        enum common_log_value common_log_value;
-
-        common_log_value = key2common_log_value(pair->key);
-        if (common_log_value != CLV_UNKNOWN) {
-            print_common_log_info(pair->value, common_log_value,
-                                  print_oneline, &need_comma);
-            continue;
-        }
-    }
+    print_log_wrapper(log, print_oneline, NULL, NULL);
 }
