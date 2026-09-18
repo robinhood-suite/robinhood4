@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87da4637_c3db3024",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-18T08:29:08Z",
+      "side": 1,
+      "message": "nitpick: some more",
+      "range": {
+        "startLine": 14,
+        "startChar": 10,
+        "endLine": 14,
+        "endChar": 14
+      },
+      "revId": "90263fde445dce8b27601189165ddfb3ed975853",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b218f7d_a289d64e",
+        "filename": "rbh-sync/tests/posix/test_stats.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-18T08:29:08Z",
+      "side": 1,
+      "message": "minor: could also be a parameter of the function",
+      "range": {
+        "startLine": 29,
+        "startChar": 53,
+        "endLine": 29,
+        "endChar": 55
+      },
+      "revId": "90263fde445dce8b27601189165ddfb3ed975853",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3b7e0eb_a5cb39f3",
+        "filename": "rbh-sync/tests/posix/test_stats.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-18T08:29:08Z",
+      "side": 1,
+      "message": "minor: could also be a parameter of the function",
+      "range": {
+        "startLine": 35,
+        "startChar": 47,
+        "endLine": 35,
+        "endChar": 48
+      },
+      "revId": "90263fde445dce8b27601189165ddfb3ed975853",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41f201ff_a365513c",
+        "filename": "rbh-sync/tests/posix/test_stats.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-18T08:29:08Z",
+      "side": 1,
+      "message": "minor: debug lines to remove ?",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 68
+      },
+      "revId": "90263fde445dce8b27601189165ddfb3ed975853",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf394277_3b381a0b",
+        "filename": "rbh-sync/tests/posix/test_stats.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-18T08:29:08Z",
+      "side": 1,
+      "message": "minor: debug lines to remove ?",
+      "range": {
+        "startLine": 82,
+        "startChar": 4,
+        "endLine": 82,
+        "endChar": 39
+      },
+      "revId": "90263fde445dce8b27601189165ddfb3ed975853",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74dc83f7_70bcd7a0",
+        "filename": "rbh-sync/tests/posix/test_stats.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-18T08:29:08Z",
+      "side": 1,
+      "message": "minor: this comment is no longer appropriate.",
+      "range": {
+        "startLine": 83,
+        "startChar": 4,
+        "endLine": 83,
+        "endChar": 71
+      },
+      "revId": "90263fde445dce8b27601189165ddfb3ed975853",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08210d8a_718b5c90",
+        "filename": "rbh-sync/tests/posix/test_stats.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-18T08:29:08Z",
+      "side": 1,
+      "message": "minor: debug lines to remove ?",
+      "range": {
+        "startLine": 85,
+        "startChar": 4,
+        "endLine": 85,
+        "endChar": 45
+      },
+      "revId": "90263fde445dce8b27601189165ddfb3ed975853",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
