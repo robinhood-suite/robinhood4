@@ -746,10 +746,12 @@ usage(void)
         "    -n, --no-skip          do not skip errors when synchronizing backends,\n"
         "                           instead stop on the first error.\n"
         "    -o, --one              only consider the root of SOURCE\n"
-        "    --stats                show command stats during execution to stdout\n"
-        "    --log-file FILE        redirect command stats printing to given FILE\n"
+        "    --stats                print command stats during execution to stderr\n"
+        "    --log-file FILE        redirect command stats printing to given FILE.\n"
+        "                           Is only used if '--stats' is specified.\n"
         "    --log-timer TIMER      print stats each TIMER seconds, 60 by\n"
-        "                           default, 0 to only print at the end of the command\n"
+        "                           default, 0 to only print at the end of the command.\n"
+        "                           Is only used if '--stats' is specified.\n"
         "    --version              print RobinHood 4's version\n"
         "\n"
         "Capability arguments:\n"
@@ -845,7 +847,7 @@ main(int argc, char *argv[])
     struct rbh_metadata metadata = {
         .common_md.command_line = get_command_line(argc, argv),
         .last_shown_time = time(NULL),
-        .log_file = stdout,
+        .log_file = stderr,
         .log_timer = 60,
     };
     bool print_stats = false;

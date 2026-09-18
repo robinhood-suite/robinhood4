@@ -84,15 +84,17 @@ usage(void)
         "    -l, --no-estale-logs\n"
         "                    do not print any log on ESTALE errors, quietly skip/quit instead\n"
         "    --log-file FILE\n"
-        "                    redirect command stats printing to given FILE\n"
+        "                    redirect command stats printing to given FILE.\n"
+        "                    Is only used if '--stats' is specified.\n"
         "    --log-timer TIMER\n"
         "                    print stats each TIMER seconds, 60 by default,\n"
-        "                    0 to only print at the end of the command\n"
+        "                    0 to only print at the end of the command.\n"
+        "                    Is only used if '--stats' is specified.\n"
         "    -m, --max NUMBER\n"
         "                    Set a maximum number of changelog to read\n"
         "    -n, --no-skip   do not skip entries on error, stop instead\n"
         "    -r, --raw       do not enrich changelog records (default)\n"
-        "    --stats         show command stats during execution\n"
+        "    --stats         print command stats during execution to stderr\n"
         "    -v, --verbose   Set the verbose mode\n"
         "    --version       print RobinHood 4's version\n"
         "    -w, --nb-workers NUMBER\n"
@@ -806,7 +808,7 @@ main(int argc, char *argv[])
         .fsevents_md.worker_count = 1,
         .fsevents_md.start_index = -1,
         .last_shown_time = time(NULL),
-        .log_file = stdout,
+        .log_file = stderr,
         .log_timer = 60,
     };
     uint64_t max_changelog = 0;

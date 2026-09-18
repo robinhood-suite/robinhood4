@@ -57,7 +57,7 @@ test_stats()
     touch something
     ln -s something else
 
-    local output="$(rbh_sync rbh:posix:. rbh:$db:$testdb --stats)"
+    local output="$(rbh_sync rbh:posix:. rbh:$db:$testdb --stats 2>&1)"
     find_expected_values "$output" 94 2
 
     rbh_sync rbh:posix:. rbh:$db:$testdb --stats --log-file logs.txt
@@ -75,7 +75,7 @@ test_mpi_stats()
     touch something
     ln -s something else
 
-    local output="$(rbh_sync rbh:posix-mpi:. rbh:$db:$testdb --stats)"
+    local output="$(rbh_sync rbh:posix-mpi:. rbh:$db:$testdb --stats 2>&1)"
     # Each MPI process will output at the end of the command, there are
     # $cpu_count processes being run, each output 'block' has 14 lines, and
     # there are 2 lines in-between each block.
