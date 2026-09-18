@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "590b0a81_f6a7278e",
+        "filename": "rbh-log/rbh-log.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-18T09:26:07Z",
+      "side": 1,
+      "message": "major: --log-count",
+      "range": {
+        "startLine": 47,
+        "startChar": 63,
+        "endLine": 47,
+        "endChar": 71
+      },
+      "revId": "dd32f8b42fc2df0e847f4ab28fbabb507696ce7f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05c418ba_96ae1b45",
+        "filename": "rbh-log/rbh-log.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-18T09:26:07Z",
+      "side": 1,
+      "message": "minor: could be removed, -n 0 is now refused by option parsing\n\nTthe behaviour of the delete command without any count now deletes 1 line. (the default count)",
+      "range": {
+        "startLine": 265,
+        "startChar": 8,
+        "endLine": 267,
+        "endChar": 80
+      },
+      "revId": "dd32f8b42fc2df0e847f4ab28fbabb507696ce7f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
