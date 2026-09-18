@@ -275,9 +275,31 @@ main(int argc, char *argv[])
 
         print_log_count(logs_map);
     } else if (delete_logs) {
-        if (rbh_backend_delete_logs(backend, options))
-            error(EXIT_FAILURE, EINVAL,
-                  "Failed to delete requested logs\n");
+        int count;
+
+        count = rbh_backend_delete_logs(backend, options);
+        if (count < 0) {
+            switch (errno) {
+            case 0:
+                error(EXIT_FAILURE, EINVAL,
+                      "Failed to delete requested logs\n");
+                break;
+            case ENOTSUP:
+                error(EXIT_FAILURE, errno,
+                      "Failed to delete logs, requested backend doesn't support log deletion\n");
+                break;
+            case RBH_BACKEND_ERROR:
+                error(EXIT_FAILURE, EINVAL,
+                      "Failed to delete requested logs: %s\n", rbh_backend_error);
+                break;
+            default:
+                error(EXIT_FAILURE, errno,
+                      "Failed to delete requested logs: %s\n", strerror(errno));
+                break;
+            }
+        }
+
+        printf("Deleted '%d' log(s)\n", count);
     } else {
         logs_map = rbh_backend_get_logs(backend, options);
         if (logs_map == NULL)
