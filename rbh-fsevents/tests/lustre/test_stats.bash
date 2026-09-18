@@ -32,7 +32,7 @@ test_stats()
     touch test_entry
 
     local output="$(rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
-        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats | tail -n 12)"
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats 2>&1 | tail -n 12)"
 
     echo "$output" | grep "rbh-fsevents" > /dev/null ||
         error "Invalid output, missing 'rbh-fsevents' command, got '$output'"
@@ -51,7 +51,7 @@ test_stats()
     lfs mkdir dir
 
     output="$(rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
-        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats --nb-workers 4 |
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats --nb-workers 4 2>&1 |
         tail -n 12)"
     local count="$(lfs changelog $LUSTRE_MDT $userid | wc -l)"
 

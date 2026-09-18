@@ -30,13 +30,13 @@ test_stats()
 
     rm fileA
 
-    rbh_gc "rbh:$db:$testdb" --dry-run --stats |
+    rbh_gc "rbh:$db:$testdb" --dry-run --stats 2>&1 |
         difflines "'/fileA' needs to be deleted" \
                   "1 element total to delete"
 
     rm fileB
 
-    local output="$(rbh_gc "rbh:$db:$testdb" --stats)"
+    local output="$(rbh_gc "rbh:$db:$testdb" --stats 2>&1)"
 
     echo "$output" | grep "rbh-gc" > /dev/null ||
         error "Invalid command in stats, got '$output', expected 'rbh-gc'"
