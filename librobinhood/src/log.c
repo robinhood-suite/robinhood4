@@ -169,6 +169,7 @@ rbh_print_log(struct rbh_metadata *metadata, enum rbh_log_type command_type,
         print_sync_log(metadata, current);
         break;
     default:
+        /* Nothing particular to print for rbh-report */
         break;
     }
 
