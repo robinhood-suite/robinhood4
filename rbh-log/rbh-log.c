@@ -63,35 +63,50 @@ usage(void)
 }
 
 static void
-print_logs(const struct rbh_value_map *logs, bool print_oneline)
+print_logs(const struct rbh_value_map *logs,
+           enum output_format output_format)
 {
     for (size_t i = 0 ; i < logs->count ; i++) {
         enum rbh_log_type type = str2rbh_log_type(logs->pairs[i].key);
 
-        printf("{ rbh-%s:%s", logs->pairs[i].key, print_oneline ? " " : "\n");
+        switch (output_format) {
+        case OF_NORMAL:
+            printf("{ rbh-%s:\n", logs->pairs[i].key);
+            break;
+        case OF_ONELINE:
+            printf("{ rbh-%s: ", logs->pairs[i].key);
+            break;
+        }
 
         switch (type) {
         case RBH_FIND_LOG:
-            print_find_log(&logs->pairs[i].value->map, print_oneline);
+            print_find_log(&logs->pairs[i].value->map, output_format);
             break;
         case RBH_FSEVENTS_LOG:
-            print_fsevents_log(&logs->pairs[i].value->map, print_oneline);
+            print_fsevents_log(&logs->pairs[i].value->map, output_format);
             break;
         case RBH_GC_LOG:
-            print_gc_log(&logs->pairs[i].value->map, print_oneline);
+            print_gc_log(&logs->pairs[i].value->map, output_format);
             break;
         case RBH_REPORT_LOG:
-            print_report_log(&logs->pairs[i].value->map, print_oneline);
+            print_report_log(&logs->pairs[i].value->map, output_format);
             break;
         case RBH_SYNC_LOG:
-            print_sync_log(&logs->pairs[i].value->map, print_oneline);
+            print_sync_log(&logs->pairs[i].value->map, output_format);
             break;
         default:
             error(EXIT_FAILURE, EINVAL, "Invalid log type retrieved: '%s'",
                   logs->pairs[i].key);
         }
 
-        printf("%s}\n", print_oneline ? " " : "");
+        switch (output_format) {
+        case OF_NORMAL:
+            printf("}\n");
+            break;
+        case OF_ONELINE:
+            printf(" }\n");
+            break;
+        }
     }
 }
 
@@ -150,6 +165,7 @@ out:
 int
 main(int argc, char *argv[])
 {
+    enum output_format output_format = OF_NORMAL;
     const struct option LONG_OPTIONS[] = {
         {
             .name = "config",
@@ -197,7 +213,6 @@ main(int argc, char *argv[])
         .count = 1
     };
     struct rbh_value_map *logs_map = NULL;
-    bool print_oneline = false;
     bool print_count = false;
     bool delete_logs = false;
     int rc;
@@ -232,7 +247,7 @@ main(int argc, char *argv[])
 
             break;
         case 'o':
-            print_oneline = true;
+            output_format = OF_ONELINE;
             break;
         case 't':
             if (parse_tools_list(optarg, &options.type))
@@ -293,7 +308,7 @@ main(int argc, char *argv[])
             error(EXIT_FAILURE, EINVAL,
                   "Failed to retrieve requested logs\n");
 
-        print_logs(logs_map, print_oneline);
+        print_logs(logs_map, output_format);
     }
 
     return EXIT_SUCCESS;
