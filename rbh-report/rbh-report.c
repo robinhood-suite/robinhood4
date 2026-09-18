@@ -159,6 +159,9 @@ usage(const char *backend)
         "    -h, --help [backend]  show this message and exit. If 'backend' is\n"
         "                          provided, show the 'backend''s available\n"
         "                          filters and directives\n"
+        "    --log-file FILE       redirect command stats printing to given FILE.\n"
+        "                          Is only used if '--stats' is specified.\n"
+        "    --stats               print command stats after execution to stderr\n"
         "    -v, --verbose         show additionnal information\n"
         "    --version             print RobinHood 4's version\n"
         "\n"
@@ -252,7 +255,8 @@ cleanup(char **others, char *output, char *group)
 }
 
 static void
-get_command_options(int argc, char *argv[], struct command_context *context)
+get_command_options(int argc, char *argv[], struct command_context *context,
+                    struct rbh_metadata *metadata)
 {
     for (int i = 0; i < argc; i++) {
         if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
@@ -269,8 +273,25 @@ get_command_options(int argc, char *argv[], struct command_context *context)
                 error(EXIT_FAILURE, EINVAL,
                       "missing configuration file value");
 
-            context->config_file = argv[i + 1];
+            context->config_file = argv[++i];
         }
+
+        if (strcmp(argv[i], "--log-file") == 0 &&
+            metadata->log_file == stderr) {
+            if (i + 1 >= argc)
+                error(EXIT_FAILURE, EINVAL,
+                      "missing file to write logs to");
+
+            metadata->log_file = fopen(argv[i + 1], "w");
+            if (metadata->log_file == NULL)
+                error(EXIT_FAILURE, errno, "Failed to open log file '%s'",
+                      argv[i + 1]);
+
+            i++;
+        }
+
+        if (strcmp(argv[i], "--stats") == 0)
+            context->print_stats = true;
 
         if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0)
             context->verbose = true;
@@ -310,7 +331,10 @@ main(int _argc, char *_argv[])
 {
     struct command_context command_context = {0};
     struct rbh_filter_options options = {0};
-    struct rbh_metadata metadata = {0};
+    struct rbh_metadata metadata = {
+        .common_md.command_line = get_command_line(_argc, _argv),
+        .log_file = stderr,
+    };
     struct filters_context f_ctx = {0};
     struct rbh_value_map *info_map;
     bool ascending_sort = true;
@@ -325,19 +349,17 @@ main(int _argc, char *_argv[])
     char **argv;
     int argc;
 
-    metadata.common_md.command_line = get_command_line(_argc, _argv);
-
     argc = _argc - 1;
     argv = &_argv[1];
 
     nb_cli_args = rbh_count_args_before_uri(argc, argv);
-    get_command_options(nb_cli_args, argv, &command_context);
+    get_command_options(nb_cli_args, argv, &command_context, &metadata);
 
     rbh_config_load_from_path(command_context.config_file);
     rbh_apply_aliases(&argc, &argv);
 
     nb_cli_args = rbh_count_args_before_uri(argc, argv);
-    get_command_options(nb_cli_args, argv, &command_context);
+    get_command_options(nb_cli_args, argv, &command_context, &metadata);
     apply_command_options(&command_context, argc, argv);
 
     argc = argc - nb_cli_args;
@@ -406,6 +428,9 @@ main(int _argc, char *_argv[])
     metadata.common_md.start_time = time(NULL);
     report(group, output, ascending_sort, csv_print, filter, &options);
     metadata.common_md.end_time = time(NULL);
+
+    if (command_context.print_stats)
+        rbh_print_log(&metadata, RBH_REPORT_LOG, NULL);
 
     insert_report_log(from, &metadata);
 
