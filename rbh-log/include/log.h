@@ -28,33 +28,10 @@ enum common_log_value {
     CLV_START_TIME,
 };
 
-/**
- * Convert a key to a common log value.
- *
- * @param key       the key to convert
- *
- * @return          the converted key
- */
-enum common_log_value
-key2common_log_value(const char *key);
-
-/**
- * Print the given value as if it were common information about a log.
- *
- * Can correspond to the start time, duration, end time and command line.
- *
- * @param value          the value whose content should be printed as
- *                       common log info
- * @param log_value      the type of information to print
- * @param print_oneline  whether only oneline log info should be printed
- * @param need_comma     if a comma needs to be added before the next log info
- *                       is printed, only used when printing on one line
- */
 void
-print_common_log_info(const struct rbh_value *value,
-                      enum common_log_value log_value,
-                      bool print_oneline,
-                      bool *need_comma);
+print_log_wrapper(const struct rbh_value_map *log, bool oneline,
+                  const struct formatted_log_value *flv,
+                  int (*key2log_value)(const char *));
 
 /**
  * Print a sync log.
