@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "143d5c67_16086373",
+        "filename": "rbh-log/rbh-log.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-18T10:04:27Z",
+      "side": 1,
+      "message": "major: tool is used everywhere instead of tools",
+      "range": {
+        "startLine": 185,
+        "startChar": 21,
+        "endLine": 185,
+        "endChar": 28
+      },
+      "revId": "c4ad5e9a3171bab7b2ea47749518475701614953",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
