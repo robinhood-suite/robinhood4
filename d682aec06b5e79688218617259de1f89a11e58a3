@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b0c5f5b_fe667ba6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-18T10:00:02Z",
+      "side": 1,
+      "message": "spelling: invocation",
+      "range": {
+        "startLine": 10,
+        "startChar": 3,
+        "endLine": 10,
+        "endChar": 7
+      },
+      "revId": "d682aec06b5e79688218617259de1f89a11e58a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da99b56d_de0202c8",
+        "filename": "rbh-log/rbh-log.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-18T10:00:02Z",
+      "side": 1,
+      "message": "major: t",
+      "range": {
+        "startLine": 234,
+        "startChar": 53,
+        "endLine": 234,
+        "endChar": 57
+      },
+      "revId": "d682aec06b5e79688218617259de1f89a11e58a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46e81c72_9bd36647",
+        "filename": "rbh-log/tests/test_all_logs.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-18T10:00:02Z",
+      "side": 1,
+      "message": "question: local ?",
+      "range": {
+        "startLine": 298,
+        "startChar": 4,
+        "endLine": 298,
+        "endChar": 8
+      },
+      "revId": "d682aec06b5e79688218617259de1f89a11e58a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dedbacc_3895babe",
+        "filename": "rbh-log/tests/test_all_logs.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-18T10:00:02Z",
+      "side": 1,
+      "message": "minor: to be removed",
+      "range": {
+        "startLine": 350,
+        "startChar": 3,
+        "endLine": 350,
+        "endChar": 18
+      },
+      "revId": "d682aec06b5e79688218617259de1f89a11e58a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02679931_5045f202",
+        "filename": "rbh-log/tests/test_all_logs.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-18T10:00:02Z",
+      "side": 1,
+      "message": "major: shuffling the commands leads to some errors case for your test. You need to guarantee for exampel one log of each type : sync find fsevent report and gc.",
+      "range": {
+        "startLine": 352,
+        "startChar": 4,
+        "endLine": 352,
+        "endChar": 21
+      },
+      "revId": "d682aec06b5e79688218617259de1f89a11e58a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
