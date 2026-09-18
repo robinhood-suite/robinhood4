@@ -839,7 +839,7 @@ rbh_backend_get_logs(struct rbh_backend *backend,
  * @param backend   a pointer to the struct rbh_backend to delete logs from
  * @param options   options to determine the logs to delete
  *
- * @return          0 on success, any other value on error and errno set
+ * @return          the number of logs deleted, a negative value on error
  */
 static inline int
 rbh_backend_delete_logs(struct rbh_backend *backend,
@@ -847,7 +847,7 @@ rbh_backend_delete_logs(struct rbh_backend *backend,
 {
     if (backend->ops->delete_logs == NULL) {
         errno = ENOTSUP;
-        return 1;
+        return -1;
     }
     return backend->ops->delete_logs(backend, options);
 }
