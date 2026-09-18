@@ -74,13 +74,15 @@ usage(void)
         "    -c, --config PATH          the path to a configuration file\n"
         "    -d, --dry-run              displays the list of the absent entries\n"
         "    -h, --help                 print this messsage and exit\n"
-        "    --log-file FILE            redirect command stats printing to given FILE\n"
+        "    --log-file FILE            redirect command stats printing to given FILE.\n"
+        "                               Is only used if '--stats' is specified.\n"
         "    --log-timer TIMER          print stats each TIMER seconds, 60 by\n"
-        "                               default, 0 to only print at the end of the command\n"
+        "                               default, 0 to only print at the end of the command.\n"
+        "                               Is only used if '--stats' is specified.\n"
         "    -s, --sync-time SYNC_TIME  instead of checking every entry of the BACKEND,\n"
         "                               only consider entries with a sync_time lesser\n"
         "                               than SYNC_TIME\n"
-        "    --stats                    show command stats during execution\n"
+        "    --stats                    print command stats during execution to stderr\n"
         "    -v, --verbose              verbose mode\n"
         "    --version                  print RobinHood 4's version\n";
 
@@ -595,7 +597,7 @@ main(int _argc, char *_argv[])
         .common_md.command_line = get_command_line(_argc, _argv),
         .gc_md.sync_time = -1,
         .last_shown_time = time(NULL),
-        .log_file = stdout,
+        .log_file = stderr,
         .log_timer = 60,
     };
     struct rbh_filter_options options = {0};
@@ -737,7 +739,7 @@ main(int _argc, char *_argv[])
     free(path);
     rbh_config_free();
 
-    if (metadata.log_file != stdout)
+    if (metadata.log_file != stderr)
         fclose(metadata.log_file);
 
     return EXIT_SUCCESS;
