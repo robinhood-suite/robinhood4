@@ -71,7 +71,8 @@ test_delete()
     log_should_exist $id6
     log_should_exist $id7
 
-    rbh_log rbh:$db:$testdb --tool sync -n 3 --delete
+    rbh_log rbh:$db:$testdb --tool sync -n 3 --delete |
+        difflines "Deleted '3' log(s)"
 
     rbh_log rbh:$db:$testdb --log-count | sort |
         difflines "Log count for the 'find' command: '2'" \
@@ -89,7 +90,8 @@ test_delete()
     log_should_exist $id6
     log_should_exist $id7
 
-    rbh_log rbh:$db:$testdb --tool gc -n 7 --delete
+    rbh_log rbh:$db:$testdb --tool gc -n 7 --delete |
+        difflines "Deleted '0' log(s)"
 
     rbh_log rbh:$db:$testdb --log-count | sort |
         difflines "Log count for the 'find' command: '2'" \
@@ -107,7 +109,8 @@ test_delete()
     log_should_exist $id6
     log_should_exist $id7
 
-    rbh_log rbh:$db:$testdb -n 1 --delete
+    rbh_log rbh:$db:$testdb -n 1 --delete |
+        difflines "Deleted '1' log(s)"
 
     rbh_log rbh:$db:$testdb --log-count | sort |
         difflines "Log count for the 'find' command: '2'" \
@@ -125,7 +128,8 @@ test_delete()
     log_should_exist $id6
     log_shouldnt_exist $id7
 
-    rbh_log rbh:$db:$testdb -n 1 --delete
+    rbh_log rbh:$db:$testdb -n 1 --delete |
+        difflines "Deleted '1' log(s)"
 
     rbh_log rbh:$db:$testdb --log-count | sort |
         difflines "Log count for the 'find' command: '1'" \
@@ -143,7 +147,8 @@ test_delete()
     log_shouldnt_exist $id6
     log_shouldnt_exist $id7
 
-    rbh_log rbh:$db:$testdb --tool "find,report" -n 7 --delete
+    rbh_log rbh:$db:$testdb --tool "find,report" -n 7 --delete |
+        difflines "Deleted '1' log(s)"
 
     rbh_log rbh:$db:$testdb --log-count | sort |
         difflines "Log count for the 'find' command: '0'" \
@@ -161,7 +166,8 @@ test_delete()
     log_shouldnt_exist $id6
     log_shouldnt_exist $id7
 
-    rbh_log rbh:$db:$testdb -n 42 --delete
+    rbh_log rbh:$db:$testdb -n 42 --delete |
+        difflines "Deleted '1' log(s)"
 
     rbh_log rbh:$db:$testdb --log-count | sort |
         difflines "Log count for the 'find' command: '0'" \
