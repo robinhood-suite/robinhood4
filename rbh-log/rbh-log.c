@@ -275,13 +275,18 @@ main(int argc, char *argv[])
 
         print_log_count(logs_map);
     } else if (delete_logs) {
+        int count;
+
         if (options.count == 0)
             error(EXIT_FAILURE, EINVAL,
                   "Cannot delete 0 logs, specify a count to delete\n");
 
-        if (rbh_backend_delete_logs(backend, options))
+        count = rbh_backend_delete_logs(backend, options);
+        if (count < 0)
             error(EXIT_FAILURE, EINVAL,
                   "Failed to delete requested logs\n");
+
+        printf("Deleted '%d' log(s)\n", count);
     } else {
         logs_map = rbh_backend_get_logs(backend, options);
         if (logs_map == NULL)
