@@ -379,33 +379,31 @@ mongo_backend_delete_logs(void *backend, struct rbh_log_options options)
     bson_destroy(opts);
     opts = NULL;
     if (!cursor) {
-        rc = 1;
+        rc = -1;
         goto out;
     }
 
     for (index = 0; index < options.count; ++index) {
         if (!mongoc_cursor_more(cursor)) {
             if (mongoc_cursor_error(cursor, &error)) {
-                rc = 1;
+                rc = -1;
                 goto handle_error;
             }
 
-            rc = 0;
             break;
         }
 
         if (!mongoc_cursor_next(cursor, &doc)) {
             if (mongoc_cursor_error(cursor, &error)) {
-                rc = 1;
+                rc = -1;
                 goto handle_error;
             }
 
-            rc = 0;
             break;
         }
 
         if (!bson_iter_init(&iter, doc)) {
-            rc = 1;
+            rc = -1;
             goto out;
         }
 
@@ -446,7 +444,10 @@ mongo_backend_delete_logs(void *backend, struct rbh_log_options options)
     if (!result) {
         fprintf(stderr, "Failed to delete logs: %s\n", error.message);
         rc = -1;
+        goto out;
     }
+
+    rc = index;
 
 out:
     free(keys);
@@ -469,7 +470,7 @@ handle_error:
         switch (error.code) {
         case MONGOC_ERROR_SERVER_SELECTION_FAILURE:
             errno = ENOTCONN;
-            return 1;
+            return -1;
         }
         break;
     }
