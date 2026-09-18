@@ -10,7 +10,8 @@
 #include "log.h"
 
 void
-print_report_log(const struct rbh_value_map *log, bool print_oneline)
+print_report_log(const struct rbh_value_map *log,
+                 enum output_format output_format)
 {
-    print_log_wrapper(log, print_oneline, NULL, NULL);
+    print_log_wrapper(log, output_format, NULL, NULL);
 }
