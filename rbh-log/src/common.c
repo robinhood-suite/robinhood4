@@ -95,7 +95,7 @@ print_value(const struct rbh_value *value, const char *header,
     printf("%s", print_oneline ? "" : "\n");
 }
 
-enum common_log_value
+static int
 key2common_log_value(const char *key)
 {
     switch (key[0]) {
@@ -137,24 +137,51 @@ static const struct formatted_log_value common_formatted_log_value[] = {
                             .print_log_value = print_value },
 };
 
-void
-print_common_log_info(const struct rbh_value *value,
-                      enum common_log_value log_value,
-                      bool print_oneline,
-                      bool *need_comma)
+static void
+print_log_info(const struct rbh_value *value,
+               const struct formatted_log_value *flv,
+               bool print_oneline,
+               bool *need_comma)
 {
-    struct formatted_log_value formatted_log_value =
-        common_formatted_log_value[log_value];
-
-    if (print_oneline && formatted_log_value.oneline) {
+    if (print_oneline && flv->oneline) {
         if (*need_comma)
             printf(", ");
 
-        formatted_log_value.print_log_value(value, formatted_log_value.header,
-                                            print_oneline);
+        flv->print_log_value(value, flv->header, print_oneline);
         *need_comma = true;
     } else if (!print_oneline) {
-        formatted_log_value.print_log_value(value, formatted_log_value.header,
-                                            print_oneline);
+        flv->print_log_value(value, flv->header, print_oneline);
+    }
+}
+
+void
+print_log_wrapper(const struct rbh_value_map *log, bool oneline,
+                  const struct formatted_log_value *flv,
+                  int (*key2log_value)(const char *))
+{
+    bool need_comma = false;
+
+    for (size_t i = 0 ; i < log->count ; i++) {
+        const struct rbh_value_pair *pair = &log->pairs[i];
+        enum common_log_value common_log_value;
+
+        common_log_value = key2common_log_value(pair->key);
+        if (common_log_value != CLV_UNKNOWN) {
+            print_log_info(pair->value,
+                           &common_formatted_log_value[common_log_value],
+                           oneline,
+                           &need_comma);
+            continue;
+        }
+
+        if (flv == NULL)
+            continue;
+
+        /* key2log_value could theoretically return a int outside of the array,
+         * but the 'key2<command>_log_value' functions either give a valid index
+         * or simply error out. So there is no possible segfault here.
+         */
+        print_log_info(pair->value, &flv[key2log_value(pair->key)],
+                       oneline, &need_comma);
     }
 }

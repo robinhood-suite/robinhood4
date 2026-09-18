@@ -14,7 +14,7 @@ enum find_log_value {
     EXEC_SUCCESS_COUNT,
 };
 
-static enum find_log_value
+static int
 key2find_log_value(const char *key)
 {
     switch (key[0]) {
@@ -46,30 +46,5 @@ static const struct formatted_log_value find_log_value[] = {
 void
 print_find_log(const struct rbh_value_map *log, bool print_oneline)
 {
-    bool need_comma = false;
-
-    for (size_t i = 0 ; i < log->count ; i++) {
-        const struct rbh_value_pair *pair = &log->pairs[i];
-        enum common_log_value common_log_value;
-        struct formatted_log_value log_value;
-
-        common_log_value = key2common_log_value(pair->key);
-        if (common_log_value != CLV_UNKNOWN) {
-            print_common_log_info(pair->value, common_log_value,
-                                  print_oneline, &need_comma);
-            continue;
-        }
-
-        log_value = find_log_value[key2find_log_value(pair->key)];
-
-        if (print_oneline && log_value.oneline) {
-            if (need_comma)
-                printf(", ");
-
-            log_value.print_log_value(pair->value, log_value.header, print_oneline);
-            need_comma = true;
-        } else if (!print_oneline) {
-            log_value.print_log_value(pair->value, log_value.header, print_oneline);
-        }
-    }
+    print_log_wrapper(log, print_oneline, find_log_value, &key2find_log_value);
 }
