@@ -17,7 +17,7 @@ enum gc_log_value {
     TOTAL_ENTRIES,
 };
 
-static enum gc_log_value
+static int
 key2gc_log_value(const char *key)
 {
     switch (key[0]) {
@@ -52,7 +52,7 @@ key2gc_log_value(const char *key)
     __builtin_unreachable();
 }
 
-static const struct formatted_log_value gc_formatted_log_value[] = {
+static const struct formatted_log_value gc_log_value[] = {
     [CHECK_COMMAND] =       { .header = "Check command used",
                               .print_log_value = print_value },
     [DELETED_ENTRIES] =     { .header = "Amount of deleted entries",
@@ -70,30 +70,5 @@ static const struct formatted_log_value gc_formatted_log_value[] = {
 void
 print_gc_log(const struct rbh_value_map *log, bool print_oneline)
 {
-    bool need_comma = false;
-
-    for (size_t i = 0 ; i < log->count ; i++) {
-        const struct rbh_value_pair *pair = &log->pairs[i];
-        enum common_log_value common_log_value;
-        struct formatted_log_value log_value;
-
-        common_log_value = key2common_log_value(pair->key);
-        if (common_log_value != CLV_UNKNOWN) {
-            print_common_log_info(pair->value, common_log_value,
-                                  print_oneline, &need_comma);
-            continue;
-        }
-
-        log_value = gc_formatted_log_value[key2gc_log_value(pair->key)];
-
-        if (print_oneline && log_value.oneline) {
-            if (need_comma)
-                printf(", ");
-
-            log_value.print_log_value(pair->value, log_value.header, print_oneline);
-            need_comma = true;
-        } else if (!print_oneline) {
-            log_value.print_log_value(pair->value, log_value.header, print_oneline);
-        }
-    }
+    print_log_wrapper(log, print_oneline, gc_log_value, &key2gc_log_value);
 }
