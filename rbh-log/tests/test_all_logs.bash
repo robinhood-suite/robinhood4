@@ -355,11 +355,64 @@ test_multi_tools()
     _test_multi_tools "gc" "report" "gc" "find"
 }
 
+test_csv()
+{
+    generate_commands
+
+    local output=$(rbh_log "rbh:$db:$testdb" -n 21 --csv)
+    local tmp_output=$(rbh_log "rbh:$db:$testdb" -n 30 --csv)
+
+    if [ "$output" != "$tmp_output" ]; then
+        error "Outputted CSV logs should have been the same, got '$output' and '$tmp_output'"
+    fi
+
+    while [ ! -z "$output" ]; do
+        local log="$(echo "$output" | head -n 1)"
+
+        # 1 for the command + 4 for the common logs info
+        local expected_column_count=5
+        local regexp
+
+
+        if [[ $log == *"rbh-sync"* ]]; then
+            expected_column_count=$((expected_column_count + 4))
+            regexp="rbh-sync,.*,.*,.*,\"$__rbh_sync rbh:posix:. rbh:$db:$testdb\",\"$PWD\",1,0,1"
+        elif [[ $log == *"rbh-find"* ]]; then
+            expected_column_count=$((expected_column_count + 2))
+            regexp="rbh-find,.*,.*,.*,\"$__rbh_find rbh:$db:$testdb -exec ls ;\",[0-9]+,[0-9]+"
+        elif [[ $log == *"rbh-fsevents"* ]]; then
+            expected_column_count=$((expected_column_count + 9))
+            regexp="rbh-fsevents,.*,.*,.*,\"$__rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb\",\"$LUSTRE_MDT\",\"${LUSTRE_DIR::-1}\",1,.*,.*,[0-9]+,0,0,.*"
+        elif [[ $log == *"rbh-report"* ]]; then
+            regexp="rbh-report,.*,.*,.*,\"$__rbh_report rbh:$db:$testdb --group-by statx.uid --output sum\(statx.size\)\""
+        elif [[ $log == *"rbh-gc"* ]]; then
+            expected_column_count=$((expected_column_count + 4))
+            regexp="rbh-gc,.*,.*,.*,\"$__rbh_gc rbh:$db:$testdb --sync-time 42\",0,0,0,42"
+        else
+            error "Invalid command found: '$log'"
+        fi
+
+        local comma_count="$(grep -o "," <<< "$log" | wc -l)"
+        if (( comma_count + 1 != expected_column_count )); then
+            error "Found '$((comma_count + 1))' columns in '$log'," \
+                  "expected '$expected_column_count'"
+        fi
+
+        regexp="$(echo "$regexp" | sed 's/\//\\\//g')"
+        if ! [[ $log =~ $regexp ]]; then
+            error "'$log' failed to match with regexp '$regexp'"
+        fi
+
+        output="$(echo "$output" | tail -n +2)"
+    done
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_first_logs test_last_logs test_oneline test_multi_tools)
+declare -a tests=(test_first_logs test_last_logs test_oneline test_multi_tools
+                  test_csv)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
