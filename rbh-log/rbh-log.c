@@ -40,6 +40,7 @@ usage(void)
         "\n"
         "Optional arguments:\n"
         "   -c, --config PATH       the configuration file to use\n"
+        "   --csv                   print logs in a CSV format\n"
         "   --log-count             print the number of logs currently recorded.\n"
         "                           Cannot be used with '--delete' and no logs\n"
         "                           will be printed.\n"
@@ -76,6 +77,9 @@ print_logs(const struct rbh_value_map *logs,
         case OF_ONELINE:
             printf("{ rbh-%s: ", logs->pairs[i].key);
             break;
+        case OF_CSV:
+            printf("rbh-%s,", logs->pairs[i].key);
+            break;
         }
 
         switch (type) {
@@ -105,6 +109,9 @@ print_logs(const struct rbh_value_map *logs,
             break;
         case OF_ONELINE:
             printf(" }\n");
+            break;
+        case OF_CSV:
+            printf("\n");
             break;
         }
     }
@@ -173,6 +180,10 @@ main(int argc, char *argv[])
             .val = 'c',
         },
         {
+            .name = "csv",
+            .val = 'C',
+        },
+        {
             .name = "delete",
             .val = 'd',
         },
@@ -227,6 +238,9 @@ main(int argc, char *argv[])
         switch (c) {
         case 'c':
             /* already parsed */
+            break;
+        case 'C':
+            output_format = OF_CSV;
             break;
         case 'd':
             delete_logs = true;
