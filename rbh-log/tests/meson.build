@@ -12,13 +12,18 @@ parallel_integration_tests = [
   'test_sync_logs',
 ]
 
-if test_lustre
-    parallel_integration_tests += ['test_fsevents_logs',
-                                   'test_all_logs',
-                                   'test_log_count']
-endif
-
 foreach t: parallel_integration_tests
     e = find_program(t + '.bash')
     test(t, e, env: backend_path_env, suite: 'rbh-log', is_parallel: true)
 endforeach
+
+if test_lustre
+    non_parallel_integration_tests += ['test_fsevents_logs',
+                                       'test_all_logs',
+                                       'test_log_count']
+
+    foreach t: parallel_integration_tests
+        e = find_program(t + '.bash')
+        test(t, e, env: backend_path_env, suite: 'rbh-log', is_parallel: false)
+    endforeach
+endif
