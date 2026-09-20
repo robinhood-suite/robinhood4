@@ -30,6 +30,9 @@ print_timespec(const struct rbh_value *value, const char *header,
         printf("%s: %lu.%09lu", header,
                timespec.tv_sec, timespec.tv_nsec);
         break;
+    case OF_CSV:
+        printf("%lu.%09lu", timespec.tv_sec, timespec.tv_nsec);
+        break;
     }
 }
 
@@ -45,6 +48,9 @@ print_time_from_timestamp(const struct rbh_value *value, const char *header,
         break;
     case OF_ONELINE:
         printf("%s: %s", header, time_from_timestamp(&time));
+        break;
+    case OF_CSV:
+        printf("%s", time_from_timestamp(&time));
         break;
     }
 }
@@ -69,6 +75,9 @@ print_difftime(const struct rbh_value *value, const char *header,
     case OF_ONELINE:
         printf("%s: %s", header, buffer);
         break;
+    case OF_CSV:
+        printf("%s", buffer);
+        break;
     }
 }
 
@@ -83,11 +92,17 @@ print_value(const struct rbh_value *value, const char *header,
     case OF_ONELINE:
         printf("%s: ", header);
         break;
+    case OF_CSV:
+        break;
     }
 
     switch (value->type) {
     case RBH_VT_STRING:
-        printf("%s", value->string);
+        if (output_format == OF_CSV)
+            printf("\"%s\"", value->string);
+        else
+            printf("%s", value->string);
+
         break;
     case RBH_VT_INT64:
         printf("%ld", value->int64);
@@ -175,6 +190,13 @@ print_log_info(const struct rbh_value *value,
 
         if (*need_comma)
             printf(", ");
+
+        flv->print_log_value(value, flv->header, output_format);
+        *need_comma = true;
+        break;
+    case OF_CSV:
+        if (*need_comma)
+            printf(",");
 
         flv->print_log_value(value, flv->header, output_format);
         *need_comma = true;

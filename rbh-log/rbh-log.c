@@ -35,11 +35,18 @@ usage(void)
         "\n"
         "Print logs from SOURCE's metadata.\n"
         "\n"
+        "Format output modifiers only work when printing logs, not when\n"
+        "deleting them or checking their count. Only one format can be used\n"
+        "at a time.\n"
+        "\n"
         "Positional arguments:\n"
         "    SOURCE                 a robinhood URI\n"
         "\n"
         "Optional arguments:\n"
         "   -c, --config PATH       the configuration file to use\n"
+        "   --csv                   print logs in a CSV format. Only works when\n"
+        "                           printing logs, not with '--log-count' or\n"
+        "                           '--delete'.\n"
         "   --log-count             print the number of logs currently recorded.\n"
         "                           Cannot be used with '--delete' and no logs\n"
         "                           will be printed.\n"
@@ -76,6 +83,9 @@ print_logs(const struct rbh_value_map *logs,
         case OF_ONELINE:
             printf("{ rbh-%s: ", logs->pairs[i].key);
             break;
+        case OF_CSV:
+            printf("rbh-%s,", logs->pairs[i].key);
+            break;
         }
 
         switch (type) {
@@ -105,6 +115,9 @@ print_logs(const struct rbh_value_map *logs,
             break;
         case OF_ONELINE:
             printf(" }\n");
+            break;
+        case OF_CSV:
+            printf("\n");
             break;
         }
     }
@@ -173,6 +186,10 @@ main(int argc, char *argv[])
             .val = 'c',
         },
         {
+            .name = "csv",
+            .val = 'C',
+        },
+        {
             .name = "delete",
             .val = 'd',
         },
@@ -222,11 +239,18 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:dFhn:ot:zZ",
+    while ((c = getopt_long(argc, argv, "c:CdFhn:ot:zZ",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
             /* already parsed */
+            break;
+        case 'C':
+            if (output_format != OF_NORMAL)
+                error(EXIT_FAILURE, EINVAL,
+                      "Cannot specify multiple output formats\n");
+
+            output_format = OF_CSV;
             break;
         case 'd':
             delete_logs = true;
@@ -247,6 +271,10 @@ main(int argc, char *argv[])
 
             break;
         case 'o':
+            if (output_format != OF_NORMAL)
+                error(EXIT_FAILURE, EINVAL,
+                      "Cannot specify multiple output formats\n");
+
             output_format = OF_ONELINE;
             break;
         case 't':
