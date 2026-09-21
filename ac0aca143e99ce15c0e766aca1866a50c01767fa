@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32006707_8f191ccc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-21T12:19:33Z",
+      "side": 1,
+      "message": "(Qwen + QLM 5.3)\n\n### 🟠 All three commands now `fclose(stderr)` on exit\n\n`rbh-gc.c:741`, `rbh-sync.c:960`, `rbh-fsevents.c:960`:\n\n```c\nif (metadata.log_file !\u003d stdout)\n    fclose(metadata.log_file);\n```\n\nThe default changed from `stdout` to `stderr`, but the guard only excludes `stdout`. On the normal exit path of every run **without** `--log-file`, `fclose(stderr)` runs. Today nothing writes to stderr between that call and process exit, so it\u0027s latent rather than fatal — but it is now wrong, and any future `error()`/teardown print after that point would vanish. Fix: `!\u003d stdout \u0026\u0026 !\u003d stderr`.",
+      "revId": "ac0aca143e99ce15c0e766aca1866a50c01767fa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
