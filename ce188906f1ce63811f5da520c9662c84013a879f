@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a7e7040_b0aaf0ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-21T12:23:48Z",
+      "side": 1,
+      "message": "(Qwen + QLM 5.3)\n\nNits: `sync.c`\u0027s array is still named `sync_formatted_log_value` while every sibling was renamed to `*_log_value`; `print_log_wrapper()` got no doc comment although the declarations it replaced had them.",
+      "revId": "ce188906f1ce63811f5da520c9662c84013a879f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
