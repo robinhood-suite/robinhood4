@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce4ca002_51cfb263",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-21T12:27:41Z",
+      "side": 1,
+      "message": "(Qwen + QLM 5.3)\n\n### 🔴 The `foreach` iterates the wrong list — the commit achieves the opposite of its purpose\n\n`rbh-log/tests/meson.build`:\n\n```meson\nif test_lustre\n    non_parallel_integration_tests +\u003d [\u0027test_fsevents_logs\u0027,\n                                       \u0027test_all_logs\u0027,\n                                       \u0027test_log_count\u0027]\n\n    foreach t: parallel_integration_tests      # ← wrong list\n        e \u003d find_program(t + \u0027.bash\u0027)\n        test(t, e, env: backend_path_env, suite: \u0027rbh-log\u0027, is_parallel: false)\n    endforeach\nendif\n```\n\nTwo consequences when building with Lustre support:\n1. **`test_fsevents_logs`, `test_all_logs`, `test_log_count` are never registered** — `non_parallel_integration_tests` is populated but never iterated. They silently don\u0027t run. That includes the `test_csv` added two commits earlier: **your new CSV test will never execute on a Lustre build.**\n2. The five non-Lustre tests (`test_delete`, `test_find_logs`, …) are registered **twice** — once `is_parallel: true` from the unconditional loop, once `is_parallel: false` from this one — duplicating runs and cluttering `meson test` output.\n\nThe commit message says the Lustre tests must not run in parallel \"because they target the same MDT\"; as written, the interference problem isn\u0027t fixed, it\u0027s replaced by a coverage hole. One-word fix:\n\n```meson\n    foreach t: non_parallel_integration_tests\n```\n\n### 🟡 `+\u003d` on a variable that is never defined in this scope\nEvery sibling `tests/meson.build` (`rbh-info`, `rbh-undelete`, `rbh-find/tests/*`) declares its list with plain `\u003d`. Here `non_parallel_integration_tests` is never defined before the `+\u003d`, which relies on Meson\u0027s lenient plusassign-to-undefined behavior. Use `\u003d` like the rest of the tree (and note: if it *were* an error on some Meson version, configure would fail loudly with `test_lustre` — either way, don\u0027t rely on it).",
+      "revId": "42ef56a3a59c55c3600539bdb035288be0adc0a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21798141_55e40bc5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-21T12:27:41Z",
+      "side": 1,
+      "message": "(Qwen + QLM 5.3)\n\n### 🔴 The `foreach` iterates the wrong list — the commit achieves the opposite of its purpose\n\n`rbh-log/tests/meson.build`:\n\n```meson\nif test_lustre\n    non_parallel_integration_tests +\u003d [\u0027test_fsevents_logs\u0027,\n                                       \u0027test_all_logs\u0027,\n                                       \u0027test_log_count\u0027]\n\n    foreach t: parallel_integration_tests      # ← wrong list\n        e \u003d find_program(t + \u0027.bash\u0027)\n        test(t, e, env: backend_path_env, suite: \u0027rbh-log\u0027, is_parallel: false)\n    endforeach\nendif\n```\n\nTwo consequences when building with Lustre support:\n1. **`test_fsevents_logs`, `test_all_logs`, `test_log_count` are never registered** — `non_parallel_integration_tests` is populated but never iterated. They silently don\u0027t run. That includes the `test_csv` added two commits earlier: **your new CSV test will never execute on a Lustre build.**\n2. The five non-Lustre tests (`test_delete`, `test_find_logs`, …) are registered **twice** — once `is_parallel: true` from the unconditional loop, once `is_parallel: false` from this one — duplicating runs and cluttering `meson test` output.\n\nThe commit message says the Lustre tests must not run in parallel \"because they target the same MDT\"; as written, the interference problem isn\u0027t fixed, it\u0027s replaced by a coverage hole. One-word fix:\n\n```meson\n    foreach t: non_parallel_integration_tests\n```\n\n### 🟡 `+\u003d` on a variable that is never defined in this scope\nEvery sibling `tests/meson.build` (`rbh-info`, `rbh-undelete`, `rbh-find/tests/*`) declares its list with plain `\u003d`. Here `non_parallel_integration_tests` is never defined before the `+\u003d`, which relies on Meson\u0027s lenient plusassign-to-undefined behavior. Use `\u003d` like the rest of the tree (and note: if it *were* an error on some Meson version, configure would fail loudly with `test_lustre` — either way, don\u0027t rely on it).",
+      "revId": "42ef56a3a59c55c3600539bdb035288be0adc0a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
