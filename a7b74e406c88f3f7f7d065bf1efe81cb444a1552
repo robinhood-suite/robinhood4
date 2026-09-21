@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c298751_ec17757d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-21T12:26:49Z",
+      "side": 1,
+      "message": "(qwen + QLM 5.3)\n\n### Nits\n- `echo \"output \u003d \u0027$output\u0027\"` — debug print left in; dumps 21 lines on every passing run.\n- The `sed \u0027s/\\//\\\\\\//g\u0027` slash-escaping is useless for bash `[[ \u003d~ ]]` (it\u0027s only meaningful if the regexp were fed to `sed`), and `\\/` in POSIX ERE is technically undefined — works on glibc, but it\u0027s dead weight.\n- The report regexp is unanchored (no `$`) — compensated by the column count, just noting the asymmetry with the others.",
+      "revId": "a7b74e406c88f3f7f7d065bf1efe81cb444a1552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eda2c932_e3a372ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-21T12:26:49Z",
+      "side": 1,
+      "message": "(qwen + QLM 5.3)\n\n### Nits\n- `echo \"output \u003d \u0027$output\u0027\"` — debug print left in; dumps 21 lines on every passing run.\n- The `sed \u0027s/\\//\\\\\\//g\u0027` slash-escaping is useless for bash `[[ \u003d~ ]]` (it\u0027s only meaningful if the regexp were fed to `sed`), and `\\/` in POSIX ERE is technically undefined — works on glibc, but it\u0027s dead weight.\n- The report regexp is unanchored (no `$`) — compensated by the column count, just noting the asymmetry with the others.",
+      "revId": "a7b74e406c88f3f7f7d065bf1efe81cb444a1552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
