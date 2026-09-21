@@ -189,6 +189,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a66df5b1_305ba672",
+        "filename": "rbh-sync/tests/posix/test_stats.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-21T11:28:36Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1e0f40ab_ed0ce6c3",
+      "range": {
+        "startLine": 72,
+        "startChar": 16,
+        "endLine": 72,
+        "endChar": 46
+      },
+      "revId": "847ad6f5b7ffab99a16fd973e8a64139f39de881",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24677dd5_7a02a6d4",
@@ -226,6 +250,30 @@
       "side": 1,
       "message": "Yes, if one job does nothing, it will say it does nothing.",
       "parentUuid": "24677dd5_7a02a6d4",
+      "range": {
+        "startLine": 85,
+        "startChar": 3,
+        "endLine": 85,
+        "endChar": 71
+      },
+      "revId": "847ad6f5b7ffab99a16fd973e8a64139f39de881",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be4896f1_77c4a51a",
+        "filename": "rbh-sync/tests/posix/test_stats.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-21T11:28:36Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fde9329a_959ec6c5",
       "range": {
         "startLine": 85,
         "startChar": 3,
