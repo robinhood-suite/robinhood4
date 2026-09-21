@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a44e3a5_391b0f7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-21T12:17:10Z",
+      "side": 1,
+      "message": "The feature itself is right: returning a count instead of a boolean, printing `Deleted \u0027N\u0027 log(s)`, and the empty case (`Deleted \u00270\u0027 log(s)`) is handled correctly (empty `$in` array → `delete_many` succeeds → `rc \u003d 0`).\n\n### 🔴 Two error paths still return `1`, which the new caller reads as success\n\nThe contract changed from \"non-zero \u003d error\" to \"negative \u003d error\" (`rbh-log.c:285` now checks `count \u003c 0`), but two pre-existing `return 1` paths were not updated:\n\n- `librobinhood/src/plugins/mongo/logs.c:469` — `handle_error:` for `MONGOC_ERROR_SERVER_SELECTION_FAILURE` does `errno \u003d ENOTCONN; return 1;`. **If the mongod is unreachable, `rbh_log --delete` prints `Deleted \u00271\u0027 log(s)` and exits 0.** Deleted nothing, reports one deletion, success status — this is the worst kind of silent failure, and it\u0027s the most reachable error path in the function (server down).\n- `librobinhood/include/robinhood/backend.h:~850` — the `rbh_backend_delete_logs` wrapper still does `errno \u003d ENOTSUP; return 1;` while its doc comment (updated *in this very commit*) now promises \"a negative value on error\". Only the mongo backend implements `delete_logs`, so this path is less reachable in practice, but the contract is internally inconsistent.\n\nMinimal fix, in the spirit of the commit: change both `return 1;` to `return -1;`.\n\n### 🟡 `rc \u003d index` counts *matched* logs, not *deleted* logs\n\n`delete_many` is called with `reply \u003d NULL`, so the returned count is the number of OIDs collected by the find cursor. If another process deletes some of those logs between the find and the `delete_many`, the command over-reports. Passing a `bson_t` reply and reading `deleted_count` would make the number honest. Low severity (racy window, same tool), but the commit message says \"the number of logs deleted\" — it isn\u0027t quite.\n\n### Nits\n- The caller does `error(EXIT_FAILURE, EINVAL, \"Failed to delete requested logs\\n\")` — `EINVAL` is misleading when the backend carefully set `ENOTCONN` or `RBH_BACKEND_ERROR`. Pre-existing pattern, but now more visible since the paths are distinct.\n- Test update is genuinely good: every delete invocation now asserts the printed count, including the 0 case.",
+      "revId": "a69033cc69b4a330a141a5eabf0a895733bb5a87",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
