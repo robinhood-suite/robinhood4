@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf5058de_5bd5744d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-21T13:26:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9280127_ab5559a4",
+      "range": {
+        "startLine": 9,
+        "startChar": 54,
+        "endLine": 9,
+        "endChar": 67
+      },
+      "revId": "e47cfafbecabf63b1fb79ca5283ee57073c83df5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52f746ba_ff20f876",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-09-18T09:43:48Z",
       "side": 1,
       "message": "nitpick: mutiple tools",
+      "range": {
+        "startLine": 10,
+        "startChar": 50,
+        "endLine": 10,
+        "endChar": 63
+      },
+      "revId": "e47cfafbecabf63b1fb79ca5283ee57073c83df5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba7495f0_dd943243",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-21T13:26:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52f746ba_ff20f876",
       "range": {
         "startLine": 10,
         "startChar": 50,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58ab4405_9fcf4ddc",
+        "filename": "librobinhood/src/plugins/mongo/logs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-21T13:26:32Z",
+      "side": 1,
+      "message": "size_t.",
+      "parentUuid": "558c509a_93d92ffe",
+      "range": {
+        "startLine": 70,
+        "startChar": 35,
+        "endLine": 70,
+        "endChar": 42
+      },
+      "revId": "e47cfafbecabf63b1fb79ca5283ee57073c83df5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ca6f9ed_eea3ca93",
@@ -83,6 +155,30 @@
       "writtenOn": "2026-09-18T09:43:48Z",
       "side": 1,
       "message": "minor: RBH_LOG_TYPE_FIRST will be more explicite or FIND if you want to be explicit with this default",
+      "range": {
+        "startLine": 73,
+        "startChar": 14,
+        "endLine": 73,
+        "endChar": 16
+      },
+      "revId": "e47cfafbecabf63b1fb79ca5283ee57073c83df5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47820f9c_3f373db5",
+        "filename": "librobinhood/src/plugins/mongo/logs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-21T13:26:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ca6f9ed_eea3ca93",
       "range": {
         "startLine": 73,
         "startChar": 14,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b894c748_ed0bfc1d",
+        "filename": "librobinhood/src/plugins/mongo/logs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-21T13:26:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38046b18_3fd8d8cf",
+      "range": {
+        "startLine": 278,
+        "startChar": 29,
+        "endLine": 280,
+        "endChar": 45
+      },
+      "revId": "e47cfafbecabf63b1fb79ca5283ee57073c83df5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cce94919_33f08cad",
@@ -139,6 +259,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df81dff2_0ac42f84",
+        "filename": "librobinhood/src/plugins/mongo/logs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-21T13:26:32Z",
+      "side": 1,
+      "message": "No need, line 337 instantly assign it.",
+      "parentUuid": "cce94919_33f08cad",
+      "range": {
+        "startLine": 330,
+        "startChar": 12,
+        "endLine": 330,
+        "endChar": 19
+      },
+      "revId": "e47cfafbecabf63b1fb79ca5283ee57073c83df5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ebf81f2d_07ade099",
@@ -152,6 +296,30 @@
       "writtenOn": "2026-09-18T09:43:48Z",
       "side": 1,
       "message": "minor: free filter and opts",
+      "range": {
+        "startLine": 341,
+        "startChar": 8,
+        "endLine": 341,
+        "endChar": 16
+      },
+      "revId": "e47cfafbecabf63b1fb79ca5283ee57073c83df5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "058d9ad1_4677567e",
+        "filename": "librobinhood/src/plugins/mongo/logs.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-21T13:26:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebf81f2d_07ade099",
       "range": {
         "startLine": 341,
         "startChar": 8,
