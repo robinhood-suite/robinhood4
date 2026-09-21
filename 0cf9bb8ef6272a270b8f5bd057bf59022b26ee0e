@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e202618e_0ea894c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-09-21T12:22:31Z",
+      "side": 1,
+      "message": "(qwen + QLM 5.3)\n\nNits: the `// Nothing particular to print for rbh-report` comment in `log.c` uses `//` where the codebase convention is `/* */`; and the same `--log-file` double-`fopen` leak as find.",
+      "revId": "0cf9bb8ef6272a270b8f5bd057bf59022b26ee0e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
