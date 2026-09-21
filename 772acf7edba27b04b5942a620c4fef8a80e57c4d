@@ -16,6 +16,24 @@
       "message": "(qwen + QLM 5.3)\n\n### 🟡 Stale comment\n`# 91 + 1 because of logs.txt` — logs.txt is never synced into the DB (the sync ran before it existed), so the count stays 91 for a different reason than the comment implies. The check is right; the comment will confuse the next reader.",
       "revId": "772acf7edba27b04b5942a620c4fef8a80e57c4d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f61593ec_5ba04538",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-21T13:58:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f5dc586_e95c96e5",
+      "revId": "772acf7edba27b04b5942a620c4fef8a80e57c4d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
