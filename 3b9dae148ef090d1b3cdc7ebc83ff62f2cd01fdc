@@ -16,6 +16,24 @@
       "message": "(qwen + qlm 5.3)\n\nMechanically correct: comma insertion via `need_comma`, prefix `rbh-\u003ccmd\u003e,`, all fields included regardless of their `oneline` flag, newline at row end. The plumbing is consistent with the enum groundwork.\n\n### 🟠 No CSV quoting/escaping\n\nFields are printed raw. The very first field after the command name is `command_line` — and command lines routinely contain commas: `rbh-report --group-by statx.uid,statx.gid`, `-exec` payloads, or simply a path with a comma in it. Any such log produces a row with an extra column, i.e. malformed CSV for every consumer. Quotes (`\"`) would break naive parsers the same way. RFC 4180 quoting (wrap fields containing `,` `\"` `\\n`, double internal quotes) is ~10 lines in `print_log_info()`/`print_value()`; alternatively, document explicitly that the format is \"comma-separated, no escaping\" and unusable for arbitrary command lines. Right now it\u0027s neither.\n\n### 🟡 Smaller gaps\n- No header row — for a machine-readable format, column names would cost one `printf` per row type.\n- `--csv` doesn\u0027t affect `--log-count` or the `Deleted \u0027N\u0027 log(s)` line — those stay in human format. Fine, but worth a line in `usage()`.\n- `-o` and `--csv` silently override each other (last wins). Acceptable; maybe worth a warning.\n- Nit: `val \u003d \u0027C\u0027` but `C` is not in the `\"c:dFhn:ozZ\"` optstring, so `-C` doesn\u0027t exist — if that\u0027s intentional, fine; if not, add it.",
       "revId": "3b9dae148ef090d1b3cdc7ebc83ff62f2cd01fdc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "456566b7_24b916e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-21T14:11:39Z",
+      "side": 1,
+      "message": "Done for everything except the header row printing, will do a separate patch for it.",
+      "parentUuid": "48d4eb00_d406cd5a",
+      "revId": "3b9dae148ef090d1b3cdc7ebc83ff62f2cd01fdc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
