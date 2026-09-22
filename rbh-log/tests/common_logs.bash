@@ -6,6 +6,43 @@
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
+generate_commands()
+{
+    # Ensure there is at least one of each command recorded
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+    rbh_find rbh:$db:$testdb -exec ls \; > /dev/null
+    rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR \
+        src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
+    rbh_report rbh:$db:$testdb \
+        --group-by "statx.uid" \
+        --output "sum(statx.size)" > /dev/null
+    rbh_gc rbh:$db:$testdb --sync-time 42
+
+    # Output 16 random ints between 0 and 4
+    for i in $(shuf -i 0-4 -r -n 16); do
+        case "$i" in
+            0)
+                rbh_sync rbh:posix:. rbh:$db:$testdb
+                ;;
+            1)
+                rbh_find rbh:$db:$testdb -exec ls \; > /dev/null
+                ;;
+            2)
+                rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR \
+                    src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
+                ;;
+            3)
+                rbh_report rbh:$db:$testdb \
+                    --group-by "statx.uid" \
+                    --output "sum(statx.size)" > /dev/null
+                ;;
+            4)
+                rbh_gc rbh:$db:$testdb --sync-time 42
+                ;;
+        esac
+    done
+}
+
 check_expected_log_value()
 {
     local output="$1"
