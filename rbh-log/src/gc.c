@@ -56,6 +56,7 @@ static const struct formatted_log_value gc_log_value[] = {
     [CHECK_COMMAND] =       { .header = "Check command used",
                               .print_log_value = print_value },
     [DELETED_ENTRIES] =     { .header = "Amount of deleted entries",
+                              .oneline_header = "Entries deleted",
                               .print_log_value = print_value,
                               .oneline = true },
     [NOT_DELETED_ENTRIES] = { .header = "Amount of non-deleted entries",
@@ -63,6 +64,7 @@ static const struct formatted_log_value gc_log_value[] = {
     [SYNC_TIME] =           { .header = "Sync-time used",
                               .print_log_value = print_value },
     [TOTAL_ENTRIES] =       { .header = "Amount of entries seen",
+                              .oneline_header = "Entries seen",
                               .print_log_value = print_value,
                               .oneline = true },
 };

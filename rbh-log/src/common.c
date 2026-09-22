@@ -163,9 +163,11 @@ key2common_log_value(const char *key)
 
 static const struct formatted_log_value common_formatted_log_value[] = {
     [CLV_START_TIME] =    { .header = "Start of the command",
+                            .oneline_header = "Start",
                             .print_log_value = print_time_from_timestamp,
                             .oneline = true },
     [CLV_DURATION] =      { .header = "Duration of the command",
+                            .oneline_header = "Duration",
                             .print_log_value = print_difftime,
                             .oneline = true },
     [CLV_END_TIME] =      { .header = "End of the command",
@@ -191,7 +193,7 @@ print_log_info(const struct rbh_value *value,
         if (*need_comma)
             printf(", ");
 
-        flv->print_log_value(value, flv->header, output_format);
+        flv->print_log_value(value, flv->oneline_header, output_format);
         *need_comma = true;
         break;
     case OF_CSV:
