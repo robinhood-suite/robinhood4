@@ -47,14 +47,17 @@ usage(void)
         "   --csv                   print logs in a CSV format. Only works when\n"
         "                           printing logs, not with '--log-count' or\n"
         "                           '--delete'.\n"
-        "   --log-count             print the number of logs currently recorded.\n"
-        "                           Cannot be used with '--delete' and no logs\n"
-        "                           will be printed.\n"
         "   --delete                delete the requested logs instead of printing\n"
         "                           them. Cannot be used with '--log-count',\n"
         "                           and no logs will be printed.\n"
-        "   -h, --help              show this message and exit\n"
         "   -F, --first             print the first log instead of the last\n"
+        "   -h, --help              show this message and exit\n"
+        "   --json                  print logs in a JSON format. Only works when\n"
+        "                           printing logs, not with '--log-count' or\n"
+        "                           '--delete'.\n"
+        "   --log-count             print the number of logs currently recorded.\n"
+        "                           Cannot be used with '--delete' and no logs\n"
+        "                           will be printed.\n"
         "   -n, --count N           print N logs instead of one\n"
         "   --oneline               print logs in a shortened format\n"
         "   -t, --tool TOOLS        print logs of the requested tools instead\n"
@@ -85,6 +88,9 @@ print_logs(const struct rbh_value_map *logs,
             break;
         case OF_CSV:
             printf("rbh-%s,", logs->pairs[i].key);
+            break;
+        case OF_JSON:
+            printf("{\n    \"rbh-%s\": {\n", logs->pairs[i].key);
             break;
         }
 
@@ -119,6 +125,8 @@ print_logs(const struct rbh_value_map *logs,
         case OF_CSV:
             printf("\n");
             break;
+        case OF_JSON:
+            printf("\n    }\n}\n");
         }
     }
 }
@@ -202,6 +210,10 @@ main(int argc, char *argv[])
             .val = 'h',
         },
         {
+            .name = "json",
+            .val = 'J',
+        },
+        {
             .name = "log-count",
             .val = 'Z',
         },
@@ -239,7 +251,7 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:CdFhn:ot:zZ",
+    while ((c = getopt_long(argc, argv, "c:CdFhjn:ot:zZ",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
@@ -261,6 +273,13 @@ main(int argc, char *argv[])
         case 'h':
             usage();
             return 0;
+        case 'J':
+            if (output_format != OF_NORMAL)
+                error(EXIT_FAILURE, EINVAL,
+                      "Cannot specify multiple output formats\n");
+
+            output_format = OF_JSON;
+            break;
         case 'n':
             if (str2uint64_t(optarg, &options.count))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
