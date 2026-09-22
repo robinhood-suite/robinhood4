@@ -16,6 +16,24 @@
       "message": "(Qwen + QLM 5.3)\n\n### 🟡 `--log-file` is opened twice (FILE* leak)\n\n`get_command_options()` is called twice — before and after `rbh_apply_aliases()` (pre-existing design, harmless for the old string/bool options). For the new `--log-file`, both passes call `fopen(..., \"w\")`: the first `FILE*` leaks and the file is re-truncated. Output is still correct (second handle writes everything), so this is a leak-once-per-run nit, but it\u0027s the first option in this parser that isn\u0027t idempotent. Same issue in report (commit 6 below).",
       "revId": "545b29fce05a59d63f4b9aedae75991f3a2ee168",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9f0f203_3d7b49e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-09-22T08:01:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edd790c9_d06cdf30",
+      "revId": "545b29fce05a59d63f4b9aedae75991f3a2ee168",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
