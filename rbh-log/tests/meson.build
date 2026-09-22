@@ -19,6 +19,7 @@ endforeach
 
 if test_lustre
     non_parallel_integration_tests = ['test_all_logs',
+                                      'test_format',
                                       'test_fsevents_logs',
                                       'test_log_count']
 
