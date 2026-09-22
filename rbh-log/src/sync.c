@@ -47,11 +47,13 @@ static const struct formatted_log_value sync_log_value[] = {
     [SOURCE_MOUNTPOINT] = { .header = "Mountpoint used",
                             .print_log_value = print_value },
     [CONVERTED_ENTRIES] = { .header = "Amount of entries converted",
+                            .oneline_header = "Entries converted",
                             .print_log_value = print_value,
                             .oneline = true },
     [SKIPPED_ENTRIES] =   { .header = "Amount of entries skipped",
                             .print_log_value = print_value },
     [TOTAL_ENTRIES] =     { .header = "Amount of entries seen",
+                            .oneline_header = "Entries seen",
                             .print_log_value = print_value,
                             .oneline = true },
 };
