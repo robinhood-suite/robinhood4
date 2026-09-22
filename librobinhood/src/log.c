@@ -98,8 +98,8 @@ print_fsevents_log(struct rbh_metadata *metadata, time_t current)
         "STATS |      progress: %lu changelog read\n"
         "STATS |      worker: %lu\n"
         "STATS |      current speed:\n"
-        "STATS |          read/dedup: %llu.%09llu changelog/sec\n"
-        "STATS |          enrich/update: %llu.%09llu changelog/sec/worker\n"
+        "STATS |          read/dedup: %llu.%09llu sec/changelog\n"
+        "STATS |          enrich/update: %llu.%09llu sec/worker/changelog\n"
         "STATS |          overall: %.2f changelog/sec\n",
         fsevents_md->changelog_read,
         fsevents_md->worker_count,
