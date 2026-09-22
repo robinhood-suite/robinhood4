@@ -15,18 +15,25 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-test_oneline()
+check_over_output_is_correct()
 {
-    local order=$1
+    local format="$1"
 
-    generate_commands
-
-    local output=$(rbh_log "rbh:$db:$testdb" $order -n 21 --oneline)
-    local tmp_output=$(rbh_log "rbh:$db:$testdb" $order -n 30 --oneline)
+    local output=$(rbh_log "rbh:$db:$testdb" -n 21 $format)
+    local tmp_output=$(rbh_log "rbh:$db:$testdb" -n 30 $format)
 
     if [ "$output" != "$tmp_output" ]; then
         error "Outputted oneline logs should have been the same, got '$output' and '$tmp_output'"
     fi
+
+}
+
+test_oneline()
+{
+    generate_commands
+    check_over_output_is_correct --oneline
+
+    local output=$(rbh_log "rbh:$db:$testdb" -n 21 --oneline)
 
     while [ ! -z "$output" ]; do
         local log="$(echo "$output" | head -n 1)"
@@ -92,13 +99,9 @@ test_oneline()
 test_csv()
 {
     generate_commands
+    check_over_output_is_correct --csv
 
     local output=$(rbh_log "rbh:$db:$testdb" -n 21 --csv)
-    local tmp_output=$(rbh_log "rbh:$db:$testdb" -n 30 --csv)
-
-    if [ "$output" != "$tmp_output" ]; then
-        error "Outputted CSV logs should have been the same, got '$output' and '$tmp_output'"
-    fi
 
     while [ ! -z "$output" ]; do
         local log="$(echo "$output" | head -n 1)"
@@ -106,7 +109,6 @@ test_csv()
         # 1 for the command + 4 for the common logs info
         local expected_column_count=5
         local regexp
-
 
         if [[ $log == *"rbh-sync"* ]]; then
             expected_column_count=$((expected_column_count + 4))
@@ -141,11 +143,78 @@ test_csv()
     done
 }
 
+test_json()
+{
+    generate_commands
+    check_over_output_is_correct --json
+
+    local output=$(rbh_log "rbh:$db:$testdb" -n 21 --json)
+
+    while [ ! -z "$output" ]; do
+        local command="$(echo "$output" | tail -n +2 | head -n 1)"
+        # Start a line counter to check one log has the correct format. There
+        # are always one line with the starting '{', another with the command,
+        # and two at the end with ending '}'
+        local expected_line_count=4
+        local regexp
+
+        if [[ $command == *"rbh-sync"* ]]; then
+            expected_line_count=$((expected_line_count + 8))
+            regexp=(".*" ".*" ".*"
+                    "\"$__rbh_sync rbh:posix:. rbh:$db:$testdb\""
+                    "\"$PWD\"" "1" "0" "1")
+        elif [[ $command == *"rbh-find"* ]]; then
+            expected_line_count=$((expected_line_count + 6))
+            regexp=(".*" ".*" ".*"
+                    "\"$__rbh_find rbh:$db:$testdb -exec ls ;\""
+                    "[0-9]+" "[0-9]+")
+        elif [[ $command == *"rbh-fsevents"* ]]; then
+            expected_line_count=$((expected_line_count + 13))
+            regexp=(".*" ".*" ".*"
+                    "\"$__rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb\""
+                    "\"$LUSTRE_MDT\"" "\"${LUSTRE_DIR::-1}\"" "1"
+                    ".*" ".*" "[0-9]+" "0" "0" ".*")
+        elif [[ $command == *"rbh-report"* ]]; then
+            expected_line_count=$((expected_line_count + 4))
+            regexp=(".*" ".*" ".*"
+                    "\"$__rbh_report rbh:$db:$testdb --group-by statx.uid --output sum\(statx.size\)\"")
+        elif [[ $command == *"rbh-gc"* ]]; then
+            expected_line_count=$((expected_line_count + 8))
+            regexp=(".*" ".*" ".*"
+                    "\"$__rbh_gc rbh:$db:$testdb --sync-time 42\""
+                    "0" "0" "0" "42")
+        else
+            error "Invalid command found: '$command'"
+        fi
+
+        local log="$(echo "$output" | head -n $expected_line_count)"
+        if ! jq -e . >/dev/null 2>&1 <<<"$log"; then
+            error "'$log' is not a valid JSON document"
+        fi
+
+        # Skip over the two initial lines + the last two
+        log="$(echo "$log" | tail -n +3 | head -n -2)"
+        local counter=0
+
+        while IFS= read -r line; do
+            local line_regexp="$(echo "${regexp[$counter]}" |
+                                 sed 's/\//\\\//g')"
+            if ! [[ $line =~ $line_regexp ]]; then
+                error "'$line' failed to match with regexp '$line_regexp'"
+            fi
+
+            counter=$((counter + 1))
+        done <<< "$log"
+
+        output="$(echo "$output" | tail -n +$((expected_line_count + 1)))"
+    done
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_oneline test_csv)
+declare -a tests=(test_oneline test_csv test_json)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
