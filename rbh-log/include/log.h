@@ -17,6 +17,7 @@ enum output_format {
     OF_NORMAL,
     OF_ONELINE,
     OF_CSV,
+    OF_JSON,
 };
 
 struct formatted_log_value {
