@@ -40,8 +40,13 @@ test_stats()
         error "Invalid changelog read count, got '$output', expected '2'"
     echo "$output" | grep "worker" | grep "1" > /dev/null ||
         error "Invalid worker count, got '$output', expected '1'"
-    echo "$output" | grep "changelog/sec" | wc -l | grep "3" > /dev/null ||
-        error "Invalid output, missing 3 'changelog/sec' lines, got '$output'"
+    echo "$output" | grep "sec/changelog" | wc -l | grep "1" > /dev/null ||
+        error "Invalid output, missing 1 'sec/changelog' line, got '$output'"
+    echo "$output" | grep "sec/worker/changelog" | wc -l |
+        grep "1" > /dev/null ||
+        error "Invalid output, missing 1 'sec/worker/changelog' line, got '$output'"
+    echo "$output" | grep "changelog/sec" | wc -l | grep "1" > /dev/null ||
+        error "Invalid output, missing 1 'changelog/sec' line, got '$output'"
 
     mkdir blob
     rm test_entry
@@ -61,8 +66,13 @@ test_stats()
         error "Invalid changelog read count, got '$output', expected '$count'"
     echo "$output" | grep "worker" | grep "4" > /dev/null ||
         error "Invalid worker count, got '$output', expected '4'"
-    echo "$output" | grep "changelog/sec" | wc -l | grep "3" > /dev/null ||
-        error "Invalid output, missing 3 'changelog/sec' lines, got '$output'"
+    echo "$output" | grep "sec/changelog" | wc -l | grep "1" > /dev/null ||
+        error "Invalid output, missing 1 'sec/changelog' line, got '$output'"
+    echo "$output" | grep "sec/worker/changelog" | wc -l |
+        grep "1" > /dev/null ||
+        error "Invalid output, missing 1 'sec/worker/changelog' line, got '$output'"
+    echo "$output" | grep "changelog/sec" | wc -l | grep "1" > /dev/null ||
+        error "Invalid output, missing 1 'changelog/sec' line, got '$output'"
 
     rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" src:lustre:"$LUSTRE_MDT" \
         "rbh:$db:$testdb" --stats --nb-workers 4 --log-file logs.txt
@@ -80,8 +90,13 @@ test_stats()
         error "Invalid changelog read count, got '$output', expected '$((count - 1))'"
     echo "$output" | grep "worker" | grep "4" > /dev/null ||
         error "Invalid worker count, got '$output', expected '4'"
-    echo "$output" | grep "changelog/sec" | wc -l | grep "3" > /dev/null ||
-        error "Invalid output, missing 3 'changelog/sec' lines, got '$output'"
+    echo "$output" | grep "sec/changelog" | wc -l | grep "1" > /dev/null ||
+        error "Invalid output, missing 1 'sec/changelog' line, got '$output'"
+    echo "$output" | grep "sec/worker/changelog" | wc -l |
+        grep "1" > /dev/null ||
+        error "Invalid output, missing 1 'sec/worker/changelog' line, got '$output'"
+    echo "$output" | grep "changelog/sec" | wc -l | grep "1" > /dev/null ||
+        error "Invalid output, missing 1 'changelog/sec' line, got '$output'"
 }
 
 ################################################################################
