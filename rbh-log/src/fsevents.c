@@ -78,6 +78,7 @@ key2fsevents_log_value(const char *key)
 
 static const struct formatted_log_value fsevents_log_value[] = {
     [CHANGELOG_READ] =      { .header = "Amount of changelog read",
+                              .oneline_header = "Changelog read",
                               .print_log_value = print_value,
                               .oneline = true },
     [DEDUPLICATION_RATIO] = { .header = "Ratio of events deduplicated",
@@ -91,9 +92,11 @@ static const struct formatted_log_value fsevents_log_value[] = {
     [START_INDEX] =         { .header = "Starting index for reading changelogs",
                               .print_log_value = print_value },
     [TIME_READ_DEDUP] =     { .header = "Time spent reading/deduplicating events",
+                              .oneline_header = "Read/dedup time",
                               .print_log_value = print_timespec,
                               .oneline = true },
     [TIME_ENRICH_UPDATE] =  { .header = "Time spent enriching/updating mirror (on average between all workers)",
+                              .oneline_header = "Enrich/update time",
                               .print_log_value = print_timespec,
                               .oneline = true },
     [WORKER_COUNT] =        { .header = "Number of parallel workers used",

@@ -21,6 +21,7 @@ enum output_format {
 
 struct formatted_log_value {
     const char *header;
+    const char *oneline_header;
     void (*print_log_value)(const struct rbh_value *, const char *,
                             enum output_format);
     bool oneline;

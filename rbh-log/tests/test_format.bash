@@ -31,23 +31,19 @@ test_oneline()
     while [ ! -z "$output" ]; do
         local log="$(echo "$output" | head -n 1)"
 
-        local expected_output=("Start of the command"
-                               "Duration of the command")
+        local expected_output=("Start" "Duration")
         if [[ $log == *"rbh-sync"* ]]; then
-            expected_output+=("Amount of entries converted"
-                              "Amount of entries seen")
+            expected_output+=("Entries converted" "Entries seen")
         elif [[ $log == *"rbh-find"* ]]; then
-            expected_output+=("Number of entries post-filtering")
+            expected_output+=("Entries post-filtering")
         elif [[ $log == *"rbh-fsevents"* ]]; then
-            expected_output+=("Amount of changelog read"
-                              "Time spent reading/deduplicating events"
-                              "Time spent enriching/updating mirror")
+            expected_output+=("Changelog read" "Read/dedup time"
+                              "Enrich/update time")
         elif [[ $log == *"rbh-report"* ]]; then
             # Nothing to add here
             echo "blob"
         elif [[ $log == *"rbh-gc"* ]]; then
-            expected_output+=("Amount of deleted entries"
-                              "Amount of entries seen")
+            expected_output+=("Entries deleted" "Entries seen")
         else
             error "Invalid command found: '$log'"
         fi

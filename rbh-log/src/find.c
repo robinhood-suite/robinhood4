@@ -35,6 +35,7 @@ key2find_log_value(const char *key)
 static const struct formatted_log_value find_log_value[] = {
     [ENTRY_COUNT] =
         { .header = "Number of entries post-filtering",
+          .oneline_header = "Entries post-filtering",
           .print_log_value = print_value,
           .oneline  = true },
     [EXEC_SUCCESS_COUNT] =
