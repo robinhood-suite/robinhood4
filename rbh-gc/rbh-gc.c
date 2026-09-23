@@ -76,7 +76,8 @@ usage(void)
         "    -h, --help                 print this messsage and exit\n"
         "    --log-file FILE            redirect command stats printing to given FILE.\n"
         "                               Is only used if '--stats' is specified.\n"
-        "    --log-timer TIMER          print stats each TIMER seconds, 60 by\n"
+        "    -I, --log-interval INTERVAL\n"
+        "                               print stats each INTERVAL seconds, 60 by\n"
         "                               default, 0 to only print at the end of the command.\n"
         "                               Is only used if '--stats' is specified.\n"
         "    -s, --sync-time SYNC_TIME  instead of checking every entry of the BACKEND,\n"
@@ -598,7 +599,7 @@ main(int _argc, char *_argv[])
         .gc_md.sync_time = -1,
         .last_shown_time = time(NULL),
         .log_file = stderr,
-        .log_timer = 60,
+        .log_interval = 60,
     };
     struct rbh_filter_options options = {0};
     struct filters_context f_ctx = {0};
@@ -662,18 +663,19 @@ main(int _argc, char *_argv[])
             if (metadata.log_file == NULL)
                 error(EXIT_FAILURE, errno, "Failed to open log file '%s'",
                       argv[i]);
-        } else if (strcmp(arg, "--log-timer") == 0) {
+        } else if (strcmp(arg, "--log-interval") == 0 ||
+                   strcmp(arg, "-I") == 0) {
             if (i + 1 >= argc)
                 error(EXIT_FAILURE, EINVAL,
-                      "Missing argument for '--log-file'");
+                      "Missing argument for '--log-interval'");
 
-            if (str2int64_t(argv[i + 1], &metadata.log_timer))
+            if (str2int64_t(argv[i + 1], &metadata.log_interval))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to int64_t",
                       argv[i + 1]);
 
-            if (metadata.log_timer < 0)
-                error(EXIT_FAILURE, EINVAL, "Log timer '%s' cannot be negative",
-                      argv[i + 1]);
+            if (metadata.log_interval < 0)
+                error(EXIT_FAILURE, EINVAL,
+                      "Log interval '%s' cannot be negative", argv[i + 1]);
 
             i++;
         } else if (strcmp(arg, "--sync-time") == 0 || strcmp(arg, "-s") == 0) {
