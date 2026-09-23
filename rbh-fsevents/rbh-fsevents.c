@@ -86,8 +86,8 @@ usage(void)
         "    --log-file FILE\n"
         "                    redirect command stats printing to given FILE.\n"
         "                    Is only used if '--stats' is specified.\n"
-        "    --log-timer TIMER\n"
-        "                    print stats each TIMER seconds, 60 by default,\n"
+        "    -I, --log-interval INTERVAL\n"
+        "                    print stats each INTERVAL seconds, 60 by default,\n"
         "                    0 to only print at the end of the command.\n"
         "                    Is only used if '--stats' is specified.\n"
         "    -m, --max NUMBER\n"
@@ -762,6 +762,11 @@ main(int argc, char *argv[])
             .val = 'L',
         },
         {
+            .name = "log-interval",
+            .has_arg = required_argument,
+            .val = 'I',
+        },
+        {
             .name = "max",
             .has_arg = required_argument,
             .val = 'm',
@@ -784,11 +789,6 @@ main(int argc, char *argv[])
             .val = 's',
         },
         {
-            .name = "log-timer",
-            .has_arg = required_argument,
-            .val = 'T',
-        },
-        {
             .name = "verbose",
             .has_arg = no_argument,
             .val = 'v',
@@ -809,7 +809,7 @@ main(int argc, char *argv[])
         .fsevents_md.start_index = -1,
         .last_shown_time = time(NULL),
         .log_file = stderr,
-        .log_timer = 60,
+        .log_interval = 60,
     };
     uint64_t max_changelog = 0;
     char *cmd_backend = NULL;
@@ -856,6 +856,16 @@ main(int argc, char *argv[])
                 error(EXIT_FAILURE, 0, "'%s' cannot be a negative integer",
                       optarg);
             break;
+        case 'I':
+            if (str2int64_t(optarg, &metadata.log_interval))
+                error(EXIT_FAILURE, errno, "Failed to convert '%s' to int64_t",
+                      optarg);
+
+            if (metadata.log_interval < 0)
+                error(EXIT_FAILURE, EINVAL,
+                      "Log interval '%s' cannot be negative", optarg);
+
+            break;
         case 'l':
             estale_logs = false;
             break;
@@ -885,16 +895,6 @@ main(int argc, char *argv[])
             break;
         case 's':
             print_stats = true;
-            break;
-        case 'T':
-            if (str2int64_t(optarg, &metadata.log_timer))
-                error(EXIT_FAILURE, errno, "Failed to convert '%s' to int64_t",
-                      optarg);
-
-            if (metadata.log_timer < 0)
-                error(EXIT_FAILURE, EINVAL, "Log timer '%s' cannot be negative",
-                      optarg);
-
             break;
         case 'x':
             rbh_display_resolved_argv(NULL, &argc, &argv);

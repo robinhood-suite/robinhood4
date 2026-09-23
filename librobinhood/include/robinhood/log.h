@@ -64,7 +64,7 @@ struct rbh_metadata {
     };
     time_t last_shown_time;
     FILE *log_file;
-    int64_t log_timer;
+    int64_t log_interval;
 };
 
 /**
@@ -162,8 +162,8 @@ rbh_set_common_metadata_pairs(struct rbh_common_metadata *md,
 static inline bool
 rbh_should_print_log(struct rbh_metadata *metadata)
 {
-    return metadata->log_timer > 0 &&
-           time(NULL) - metadata->last_shown_time >= metadata->log_timer;
+    return metadata->log_interval > 0 &&
+           time(NULL) - metadata->last_shown_time >= metadata->log_interval;
 }
 
 void

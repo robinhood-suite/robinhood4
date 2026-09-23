@@ -16,11 +16,11 @@ test_dir=$(dirname $(readlink -e $0))
 
 test_invalid_stat_options()
 {
-    rbh_sync rbh:posix:$file rbh:$db:$testdb --stats --log-timer blob &&
-        error "Sync with invalid log timer should have failed"
+    rbh_sync rbh:posix:$file rbh:$db:$testdb --stats --log-interval blob &&
+        error "Sync with invalid log interval should have failed"
 
-    rbh_sync rbh:posix:$file rbh:$db:$testdb --stats --log-timer -3 &&
-        error "Sync with invalid log timer should have failed"
+    rbh_sync rbh:posix:$file rbh:$db:$testdb --stats --log-interval -3 &&
+        error "Sync with invalid log interval should have failed"
 
     return 0
 }

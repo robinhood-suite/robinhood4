@@ -749,7 +749,8 @@ usage(void)
         "    --stats                print command stats during execution to stderr\n"
         "    --log-file FILE        redirect command stats printing to given FILE.\n"
         "                           Is only used if '--stats' is specified.\n"
-        "    --log-timer TIMER      print stats each TIMER seconds, 60 by\n"
+        "    -I, --log-interval INTERVAL\n"
+        "                           print stats each INTERVAL seconds, 60 by\n"
         "                           default, 0 to only print at the end of the command.\n"
         "                           Is only used if '--stats' is specified.\n"
         "    --version              print RobinHood 4's version\n"
@@ -817,6 +818,11 @@ main(int argc, char *argv[])
             .val = 'L',
         },
         {
+            .name = "log-interval",
+            .has_arg = required_argument,
+            .val = 'I',
+        },
+        {
             .name = "no-skip",
             .val = 'n',
         },
@@ -827,11 +833,6 @@ main(int argc, char *argv[])
         {
             .name = "stats",
             .val = 's',
-        },
-        {
-            .name = "log-timer",
-            .has_arg = required_argument,
-            .val = 'T',
         },
         {
             .name = "version",
@@ -848,7 +849,7 @@ main(int argc, char *argv[])
         .common_md.command_line = get_command_line(argc, argv),
         .last_shown_time = time(NULL),
         .log_file = stderr,
-        .log_timer = 60,
+        .log_interval = 60,
     };
     bool print_stats = false;
     char *cmd_backend;
@@ -888,6 +889,16 @@ main(int argc, char *argv[])
         case 'h':
             usage();
             return 0;
+        case 'I':
+            if (str2int64_t(optarg, &metadata.log_interval))
+                error(EXIT_FAILURE, errno, "Failed to convert '%s' to int64_t",
+                      optarg);
+
+            if (metadata.log_interval < 0)
+                error(EXIT_FAILURE, EINVAL,
+                      "Log interval '%s' cannot be negative", optarg);
+
+            break;
         case 'l':
             list_capabilities(optarg);
             return EXIT_SUCCESS;
@@ -905,16 +916,6 @@ main(int argc, char *argv[])
             break;
         case 's':
             print_stats = true;
-            break;
-        case 'T':
-            if (str2int64_t(optarg, &metadata.log_timer))
-                error(EXIT_FAILURE, errno, "Failed to convert '%s' to int64_t",
-                      optarg);
-
-            if (metadata.log_timer < 0)
-                error(EXIT_FAILURE, EINVAL, "Log timer '%s' cannot be negative",
-                      optarg);
-
             break;
         case 'z':
             rbh_print_version();
