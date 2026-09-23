@@ -10,6 +10,7 @@ parallel_integration_tests = [
   'test_gc_logs',
   'test_report_logs',
   'test_sync_logs',
+  'test_time',
 ]
 
 foreach t: parallel_integration_tests
