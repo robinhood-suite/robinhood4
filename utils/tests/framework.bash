@@ -234,8 +234,15 @@ delete_test_user()
 avg()
 {
     IFS=+
-    local sum="$(echo "$(($*))")"
-    echo "scale=6; $sum / $#" | bc -l
+    sum="$(echo "$(($*))")"
+    output="$(echo "scale=7; $sum / $#" | bc -l)"
+    last="${output: -1}"
+    output="${output::-1}"
+    if (( last >= 5 )); then
+        echo "scale=6; $output + 0.000001" | bc -l
+    else
+        echo "$output"
+    fi
 }
 
 ################################################################################
