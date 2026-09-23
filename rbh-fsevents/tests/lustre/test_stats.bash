@@ -17,12 +17,14 @@ test_dir=$(dirname $(readlink -e $0))
 test_invalid_stat_options()
 {
     rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
-        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats --log-timer blob &&
-        error "Fsevents with invalid log timer should have failed"
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
+        --stats --log-interval blob &&
+        error "Fsevents with invalid log interval should have failed"
 
     rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
-        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats --log-timer -3 &&
-        error "Fsevents with invalid log timer should have failed"
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
+        --stats --log-interval -3 &&
+        error "Fsevents with invalid log interval should have failed"
 
     return 0
 }

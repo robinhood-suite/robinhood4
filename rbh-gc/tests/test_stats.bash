@@ -11,11 +11,11 @@ test_dir=$(dirname $(readlink -e $0))
 
 test_invalid_stat_options()
 {
-    rbh_gc "rbh:$db:$testdb" --stats --log-timer blob &&
-        error "GC with invalid log timer should have failed"
+    rbh_gc "rbh:$db:$testdb" --stats --log-interval blob &&
+        error "GC with invalid log interval should have failed"
 
-    rbh_gc "rbh:$db:$testdb" --stats --log-timer -3 &&
-        error "GC with invalid log timer should have failed"
+    rbh_gc "rbh:$db:$testdb" --stats --log-interval -3 &&
+        error "GC with invalid log interval should have failed"
 
     return 0
 }
