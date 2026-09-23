@@ -43,6 +43,8 @@ usage(void)
         "    SOURCE                 a robinhood URI\n"
         "\n"
         "Optional arguments:\n"
+        "   -b, --before TIMESTAMP  print logs with that were logged prior to\n"
+        "                           TIMESTAMP\n"
         "   -c, --config PATH       the configuration file to use\n"
         "   --csv                   print logs in a CSV format. Only works when\n"
         "                           printing logs, not with '--log-count' or\n"
@@ -189,6 +191,11 @@ main(int argc, char *argv[])
     enum output_format output_format = OF_NORMAL;
     const struct option LONG_OPTIONS[] = {
         {
+            .name = "before",
+            .has_arg = required_argument,
+            .val = 'b',
+        },
+        {
             .name = "config",
             .has_arg = required_argument,
             .val = 'c',
@@ -251,9 +258,19 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "c:CdFhjn:ot:zZ",
+    while ((c = getopt_long(argc, argv, "b:c:CdFhjn:ot:zZ",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
+        case 'b':
+            if (str2uint64_t(optarg, &options.start_timestamp))
+                error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
+                      optarg);
+
+            if (options.start_timestamp == 0)
+                error(EXIT_FAILURE, EINVAL,
+                      "Cannot print logs of command started before Epoch");
+
+            break;
         case 'c':
             /* already parsed */
             break;

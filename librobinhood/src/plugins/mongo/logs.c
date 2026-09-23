@@ -74,7 +74,7 @@ log_type_to_bson_t(bson_t *filter, size_t types)
     bson_t array;
 
     if (!BSON_APPEND_ARRAY_BEGIN(filter, "$or", &array))
-        return 1;
+        return 0;
 
     while (type <= RBH_LOG_TYPE_LAST) {
         const char *str_type;
@@ -97,9 +97,59 @@ log_type_to_bson_t(bson_t *filter, size_t types)
               BSON_APPEND_BOOL(&subdocument, "$exists", true) &&
               bson_append_document_end(&document, &subdocument) &&
               bson_append_document_end(&array, &document)))
-            return 1;
+            return 0;
 
         type = type << 1;
+        counter++;
+    }
+
+    return bson_append_array_end(filter, &array);
+}
+
+static int
+log_options_to_bson(bson_t *filter, struct rbh_log_options *options)
+{
+    const char *key;
+    int counter = 0;
+    char str[16];
+    bson_t array;
+
+    if (options->start_timestamp == 0 &&
+        options->type == RBH_ALL_LOG)
+        return 0;
+
+    if (!BSON_APPEND_ARRAY_BEGIN(filter, "$and", &array))
+        return 1;
+
+    if (options->type != RBH_ALL_LOG) {
+        bson_t subdocument;
+
+        bson_uint32_to_string(counter, &key, str, sizeof(str));
+        if (!(BSON_APPEND_DOCUMENT_BEGIN(&array, key, &subdocument) &&
+              log_type_to_bson_t(&subdocument, options->type) &&
+              bson_append_document_end(&array, &subdocument)))
+            return 1;
+
+        counter++;
+    }
+
+    if (options->start_timestamp) {
+        bson_t start_timestamp_document;
+        bson_t subdocument;
+
+        bson_uint32_to_string(counter, &key, str, sizeof(str));
+        if (!(BSON_APPEND_DOCUMENT_BEGIN(&array, key, &subdocument) &&
+              BSON_APPEND_DOCUMENT_BEGIN(&subdocument, "logged_at",
+                                         &start_timestamp_document) &&
+              BSON_APPEND_DATE_TIME(
+                &start_timestamp_document, "$lt",
+                (int64_t) options->start_timestamp * 1000
+              ) &&
+              bson_append_document_end(&subdocument,
+                                       &start_timestamp_document) &&
+              bson_append_document_end(&array, &subdocument)))
+            return 1;
+
         counter++;
     }
 
@@ -124,8 +174,7 @@ get_logs(const struct mongo_backend *mongo, struct rbh_value_pair *pair,
     int rc = 0;
 
     filter = bson_new();
-    if (options->type != RBH_ALL_LOG &&
-        log_type_to_bson_t(filter, options->type)) {
+    if (log_options_to_bson(filter, options)) {
         rc = 1;
         goto out;
     }
@@ -335,8 +384,7 @@ mongo_backend_delete_logs(void *backend, struct rbh_log_options options)
     int rc = 0;
 
     filter = bson_new();
-    if (options.type != RBH_ALL_LOG &&
-        log_type_to_bson_t(filter, options.type)) {
+    if (log_options_to_bson(filter, &options)) {
         rc = -1;
         goto out;
     }

@@ -131,6 +131,7 @@ struct rbh_log_options {
     size_t type;
     size_t count;
     bool ascending;
+    uint64_t start_timestamp;
 };
 
 static inline void
