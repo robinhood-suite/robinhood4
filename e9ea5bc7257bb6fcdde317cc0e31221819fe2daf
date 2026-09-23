@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc0ece6a_1e0045ec",
+        "filename": "librobinhood/src/plugins/posix/iterators/fts/iterator.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-09-23T13:26:52Z",
+      "side": 1,
+      "message": "minor: to remove debug line",
+      "revId": "e9ea5bc7257bb6fcdde317cc0e31221819fe2daf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
