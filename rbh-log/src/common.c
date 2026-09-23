@@ -54,7 +54,7 @@ print_time_from_timestamp(const struct rbh_value *value, const char *header,
         printf("%s: %s", header, time_from_timestamp(&time));
         break;
     case OF_CSV:
-        printf("%s", time_from_timestamp(&time));
+        printf("%lu", time);
         break;
     case OF_JSON:
         printf("        \"%s\": \"%s\"", header, time_from_timestamp(&time));
