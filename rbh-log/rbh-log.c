@@ -43,6 +43,8 @@ usage(void)
         "    SOURCE                 a robinhood URI\n"
         "\n"
         "Optional arguments:\n"
+        "   -a, --after TIMESTAMP   print logs that were logged after\n"
+        "                           TIMESTAMP\n"
         "   -b, --before TIMESTAMP  print logs that were logged prior to\n"
         "                           TIMESTAMP\n"
         "   -c, --config PATH       the configuration file to use\n"
@@ -191,6 +193,11 @@ main(int argc, char *argv[])
     enum output_format output_format = OF_NORMAL;
     const struct option LONG_OPTIONS[] = {
         {
+            .name = "after",
+            .has_arg = required_argument,
+            .val = 'a',
+        },
+        {
             .name = "before",
             .has_arg = required_argument,
             .val = 'b',
@@ -258,9 +265,19 @@ main(int argc, char *argv[])
     if (rc)
         error(EXIT_FAILURE, errno, "failed to open configuration file");
 
-    while ((c = getopt_long(argc, argv, "b:c:CdFhjn:ot:zZ",
+    while ((c = getopt_long(argc, argv, "a:b:c:CdFhjn:ot:zZ",
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
+        case 'a':
+            if (str2uint64_t(optarg, &options.start_timestamp))
+                error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
+                      optarg);
+
+            if (options.start_timestamp == 0)
+                error(EXIT_FAILURE, EINVAL,
+                      "Cannot print logs of command started before Epoch");
+
+            break;
         case 'b':
             if (str2uint64_t(optarg, &options.end_timestamp))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
