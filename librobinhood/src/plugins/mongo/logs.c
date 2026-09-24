@@ -114,7 +114,8 @@ log_options_to_bson(bson_t *filter, struct rbh_log_options *options)
     char str[16];
     bson_t array;
 
-    if (options->end_timestamp == 0 &&
+    if (options->start_timestamp == 0 &&
+        options->end_timestamp == 0 &&
         options->type == RBH_ALL_LOG)
         return 0;
 
@@ -127,6 +128,26 @@ log_options_to_bson(bson_t *filter, struct rbh_log_options *options)
         bson_uint32_to_string(counter, &key, str, sizeof(str));
         if (!(BSON_APPEND_DOCUMENT_BEGIN(&array, key, &subdocument) &&
               log_type_to_bson_t(&subdocument, options->type) &&
+              bson_append_document_end(&array, &subdocument)))
+            return 1;
+
+        counter++;
+    }
+
+    if (options->start_timestamp) {
+        bson_t start_timestamp_document;
+        bson_t subdocument;
+
+        bson_uint32_to_string(counter, &key, str, sizeof(str));
+        if (!(BSON_APPEND_DOCUMENT_BEGIN(&array, key, &subdocument) &&
+              BSON_APPEND_DOCUMENT_BEGIN(&subdocument, "logged_at",
+                                         &start_timestamp_document) &&
+              BSON_APPEND_DATE_TIME(
+                  &start_timestamp_document, "$gt",
+                  (int64_t) options->start_timestamp * 1000
+              ) &&
+              bson_append_document_end(&subdocument,
+                                       &start_timestamp_document) &&
               bson_append_document_end(&array, &subdocument)))
             return 1;
 
