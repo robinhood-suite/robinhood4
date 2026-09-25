@@ -28,6 +28,38 @@ test_invalid()
     return 0
 }
 
+test_after()
+{
+    local time1="$(date +%s)"
+    sleep 1
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+    sleep 1
+    local time2="$(date +%s)"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+    sleep 1
+    local time3="$(date +%s)"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+    sleep 1
+    local time4="$(date +%s)"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    local output="$(rbh_log rbh:$db:$testdb -n 10 --after $time2 --csv)"
+    echo "$output" | wc -l | grep "3" ||
+        error "Should have found 3 logs after '$time2', got '$output'"
+
+    output="$(rbh_log rbh:$db:$testdb -n 10 --after $time1 --csv)"
+    echo "$output" | wc -l | grep "4" ||
+        error "Should have found 4 logs after '$time1', got '$output'"
+
+    sleep 1
+    local time5="$(date +%s)"
+
+    output="$(rbh_log rbh:$db:$testdb -n 10 --after $time5 --csv)"
+    if [ ! -z "$output" ]; then
+        error "Should have found 0 logs after '$time5', got '$output'"
+    fi
+}
+
 test_before()
 {
     local time1="$(date +%s)"
@@ -63,7 +95,7 @@ test_before()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid test_before)
+declare -a tests=(test_invalid test_after test_before)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
