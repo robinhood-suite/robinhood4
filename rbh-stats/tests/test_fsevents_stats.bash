@@ -1,0 +1,440 @@
+#!/usr/bin/env bash
+
+# This file is part of RobinHood.
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
+#                    alternatives
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
+test_dir=$(dirname $(readlink -e $0))
+. $test_dir/../../utils/tests/framework.bash
+. $test_dir/lustre_utils.bash
+. $test_dir/common_stats.bash
+
+################################################################################
+#                                    TESTS                                     #
+################################################################################
+
+check_stats_result()
+{
+    local output="$1"
+
+    check_common_stats "$output" rbh-fsevents \
+        "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb"
+
+    echo "$output" | grep "Enrichment" > /dev/null ||
+        error "enrich_mountpoint should have been retrieved, got '$output'"
+
+    echo "$output" | grep "Source" > /dev/null ||
+        error "source_read should have been retrieved, got '$output'"
+
+    echo "$output" | grep "Number" > /dev/null ||
+        error "worker_count should have been retrieved, got '$output'"
+
+    echo "$output" | grep "Amount" > /dev/null ||
+        error "changelogs_read should have been retrieved, got '$output'"
+
+    echo "$output" | grep "Starting" > /dev/null ||
+        error "start_index should have been retrieved, got '$output'"
+
+    echo "$output" | grep "reading/deduplicating" > /dev/null ||
+        error "time_read_dedup should have been retrieved, got '$output'"
+
+    echo "$output" | grep "enriching/updating" > /dev/null ||
+        error "time_enrich_update should have been retrieved, got '$output'"
+
+    echo "$output" | grep "skipped" > /dev/null ||
+        error "enrich_skip_count should have been retrieved, got '$output'"
+
+    echo "$output" | grep "Ratio" > /dev/null ||
+        error "deduplication_ratio should have been retrieved, got '$output'"
+}
+
+test_N_logs()
+{
+    local requested=$1
+    local expected=$2
+    local count=15
+
+    touch blob
+    for i in $(seq 1 $expected); do
+        invoke_rbh-fsevents
+    done
+
+    local output=$(rbh_stats "rbh:$db:$testdb" --tool fsevents -n $requested)
+
+    local n_lines=$(echo "$output" | wc -l)
+
+    if ((n_lines != $count * $expected)); then
+        error "There should be $count * $expected lines about fsevents ($(( $count - 2)) for content, 2 for header/footer, time $expected logs), got '$output'"
+    fi
+
+    for i in $(seq 1 $expected); do
+        local one_stats="$(echo "$output" | head -n $count)"
+        check_stats_result "$one_stats"
+        output="$(echo "$output" | sed 1,${count}d)"
+    done
+}
+
+test_fsevents_1()
+{
+    test_N_logs 1 1
+}
+
+test_fsevents_N()
+{
+    test_N_logs 3 3
+}
+
+test_more_than_N()
+{
+    test_N_logs 6 3
+}
+
+test_timestamps()
+{
+    check_common_timestamps "fsevents" \
+        "rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR
+         src:lustre:$LUSTRE_MDT rbh:$db:$testdb"
+}
+
+test_command_line()
+{
+    local conf="conf"
+    local file="file"
+    local dir="dir"
+    local command="rbh-fsevents"
+
+    echo "---
+ mongo:
+     address: \"mongodb://localhost:27017\"
+---" > $conf
+
+    touch file
+
+    # These two commands will fail because we can't push events to the DB
+    # without enriching them first. But since we don't care about these commands
+    # actually suceeding, just keep them as-is just for proper testing of the
+    # logs
+    set +e
+    rbh_fsevents src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
+    rbh_fsevents --config $conf src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
+    set -e
+    rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
+    rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb -b 400 -d blob --no-estale-logs > /dev/null
+    rbh_fsevents src:lustre:$LUSTRE_MDT - > tmp
+    cat tmp | rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR - - > tmp
+    cat tmp | rbh_fsevents - rbh:$db:$testdb > /dev/null
+
+    rbh_stats rbh:$db:$testdb --tool fsevents -n 7 | grep "Command" | cut -d':' -f2- |
+        sed 's/^[ \t]*//' | sed -n "s/.*$command/$command/p" |
+        # Two of the commands above are not here because their output was a file
+        # and not the database, so there is no stats associated
+        difflines "rbh-fsevents - rbh:$db:$testdb" \
+                  "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb -b 400 -d blob --no-estale-logs" \
+                  "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb" \
+                  "rbh-fsevents --config $conf src:lustre:$LUSTRE_MDT rbh:$db:$testdb" \
+                  "rbh-fsevents src:lustre:$LUSTRE_MDT rbh:$db:$testdb"
+}
+
+test_source_and_enrichment()
+{
+    local other_mdt="lustre-MDT0001"
+    local other_mdt_user=$(start_changelogs "$other_mdt")
+    local entry="test_entry"
+
+    # Clear changelogs from previous tests
+    clear_changelogs "$LUSTRE_MDT" "$userid"
+    clear_changelogs "$other_mdt" "$other_mdt_user"
+
+    mkdir $entry
+    lfs migrate -m 1 $entry
+    lfs migrate -m 0 $entry
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" src:lustre:"$other_mdt" \
+        "rbh:$db:$testdb"
+    set +e
+    rbh_fsevents --enrich rbh:lustre:. src:lustre:"$other_mdt" \
+        "rbh:$db:$testdb"
+    set -e
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
+
+    stop_changelogs "$other_mdt" "$other_mdt_user"
+
+    rbh_stats rbh:$db:$testdb --tool fsevents -n 4 | grep "Source of the events" |
+        cut -d':' -f2- | sed 's/^[ \t]*//' |
+        difflines "$LUSTRE_MDT" "$other_mdt" "$other_mdt" "$LUSTRE_MDT"
+
+    # LUSTRE_DIR without last slash
+    local ldwls="${LUSTRE_DIR::-1}"
+    rbh_stats rbh:$db:$testdb --tool fsevents -n 4 | grep "Enrichment mountpoint" |
+        cut -d':' -f2- | sed 's/^[ \t]*//' |
+        difflines "$ldwls" "." "$ldwls" "$ldwls"
+}
+
+test_worker_count_start_index()
+{
+    local entry="test_entry"
+    local entry2="test_entry2"
+
+    mkdir $entry
+    echo "blob" > $entry2
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
+        --nb-workers 1 --index 0
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
+        --nb-workers 2 --index 0
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
+        --nb-workers 2 --index 2
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
+        --nb-workers 1 --index 4
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
+        --nb-workers 4 --index 2
+
+    rbh_stats rbh:$db:$testdb --tool fsevents -n 5 | grep "parallel" |
+        cut -d':' -f2- | sed 's/^[ \t]*//' |
+        difflines "4" "1" "2" "2" "1"
+
+    rbh_stats rbh:$db:$testdb --tool fsevents -n 5 | grep "Starting index" |
+        cut -d':' -f2- | sed 's/^[ \t]*//' |
+        difflines "2" "4" "2" "0" "0"
+}
+
+test_changelogs_amount()
+{
+    local entry1="test_entry1"
+    local entry2="test_entry2"
+    local entry3="test_entry3"
+    local entry4="test_entry4"
+
+    mkdir $entry1
+
+    local changelogs_count1="$(lfs changelog $LUSTRE_MDT | wc -l)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
+
+    echo "blob" > $entry2
+
+    local changelogs_count2="$(lfs changelog $LUSTRE_MDT | wc -l)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
+
+    touch $entry1/$entry3
+
+    local changelogs_count3="$(lfs changelog $LUSTRE_MDT | wc -l)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
+
+    lfs migrate -c 3 $entry2
+
+    local changelogs_count4="$(lfs changelog $LUSTRE_MDT | wc -l)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
+
+    ln $entry2 $entry4
+
+    local changelogs_count5="$(lfs changelog $LUSTRE_MDT | wc -l)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
+
+    rbh_stats rbh:$db:$testdb --tool fsevents -n 5
+
+    rbh_stats rbh:$db:$testdb --tool fsevents -n 5 | grep "changelog read" |
+        cut -d':' -f2- | sed 's/^[ \t]*//' |
+        difflines "$changelogs_count5" \
+                  "$changelogs_count4" \
+                  "$changelogs_count3" \
+                  "$changelogs_count2" \
+                  "$changelogs_count1"
+}
+
+test_work_timestamps()
+{
+    local entry1="test_entry1"
+    local entry2="test_entry2"
+    local entry3="test_entry3"
+    local entry4="test_entry4"
+    local timestamps=()
+
+    mkdir $entry1
+    echo "blob" > $entry2
+    touch $entry1/$entry3
+    lfs migrate -c 3 $entry2
+    ln $entry2 $entry4
+
+    local start="$(date -u +%s.%N)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" -w 2
+    local end="$(date -u +%s.%N)"
+    timestamps=($(bc <<< "$end - $start"))
+
+    local start="$(date -u +%s.%N)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" -w 2
+    local end="$(date -u +%s.%N)"
+    timestamps=("$(bc <<< "$end - $start")" "${timestamps[@]}")
+
+    local start="$(date -u +%s.%N)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" -w 2
+    local end="$(date -u +%s.%N)"
+    timestamps=("$(bc <<< "$end - $start")" "${timestamps[@]}")
+
+    local start="$(date -u +%s.%N)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" -w 2
+    local end="$(date -u +%s.%N)"
+    timestamps=("$(bc <<< "$end - $start")" "${timestamps[@]}")
+
+    local start="$(date -u +%s.%N)"
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" -w 2
+    local end="$(date -u +%s.%N)"
+    timestamps=("$(bc <<< "$end - $start")" "${timestamps[@]}")
+
+    # No way to check the real times against what rbh-stats says, so just check
+    # they seem like normal times
+    local output="$(rbh_stats rbh:$db:$testdb --tool fsevents -n 5 |
+                        grep "reading/deduplicating" |
+                        cut -d':' -f2- | sed 's/^[ \t]*//')"
+    for i in $(seq 1 5); do
+        local stats_time="$(echo "$output" | head -$i | tail -1)"
+
+        i=$(($i - 1))
+        if [ "$(echo "$stats_time > ${timestamps[$i]}" | bc -l)" -eq 1 ]; then
+            error "Command time for read/dedup (${timestamps[$i]}) should be greater than reported stats time ($stats_time)"
+        fi
+    done
+
+    local output="$(rbh_stats rbh:$db:$testdb --tool fsevents -n 5 |
+                        grep "enriching/updating" |
+                        cut -d':' -f2- | sed 's/^[ \t]*//')"
+    for i in $(seq 1 5); do
+        local stats_time="$(echo "$output" | head -$i | tail -1)"
+
+        i=$(($i - 1))
+        if [ "$(echo "$stats_time > ${timestamps[$i]}" | bc -l)" -eq 1 ]; then
+            error "Command time for enrich/update (${timestamps[$i]}) should be greater than reported stats time ($stats_time)"
+        fi
+    done
+}
+
+test_deduplication_ratio()
+{
+    local entry1="test_entry1"
+    local entry2="test_entry2"
+    local entry3="test_entry3"
+    local entry4="test_entry4"
+    local timestamps=()
+
+    mkdir $entry1
+    echo "blob" > $entry2
+    touch $entry1/$entry3
+    lfs migrate -c 3 $entry2
+    ln $entry2 $entry4
+
+    # Get the number of ID seen and the number of ID that should be deduplicated
+    local output="$(rbh_fsevents -b 0 src:lustre:"$LUSTRE_MDT" -)"
+    local full_id_count="$(echo "$output" | grep "\"id\"" | wc -l)"
+    local dedup_id_count="$(echo "$output" | grep "\"id\"" | sort | uniq |
+                            wc -l)"
+
+    # Run two commands just to have more logs to show
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" -b 0
+
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" -b 100
+
+    local expected_dedup_ratio="$(\
+        echo "(1.0 - ${dedup_id_count}.0 / ${full_id_count}.0) * 100.0" |
+        bc -l)"
+
+    rbh_stats rbh:$db:$testdb --tool fsevents -n 2 | grep "Ratio" |
+        cut -d':' -f2- | sed 's/^[ \t]*//' |
+        difflines "$(printf "%.3f" $expected_dedup_ratio)" \
+                  "0.000"
+}
+
+test_order()
+{
+    local order="$1"
+
+    local command="rbh-fsevents"
+    local flag="fsevents"
+    local count="3"
+
+    set +e
+    rbh_fsevents src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
+    set -e
+    rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR \
+        src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
+    rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR \
+        src:lustre:$LUSTRE_MDT rbh:$db:$testdb \
+        -b 400 -d blob --no-estale-logs > /dev/null
+
+    local output="$(rbh_stats rbh:$db:$testdb $order -n $count | grep "Command" |
+                    cut -d':' -f2- | sed 's/^[ \t]*//' |
+                    sed -n "s/.*$command/$command/p")"
+
+    if [ "$order" != "--first" ]; then
+        echo "$output" |
+            difflines "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb -b 400 -d blob --no-estale-logs" \
+                      "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb" \
+                      "rbh-fsevents src:lustre:$LUSTRE_MDT rbh:$db:$testdb"
+    else
+        echo "$output" |
+            difflines "rbh-fsevents src:lustre:$LUSTRE_MDT rbh:$db:$testdb" \
+                      "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb" \
+                      "rbh-fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb -b 400 -d blob --no-estale-logs"
+    fi
+}
+
+test_ascending()
+{
+    test_order "--first"
+}
+
+test_descending()
+{
+    test_order
+}
+
+################################################################################
+#                                     MAIN                                     #
+################################################################################
+
+declare -a tests=(test_fsevents_1 test_fsevents_N test_more_than_N
+                  test_timestamps test_command_line test_source_and_enrichment
+                  test_worker_count_start_index test_changelogs_amount
+                  test_work_timestamps test_deduplication_ratio test_ascending
+                  test_descending)
+
+LUSTRE_DIR=/mnt/lustre/
+cd "$LUSTRE_DIR"
+
+LUSTRE_MDT=lustre-MDT0000
+userid="$(start_changelogs "$LUSTRE_MDT")"
+
+tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
+lfs setdirstripe -D -i 0 $tmpdir
+trap -- "rm -rf '$tmpdir'; stop_changelogs '$LUSTRE_MDT' '$userid'" EXIT
+cd "$tmpdir"
+
+sub_setup=lustre_setup
+sub_teardown=lustre_teardown
+run_tests "${tests[@]}"

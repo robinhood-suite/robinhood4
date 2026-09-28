@@ -1024,7 +1024,7 @@ mongo_backend_destroy(void *backend)
 
     mongoc_collection_destroy(mongo->entries);
     mongoc_collection_destroy(mongo->info);
-    mongoc_collection_destroy(mongo->log);
+    mongoc_collection_destroy(mongo->stats);
     mongoc_client_destroy(mongo->client);
     free(mongo);
 }
@@ -1041,10 +1041,10 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
     .get_info = mongo_backend_get_info,
-    .insert_log = mongo_backend_insert_log,
-    .get_log_count = mongo_backend_get_log_count,
-    .get_logs = mongo_backend_get_logs,
-    .delete_logs = mongo_backend_delete_logs,
+    .insert_stats = mongo_backend_insert_stats,
+    .get_stats_count = mongo_backend_get_stats_count,
+    .get_stats = mongo_backend_get_stats,
+    .delete_stats = mongo_backend_delete_stats,
     .insert_info = mongo_insert_info,
     .destroy = mongo_backend_destroy,
 };
@@ -1288,27 +1288,27 @@ mongo_branch_get_info(void *backend, int info_flags)
 }
 
 static struct rbh_value_map *
-mongo_branch_get_log_count(void *backend)
+mongo_branch_get_stats_count(void *backend)
 {
     struct mongo_branch_backend *branch = backend;
 
-    return mongo_backend_get_log_count(&branch->mongo);
+    return mongo_backend_get_stats_count(&branch->mongo);
 }
 
 static struct rbh_value_map *
-mongo_branch_get_logs(void *backend, struct rbh_log_options options)
+mongo_branch_get_stats(void *backend, struct rbh_stats_options options)
 {
     struct mongo_branch_backend *branch = backend;
 
-    return mongo_backend_get_logs(&branch->mongo, options);
+    return mongo_backend_get_stats(&branch->mongo, options);
 }
 
 static int
-mongo_branch_delete_logs(void *backend, struct rbh_log_options options)
+mongo_branch_delete_stats(void *backend, struct rbh_stats_options options)
 {
     struct mongo_branch_backend *branch = backend;
 
-    return mongo_backend_delete_logs(&branch->mongo, options);
+    return mongo_backend_delete_stats(&branch->mongo, options);
 }
 
 static const struct rbh_backend_operations MONGO_BRANCH_BACKEND_OPS = {
@@ -1317,9 +1317,9 @@ static const struct rbh_backend_operations MONGO_BRANCH_BACKEND_OPS = {
     .update = mongo_backend_update,
     .filter = generic_branch_backend_filter,
     .get_info = mongo_branch_get_info,
-    .get_log_count = mongo_branch_get_log_count,
-    .get_logs = mongo_branch_get_logs,
-    .delete_logs = mongo_branch_delete_logs,
+    .get_stats_count = mongo_branch_get_stats_count,
+    .get_stats = mongo_branch_get_stats,
+    .delete_stats = mongo_branch_delete_stats,
     .destroy = mongo_backend_destroy,
 };
 
@@ -1372,8 +1372,8 @@ mongo_backend_init_from_uri(struct mongo_backend *mongo,
         return -1;
     }
 
-    mongo->log = mongoc_client_get_collection(mongo->client, db, "log");
-    if (mongo->log == NULL) {
+    mongo->stats = mongoc_client_get_collection(mongo->client, db, "stat");
+    if (mongo->stats == NULL) {
         mongoc_client_destroy(mongo->client);
         errno = ENOMEM;
         return -1;

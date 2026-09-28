@@ -36,7 +36,7 @@
 #include "robinhood/fsentry.h"
 #include "robinhood/fsevent.h"
 #include "robinhood/iterator.h"
-#include "robinhood/log.h"
+#include "robinhood/stats.h"
 
 /**
  * Calls to a backend's methods may set errno to \c RBH_BACKEND_ERROR if they
@@ -341,21 +341,21 @@ struct rbh_backend_operations {
             void *backend,
             int info_flags
             );
-    int (*insert_log)(
+    int (*insert_stats)(
             void *backend,
             const char *command,
             const struct rbh_value_map *map
             );
-    struct rbh_value_map *(*get_log_count)(
+    struct rbh_value_map *(*get_stats_count)(
             void *backend
             );
-    struct rbh_value_map *(*get_logs)(
+    struct rbh_value_map *(*get_stats)(
             void *backend,
-            struct rbh_log_options options
+            struct rbh_stats_options options
             );
-    int (*delete_logs)(
+    int (*delete_stats)(
             void *backend,
-            struct rbh_log_options options
+            struct rbh_stats_options options
             );
     struct rbh_fsentry *(*undelete)(
             void *backend,
@@ -775,81 +775,81 @@ rbh_backend_get_info(struct rbh_backend *backend, int info_flags)
 }
 
 /**
- * Insert a log in the given backend
+ * Insert a stats in the given backend
  *
- * @param backend         the backend in which to insert the log
- * @param command         the command the log originiates from
- * @param pair            a map containing information about the log to insert
+ * @param backend         the backend in which to insert the stats
+ * @param command         the command the stats originiates from
+ * @param pair            a map containing information about the stats to insert
  *
  * @return                0 on success, -1 on error
  */
 static inline int
-rbh_backend_insert_log(struct rbh_backend *backend,
+rbh_backend_insert_stats(struct rbh_backend *backend,
                        const char *command,
                        const struct rbh_value_map *map)
 {
-    if (backend->ops->insert_log == NULL) {
+    if (backend->ops->insert_stats == NULL) {
         errno = ENOTSUP;
         return -1;
     }
 
-    return backend->ops->insert_log(backend, command, map);
+    return backend->ops->insert_stats(backend, command, map);
 }
 
 /**
- * Retrieve the number of logs of each type from a given backend.
+ * Retrieve the number of stats of each type from a given backend.
  *
- * @param backend   a pointer to the struct rbh_backend to get log count from
+ * @param backend   a pointer to the struct rbh_backend to get stats count from
  *
- * @return          the number of logs of each type in a value_map
+ * @return          the number of stats of each type in a value_map
  */
 static inline struct rbh_value_map *
-rbh_backend_get_log_count(struct rbh_backend *backend)
+rbh_backend_get_stats_count(struct rbh_backend *backend)
 {
-    if (backend->ops->get_log_count == NULL) {
+    if (backend->ops->get_stats_count == NULL) {
         errno = ENOTSUP;
         return NULL;
     }
-    return backend->ops->get_log_count(backend);
+    return backend->ops->get_stats_count(backend);
 }
 
 /**
- * Retrieve logs from a given backend.
+ * Retrieve stats from a given backend.
  *
- * @param backend   a pointer to the struct rbh_backend to get logs from
- * @param options   options to determine the logs to get
+ * @param backend   a pointer to the struct rbh_backend to get stats from
+ * @param options   options to determine the stats to get
  *
- * @return          the logs requested in a value_map, NULL on error with errno
+ * @return          the stats requested in a value_map, NULL on error with errno
  *                  set
  */
 static inline struct rbh_value_map *
-rbh_backend_get_logs(struct rbh_backend *backend,
-                     struct rbh_log_options options)
+rbh_backend_get_stats(struct rbh_backend *backend,
+                     struct rbh_stats_options options)
 {
-    if (backend->ops->get_logs == NULL) {
+    if (backend->ops->get_stats == NULL) {
         errno = ENOTSUP;
         return NULL;
     }
-    return backend->ops->get_logs(backend, options);
+    return backend->ops->get_stats(backend, options);
 }
 
 /**
- * Delete logs from a given backend.
+ * Delete stats from a given backend.
  *
- * @param backend   a pointer to the struct rbh_backend to delete logs from
- * @param options   options to determine the logs to delete
+ * @param backend   a pointer to the struct rbh_backend to delete stats from
+ * @param options   options to determine the stats to delete
  *
- * @return          the number of logs deleted, a negative value on error
+ * @return          the number of stats deleted, a negative value on error
  */
 static inline int
-rbh_backend_delete_logs(struct rbh_backend *backend,
-                        struct rbh_log_options options)
+rbh_backend_delete_stats(struct rbh_backend *backend,
+                        struct rbh_stats_options options)
 {
-    if (backend->ops->delete_logs == NULL) {
+    if (backend->ops->delete_stats == NULL) {
         errno = ENOTSUP;
         return -1;
     }
-    return backend->ops->delete_logs(backend, options);
+    return backend->ops->delete_stats(backend, options);
 }
 
 /**

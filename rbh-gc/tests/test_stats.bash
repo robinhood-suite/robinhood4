@@ -11,10 +11,10 @@ test_dir=$(dirname $(readlink -e $0))
 
 test_invalid_stat_options()
 {
-    rbh_gc "rbh:$db:$testdb" --stats --log-interval blob &&
+    rbh_gc "rbh:$db:$testdb" --stats --stats-interval blob &&
         error "GC with invalid log interval should have failed"
 
-    rbh_gc "rbh:$db:$testdb" --stats --log-interval -3 &&
+    rbh_gc "rbh:$db:$testdb" --stats --stats-interval -3 &&
         error "GC with invalid log interval should have failed"
 
     return 0
@@ -47,7 +47,7 @@ test_stats()
 
     rm fileC
 
-    rbh_gc "rbh:$db:$testdb" --stats --log-file logs.txt
+    rbh_gc "rbh:$db:$testdb" --stats --stats-file logs.txt
     output="$(cat logs.txt)"
 
     echo "$output" | grep "rbh-gc" > /dev/null ||

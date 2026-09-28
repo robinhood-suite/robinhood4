@@ -59,6 +59,6 @@ rbh_posix_fill_projection(struct rbh_filter_projection *projection,
                           const char *format_string, size_t *index);
 
 int
-rbh_posix_print_logs(void *plugin_md, char *buffer, size_t buffer_size);
+rbh_posix_print_stats(void *plugin_md, char *buffer, size_t buffer_size);
 
 #endif

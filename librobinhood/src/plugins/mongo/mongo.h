@@ -27,7 +27,7 @@ struct mongo_backend {
     mongoc_client_t *client;
     mongoc_collection_t *entries;
     mongoc_collection_t *info;
-    mongoc_collection_t *log;
+    mongoc_collection_t *stats;
 };
 
 /*----------------------------------------------------------------------------*
@@ -349,16 +349,16 @@ struct rbh_value_map *
 mongo_backend_get_info(void *backend, int info_flags);
 
 int
-mongo_backend_insert_log(void *backend, const char *command,
+mongo_backend_insert_stats(void *backend, const char *command,
                          const struct rbh_value_map *map);
 
 struct rbh_value_map *
-mongo_backend_get_log_count(void *backend);
+mongo_backend_get_stats_count(void *backend);
 
 struct rbh_value_map *
-mongo_backend_get_logs(void *backend, struct rbh_log_options options);
+mongo_backend_get_stats(void *backend, struct rbh_stats_options options);
 
 int
-mongo_backend_delete_logs(void *backend, struct rbh_log_options options);
+mongo_backend_delete_stats(void *backend, struct rbh_stats_options options);
 
 #endif
