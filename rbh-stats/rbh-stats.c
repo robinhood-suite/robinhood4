@@ -141,12 +141,12 @@ print_stats_count(const struct rbh_value_map *counts)
     int64_t count = 0;
 
     for (size_t i = 0 ; i < counts->count ; i++) {
-        printf("Log count for the '%s' command: '%ld'\n",
+        printf("%s: %ld\n",
                counts->pairs[i].key, counts->pairs[i].value->int64);
         count += counts->pairs[i].value->int64;
     }
 
-    printf("Total stats count: '%ld'\n", count);
+    printf("total: %ld\n", count);
 }
 
 static int
