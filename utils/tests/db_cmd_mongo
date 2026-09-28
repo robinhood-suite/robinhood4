@@ -79,19 +79,19 @@ find_attribute()
     return 0
 }
 
-find_log()
+find_stats()
 {
     local db="$1"
     local id="$2"
 
-    mongo "$db" --eval "db.log.find({\"_id\": ObjectId(\"$id\")})"
+    mongo "$db" --eval "db.stat.find({\"_id\": ObjectId(\"$id\")})"
 }
 
-get_last_log_id()
+get_last_stats_id()
 {
     local db="$1"
 
-    mongo "$db" --eval "db.log.find().sort({\"logged_at\": -1}).limit(1)" |
+    mongo "$db" --eval "db.stat.find().sort({\"logged_at\": -1}).limit(1)" |
         cut -d'"' -f4
 }
 
@@ -119,11 +119,11 @@ case "$cmd" in
     find)
         find_attribute "$db" "$@"
         ;;
-    find_log)
-        find_log "$db" "$@"
+    find_stats)
+        find_stats "$db" "$@"
         ;;
-    get_last_log_id)
-        get_last_log_id "$db" "$@"
+    get_last_stats_id)
+        get_last_stats_id "$db" "$@"
         ;;
     get)
         get_attribute "$db" "$@"

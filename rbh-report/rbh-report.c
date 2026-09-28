@@ -21,7 +21,7 @@
 #include <robinhood/utils.h>
 #include <robinhood/value.h>
 
-#include "log.h"
+#include "stats.h"
 #include "report.h"
 
 #define MIN_VALUES_SSTACK_ALLOC (1 << 6)
@@ -159,7 +159,7 @@ usage(const char *backend)
         "    -h, --help [backend]  show this message and exit. If 'backend' is\n"
         "                          provided, show the 'backend''s available\n"
         "                          filters and directives\n"
-        "    --log-file FILE       redirect command stats printing to given FILE.\n"
+        "    --stats-file FILE       redirect command stats printing to given FILE.\n"
         "                          Is only used if '--stats' is specified.\n"
         "    --stats               print command stats after execution to stderr\n"
         "    -v, --verbose         show additionnal information\n"
@@ -276,15 +276,15 @@ get_command_options(int argc, char *argv[], struct command_context *context,
             context->config_file = argv[++i];
         }
 
-        if (strcmp(argv[i], "--log-file") == 0 &&
-            metadata->log_file == stderr) {
+        if (strcmp(argv[i], "--stats-file") == 0 &&
+            metadata->stats_file == stderr) {
             if (i + 1 >= argc)
                 error(EXIT_FAILURE, EINVAL,
-                      "missing file to write logs to");
+                      "missing file to write stats to");
 
-            metadata->log_file = fopen(argv[i + 1], "w");
-            if (metadata->log_file == NULL)
-                error(EXIT_FAILURE, errno, "Failed to open log file '%s'",
+            metadata->stats_file = fopen(argv[i + 1], "w");
+            if (metadata->stats_file == NULL)
+                error(EXIT_FAILURE, errno, "Failed to open stats file '%s'",
                       argv[i + 1]);
 
             i++;
@@ -333,7 +333,7 @@ main(int _argc, char *_argv[])
     struct rbh_filter_options options = {0};
     struct rbh_metadata metadata = {
         .common_md.command_line = get_command_line(_argc, _argv),
-        .log_file = stderr,
+        .stats_file = stderr,
     };
     struct filters_context f_ctx = {0};
     struct rbh_value_map *info_map;
@@ -430,9 +430,9 @@ main(int _argc, char *_argv[])
     metadata.common_md.end_time = time(NULL);
 
     if (command_context.print_stats)
-        rbh_print_log(&metadata, RBH_REPORT_LOG, NULL);
+        rbh_print_stats(&metadata, RBH_REPORT_STATS, NULL);
 
-    insert_report_log(from, &metadata);
+    insert_report_stats(from, &metadata);
 
     free(metadata.common_md.command_line);
 

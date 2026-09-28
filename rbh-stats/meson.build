@@ -1,0 +1,25 @@
+# This file is part of RobinHood 4
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
+#                    alternatives
+#
+# SPDX-License-Identifer: LGPL-3.0-or-later
+
+include_dir = include_directories('.', 'include')
+
+executable(
+    'rbh-stats',
+    sources: [
+        'rbh-stats.c',
+        'src/common.c',
+        'src/find.c',
+        'src/fsevents.c',
+        'src/gc.c',
+        'src/report.c',
+        'src/sync.c',
+    ],
+    dependencies: [librobinhood_dep],
+    include_directories: include_dir,
+    install: true,
+)
+
+subdir('tests')

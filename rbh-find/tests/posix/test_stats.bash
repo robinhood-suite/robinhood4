@@ -42,7 +42,7 @@ test_stats()
     # 9*9 + 9 + root
     find_expected_values "$output" 91
 
-    rbh_find --stats --log-file logs.txt rbh:$db:$testdb
+    rbh_find --stats --stats-file logs.txt rbh:$db:$testdb
     output="$(cat logs.txt)"
     find_expected_values "$output" 91
 

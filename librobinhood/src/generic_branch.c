@@ -15,7 +15,7 @@
 
 #include "robinhood/backend.h"
 #include "robinhood/itertools.h"
-#include "robinhood/log.h"
+#include "robinhood/stats.h"
 #include "robinhood/ringr.h"
 #include "robinhood/statx.h"
 

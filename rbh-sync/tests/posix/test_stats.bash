@@ -16,10 +16,10 @@ test_dir=$(dirname $(readlink -e $0))
 
 test_invalid_stat_options()
 {
-    rbh_sync rbh:posix:$file rbh:$db:$testdb --stats --log-interval blob &&
+    rbh_sync rbh:posix:$file rbh:$db:$testdb --stats --stats-interval blob &&
         error "Sync with invalid log interval should have failed"
 
-    rbh_sync rbh:posix:$file rbh:$db:$testdb --stats --log-interval -3 &&
+    rbh_sync rbh:posix:$file rbh:$db:$testdb --stats --stats-interval -3 &&
         error "Sync with invalid log interval should have failed"
 
     return 0
@@ -60,7 +60,7 @@ test_stats()
     local output="$(rbh_sync rbh:posix:. rbh:$db:$testdb --stats 2>&1)"
     find_expected_values "$output" 94 2
 
-    rbh_sync rbh:posix:. rbh:$db:$testdb --stats --log-file logs.txt
+    rbh_sync rbh:posix:. rbh:$db:$testdb --stats --stats-file logs.txt
     output="$(cat logs.txt)"
     # 94 + 1 because of logs.txt
     find_expected_values "$output" 95 3

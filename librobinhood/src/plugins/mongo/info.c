@@ -198,7 +198,7 @@ get_collection_last_sync_start_date(const struct mongo_backend *mongo,
     value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*value));
     opts = BCON_NEW("sort", "{", "_id", BCON_INT32(-1), "}");
 
-    cursor = mongoc_collection_find_with_opts(mongo->log, filter, opts, NULL);
+    cursor = mongoc_collection_find_with_opts(mongo->stats, filter, opts, NULL);
     if (!cursor) {
         rc = -1;
         goto out;

@@ -18,7 +18,7 @@
 #include <robinhood/alias.h>
 #include <robinhood/config.h>
 #include <robinhood/itertools.h>
-#include <robinhood/log.h>
+#include <robinhood/stats.h>
 #include <robinhood/plugins/backend.h>
 #include <robinhood/projection.h>
 #include <robinhood/utils.h>
@@ -130,21 +130,21 @@ sync_metadata_value_map(struct rbh_metadata *metadata)
 }
 
 static void
-insert_sync_log(struct rbh_backend *backend, struct rbh_metadata *metadata)
+insert_sync_stats(struct rbh_backend *backend, struct rbh_metadata *metadata)
 {
-    if (!rbh_backend_insert_log(backend, "sync",
+    if (!rbh_backend_insert_stats(backend, "sync",
                                 sync_metadata_value_map(metadata)))
         return;
 
     switch (errno) {
     case 0:
-        fprintf(stderr, "failed to insert sync log\n");
+        fprintf(stderr, "failed to insert sync stats\n");
         break;
     case RBH_BACKEND_ERROR:
-        fprintf(stderr, "failed to insert sync log: %s\n", rbh_backend_error);
+        fprintf(stderr, "failed to insert sync stats: %s\n", rbh_backend_error);
         break;
     default:
-        fprintf(stderr, "failed to insert sync log: %s\n", strerror(errno));
+        fprintf(stderr, "failed to insert sync stats: %s\n", strerror(errno));
         break;
     }
 }
@@ -622,8 +622,8 @@ sync(const struct rbh_filter_projection *projection,
             error(EXIT_FAILURE, errno, "while chunkifying SOURCE's entries");
         }
 
-        if (print_stats && rbh_should_print_log(metadata))
-            rbh_print_log(metadata, RBH_SYNC_LOG, from->name);
+        if (print_stats && rbh_should_print_stats(metadata))
+            rbh_print_stats(metadata, RBH_SYNC_STATS, from->name);
 
         count = rbh_backend_update(to, chunk);
         save_errno = errno;
@@ -647,7 +647,7 @@ sync(const struct rbh_filter_projection *projection,
     }
 
     if (print_stats)
-        rbh_print_log(metadata, RBH_SYNC_LOG, from->name);
+        rbh_print_stats(metadata, RBH_SYNC_STATS, from->name);
 }
 
 /*----------------------------------------------------------------------------*
@@ -747,9 +747,9 @@ usage(void)
         "                           instead stop on the first error.\n"
         "    -o, --one              only consider the root of SOURCE\n"
         "    --stats                print command stats during execution to stderr\n"
-        "    --log-file FILE        redirect command stats printing to given FILE.\n"
+        "    --stats-file FILE      redirect command stats printing to given FILE.\n"
         "                           Is only used if '--stats' is specified.\n"
-        "    -I, --log-interval INTERVAL\n"
+        "    -I, --stats-interval INTERVAL\n"
         "                           print stats each INTERVAL seconds, 60 by\n"
         "                           default, 0 to only print at the end of the command.\n"
         "                           Is only used if '--stats' is specified.\n"
@@ -813,12 +813,12 @@ main(int argc, char *argv[])
             .val = 'l',
         },
         {
-            .name = "log-file",
+            .name = "stats-file",
             .has_arg = required_argument,
             .val = 'L',
         },
         {
-            .name = "log-interval",
+            .name = "stats-interval",
             .has_arg = required_argument,
             .val = 'I',
         },
@@ -848,8 +848,8 @@ main(int argc, char *argv[])
     struct rbh_metadata metadata = {
         .common_md.command_line = get_command_line(argc, argv),
         .last_shown_time = time(NULL),
-        .log_file = stderr,
-        .log_interval = 60,
+        .stats_file = stderr,
+        .stats_interval = 60,
     };
     bool print_stats = false;
     char *cmd_backend;
@@ -890,11 +890,11 @@ main(int argc, char *argv[])
             usage();
             return 0;
         case 'I':
-            if (str2int64_t(optarg, &metadata.log_interval))
+            if (str2int64_t(optarg, &metadata.stats_interval))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to int64_t",
                       optarg);
 
-            if (metadata.log_interval < 0)
+            if (metadata.stats_interval < 0)
                 error(EXIT_FAILURE, EINVAL,
                       "Log interval '%s' cannot be negative", optarg);
 
@@ -903,9 +903,9 @@ main(int argc, char *argv[])
             list_capabilities(optarg);
             return EXIT_SUCCESS;
         case 'L':
-            metadata.log_file = fopen(optarg, "w");
-            if (metadata.log_file == NULL)
-                error(EXIT_FAILURE, errno, "Failed to open log file '%s'",
+            metadata.stats_file = fopen(optarg, "w");
+            if (metadata.stats_file == NULL)
+                error(EXIT_FAILURE, errno, "Failed to open stats file '%s'",
                       optarg);
             break;
         case 'n':
@@ -952,14 +952,14 @@ main(int argc, char *argv[])
     sync(&projection, &metadata, print_stats);
     metadata.common_md.end_time = time(NULL);
 
-    insert_sync_log(to, &metadata);
+    insert_sync_stats(to, &metadata);
 
     free(metadata.sync_md.source_mountpoint);
     free(metadata.common_md.command_line);
     rbh_config_free();
 
-    if (metadata.log_file != stderr)
-        fclose(metadata.log_file);
+    if (metadata.stats_file != stderr)
+        fclose(metadata.stats_file);
 
     return EXIT_SUCCESS;
 }
