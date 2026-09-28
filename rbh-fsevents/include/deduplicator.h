@@ -11,7 +11,7 @@
 #include <stddef.h>
 
 #include <robinhood/iterator.h>
-#include <robinhood/log.h>
+#include <robinhood/stats.h>
 
 #include "source.h"
 

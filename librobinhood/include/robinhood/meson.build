@@ -17,7 +17,7 @@ install_headers(
     'iterator.h',
     'itertools.h',
     'list.h',
-    'log.h',
+    'stats.h',
     'mpi_rc.h',
     'open.h',
     'plugin.h',

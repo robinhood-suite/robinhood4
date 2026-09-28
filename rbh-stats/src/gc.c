@@ -1,0 +1,78 @@
+/* This file is part of RobinHood 4
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifier: LGPL-3.0-or-later
+ */
+
+#include <robinhood.h>
+
+#include "stats.h"
+
+enum gc_stats_value {
+    CHECK_COMMAND,
+    DELETED_ENTRIES,
+    NOT_DELETED_ENTRIES,
+    SYNC_TIME,
+    TOTAL_ENTRIES,
+};
+
+static int
+key2gc_stats_value(const char *key)
+{
+    switch (key[0]) {
+    case 'c':
+        if (!strcmp(&key[1], "heck_command"))
+            return CHECK_COMMAND;
+
+        break;
+    case 'd':
+        if (!strcmp(&key[1], "eleted_entries"))
+            return DELETED_ENTRIES;
+
+        break;
+    case 'n':
+        if (!strcmp(&key[1], "ot_deleted_entries"))
+            return NOT_DELETED_ENTRIES;
+
+        break;
+    case 's':
+        if (!strcmp(&key[1], "ync_time"))
+            return SYNC_TIME;
+
+        break;
+    case 't':
+        if (!strcmp(&key[1], "otal_entries"))
+            return TOTAL_ENTRIES;
+
+        break;
+    }
+
+    error(EXIT_FAILURE, EINVAL, "Unknown key found in gc stats: '%s'", key);
+    __builtin_unreachable();
+}
+
+static const struct formatted_stats_value gc_stats_value[] = {
+    [CHECK_COMMAND] =       { .header = "Check command used",
+                              .print_stats_value = print_value },
+    [DELETED_ENTRIES] =     { .header = "Amount of deleted entries",
+                              .oneline_header = "Entries deleted",
+                              .print_stats_value = print_value,
+                              .oneline = true },
+    [NOT_DELETED_ENTRIES] = { .header = "Amount of non-deleted entries",
+                              .print_stats_value = print_value },
+    [SYNC_TIME] =           { .header = "Sync-time used",
+                              .print_stats_value = print_value },
+    [TOTAL_ENTRIES] =       { .header = "Amount of entries seen",
+                              .oneline_header = "Entries seen",
+                              .print_stats_value = print_value,
+                              .oneline = true },
+};
+
+void
+print_gc_stats(const struct rbh_value_map *stats,
+               enum output_format output_format)
+{
+    print_stats_wrapper(stats, output_format, gc_stats_value,
+                        &key2gc_stats_value);
+}

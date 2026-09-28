@@ -8,7 +8,7 @@
 #include <robinhood/sstack.h>
 #include <robinhood/utils.h>
 
-#include "log.h"
+#include "stats.h"
 
 #define MIN_VALUES_SSTACK_ALLOC (1 << 6)
 static __thread struct rbh_sstack *metadata_sstack;
@@ -45,22 +45,22 @@ report_metadata_value_map(struct rbh_metadata *metadata)
 }
 
 void
-insert_report_log(struct rbh_backend *backend, struct rbh_metadata *metadata)
+insert_report_stats(struct rbh_backend *backend, struct rbh_metadata *metadata)
 {
-    if (!rbh_backend_insert_log(backend, "report",
+    if (!rbh_backend_insert_stats(backend, "report",
                                 report_metadata_value_map(metadata)))
         return;
 
     switch (errno) {
     case 0:
-        fprintf(stderr, "failed to insert report log\n");
+        fprintf(stderr, "failed to insert report stats\n");
         break;
     case RBH_BACKEND_ERROR:
-        fprintf(stderr, "failed to insert report log: %s\n",
+        fprintf(stderr, "failed to insert report stats: %s\n",
                 rbh_backend_error);
         break;
     default:
-        fprintf(stderr, "failed to insert report log: %s\n", strerror(errno));
+        fprintf(stderr, "failed to insert report stats: %s\n", strerror(errno));
         break;
     }
 }
