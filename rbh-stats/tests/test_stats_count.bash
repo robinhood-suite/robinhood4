@@ -59,12 +59,12 @@ test_stats_count()
                          report_count + sync_count))
 
     rbh_stats rbh:$db:$testdb --stats-count | sort |
-        difflines "Log count for the 'find' command: '$find_count'" \
-                  "Log count for the 'fsevents' command: '$fsevents_count'" \
-                  "Log count for the 'gc' command: '$gc_count'" \
-                  "Log count for the 'report' command: '$report_count'" \
-                  "Log count for the 'sync' command: '$sync_count'" \
-                  "Total stats count: '$total_count'"
+        difflines "find: $find_count" \
+                  "fsevents: $fsevents_count" \
+                  "gc: $gc_count" \
+                  "report: $report_count" \
+                  "sync: $sync_count" \
+                  "total: $total_count"
 }
 
 ################################################################################
