@@ -18,12 +18,12 @@ test_invalid_stat_options()
 {
     rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
         src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
-        --stats --log-interval blob &&
+        --stats --stats-interval blob &&
         error "Fsevents with invalid log interval should have failed"
 
     rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
         src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
-        --stats --log-interval -3 &&
+        --stats --stats-interval -3 &&
         error "Fsevents with invalid log interval should have failed"
 
     return 0
@@ -77,7 +77,7 @@ test_stats()
         error "Invalid output, missing 1 'changelog/sec' line, got '$output'"
 
     rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" src:lustre:"$LUSTRE_MDT" \
-        "rbh:$db:$testdb" --stats --nb-workers 4 --log-file logs.txt
+        "rbh:$db:$testdb" --stats --nb-workers 4 --stats-file logs.txt
     count="$(lfs changelog $LUSTRE_MDT $userid | wc -l)"
     output="$(cat logs.txt | tail -n 12)"
 

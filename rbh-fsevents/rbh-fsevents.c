@@ -27,14 +27,14 @@
 #include <robinhood/alias.h>
 #include <robinhood/config.h>
 #include <robinhood/list.h>
-#include <robinhood/log.h>
+#include <robinhood/stats.h>
 #include <robinhood/uri.h>
 #include <robinhood/utils.h>
 
 #include "deduplicator.h"
 #include "enricher.h"
 #include "info.h"
-#include "log.h"
+#include "stats.h"
 #include "source.h"
 #include "sink.h"
 
@@ -72,7 +72,7 @@ usage(void)
         "                    the path to a configuration file\n"
         "    --dry-run       displays the command after alias management\n"
         "    -d, --dump PATH\n"
-        "                    the path to a file where the changelogs should be dumped,\n"
+        "                    the path to a file where the changelog should be dumped,\n"
         "                    can only be used with a Lustre source. Use '-' for stdout.\n"
         "    -e, --enrich MOUNTPOINT\n"
         "                    enrich changelog records by querying MOUNTPOINT as needed\n"
@@ -82,11 +82,11 @@ usage(void)
         "                    the changelog index to start reading from instead of\n"
         "                    the one stored in the database\n"
         "    -l, --no-estale-logs\n"
-        "                    do not print any log on ESTALE errors, quietly skip/quit instead\n"
-        "    --log-file FILE\n"
+        "                    do not print any logs on ESTALE errors, quietly skip/quit instead\n"
+        "    --stats-file FILE\n"
         "                    redirect command stats printing to given FILE.\n"
         "                    Is only used if '--stats' is specified.\n"
-        "    -I, --log-interval INTERVAL\n"
+        "    -I, --stats-interval INTERVAL\n"
         "                    print stats each INTERVAL seconds, 60 by default,\n"
         "                    0 to only print at the end of the command.\n"
         "                    Is only used if '--stats' is specified.\n"
@@ -103,7 +103,7 @@ usage(void)
         "Note that uploading raw records to a RobinHood backend will fail, they have to\n"
         "be enriched first.\n"
         "\n"
-        "For Lustre sources, changelogs are not acknowledged by default. To\n"
+        "For Lustre sources, changelog are not acknowledged by default. To\n"
         "enable this feature, you must specify in the Source URI the user\n"
         "with whom the acknowledge should be done, i.e.\n"
         "'src:lustre:lustre-MDT0000?ack-user=cl1'.\n";
@@ -630,8 +630,8 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
         rbh_mut_iter_destroy(batch);
         batch_id++;
 
-        if (print_stats && rbh_should_print_log(metadata))
-            rbh_print_log(metadata, RBH_FSEVENTS_LOG, NULL);
+        if (print_stats && rbh_should_print_stats(metadata))
+            rbh_print_stats(metadata, RBH_FSEVENTS_STATS, NULL);
     }
 
 end:
@@ -709,7 +709,7 @@ feed(struct sink **sink, struct source *source,
         rc = -1;
 
     if (print_stats)
-        rbh_print_log(metadata, RBH_FSEVENTS_LOG, NULL);
+        rbh_print_stats(metadata, RBH_FSEVENTS_STATS, NULL);
 
     return rc;
 }
@@ -757,12 +757,12 @@ main(int argc, char *argv[])
             .val = 'l',
         },
         {
-            .name = "log-file",
+            .name = "stats-file",
             .has_arg = required_argument,
             .val = 'L',
         },
         {
-            .name = "log-interval",
+            .name = "stats-interval",
             .has_arg = required_argument,
             .val = 'I',
         },
@@ -808,8 +808,8 @@ main(int argc, char *argv[])
         .fsevents_md.worker_count = 1,
         .fsevents_md.start_index = -1,
         .last_shown_time = time(NULL),
-        .log_file = stderr,
-        .log_interval = 60,
+        .stats_file = stderr,
+        .stats_interval = 60,
     };
     uint64_t max_changelog = 0;
     char *cmd_backend = NULL;
@@ -857,11 +857,11 @@ main(int argc, char *argv[])
                       optarg);
             break;
         case 'I':
-            if (str2int64_t(optarg, &metadata.log_interval))
+            if (str2int64_t(optarg, &metadata.stats_interval))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to int64_t",
                       optarg);
 
-            if (metadata.log_interval < 0)
+            if (metadata.stats_interval < 0)
                 error(EXIT_FAILURE, EINVAL,
                       "Log interval '%s' cannot be negative", optarg);
 
@@ -870,9 +870,9 @@ main(int argc, char *argv[])
             estale_logs = false;
             break;
         case 'L':
-            metadata.log_file = fopen(optarg, "w");
-            if (metadata.log_file == NULL)
-                error(EXIT_FAILURE, errno, "Failed to open log file '%s'",
+            metadata.stats_file = fopen(optarg, "w");
+            if (metadata.stats_file == NULL)
+                error(EXIT_FAILURE, errno, "Failed to open stats file '%s'",
                       optarg);
             break;
         case 'm':
@@ -919,7 +919,7 @@ main(int argc, char *argv[])
 
     if (dump_file && strcmp(argv[optind + 1], dump_file) == 0)
         error(EX_USAGE, EINVAL,
-              "Cannot output changelogs and fsevents both to stdout");
+              "Cannot output changelog and fsevents both to stdout");
 
     char *source_uri = argv[optind++];
 
@@ -950,15 +950,15 @@ main(int argc, char *argv[])
               &dedup_opts, &metadata, print_stats);
     metadata.common_md.end_time = time(NULL);
 
-    insert_fsevents_log(sink[0], &metadata);
+    insert_fsevents_stats(sink[0], &metadata);
 
     free((char *) metadata.fsevents_md.enrich_mountpoint);
     free((char *) metadata.fsevents_md.source_read);
     free(metadata.common_md.command_line);
     rbh_config_free();
 
-    if (metadata.log_file != stderr)
-        fclose(metadata.log_file);
+    if (metadata.stats_file != stderr)
+        fclose(metadata.stats_file);
 
     return rc == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }

@@ -30,7 +30,7 @@ test_stats()
     local output="$(rbh_report --stats rbh:$db:$testdb --output "count()" 2>&1)"
     find_expected_values "$output"
 
-    rbh_report --stats --log-file logs.txt rbh:$db:$testdb --output "count()"
+    rbh_report --stats --stats-file logs.txt rbh:$db:$testdb --output "count()"
     output="$(cat logs.txt)"
     find_expected_values "$output"
 }

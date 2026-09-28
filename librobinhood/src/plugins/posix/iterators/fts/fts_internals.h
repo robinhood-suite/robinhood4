@@ -9,7 +9,7 @@
 #define ROBINHOOD_POSIX_FTS_INTERNALS_H
 
 #include <robinhood/iterator.h>
-#include <robinhood/log.h>
+#include <robinhood/stats.h>
 
 struct rbh_mut_iterator *
 fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,

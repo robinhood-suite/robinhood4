@@ -20,7 +20,7 @@
 #include <robinhood/action.h>
 #include <robinhood/config.h>
 #include <robinhood/filters/parser.h>
-#include <robinhood/log.h>
+#include <robinhood/stats.h>
 #include <robinhood/open.h>
 #include <robinhood/utils.h>
 
@@ -74,9 +74,9 @@ usage(void)
         "    -c, --config PATH          the path to a configuration file\n"
         "    -d, --dry-run              displays the list of the absent entries\n"
         "    -h, --help                 print this messsage and exit\n"
-        "    --log-file FILE            redirect command stats printing to given FILE.\n"
+        "    --stats-file FILE            redirect command stats printing to given FILE.\n"
         "                               Is only used if '--stats' is specified.\n"
-        "    -I, --log-interval INTERVAL\n"
+        "    -I, --stats-interval INTERVAL\n"
         "                               print stats each INTERVAL seconds, 60 by\n"
         "                               default, 0 to only print at the end of the command.\n"
         "                               Is only used if '--stats' is specified.\n"
@@ -156,20 +156,20 @@ gc_metadata_value_map(struct rbh_metadata *metadata)
 }
 
 static void
-insert_gc_log(struct rbh_metadata *metadata)
+insert_gc_stats(struct rbh_metadata *metadata)
 {
-    if (!rbh_backend_insert_log(backend, "gc", gc_metadata_value_map(metadata)))
+    if (!rbh_backend_insert_stats(backend, "gc", gc_metadata_value_map(metadata)))
         return;
 
     switch (errno) {
     case 0:
-        fprintf(stderr, "failed to insert gc log\n");
+        fprintf(stderr, "failed to insert gc stats\n");
         break;
     case RBH_BACKEND_ERROR:
-        fprintf(stderr, "failed to insert gc log: %s\n", rbh_backend_error);
+        fprintf(stderr, "failed to insert gc stats: %s\n", rbh_backend_error);
         break;
     default:
-        fprintf(stderr, "failed to insert gc log: %s\n", strerror(errno));
+        fprintf(stderr, "failed to insert gc stats: %s\n", strerror(errno));
         break;
     }
 }
@@ -562,8 +562,8 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
             }
             metadata->gc_md.deleted_entry_count += count;
 
-            if (print_stats && rbh_should_print_log(metadata))
-                rbh_print_log(metadata, RBH_GC_LOG, NULL);
+            if (print_stats && rbh_should_print_stats(metadata))
+                rbh_print_stats(metadata, RBH_GC_STATS, NULL);
 
         } while (true);
 
@@ -579,7 +579,7 @@ gc(char *mnt_path, bool dry_run_mode, bool verbose_mode,
         }
 
         if (print_stats)
-            rbh_print_log(metadata, RBH_GC_LOG, NULL);
+            rbh_print_stats(metadata, RBH_GC_STATS, NULL);
     } else {
         struct rbh_iterator *prints;
 
@@ -598,8 +598,8 @@ main(int _argc, char *_argv[])
         .common_md.command_line = get_command_line(_argc, _argv),
         .gc_md.sync_time = -1,
         .last_shown_time = time(NULL),
-        .log_file = stderr,
-        .log_interval = 60,
+        .stats_file = stderr,
+        .stats_interval = 60,
     };
     struct rbh_filter_options options = {0};
     struct filters_context f_ctx = {0};
@@ -654,26 +654,26 @@ main(int _argc, char *_argv[])
         } else if (strcmp(arg, "--dry-run") == 0 || strcmp(arg, "-d") == 0) {
             dry_run_mode = true;
 
-        } else if (strcmp(arg, "--log-file") == 0) {
+        } else if (strcmp(arg, "--stats-file") == 0) {
             if (i + 1 >= argc)
                 error(EXIT_FAILURE, EINVAL,
-                      "Missing argument for '--log-file'");
+                      "Missing argument for '--stats-file'");
 
-            metadata.log_file = fopen(argv[++i], "w");
-            if (metadata.log_file == NULL)
-                error(EXIT_FAILURE, errno, "Failed to open log file '%s'",
+            metadata.stats_file = fopen(argv[++i], "w");
+            if (metadata.stats_file == NULL)
+                error(EXIT_FAILURE, errno, "Failed to open stats file '%s'",
                       argv[i]);
-        } else if (strcmp(arg, "--log-interval") == 0 ||
+        } else if (strcmp(arg, "--stats-interval") == 0 ||
                    strcmp(arg, "-I") == 0) {
             if (i + 1 >= argc)
                 error(EXIT_FAILURE, EINVAL,
-                      "Missing argument for '--log-interval'");
+                      "Missing argument for '--stats-interval'");
 
-            if (str2int64_t(argv[i + 1], &metadata.log_interval))
+            if (str2int64_t(argv[i + 1], &metadata.stats_interval))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to int64_t",
                       argv[i + 1]);
 
-            if (metadata.log_interval < 0)
+            if (metadata.stats_interval < 0)
                 error(EXIT_FAILURE, EINVAL,
                       "Log interval '%s' cannot be negative", argv[i + 1]);
 
@@ -734,15 +734,15 @@ main(int _argc, char *_argv[])
     gc(path, dry_run_mode, verbose_mode, &metadata, filter, print_stats);
     metadata.common_md.end_time = time(NULL);
 
-    insert_gc_log(&metadata);
+    insert_gc_stats(&metadata);
 
     free(metadata.common_md.command_line);
 
     free(path);
     rbh_config_free();
 
-    if (metadata.log_file != stderr)
-        fclose(metadata.log_file);
+    if (metadata.stats_file != stderr)
+        fclose(metadata.stats_file);
 
     return EXIT_SUCCESS;
 }

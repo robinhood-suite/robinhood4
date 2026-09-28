@@ -10,7 +10,7 @@
 
 #include <robinhood/backend.h>
 #include <robinhood/iterator.h>
-#include <robinhood/log.h>
+#include <robinhood/stats.h>
 
 struct enrich_iter_builder;
 

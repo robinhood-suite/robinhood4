@@ -10,7 +10,7 @@
 
 #include <robinhood.h>
 #include <robinhood/backends/posix_extension.h>
-#include <robinhood/log.h>
+#include <robinhood/stats.h>
 
 #include "enricher.h"
 

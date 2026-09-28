@@ -50,11 +50,11 @@ backend_sink_insert_info(void *_sink, const struct rbh_value_map *value)
 }
 
 static int
-backend_sink_insert_log(void *_sink, const struct rbh_value_map *value)
+backend_sink_insert_stats(void *_sink, const struct rbh_value_map *value)
 {
     struct backend_sink *sink = _sink;
 
-    return rbh_backend_insert_log(sink->backend, "fsevents", value);
+    return rbh_backend_insert_stats(sink->backend, "fsevents", value);
 }
 
 static void
@@ -70,7 +70,7 @@ static const struct sink_operations BACKEND_SINK_OPS = {
     .process = backend_sink_process,
     .get_info = backend_sink_get_info,
     .insert_info = backend_sink_insert_info,
-    .insert_log = backend_sink_insert_log,
+    .insert_stats = backend_sink_insert_stats,
     .destroy = backend_sink_destroy,
 };
 

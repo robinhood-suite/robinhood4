@@ -12,7 +12,7 @@
 
 #include <robinhood/backends/posix_extension.h>
 #include <robinhood/iterator.h>
-#include <robinhood/log.h>
+#include <robinhood/stats.h>
 #include <robinhood/plugin.h>
 
 #define RBH_MFU_PLUGIN_NAME "mfu"
