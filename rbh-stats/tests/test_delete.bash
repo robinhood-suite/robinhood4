@@ -57,12 +57,12 @@ test_delete()
     local id7="$(do_db get_last_stats_id $testdb)"
 
     rbh_stats rbh:$db:$testdb --stats-count | sort |
-        difflines "Log count for the 'find' command: '2'" \
-                  "Log count for the 'fsevents' command: '0'" \
-                  "Log count for the 'gc' command: '0'" \
-                  "Log count for the 'report' command: '1'" \
-                  "Log count for the 'sync' command: '4'" \
-                  "Total stats count: '7'"
+        difflines "find: 2" \
+                  "fsevents: 0" \
+                  "gc: 0" \
+                  "report: 1" \
+                  "sync: 4" \
+                  "total: 7"
 
     stats_should_exist $id1 "Should have found '$id1'"
     stats_should_exist $id2 "Should have found '$id2'"
@@ -76,12 +76,12 @@ test_delete()
         difflines "Deleted '3' stats(s)"
 
     rbh_stats rbh:$db:$testdb --stats-count | sort |
-        difflines "Log count for the 'find' command: '2'" \
-                  "Log count for the 'fsevents' command: '0'" \
-                  "Log count for the 'gc' command: '0'" \
-                  "Log count for the 'report' command: '1'" \
-                  "Log count for the 'sync' command: '1'" \
-                  "Total stats count: '4'"
+        difflines "find: 2" \
+                  "fsevents: 0" \
+                  "gc: 0" \
+                  "report: 1" \
+                  "sync: 1" \
+                  "total: 4"
 
     stats_should_exist $id1 "Should have found '$id1'"
     stats_shouldnt_exist $id2 "Shouldnt have found '$id2'"
@@ -95,12 +95,12 @@ test_delete()
         difflines "Deleted '0' stats(s)"
 
     rbh_stats rbh:$db:$testdb --stats-count | sort |
-        difflines "Log count for the 'find' command: '2'" \
-                  "Log count for the 'fsevents' command: '0'" \
-                  "Log count for the 'gc' command: '0'" \
-                  "Log count for the 'report' command: '1'" \
-                  "Log count for the 'sync' command: '1'" \
-                  "Total stats count: '4'"
+        difflines "find: 2" \
+                  "fsevents: 0" \
+                  "gc: 0" \
+                  "report: 1" \
+                  "sync: 1" \
+                  "total: 4"
 
     stats_should_exist $id1 "Should have found '$id1'"
     stats_shouldnt_exist $id2 "Shouldnt have found '$id2'"
@@ -114,12 +114,12 @@ test_delete()
         difflines "Deleted '1' stats(s)"
 
     rbh_stats rbh:$db:$testdb --stats-count | sort |
-        difflines "Log count for the 'find' command: '2'" \
-                  "Log count for the 'fsevents' command: '0'" \
-                  "Log count for the 'gc' command: '0'" \
-                  "Log count for the 'report' command: '0'" \
-                  "Log count for the 'sync' command: '1'" \
-                  "Total stats count: '3'"
+        difflines "find: 2" \
+                  "fsevents: 0" \
+                  "gc: 0" \
+                  "report: 0" \
+                  "sync: 1" \
+                  "total: 3"
 
     stats_should_exist $id1 "Should have found '$id1'"
     stats_shouldnt_exist $id2 "Shouldnt have found '$id2'"
@@ -133,12 +133,12 @@ test_delete()
         difflines "Deleted '1' stats(s)"
 
     rbh_stats rbh:$db:$testdb --stats-count | sort |
-        difflines "Log count for the 'find' command: '1'" \
-                  "Log count for the 'fsevents' command: '0'" \
-                  "Log count for the 'gc' command: '0'" \
-                  "Log count for the 'report' command: '0'" \
-                  "Log count for the 'sync' command: '1'" \
-                  "Total stats count: '2'"
+        difflines "find: 1" \
+                  "fsevents: 0" \
+                  "gc: 0" \
+                  "report: 0" \
+                  "sync: 1" \
+                  "total: 2"
 
     stats_should_exist $id1 "Should have found '$id1'"
     stats_shouldnt_exist $id2 "Shouldnt have found '$id2'"
@@ -152,12 +152,12 @@ test_delete()
         difflines "Deleted '1' stats(s)"
 
     rbh_stats rbh:$db:$testdb --stats-count | sort |
-        difflines "Log count for the 'find' command: '0'" \
-                  "Log count for the 'fsevents' command: '0'" \
-                  "Log count for the 'gc' command: '0'" \
-                  "Log count for the 'report' command: '0'" \
-                  "Log count for the 'sync' command: '1'" \
-                  "Total stats count: '1'"
+        difflines "find: 0" \
+                  "fsevents: 0" \
+                  "gc: 0" \
+                  "report: 0" \
+                  "sync: 1" \
+                  "total: 1"
 
     stats_should_exist $id1 "Should have found '$id1'"
     stats_shouldnt_exist $id2 "Shouldnt have found '$id2'"
@@ -171,12 +171,12 @@ test_delete()
         difflines "Deleted '1' stats(s)"
 
     rbh_stats rbh:$db:$testdb --stats-count | sort |
-        difflines "Log count for the 'find' command: '0'" \
-                  "Log count for the 'fsevents' command: '0'" \
-                  "Log count for the 'gc' command: '0'" \
-                  "Log count for the 'report' command: '0'" \
-                  "Log count for the 'sync' command: '0'" \
-                  "Total stats count: '0'"
+        difflines "find: 0" \
+                  "fsevents: 0" \
+                  "gc: 0" \
+                  "report: 0" \
+                  "sync: 0" \
+                  "total: 0"
 
     stats_shouldnt_exist $id1 "Shouldnt have found '$id1'"
     stats_shouldnt_exist $id2 "Shouldnt have found '$id2'"
