@@ -13,6 +13,17 @@
 #include "robinhood/utils.h"
 
 static void
+print_stats(struct rbh_metadate *metadata, const char *fmt, ...)
+{
+    va_list args;
+
+    va_start(args, fmt);
+    fprintf(metadata->stats_file, fmt, args);
+    va_end(args);
+}
+
+
+static void
 print_find_stats(struct rbh_metadata *metadata, time_t current)
 {
     char exec_success_count_str[512];
@@ -22,7 +33,7 @@ print_find_stats(struct rbh_metadata *metadata, time_t current)
         metadata->find_md.exec_success_count
     );
 
-    fprintf(metadata->stats_file,
+    print_stats(metadata,
         "STATS | ======== Backend query statistics =========\n"
         "STATS | rbh-find has found:\n"
         "STATS |      %lu entries\n"
@@ -39,7 +50,7 @@ print_sync_stats(struct rbh_metadata *metadata, time_t current)
                                  metadata->sync_md.skipped_entries;
     uint64_t time_spent = current - metadata->common_md.start_time;
 
-    fprintf(metadata->stats_file,
+    print_stats(metadata,
         "STATS | ======== Backend scan statistics =========\n"
         "STATS | rbh-sync is running:\n"
         "STATS |      progress: %lu entries scanned (%lu skipped)\n"
@@ -57,7 +68,7 @@ print_gc_stats(struct rbh_metadata *metadata, time_t current)
     uint64_t total_entry_count = metadata->gc_md.total_entry_count;
     uint64_t time_spent = current - metadata->common_md.start_time;
 
-    fprintf(metadata->stats_file,
+    print_stats(metadata,
         "STATS | ======== Garbage collector statistics =========\n"
         "STATS | rbh-gc is running:\n"
         "STATS |      progress: %lu entries deleted from mirror (%lu kept)\n"
@@ -92,7 +103,7 @@ print_fsevents_stats(struct rbh_metadata *metadata, time_t current)
     avg_eu_ns = total_eu_ns / fsevents_md->changelog_read;
     avg_eu_ns = avg_eu_ns / fsevents_md->worker_count;
 
-    fprintf(metadata->stats_file,
+    print_stats(metadata,
         "STATS | ======== Backend update statistics =========\n"
         "STATS | rbh-fsevents is running:\n"
         "STATS |      progress: %lu changelog read\n"
@@ -144,7 +155,7 @@ rbh_print_stats(struct rbh_metadata *metadata, enum rbh_stats_type command_type,
     difftime_printer(difftime_buffer, sizeof(difftime_buffer),
                      current - metadata->common_md.start_time);
 
-    fprintf(metadata->stats_file,
+    print_stats(metadata,
         "STATS | =================== Dumping stats at %s ====================\n"
         "STATS | ======== General statistics =========\n"
         "STATS | Started command: rbh-%s\n"
@@ -195,7 +206,7 @@ rbh_print_stats(struct rbh_metadata *metadata, enum rbh_stats_type command_type,
             return;
         }
 
-        fprintf(metadata->stats_file,
+        print_stats(metadata,
             "STATS | ======== Plugin '%s' statistics =========\n"
             "%s\n",
             plugin->plugin.name,
@@ -203,7 +214,7 @@ rbh_print_stats(struct rbh_metadata *metadata, enum rbh_stats_type command_type,
         );
     }
 
-    fprintf(metadata->stats_file, "\n");
+    print_stats(metadata, "\n");
 
     metadata->last_shown_time = current;
 }
