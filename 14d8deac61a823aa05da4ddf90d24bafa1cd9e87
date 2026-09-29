@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18b774c1_44832165",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-09-29T07:53:00Z",
+      "side": 1,
+      "message": "minor: log-timer",
+      "range": {
+        "startLine": 666,
+        "startChar": 47,
+        "endLine": 666,
+        "endChar": 55
+      },
+      "revId": "14d8deac61a823aa05da4ddf90d24bafa1cd9e87",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
