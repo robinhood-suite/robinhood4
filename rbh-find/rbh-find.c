@@ -58,6 +58,8 @@ usage(const char *backend)
         "                         filters and directives\n"
         "    --stats-file FILE    redirect command stats printing to given FILE.\n"
         "                         Is only used if '--stats' is specified.\n"
+        "                         If given 'syslog', will output to both the\n"
+        "                         system logger and stderr.\n"
         "    --stats              print command stats after execution to stderr\n"
         "    -v, --verbose        show additionnal information\n"
         "    --version            print RobinHood 4's version\n"
@@ -184,11 +186,14 @@ get_command_options(int argc, char *argv[], struct command_context *context,
                 error(EXIT_FAILURE, EINVAL,
                       "missing file to write stats to");
 
-            metadata->stats_file = fopen(argv[i + 1], "w");
-            if (metadata->stats_file == NULL)
-                error(EXIT_FAILURE, errno, "Failed to open stats file '%s'",
-                      argv[i + 1]);
-
+            if (strcmp(argv[i + 1], "syslog") == 0) {
+                start_syslog(metadata);
+            } else {
+                metadata->stats_file = fopen(argv[i + 1], "w");
+                if (metadata->stats_file == NULL)
+                    error(EXIT_FAILURE, errno, "Failed to open stats file '%s'",
+                          argv[i + 1]);
+            }
             i++;
         }
 

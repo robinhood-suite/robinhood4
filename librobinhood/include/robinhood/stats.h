@@ -65,6 +65,7 @@ struct rbh_metadata {
     time_t last_shown_time;
     FILE *stats_file;
     int64_t stats_interval;
+    bool syslog;
 };
 
 /**
@@ -175,5 +176,11 @@ rbh_print_stats(struct rbh_metadata *metadata, enum rbh_stats_type command_type,
 void
 rbh_timespec_atomic_accumulate(struct rbh_fsevents_metadata *fsevents_md,
                                struct timespec to_add);
+
+void
+start_syslog(struct rbh_metadata *metadata);
+
+void
+close_syslog();
 
 #endif
