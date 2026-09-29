@@ -7,6 +7,7 @@
 
 #include <stdatomic.h>
 #include <stdio.h>
+#include <syslog.h>
 
 #include "robinhood/plugins/backend.h"
 #include "robinhood/stats.h"
@@ -18,7 +19,10 @@ print_stats(struct rbh_metadate *metadata, const char *fmt, ...)
     va_list args;
 
     va_start(args, fmt);
-    fprintf(metadata->stats_file, fmt, args);
+    if (metadata->syslog)
+        syslog(LOG_INFO, fmt, args);
+    else
+        fprintf(metadata->stats_file, fmt, args);
     va_end(args);
 }
 
@@ -246,4 +250,17 @@ rbh_timespec_atomic_accumulate(struct rbh_fsevents_metadata *fsevents_md,
         &current,
         temp)
     );
+}
+
+void
+start_syslog(struct rbh_metadata *metadata)
+{
+    openlog("RobinHood4", LOG_PERROR | LOG_PID, LOG_USER);
+    metadata->syslog = true;
+}
+
+void
+stop_syslog()
+{
+    closelog();
 }

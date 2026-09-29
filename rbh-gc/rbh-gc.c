@@ -76,6 +76,8 @@ usage(void)
         "    -h, --help                 print this messsage and exit\n"
         "    --stats-file FILE            redirect command stats printing to given FILE.\n"
         "                               Is only used if '--stats' is specified.\n"
+        "                               If given 'syslog', will output to both the\n"
+        "                               system logger and stderr.\n"
         "    -I, --stats-interval INTERVAL\n"
         "                               print stats each INTERVAL seconds, 60 by\n"
         "                               default, 0 to only print at the end of the command.\n"
@@ -659,10 +661,15 @@ main(int _argc, char *_argv[])
                 error(EXIT_FAILURE, EINVAL,
                       "Missing argument for '--stats-file'");
 
-            metadata.stats_file = fopen(argv[++i], "w");
-            if (metadata.stats_file == NULL)
-                error(EXIT_FAILURE, errno, "Failed to open stats file '%s'",
-                      argv[i]);
+            if (strcmp(argv[i + 1], "syslog") == 0) {
+                open_syslog(&metadata);
+            } else {
+                metadata.stats_file = fopen(argv[i + 1], "w");
+                if (metadata.stats_file == NULL)
+                    error(EXIT_FAILURE, errno, "Failed to open stats file '%s'",
+                          argv[i + 1]);
+            }
+            i++;
         } else if (strcmp(arg, "--stats-interval") == 0 ||
                    strcmp(arg, "-I") == 0) {
             if (i + 1 >= argc)

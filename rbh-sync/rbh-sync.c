@@ -749,6 +749,8 @@ usage(void)
         "    --stats                print command stats during execution to stderr\n"
         "    --stats-file FILE      redirect command stats printing to given FILE.\n"
         "                           Is only used if '--stats' is specified.\n"
+        "                           If given 'syslog', will output to both the\n"
+        "                           system logger and stderr.\n"
         "    -I, --stats-interval INTERVAL\n"
         "                           print stats each INTERVAL seconds, 60 by\n"
         "                           default, 0 to only print at the end of the command.\n"
@@ -903,10 +905,14 @@ main(int argc, char *argv[])
             list_capabilities(optarg);
             return EXIT_SUCCESS;
         case 'L':
-            metadata.stats_file = fopen(optarg, "w");
-            if (metadata.stats_file == NULL)
-                error(EXIT_FAILURE, errno, "Failed to open stats file '%s'",
-                      optarg);
+            if (strcmp(optarg, "syslog") == 0) {
+                open_syslog(&metadata);
+            } else {
+                metadata.stats_file = fopen(optarg, "w");
+                if (metadata.stats_file == NULL)
+                    error(EXIT_FAILURE, errno, "Failed to open stats file '%s'",
+                          optarg);
+            }
             break;
         case 'n':
             skip_error = false;
