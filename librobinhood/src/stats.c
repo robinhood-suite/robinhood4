@@ -13,6 +13,55 @@
 #include "robinhood/stats.h"
 #include "robinhood/utils.h"
 
+static int
+print_general_info(struct rbh_metadata *metadata, time_t current,
+                   enum rbh_stats_type command_type,
+                   char *message, size_t *message_avail_size)
+{
+    const char *command = rbh_stats_type2str(command_type);
+    char current_time_string[128];
+    char start_time_string[128];
+    char difftime_buffer[32];
+    struct tm *current_tm;
+    struct tm *start_tm;
+    int rc;
+
+    current_tm = localtime(&current);
+    if (!strftime(current_time_string, sizeof(current_time_string),
+                  "%d/%m/%Y %H:%M:%S", current_tm)) {
+        fprintf(stderr,
+                "Cannot print stats for current command, conversion of current timestamp failed\n");
+        return -1;
+    }
+
+    start_tm = localtime(&metadata->common_md.start_time);
+    if (!strftime(start_time_string, sizeof(start_time_string),
+                  "%d/%m/%Y %H:%M:%S", start_tm)) {
+        fprintf(stderr,
+                "Cannot print stats for current command, conversion of start timestamp failed\n");
+        return -1;
+    }
+
+    difftime_printer(difftime_buffer, sizeof(difftime_buffer),
+                     current - metadata->common_md.start_time);
+
+    rc = snprintf(message, *message_avail_size,
+        "STATS | =================== Dumping stats at %s ====================\n"
+        "STATS | ======== General statistics =========\n"
+        "STATS | Started command: rbh-%s\n"
+        "STATS | Start time: %s (%s ago)\n",
+        current_time_string,
+        command,
+        start_time_string,
+        difftime_buffer
+    );
+    if (rc < 0)
+        return rc;
+
+    *message_avail_size -= rc;
+    return rc;
+}
+
 static void
 print_find_stats(struct rbh_metadata *metadata, time_t current)
 {
@@ -116,45 +165,22 @@ print_fsevents_stats(struct rbh_metadata *metadata, time_t current)
 
 void
 rbh_print_stats(struct rbh_metadata *metadata, enum rbh_stats_type command_type,
-              const char *plugin_name)
+                const char *plugin_name)
 {
-    const char *command = rbh_stats_type2str(command_type);
-    char current_time_string[128];
-    char start_time_string[128];
     time_t current = time(NULL);
-    char difftime_buffer[32];
-    struct tm *current_tm;
-    struct tm *start_tm;
+    size_t message_avail_size;
+    char message[8192];
+    int rc;
 
-    current_tm = localtime(&current);
-    if (!strftime(current_time_string, sizeof(current_time_string),
-                  "%d/%m/%Y %H:%M:%S", current_tm)) {
-        fprintf(stderr,
-                "Cannot print stats for current command, converion of current timestamp failed\n");
+    message_avail_size = sizeof(message);
+
+    rc = print_general_info(metadata, current, command_type,
+                            message, &message_avail_size);
+    if (rc < 0) {
+        fprintf(stderr, "Failed to print general info to buffer");
         return;
     }
-
-    start_tm = localtime(&metadata->common_md.start_time);
-    if (!strftime(start_time_string, sizeof(start_time_string),
-                  "%d/%m/%Y %H:%M:%S", start_tm)) {
-        fprintf(stderr,
-                "Cannot print stats for current command, converion of start timestamp failed\n");
-        return;
-    }
-
-    difftime_printer(difftime_buffer, sizeof(difftime_buffer),
-                     current - metadata->common_md.start_time);
-
-    fprintf(metadata->stats_file,
-        "STATS | =================== Dumping stats at %s ====================\n"
-        "STATS | ======== General statistics =========\n"
-        "STATS | Started command: rbh-%s\n"
-        "STATS | Start time: %s (%s ago)\n",
-        current_time_string,
-        command,
-        start_time_string,
-        difftime_buffer
-    );
+    fprintf(metadata->stats_file, message);
 
     switch (command_type) {
     case RBH_FIND_STATS:
