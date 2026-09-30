@@ -62,17 +62,19 @@ print_general_info(struct rbh_metadata *metadata, time_t current,
     return rc;
 }
 
-static void
-print_find_stats(struct rbh_metadata *metadata, time_t current)
+static int
+print_find_stats(struct rbh_metadata *metadata, time_t current,
+                 char *message, size_t *message_avail_size)
 {
     char exec_success_count_str[512];
+    int rc;
 
     snprintf(exec_success_count_str, sizeof(exec_success_count_str),
         "STATS |      successfully executed command on %ld entries\n",
         metadata->find_md.exec_success_count
     );
 
-    fprintf(metadata->stats_file,
+    rc = snprintf(message, *message_avail_size,
         "STATS | ======== Backend query statistics =========\n"
         "STATS | rbh-find has found:\n"
         "STATS |      %lu entries\n"
@@ -80,16 +82,23 @@ print_find_stats(struct rbh_metadata *metadata, time_t current)
         metadata->find_md.entry_count,
         metadata->find_md.exec_success_count < 0 ? "" : exec_success_count_str
     );
+    if (rc < 0)
+        return rc;
+
+    *message_avail_size -= rc;
+    return rc;
 }
 
-static void
-print_sync_stats(struct rbh_metadata *metadata, time_t current)
+static int
+print_sync_stats(struct rbh_metadata *metadata, time_t current,
+                 char *message, size_t *message_avail_size)
 {
     uint64_t total_entry_count = metadata->sync_md.converted_entries +
                                  metadata->sync_md.skipped_entries;
     uint64_t time_spent = current - metadata->common_md.start_time;
+    int rc;
 
-    fprintf(metadata->stats_file,
+    rc = snprintf(message, *message_avail_size,
         "STATS | ======== Backend scan statistics =========\n"
         "STATS | rbh-sync is running:\n"
         "STATS |      progress: %lu entries scanned (%lu skipped)\n"
@@ -99,15 +108,22 @@ print_sync_stats(struct rbh_metadata *metadata, time_t current)
         time_spent == 0 ? total_entry_count :
                           (double) total_entry_count  / (double) time_spent
     );
+    if (rc < 0)
+        return rc;
+
+    *message_avail_size -= rc;
+    return rc;
 }
 
-static void
-print_gc_stats(struct rbh_metadata *metadata, time_t current)
+static int
+print_gc_stats(struct rbh_metadata *metadata, time_t current,
+               char *message, size_t *message_avail_size)
 {
     uint64_t total_entry_count = metadata->gc_md.total_entry_count;
     uint64_t time_spent = current - metadata->common_md.start_time;
+    int rc;
 
-    fprintf(metadata->stats_file,
+    rc = snprintf(message, *message_avail_size,
         "STATS | ======== Garbage collector statistics =========\n"
         "STATS | rbh-gc is running:\n"
         "STATS |      progress: %lu entries deleted from mirror (%lu kept)\n"
@@ -117,10 +133,16 @@ print_gc_stats(struct rbh_metadata *metadata, time_t current)
         time_spent == 0 ? total_entry_count :
                           (double) total_entry_count  / (double) time_spent
     );
+    if (rc < 0)
+        return rc;
+
+    *message_avail_size -= rc;
+    return rc;
 }
 
-static void
-print_fsevents_stats(struct rbh_metadata *metadata, time_t current)
+static int
+print_fsevents_stats(struct rbh_metadata *metadata, time_t current,
+                     char *message, size_t *message_avail_size)
 {
     struct rbh_fsevents_metadata *fsevents_md = &metadata->fsevents_md;
     uint64_t eu_nsec =
@@ -134,6 +156,7 @@ print_fsevents_stats(struct rbh_metadata *metadata, time_t current)
     uint64_t total_eu_ns;
     uint64_t avg_rd_ns;
     uint64_t avg_eu_ns;
+    int rc;
 
     total_rd_ns = ((uint64_t) rd_sec * 1000000000ULL) + rd_nsec;
     total_eu_ns = ((uint64_t) eu_sec * 1000000000ULL) + eu_nsec;
@@ -142,7 +165,7 @@ print_fsevents_stats(struct rbh_metadata *metadata, time_t current)
     avg_eu_ns = total_eu_ns / fsevents_md->changelog_read;
     avg_eu_ns = avg_eu_ns / fsevents_md->worker_count;
 
-    fprintf(metadata->stats_file,
+    rc = snprintf(message, *message_avail_size,
         "STATS | ======== Backend update statistics =========\n"
         "STATS | rbh-fsevents is running:\n"
         "STATS |      progress: %lu changelog read\n"
@@ -161,6 +184,34 @@ print_fsevents_stats(struct rbh_metadata *metadata, time_t current)
                           (double) fsevents_md->changelog_read  /
                             (double) time_spent
     );
+    if (rc < 0)
+        return rc;
+
+    *message_avail_size -= rc;
+    return rc;
+}
+
+static int
+print_command_info(struct rbh_metadata *metadata, time_t current,
+                   enum rbh_stats_type command_type,
+                   char *message, size_t *message_avail_size)
+{
+    switch (command_type) {
+    case RBH_FIND_STATS:
+        return print_find_stats(metadata, current, message, message_avail_size);
+    case RBH_FSEVENTS_STATS:
+        return print_fsevents_stats(metadata, current,
+                                    message, message_avail_size);
+    case RBH_GC_STATS:
+        return print_gc_stats(metadata, current, message, message_avail_size);
+    case RBH_SYNC_STATS:
+        return print_sync_stats(metadata, current, message, message_avail_size);
+    default:
+        /* Nothing particular to print for rbh-report */
+        break;
+    }
+
+    return 0;
 }
 
 void
@@ -169,10 +220,12 @@ rbh_print_stats(struct rbh_metadata *metadata, enum rbh_stats_type command_type,
 {
     time_t current = time(NULL);
     size_t message_avail_size;
-    char message[8192];
+    char _message[8192];
+    char *message;
     int rc;
 
-    message_avail_size = sizeof(message);
+    message = _message;
+    message_avail_size = sizeof(_message);
 
     rc = print_general_info(metadata, current, command_type,
                             message, &message_avail_size);
@@ -180,25 +233,16 @@ rbh_print_stats(struct rbh_metadata *metadata, enum rbh_stats_type command_type,
         fprintf(stderr, "Failed to print general info to buffer");
         return;
     }
-    fprintf(metadata->stats_file, message);
 
-    switch (command_type) {
-    case RBH_FIND_STATS:
-        print_find_stats(metadata, current);
-        break;
-    case RBH_FSEVENTS_STATS:
-        print_fsevents_stats(metadata, current);
-        break;
-    case RBH_GC_STATS:
-        print_gc_stats(metadata, current);
-        break;
-    case RBH_SYNC_STATS:
-        print_sync_stats(metadata, current);
-        break;
-    default:
-        /* Nothing particular to print for rbh-report */
-        break;
+    message = &_message[sizeof(_message) - message_avail_size];
+    rc = print_command_info(metadata, current, command_type,
+                            message, &message_avail_size);
+    if (rc < 0) {
+        fprintf(stderr, "Failed to print command info to buffer");
+        return;
     }
+
+    fprintf(metadata->stats_file, message);
 
     if (metadata->plugin_md) {
         const struct rbh_backend_plugin *plugin;
