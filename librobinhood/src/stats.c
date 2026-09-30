@@ -214,6 +214,45 @@ print_command_info(struct rbh_metadata *metadata, time_t current,
     return 0;
 }
 
+static int
+print_plugin_info(struct rbh_metadata *metadata, const char *plugin_name,
+                   char *message, size_t *message_avail_size)
+{
+    const struct rbh_backend_plugin *plugin;
+    char buffer[4096];
+    int rc;
+
+    plugin = rbh_backend_plugin_import(plugin_name);
+    if (plugin == NULL) {
+        if (errno == RBH_BACKEND_ERROR)
+            error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
+
+        error(EXIT_FAILURE, errno,
+              "failed to load robinhood plugin %s", plugin_name);
+    }
+
+    if (rbh_pe_common_ops_print_stats(plugin->common_ops,
+                                      metadata->plugin_md, buffer,
+                                      sizeof(buffer)) < 0) {
+        fprintf(stderr,
+                "Cannot print plugin-specific stats for plugin '%s'\n",
+                plugin_name);
+        return -1;
+    }
+
+    rc = snprintf(message, *message_avail_size,
+        "STATS | ======== Plugin '%s' statistics =========\n"
+        "%s\n",
+        plugin->plugin.name,
+        buffer
+    );
+    if (rc < 0)
+        return rc;
+
+    *message_avail_size -= rc;
+    return rc;
+}
+
 void
 rbh_print_stats(struct rbh_metadata *metadata, enum rbh_stats_type command_type,
                 const char *plugin_name)
@@ -242,39 +281,19 @@ rbh_print_stats(struct rbh_metadata *metadata, enum rbh_stats_type command_type,
         return;
     }
 
-    fprintf(metadata->stats_file, message);
+    message = &_message[sizeof(_message) - message_avail_size];
 
     if (metadata->plugin_md) {
-        const struct rbh_backend_plugin *plugin;
-        char buffer[4096];
-
-        plugin = rbh_backend_plugin_import(plugin_name);
-        if (plugin == NULL) {
-            if (errno == RBH_BACKEND_ERROR)
-                error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
-
-            error(EXIT_FAILURE, errno,
-                  "failed to load robinhood plugin %s", plugin_name);
-        }
-
-        if (rbh_pe_common_ops_print_stats(plugin->common_ops,
-                                          metadata->plugin_md, buffer,
-                                          sizeof(buffer)) < 0) {
-            fprintf(stderr,
-                    "Cannot print plugin-specific stats for plugin '%s'\n",
-                    plugin_name);
+        rc = print_plugin_info(metadata, plugin_name,
+                                message, &message_avail_size);
+        if (rc < 0) {
+            fprintf(stderr, "Failed to print plugin info to buffer");
             return;
         }
-
-        fprintf(metadata->stats_file,
-            "STATS | ======== Plugin '%s' statistics =========\n"
-            "%s\n",
-            plugin->plugin.name,
-            buffer
-        );
+        message = &_message[sizeof(_message) - message_avail_size];
     }
 
-    fprintf(metadata->stats_file, "\n");
+    fprintf(metadata->stats_file, "%s\n", _message);
 
     metadata->last_shown_time = current;
 }
