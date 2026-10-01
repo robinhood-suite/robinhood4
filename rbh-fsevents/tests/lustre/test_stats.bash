@@ -29,19 +29,19 @@ test_invalid_stat_options()
     return 0
 }
 
-test_stats()
+find_expected_values()
 {
-    touch test_entry
-
-    local output="$(rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
-        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats 2>&1 | tail -n 12)"
+    local output="$1"
+    local changelog_read="$2"
+    local worker_count="$3"
 
     echo "$output" | grep "rbh-fsevents" > /dev/null ||
         error "Invalid output, missing 'rbh-fsevents' command, got '$output'"
-    echo "$output" | grep "changelog read" | grep "2" > /dev/null ||
-        error "Invalid changelog read count, got '$output', expected '2'"
-    echo "$output" | grep "worker" | grep "1" > /dev/null ||
-        error "Invalid worker count, got '$output', expected '1'"
+    echo "$output" | grep "changelog read" |
+        grep "$changelog_read" > /dev/null ||
+        error "Invalid changelog read count, got '$output', expected '$changelog_read'"
+    echo "$output" | grep "worker" | grep "$worker_count" > /dev/null ||
+        error "Invalid worker count, got '$output', expected '$worker_count'"
     echo "$output" | grep "sec/changelog" | wc -l | grep "1" > /dev/null ||
         error "Invalid output, missing 1 'sec/changelog' line, got '$output'"
     echo "$output" | grep "sec/worker/changelog" | wc -l |
@@ -49,6 +49,15 @@ test_stats()
         error "Invalid output, missing 1 'sec/worker/changelog' line, got '$output'"
     echo "$output" | grep "changelog/sec" | wc -l | grep "1" > /dev/null ||
         error "Invalid output, missing 1 'changelog/sec' line, got '$output'"
+}
+
+test_stats()
+{
+    touch test_entry
+
+    local output="$(rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats 2>&1 | tail -n 12)"
+    find_expected_values "$output" 2 1
 
     mkdir blob
     rm test_entry
@@ -61,44 +70,36 @@ test_stats()
         src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats --nb-workers 4 2>&1 |
         tail -n 12)"
     local count="$(lfs changelog $LUSTRE_MDT $userid | wc -l)"
-
-    echo "$output" | grep "rbh-fsevents" > /dev/null ||
-        error "Invalid output, missing 'rbh-fsevents' command, got '$output'"
-    echo "$output" | grep "changelog read" | grep "$count" > /dev/null ||
-        error "Invalid changelog read count, got '$output', expected '$count'"
-    echo "$output" | grep "worker" | grep "4" > /dev/null ||
-        error "Invalid worker count, got '$output', expected '4'"
-    echo "$output" | grep "sec/changelog" | wc -l | grep "1" > /dev/null ||
-        error "Invalid output, missing 1 'sec/changelog' line, got '$output'"
-    echo "$output" | grep "sec/worker/changelog" | wc -l |
-        grep "1" > /dev/null ||
-        error "Invalid output, missing 1 'sec/worker/changelog' line, got '$output'"
-    echo "$output" | grep "changelog/sec" | wc -l | grep "1" > /dev/null ||
-        error "Invalid output, missing 1 'changelog/sec' line, got '$output'"
+    find_expected_values "$output" "$count" 4
 
     rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" src:lustre:"$LUSTRE_MDT" \
         "rbh:$db:$testdb" --stats --nb-workers 4 --stats-file logs.txt
     count="$(lfs changelog $LUSTRE_MDT $userid | wc -l)"
     output="$(cat logs.txt | tail -n 12)"
-
-    echo "$output" | grep "rbh-fsevents" > /dev/null ||
-        error "Invalid output, missing 'rbh-fsevents' command, got '$output'"
     # $count - 1 because the file logs.txt is created by the command, thus it
     # adds an CREAT changelog to be read, but it is closed after everything is
     # read, so the corresponding CLOSE changelog is not handled by rbh-fsevents,
     # so the command only reads $count - 1 changelogs.
-    echo "$output" | grep "changelog read" |
-        grep "$((count - 1))" > /dev/null ||
-        error "Invalid changelog read count, got '$output', expected '$((count - 1))'"
-    echo "$output" | grep "worker" | grep "4" > /dev/null ||
-        error "Invalid worker count, got '$output', expected '4'"
-    echo "$output" | grep "sec/changelog" | wc -l | grep "1" > /dev/null ||
-        error "Invalid output, missing 1 'sec/changelog' line, got '$output'"
-    echo "$output" | grep "sec/worker/changelog" | wc -l |
-        grep "1" > /dev/null ||
-        error "Invalid output, missing 1 'sec/worker/changelog' line, got '$output'"
-    echo "$output" | grep "changelog/sec" | wc -l | grep "1" > /dev/null ||
-        error "Invalid output, missing 1 'changelog/sec' line, got '$output'"
+    find_expected_values "$output" "$((count - 1))" 4
+
+    output="$(rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+                src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
+                --stats --nb-workers 4 --stats-file syslog 2>&1)"
+    # Remove the normal stderr lines associated with the exec failures, the
+    # actual stdout lines of the exec success, and then the 'RobinHood4[<pid>]'
+    # header syslog adds.
+    output="$(echo "${output#*: }")"
+    journalctl --sync
+    local syslog_output="$(journalctl -t RobinHood4 -o cat)"
+
+    journalctl -t RobinHood4 --rotate
+    journalctl -t RobinHood4 --vacuum-time=10s
+
+    find_expected_values "$output" "$count" 4
+    if [ "$output" != "$syslog_output" ]; then
+        error "Syslog output and stderr should have been the same," \
+              "got syslog '$syslog_output' and stderr '$output'"
+    fi
 }
 
 ################################################################################

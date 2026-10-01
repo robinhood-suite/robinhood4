@@ -33,6 +33,23 @@ test_stats()
     rbh_report --stats --stats-file logs.txt rbh:$db:$testdb --output "count()"
     output="$(cat logs.txt)"
     find_expected_values "$output"
+
+    output="$(rbh_report --stats --stats-file syslog rbh:$db:$testdb \
+                --output "count()" 2>&1 1>/dev/null)"
+
+    # Remove the 'RobinHood4[<pid>]' header syslog adds.
+    output="$(echo "${output#*: }")"
+    journalctl --sync
+    local syslog_output="$(journalctl -t RobinHood4 -o cat)"
+
+    journalctl -t RobinHood4 --rotate
+    journalctl -t RobinHood4 --vacuum-time=10s
+
+    find_expected_values "$output"
+    if [ "$output" != "$syslog_output" ]; then
+        error "Syslog output and stderr should have been the same," \
+              "got syslog '$syslog_output' and stderr '$output'"
+    fi
 }
 
 ################################################################################

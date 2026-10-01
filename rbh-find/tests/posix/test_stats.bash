@@ -42,7 +42,7 @@ test_stats()
     # 9*9 + 9 + root
     find_expected_values "$output" 91
 
-    rbh_find --stats --stats-file logs.txt rbh:$db:$testdb
+    rbh_find --stats --stats-file logs.txt rbh:$db:$testdb > /dev/null
     output="$(cat logs.txt)"
     find_expected_values "$output" 91
 
@@ -50,6 +50,24 @@ test_stats()
     # 9*9 + 9 + root, and only 10 directories have a directory named '1' inside
     # of them, the top ones + root.
     find_expected_values "$output" 91 10
+
+    output="$(rbh_find --stats --stats-file syslog rbh:$db:$testdb \
+                -exec ls {}/1 ";" 2>&1 1>/dev/null)"
+    # Remove the normal stderr lines associated with the exec failures and the
+    # 'RobinHood4[<pid>]' header syslog adds.
+    output="$(echo "$output" | sed '/cannot access/d')"
+    output="$(echo "${output#*: }")"
+    journalctl --sync
+    local syslog_output="$(journalctl -t RobinHood4 -o cat)"
+
+    journalctl -t RobinHood4 --rotate
+    journalctl -t RobinHood4 --vacuum-time=10s
+
+    find_expected_values "$output" 91 10
+    if [ "$output" != "$syslog_output" ]; then
+        error "Syslog output and stderr should have been the same," \
+              "got syslog '$syslog_output' and stderr '$output'"
+    fi
 }
 
 ################################################################################
