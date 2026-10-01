@@ -293,7 +293,10 @@ rbh_print_stats(struct rbh_metadata *metadata, enum rbh_stats_type command_type,
         message = &_message[sizeof(_message) - message_avail_size];
     }
 
-    fprintf(metadata->stats_file, "%s\n", _message);
+    if (metadata->syslog)
+        syslog(LOG_INFO, "%s\n", _message);
+    else
+        fprintf(metadata->stats_file, "%s\n", _message);
 
     metadata->last_shown_time = current;
 }
