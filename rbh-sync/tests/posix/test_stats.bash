@@ -64,6 +64,25 @@ test_stats()
     output="$(cat logs.txt)"
     # 94 + 1 because of logs.txt
     find_expected_values "$output" 95 3
+
+    output="$(rbh_sync rbh:posix:. rbh:$db:$testdb \
+                --stats --stats-file syslog 2>&1)"
+    # Need to remove up to the first space because with syslog we remove the
+    # header (using '-o cat'), and when printing to stderr, syslog adds an
+    # initial "RobinHood4[<pid>]: " to the string. So we have to remove that
+    # part to make sure the strings match exactly.
+    output="$(echo "${output#*: }")"
+    local syslog_output="$(journalctl -t RobinHood4 -o cat)"
+
+    # Clean the journalctl logs to ensure future tests do not strumble on those
+    journalctl -t RobinHood4 --rotate
+    journalctl -t RobinHood4 --vacuum-time=10s
+
+    find_expected_values "$output" 95 3
+    if [ "$output" != "$syslog_output" ]; then
+        error "Syslog output and stderr should have been the same," \
+              "got syslog '$syslog_output' and stderr '$output'"
+    fi
 }
 
 test_mpi_stats()

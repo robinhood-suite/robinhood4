@@ -20,11 +20,26 @@ test_invalid_stat_options()
     return 0
 }
 
+find_expected_values()
+{
+    local output="$1"
+    local deleted="$2"
+    local kept="$3"
+
+    echo "$output" | grep "rbh-gc" > /dev/null ||
+        error "Invalid command in stats, got '$output', expected 'rbh-gc'"
+    echo "$output" | grep "progress" | grep "$deleted entries deleted" > /dev/null ||
+        error "Invalid progress stats, got '$output', expected '$deleted entries deleted'"
+    echo "$output" | grep "progress" | grep "$kept kept" > /dev/null ||
+        error "Invalid progress stats, got '$output', expected '$kept kept'"
+}
+
 test_stats()
 {
     touch fileA
     ln fileA fileB
     touch fileC
+    touch fileD
 
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
@@ -37,25 +52,29 @@ test_stats()
     rm fileB
 
     local output="$(rbh_gc "rbh:$db:$testdb" --stats 2>&1)"
-
-    echo "$output" | grep "rbh-gc" > /dev/null ||
-        error "Invalid command in stats, got '$output', expected 'rbh-gc'"
-    echo "$output" | grep "progress" | grep "2 entries deleted" > /dev/null ||
-        error "Invalid progress stats, got '$output', expected '2 entries deleted'"
-    echo "$output" | grep "progress" | grep "2 kept" > /dev/null ||
-        error "Invalid progress stats, got '$output', expected '2 kept'"
+    find_expected_values "$output" 2 3
 
     rm fileC
 
     rbh_gc "rbh:$db:$testdb" --stats --stats-file logs.txt
     output="$(cat logs.txt)"
+    find_expected_values "$output" 1 2
 
-    echo "$output" | grep "rbh-gc" > /dev/null ||
-        error "Invalid command in stats, got '$output', expected 'rbh-gc'"
-    echo "$output" | grep "progress" | grep "1 entries deleted" > /dev/null ||
-        error "Invalid progress stats, got '$output', expected '1 entries deleted'"
-    echo "$output" | grep "progress" | grep "1 kept" > /dev/null ||
-        error "Invalid progress stats, got '$output', expected '1 kept'"
+    rm fileD
+
+    output="$(rbh_gc "rbh:$db:$testdb" --stats --stats-file syslog 2>&1)"
+    # Remove the 'RobinHood4[<pid>]' header syslog adds.
+    output="$(echo "${output#*: }")"
+    local syslog_output="$(journalctl -t RobinHood4 -o cat)"
+
+    journalctl -t RobinHood4 --rotate
+    journalctl -t RobinHood4 --vacuum-time=10s
+
+    find_expected_values "$output" 1 1
+    if [ "$output" != "$syslog_output" ]; then
+        error "Syslog output and stderr should have been the same," \
+              "got syslog '$syslog_output' and stderr '$output'"
+    fi
 }
 
 declare -a tests=(test_invalid_stat_options test_stats)
