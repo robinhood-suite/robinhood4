@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afbfc2c0_1a9cad31",
+        "filename": "rbh-log/rbh-log.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-10-09T07:57:01Z",
+      "side": 1,
+      "message": "typo: unclear",
+      "range": {
+        "startLine": 46,
+        "startChar": 47,
+        "endLine": 46,
+        "endChar": 51
+      },
+      "revId": "ba7afd562a180136c98818e1be9cb8f445d0f5b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
