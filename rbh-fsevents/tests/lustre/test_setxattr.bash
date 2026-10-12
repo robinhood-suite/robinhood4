@@ -154,13 +154,63 @@ xattrs_map:
     find_attribute '"xattrs.user.blob": "toto"' '"ns.name":"'$entry'"'
 }
 
+test_setxattr_unparseable_value()
+{
+    mongo_only_test "the empty XATTR fsevent only fails on the mongodb backend"
+
+    local entry="test_file"
+    local entry2="test_file2"
+    local conf_file="conf"
+
+    touch "$entry"
+
+    echo "---
+backends:
+    lustre:
+        extends: posix
+        enrichers:
+            - lustre
+xattrs_map:
+    user.blob: int32
+---" > $conf_file
+
+    rbh_fsevents --config $conf_file --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT"?ack-user=$userid "rbh:$db:$testdb"
+
+    clear_changelogs "$LUSTRE_MDT" "$userid"
+
+    # The value of user.blob does not match the type declared in xattrs_map,
+    # so the enrichment of the CL_XATTR record fails and leaves an XATTR
+    # fsevent with no xattr to update. The backend must treat it as a no-op
+    # instead of failing the whole batch, so the changelog is still
+    # acknowledged, and the second entry should be created.
+    setfattr -n user.blob -v toto "$entry"
+    touch "$entry2"
+
+    rbh_fsevents --config $conf_file -w 1 -b 10 \
+        --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT"?ack-user=$userid "rbh:$db:$testdb"
+
+    local count=$(lfs changelog $LUSTRE_MDT | wc -l)
+    if [[ $count -ne 0 ]]; then
+        error "All changelogs should have been acknowledged, got $count left"
+    fi
+
+    verify_statx "$entry"
+    find_attribute '"xattrs.user":{$exists: false}' '"ns.name":"'$entry'"'
+
+    # $entry2 was created after the unparseable setfattr, in the same batch as
+    # the empty XATTR fsevent: it must not have been dropped along with it.
+    verify_statx "$entry2"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_setxattr test_setxattr_remove
                   test_check_last_setxattr_is_inserted test_setxattr_replace
-                  test_setxattr_with_typing)
+                  test_setxattr_with_typing test_setxattr_unparseable_value)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"

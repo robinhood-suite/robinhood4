@@ -599,6 +599,13 @@ mongo_bulk_init_from_fsevents(mongoc_bulk_operation_t *bulk,
             return -1;
         }
 
+        /* An XATTR event without any xattr to update is a no-op: appending it
+         * would fail (no update operator to build from) and abort the whole
+         * bulk operation.
+         */
+        if (fsevent->type == RBH_FET_XATTR && fsevent->xattrs.count == 0)
+            continue;
+
         if (!mongo_bulk_append_fsevent(bulk, fsevent))
             return -1;
         count++;
