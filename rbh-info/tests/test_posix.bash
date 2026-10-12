@@ -47,8 +47,11 @@ test_retention_source()
 }
 
 test_posix_config() {
+    mongo_only_test
+
     cat > test_conf.yaml <<EOF
-mongodb_address: "mongodb://toto:27017"
+mongo:
+    address: "mongodb://localhost:1/?serverSelectionTimeoutMS=1000"
 EOF
 
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
@@ -57,8 +60,25 @@ EOF
     echo "$output" | grep "posix" ||
         error "Only the POSIX backend should have been registered"
 
-    rbh_info -c test_conf.yaml rbh:$db:$testdb -b ||
-        error "rbh_info should have failed"
+    rbh_info -c test_conf.yaml "rbh:$db:$testdb" -b &&
+        error "rbh_info should have failed to connect to the mongo address " \
+              "of the configuration file given with -c"
+}
+
+test_default_config() {
+    mongo_only_test
+
+    cat > test_default_conf.yaml <<EOF
+mongo:
+    address: "mongodb://localhost:1/?serverSelectionTimeoutMS=1000"
+EOF
+
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    RBH_CONFIG_PATH="$PWD/test_default_conf.yaml" \
+        rbh_info "rbh:$db:$testdb" -b &&
+        error "rbh_info should have failed to connect to the mongo address " \
+              "of the default configuration file"
 }
 
 ################################################################################
@@ -66,7 +86,7 @@ EOF
 ################################################################################
 
 declare -a tests=(test_posix_source test_retention_source
-                  test_posix_config)
+                  test_posix_config test_default_config)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT

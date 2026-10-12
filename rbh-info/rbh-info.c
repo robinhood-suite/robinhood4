@@ -104,14 +104,6 @@ apply_command_options(int argc, char *argv[])
             exit(0);
         }
 
-        if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--config") == 0) {
-            if (i + 1 >= argc)
-                error(EXIT_FAILURE, EINVAL,
-                      "missing configuration file value");
-
-            rbh_config_load_from_path(argv[i + 1]);
-        }
-
         if (strcmp(argv[i], "-l") == 0 || strcmp(argv[i], "--list") == 0) {
             list_plugins_and_extensions();
             exit(0);
@@ -172,6 +164,9 @@ main(int _argc, char **_argv)
 
     nb_cli_args = rbh_count_args_before_uri(_argc, _argv);
     apply_command_options(nb_cli_args, _argv);
+
+    if (rbh_config_from_args(nb_cli_args, _argv))
+        error(EXIT_FAILURE, errno, "failed to open configuration file");
 
     if (nb_cli_args == _argc) {
         argc = _argc - 1;
