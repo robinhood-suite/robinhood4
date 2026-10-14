@@ -56,7 +56,7 @@ test_stats()
     touch test_entry
 
     local output="$(rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
-        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats 2>&1 | tail -n 12)"
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats 2>&1 | tail -n 39)"
     find_expected_values "$output" 2 1
 
     mkdir blob
@@ -68,14 +68,14 @@ test_stats()
 
     output="$(rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
         src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats --nb-workers 4 2>&1 |
-        tail -n 12)"
+        tail -n 39)"
     local count="$(lfs changelog $LUSTRE_MDT $userid | wc -l)"
     find_expected_values "$output" "$count" 4
 
     rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" src:lustre:"$LUSTRE_MDT" \
         "rbh:$db:$testdb" --stats --nb-workers 4 --stats-file logs.txt
     count="$(lfs changelog $LUSTRE_MDT $userid | wc -l)"
-    output="$(cat logs.txt | tail -n 12)"
+    output="$(cat logs.txt | tail -n 39)"
     # $count - 1 because the file logs.txt is created by the command, thus it
     # adds an CREAT changelog to be read, but it is closed after everything is
     # read, so the corresponding CLOSE changelog is not handled by rbh-fsevents,
