@@ -156,6 +156,7 @@ print_fsevents_stats(struct rbh_metadata *metadata, time_t current,
     uint64_t total_eu_ns;
     uint64_t avg_rd_ns;
     uint64_t avg_eu_ns;
+    int rc2;
     int rc;
 
     total_rd_ns = ((uint64_t) rd_sec * 1000000000ULL) + rd_nsec;
@@ -188,7 +189,13 @@ print_fsevents_stats(struct rbh_metadata *metadata, time_t current,
         return rc;
 
     *message_avail_size -= rc;
-    return rc;
+
+    rc2 = fsevents_md->print_source_stats(fsevents_md, &message[rc],
+                                          message_avail_size);
+    if (rc2 < 0)
+        return rc2;
+
+    return rc + rc2;
 }
 
 static int

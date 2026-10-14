@@ -25,11 +25,12 @@ extra_args = []
 
 if get_option('lustre').enabled()
     extra_sources += [
+        'src/enrichers/posix/lustre.c',
+        'src/sources/lustre/ack.c',
         'src/sources/lustre/lustre.c',
         'src/sources/lustre/lustre_utils.c',
         'src/sources/lustre/source_reader.c',
-        'src/sources/lustre/ack.c',
-        'src/enrichers/posix/lustre.c',
+        'src/sources/lustre/stats.c',
     ]
     extra_args += ['-DHAVE_LUSTRE']
     extra_dependencies += [ liblustre ]
