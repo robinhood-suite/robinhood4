@@ -67,7 +67,8 @@ lustre_changelog_get_start_idx(struct lustre_changelog_iterator *events,
 
 static void
 lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
-                           const char *username, const char *dump_file,
+                           const char *username,
+                           const char *dump_file,
                            uint64_t max_changelog,
                            struct rbh_fsevents_metadata *fsevents_md,
                            struct sink *sink)
@@ -80,6 +81,9 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
     events->fsevents_md->changelog_read = 0;
     events->sink = sink;
     events->empty = false;
+
+    fsevents_md->source_md = xcalloc(1, sizeof(struct lustre_source_md));
+    fsevents_md->print_source_stats = print_lustre_source_md;
 
     if (fsevents_md->start_index < 0) {
         uint64_t db_index = 0;

@@ -706,12 +706,14 @@ lustre_changelog_iter_next(void *iterator)
     struct lustre_changelog_iterator *records = iterator;
     struct rbh_iterator *fsevents_iterator;
     const struct rbh_fsevent *to_return;
+    struct lustre_source_md *lustre_md;
     uint32_t statx_enrich_mask = 0;
     struct changelog_rec *record;
     struct rbh_id *id;
     int save_errno;
     int rc;
 
+    lustre_md = records->fsevents_md->source_md;
     fsevents_iterator = records->fsevents_iterator;
 
     if (fsevents_iterator) {
@@ -755,6 +757,12 @@ retry:
         rc = -1;
         goto end_event;
     }
+
+    /** Check the 'cr_type' in case new records are added by Lustre but are
+     * unknown to us, which could segfault.
+     */
+    if (record->cr_type < CL_LAST)
+        lustre_md->changelog_count[record->cr_type]++;
 
     switch (record->cr_type) {
     case CL_CREATE:
