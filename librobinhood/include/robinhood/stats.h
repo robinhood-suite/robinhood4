@@ -36,6 +36,10 @@ struct rbh_fsevents_metadata {
     size_t enrich_skip_count;
     size_t deduplicated_event_amount;
     size_t event_amount;
+
+    void *source_md;
+    int (*print_source_stats)(struct rbh_fsevents_metadata *, char *message,
+                              size_t *message_avail_size);
 };
 
 struct rbh_find_metadata {
