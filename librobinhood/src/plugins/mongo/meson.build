@@ -23,6 +23,7 @@ librbh_mongo = library(
         'plugin.c',
         'projection.c',
         'statx.c',
+        'timeout.c',
         'value.c',
         'xattrs.c',
     ],

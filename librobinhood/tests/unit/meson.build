@@ -37,6 +37,18 @@ foreach t: ['check_posix']
          suite: 'librobinhood')
 endforeach
 
+foreach t: ['check_timeout']
+    test(t,
+         executable(t, t + '.c',
+                    dependencies: [check, miniyaml, libmongoc, libbson],
+                    link_with: [librobinhood, librbh_mongo],
+                    include_directories: [rbh_include,
+                        include_directories('../../src/plugins/mongo')],
+                    c_args: '-DHAVE_CONFIG_H'),
+         env: backend_path_env,
+         suite: 'librobinhood')
+endforeach
+
 foreach t: ['check_retention']
     test(t,
          executable(t, t + '.c',
