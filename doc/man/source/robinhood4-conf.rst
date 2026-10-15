@@ -126,7 +126,13 @@ MONGO
 You can define Mongo specific attributes in the `mongo` section of the
 configuration file. These attributes can be:
  - `address`: the connection string to connect to the Mongo database and how
- - `cursor_timeout`: the timeout of the libmongoc cursor
+ - `read_socket_timeout`: the network socket timeout in milliseconds, used when
+   the backend is opened in read-only mode (`rbh-find`, `rbh-report`...).
+   Defaults to 0, which means "practically unlimited": it is translated to
+   `INT32_MAX` (~24.8 days)
+ - `write_socket_timeout`: the network socket timeout, in milliseconds, used
+   when the backend is opened in write mode (`rbh-sync`, `rbh-fsevents`, ...)
+   Defaults to 600000 (10 minutes).
 
 RETENTION
 +++++++++
