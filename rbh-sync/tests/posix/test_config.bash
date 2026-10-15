@@ -95,6 +95,15 @@ test_complete_config()
               "failed"
 
     echo "---
+ mongo:
+     write_socket_timeout: !int32 -1
+---" > $conf_file
+
+    rbh_sync --config $conf_file --one rbh:posix:$file rbh:$db:$testdb &&
+        error "Sync with negative write_socket_timeout in config should have" \
+              "failed"
+
+    echo "---
 xattrs_map:
     user.blob_int32: int32
     user.blob_int64: int64

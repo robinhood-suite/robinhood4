@@ -30,6 +30,7 @@
 #include "value.h"
 
 #include "mongo.h"
+#include "timeout.h"
 
 /* libmongoc imposes that mongoc_init() be called before any other mongoc_*
  * function; and mongoc_cleanup() after the last one.
@@ -1432,7 +1433,6 @@ static const struct rbh_backend MONGO_BACKEND = {
  *----------------------------------------------------------------------------*/
 
 #define MONGODB_ADDRESS_KEY "address"
-#define MONGODB_CURSOR_TIMEOUT "cursor_timeout"
 
 static const char *
 get_mongo_addr()
@@ -1450,24 +1450,9 @@ get_mongo_addr()
     return value.string;
 }
 
-static int32_t
-get_cursor_timeout()
-{
-    struct rbh_value value = { 0 };
-    enum key_parse_result rc;
-
-    rc = rbh_config_find("mongo/"MONGODB_CURSOR_TIMEOUT, &value, RBH_VT_INT32);
-    if (rc == KPR_ERROR)
-        return -1;
-
-    if ((rc == KPR_FOUND && value.int32 == 0) || rc == KPR_NOT_FOUND)
-        value.int32 = INT32_MAX;
-
-    return value.int32;
-}
-
 static int
-mongo_backend_init(struct mongo_backend *mongo, const struct rbh_uri *uri)
+mongo_backend_init(struct mongo_backend *mongo, const struct rbh_uri *uri,
+                   bool read_only)
 {
     mongoc_uri_t *mongo_uri;
     const char *addr;
@@ -1515,9 +1500,11 @@ mongo_backend_init(struct mongo_backend *mongo, const struct rbh_uri *uri)
         return -1;
     }
 
-    timeout = get_cursor_timeout();
-    if (timeout == -1)
+    timeout = mongo_socket_timeout_from_config(read_only);
+    if (timeout == -1) {
+        mongoc_uri_destroy(mongo_uri);
         return -1;
+    }
 
     if (!mongoc_uri_set_option_as_int32(mongo_uri, MONGOC_URI_SOCKETTIMEOUTMS,
                                         timeout)) {
@@ -1545,7 +1532,7 @@ rbh_mongo_backend_new(const struct rbh_backend_plugin *self,
 
     rbh_config_load(config);
 
-    if (mongo_backend_init(mongo, uri)) {
+    if (mongo_backend_init(mongo, uri, read_only)) {
         int save_errno = errno;
 
         free(mongo);
