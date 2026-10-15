@@ -7,9 +7,14 @@ mongo:
     # more information about connection string.
     address: "mongodb://localhost:27017"
 
-    # Parameter to specify the libmongoc cursor timeout in milliseconds.
-    # If not set or set to 0, the mongo backend will use INT32_MAX as timeout.
-    cursor_timeout: !int32 0
+    # Network socket timeout, in milliseconds, of the mongo backend when it is
+    # opened in read-only mode (rbh-find, rbh-report...).
+    # 0 means "practically unlimited" (translated to INT32_MAX, ~24.8 days).
+    read_socket_timeout: !int32 0
+
+    # Network socket timeout, in milliseconds, of the mongo backend when it is
+    # opened in write mode (rbh-sync, rbh-fsevents.
+    write_socket_timeout: !int32 600000
 
 # Map to indicate the type of each xattrs expected to find and to use the
 # appropriate type to store them in Mongo. If not set, all xattrs will be stored
