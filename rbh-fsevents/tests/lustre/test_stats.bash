@@ -34,6 +34,7 @@ find_expected_values()
     local output="$1"
     local changelog_read="$2"
     local worker_count="$3"
+    local close_count="$4"
 
     echo "$output" | grep "rbh-fsevents" > /dev/null ||
         error "Invalid output, missing 'rbh-fsevents' command, got '$output'"
@@ -49,6 +50,25 @@ find_expected_values()
         error "Invalid output, missing 1 'sec/worker/changelog' line, got '$output'"
     echo "$output" | grep "changelog/sec" | wc -l | grep "1" > /dev/null ||
         error "Invalid output, missing 1 'changelog/sec' line, got '$output'"
+
+    local changelogs="$(echo "$output" | tail -n 25)"
+    while IFS= read -r line; do
+        local type="$(echo "$line" | cut -d':' -f1 | cut -d'|' -f2 | xargs)"
+        local count="$(echo "$line" | cut -d':' -f2 | xargs)"
+        local count_lfs_types="$(lfs changelog $LUSTRE_MDT | grep "$type" |
+                                 wc -l)"
+
+        if [ -z "$count_lfs_types" ] && [ "$count" != "0" ]; then
+            error "No changelog of type '$type' should have been found, got '$count'"
+        fi
+
+        if [ "$type" == "CLOSE" ] && [ ! -z "$close_count" ]; then
+            (( count != close_count )) &&
+                error "Expected '$close_count' changelogs of type 'CLOSE', got '$count'"
+        elif (( count != count_lfs_types )); then
+            error "Expected '$count_lfs_types' changelogs of type '$type', got '$count'"
+        fi
+    done <<< "$changelogs"
 }
 
 test_stats()
@@ -56,7 +76,8 @@ test_stats()
     touch test_entry
 
     local output="$(rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
-        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats 2>&1 | tail -n 39)"
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
+        --stats --stats-interval 0 2>&1)"
     find_expected_values "$output" 2 1
 
     mkdir blob
@@ -67,8 +88,8 @@ test_stats()
     lfs mkdir dir
 
     output="$(rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
-        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats --nb-workers 4 2>&1 |
-        tail -n 39)"
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats --stats-interval 0 \
+        --nb-workers 4 2>&1)"
     local count="$(lfs changelog $LUSTRE_MDT $userid | wc -l)"
     find_expected_values "$output" "$count" 4
 
@@ -80,11 +101,12 @@ test_stats()
     # adds an CREAT changelog to be read, but it is closed after everything is
     # read, so the corresponding CLOSE changelog is not handled by rbh-fsevents,
     # so the command only reads $count - 1 changelogs.
-    find_expected_values "$output" "$((count - 1))" 4
+    find_expected_values "$output" "$((count - 1))" 4 4
 
     output="$(rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
                 src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
-                --stats --nb-workers 4 --stats-file syslog 2>&1)"
+                --stats --stats-interval 0 \
+                --nb-workers 4 --stats-file syslog 2>&1)"
     # Remove the normal stderr lines associated with the exec failures, the
     # actual stdout lines of the exec success, and then the 'RobinHood4[<pid>]'
     # header syslog adds.
