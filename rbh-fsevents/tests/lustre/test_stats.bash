@@ -49,6 +49,20 @@ find_expected_values()
         error "Invalid output, missing 1 'sec/worker/changelog' line, got '$output'"
     echo "$output" | grep "changelog/sec" | wc -l | grep "1" > /dev/null ||
         error "Invalid output, missing 1 'changelog/sec' line, got '$output'"
+
+    # Use '$changelog_read' here because of the 'logs.txt' CLOSE not being
+    # handled by the rbh-fsevents run, meaning there's one close that cannot be
+    # matched here.
+    local changelogs="$(lfs changelog $LUSTRE_MDT | head -n $changelog_read)"
+    while IFS= read -r line; do
+        local type="$(echo "$line" | cut -d' ' -f2)"
+        type="${type:2}"
+        local count_lfs_types="$(echo "$changelogs" | grep "$type" | wc -l)"
+
+        echo "$output" | grep "$type" | grep "$count_lfs_types" ||
+            error "Failed to find '$count_lfs_types' changelogs of type" \
+                  "'$type' in $output"
+    done <<< "$changelogs"
 }
 
 test_stats()
@@ -56,7 +70,8 @@ test_stats()
     touch test_entry
 
     local output="$(rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
-        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats 2>&1 | tail -n 39)"
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
+        --stats --stats-interval 0 2>&1)"
     find_expected_values "$output" 2 1
 
     mkdir blob
@@ -67,8 +82,8 @@ test_stats()
     lfs mkdir dir
 
     output="$(rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
-        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats --nb-workers 4 2>&1 |
-        tail -n 39)"
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" --stats --stats-interval 0 \
+        --nb-workers 4 2>&1)"
     local count="$(lfs changelog $LUSTRE_MDT $userid | wc -l)"
     find_expected_values "$output" "$count" 4
 
@@ -84,7 +99,8 @@ test_stats()
 
     output="$(rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
                 src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" \
-                --stats --nb-workers 4 --stats-file syslog 2>&1)"
+                --stats --stats-interval 0 \
+                --nb-workers 4 --stats-file syslog 2>&1)"
     # Remove the normal stderr lines associated with the exec failures, the
     # actual stdout lines of the exec success, and then the 'RobinHood4[<pid>]'
     # header syslog adds.
