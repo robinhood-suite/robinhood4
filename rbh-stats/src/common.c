@@ -130,6 +130,9 @@ print_value(const struct rbh_value *value, const char *header,
          */
         printf("%.3f", ((int) (10000 * value->float64)) / 10000.0);
         break;
+    case RBH_VT_MAP:
+        printf("enotsup");
+        break;
     default:
         error(EXIT_FAILURE, EINVAL, "Unexpected key type to print '%s': %d",
               header, value->type);

@@ -70,7 +70,7 @@ check_rbh_fsevents()
 {
     local full_output="$1"
 
-    local count=15
+    local count=16
     local output="$(echo "$full_output" | head -n $count)"
 
     check_common_stats "$output" rbh-fsevents \
@@ -79,7 +79,7 @@ check_rbh_fsevents()
     echo "$output" | grep "Enrichment" > /dev/null ||
         error "enrich_mountpoint should have been retrieved, got '$output'"
 
-    echo "$output" | grep "Source" > /dev/null ||
+    echo "$output" | grep "Source of the events" > /dev/null ||
         error "source_read should have been retrieved, got '$output'"
 
     echo "$output" | grep "Number" > /dev/null ||

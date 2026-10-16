@@ -25,7 +25,7 @@ check_stats_result()
     echo "$output" | grep "Enrichment" > /dev/null ||
         error "enrich_mountpoint should have been retrieved, got '$output'"
 
-    echo "$output" | grep "Source" > /dev/null ||
+    echo "$output" | grep "Source of the events" > /dev/null ||
         error "source_read should have been retrieved, got '$output'"
 
     echo "$output" | grep "Number" > /dev/null ||
@@ -54,7 +54,7 @@ test_N_logs()
 {
     local requested=$1
     local expected=$2
-    local count=15
+    local count=16
 
     touch blob
     for i in $(seq 1 $expected); do

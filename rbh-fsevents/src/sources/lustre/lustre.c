@@ -84,6 +84,7 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
 
     fsevents_md->source_md = xcalloc(1, sizeof(struct lustre_source_md));
     fsevents_md->print_source_stats = print_lustre_source_md;
+    fsevents_md->convert_source_stats = convert_lustre_source_md;
 
     if (fsevents_md->start_index < 0) {
         uint64_t db_index = 0;

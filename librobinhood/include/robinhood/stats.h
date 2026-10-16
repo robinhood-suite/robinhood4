@@ -40,6 +40,8 @@ struct rbh_fsevents_metadata {
     void *source_md;
     int (*print_source_stats)(struct rbh_fsevents_metadata *, char *message,
                               size_t *message_avail_size);
+    struct rbh_value_map *(*convert_source_stats)
+        (struct rbh_fsevents_metadata *);
 };
 
 struct rbh_find_metadata {
