@@ -14,6 +14,7 @@ enum fsevents_stats_value {
     DEDUPLICATION_RATIO,
     ENRICH_MOUNTPOINT,
     ENRICH_SKIP_COUNT,
+    SOURCE_MD,
     SOURCE_READ,
     START_INDEX,
     TIME_READ_DEDUP,
@@ -47,8 +48,15 @@ key2fsevents_stats_value(const char *key)
 
         break;
     case 's':
-        if (key[1] == 'o' && !strcmp(&key[2], "urce_read"))
-            return SOURCE_READ;
+        if (key[1] == 'o') {
+            if (!strcmp(&key[2], "urce_read"))
+                return SOURCE_READ;
+
+            if (!strcmp(&key[2], "urce_md"))
+                return SOURCE_MD;
+
+            break;
+        }
 
         if (key[1] == 't' && !strcmp(&key[2], "art_index"))
             return START_INDEX;
@@ -86,6 +94,8 @@ static const struct formatted_stats_value fsevents_stats_value[] = {
     [ENRICH_MOUNTPOINT] =   { .header = "Enrichment mountpoint",
                               .print_stats_value = print_value },
     [ENRICH_SKIP_COUNT] =   { .header = "Number of skipped entries in enrichment",
+                              .print_stats_value = print_value },
+    [SOURCE_MD] =           { .header = "Source-specific statistics",
                               .print_stats_value = print_value },
     [SOURCE_READ] =         { .header = "Source of the events",
                               .print_stats_value = print_value },

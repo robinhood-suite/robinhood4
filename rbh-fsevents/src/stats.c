@@ -33,7 +33,7 @@ fsevents_metadata_value_map(struct rbh_metadata *metadata)
     struct rbh_value_pair *pairs;
     struct rbh_value *values;
     int count_timespec = 4;
-    int count = 13;
+    int count = 14;
 
     if (metadata_sstack == NULL)
         metadata_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
@@ -154,6 +154,15 @@ fsevents_metadata_value_map(struct rbh_metadata *metadata)
 
     pairs[count].value = &values[count];
     count++;
+
+    if (metadata->fsevents_md.convert_source_stats) {
+        pairs[count].key = "source_md";
+        values[count].type = RBH_VT_MAP;
+        values[count].map =
+            *metadata->fsevents_md.convert_source_stats(&metadata->fsevents_md);
+        pairs[count].value = &values[count];
+        count++;
+    }
 
     value_map->pairs = pairs;
     value_map->count = count;

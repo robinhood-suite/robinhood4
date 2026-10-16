@@ -117,8 +117,10 @@ test_csv()
             expected_column_count=$((expected_column_count + 2))
             regexp="rbh-find,.*,.*,.*,\"$__rbh_find rbh:$db:$testdb -exec ls ;\",[0-9]+,[0-9]+"
         elif [[ $stats == *"rbh-fsevents"* ]]; then
-            expected_column_count=$((expected_column_count + 9))
-            regexp="rbh-fsevents,.*,.*,.*,\"$__rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb\",\"$LUSTRE_MDT\",\"${LUSTRE_DIR::-1}\",1,.*,.*,[0-9]+,0,0,.*"
+            expected_column_count=$((expected_column_count + 10))
+            regexp="rbh-fsevents,.*,.*,.*"
+            regexp="$regexp,\"$__rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb\""
+            regexp="$regexp,\"$LUSTRE_MDT\",\"${LUSTRE_DIR::-1}\",1,.*,.*,[0-9]+,0,0,.*,enotsup"
         elif [[ $stats == *"rbh-report"* ]]; then
             regexp="rbh-report,.*,.*,.*,\"$__rbh_report rbh:$db:$testdb --group-by statx.uid --output sum\(statx.size\)\""
         elif [[ $stats == *"rbh-gc"* ]]; then
@@ -169,11 +171,11 @@ test_json()
                     "\"$__rbh_find rbh:$db:$testdb -exec ls ;\""
                     "[0-9]+" "[0-9]+")
         elif [[ $command == *"rbh-fsevents"* ]]; then
-            expected_line_count=$((expected_line_count + 13))
+            expected_line_count=$((expected_line_count + 14))
             regexp=(".*" ".*" ".*"
                     "\"$__rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR src:lustre:$LUSTRE_MDT rbh:$db:$testdb\""
                     "\"$LUSTRE_MDT\"" "\"${LUSTRE_DIR::-1}\"" "1"
-                    ".*" ".*" "[0-9]+" "0" "0" ".*")
+                    ".*" ".*" "[0-9]+" "0" "0" ".*" "enotsup")
         elif [[ $command == *"rbh-report"* ]]; then
             expected_line_count=$((expected_line_count + 4))
             regexp=(".*" ".*" ".*"
