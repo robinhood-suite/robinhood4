@@ -54,7 +54,7 @@ test_N_logs()
 {
     local requested=$1
     local expected=$2
-    local count=15
+    local count=16
 
     touch blob
     for i in $(seq 1 $expected); do

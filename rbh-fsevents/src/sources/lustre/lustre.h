@@ -31,6 +31,9 @@ int
 print_lustre_source_md(struct rbh_fsevents_metadata *fsevents_md,
                        char *message, size_t *message_avail_size);
 
+struct rbh_value_map *
+convert_lustre_source_md(struct rbh_fsevents_metadata *fsevents_md);
+
 /** This structure will contains all the information of one batch sent to
  *  enrichment. It contains the last changelog index read for that batch,
  *  the number of threads the batch was divided among

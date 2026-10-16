@@ -70,7 +70,7 @@ check_rbh_fsevents()
 {
     local full_output="$1"
 
-    local count=15
+    local count=16
     local output="$(echo "$full_output" | head -n $count)"
 
     check_common_stats "$output" rbh-fsevents \
