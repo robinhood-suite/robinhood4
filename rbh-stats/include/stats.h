@@ -11,6 +11,8 @@
 #include <robinhood/plugin.h>
 #include <robinhood/plugins/backend.h>
 
+struct output_handler;
+
 #define WIDTH 32
 
 enum output_format {
@@ -24,7 +26,7 @@ struct formatted_stats_value {
     const char *header;
     const char *oneline_header;
     void (*print_stats_value)(const struct rbh_value *, const char *,
-                              enum output_format);
+                              struct output_handler *);
     bool oneline;
 };
 
@@ -104,14 +106,14 @@ print_gc_stats(const struct rbh_value_map *stats,
  */
 void
 print_timespec(const struct rbh_value *value, const char *header,
-               enum output_format output_format);
+               struct output_handler *oh);
 
 /**
  * Expects the value to be int64, prints it as a timestamp.
  */
 void
 print_time_from_timestamp(const struct rbh_value *value, const char *header,
-                          enum output_format output_format);
+                          struct output_handler *oh);
 
 /**
  * Expects the value to be int64, prints it as string representing a time
@@ -119,13 +121,13 @@ print_time_from_timestamp(const struct rbh_value *value, const char *header,
  */
 void
 print_difftime(const struct rbh_value *value, const char *header,
-               enum output_format output_format);
+               struct output_handler *oh);
 
 /**
  * Print the value as-is, i.e. string as string, int64 as long int, ....
  */
 void
 print_value(const struct rbh_value *value, const char *header,
-            enum output_format output_format);
+            struct output_handler *oh);
 
 #endif
