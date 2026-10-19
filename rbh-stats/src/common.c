@@ -9,9 +9,14 @@
 
 #include "stats.h"
 
+struct output_handler {
+    enum output_format output_format;
+    bool need_comma;
+};
+
 void
 print_timespec(const struct rbh_value *value, const char *header,
-               enum output_format output_format)
+               struct output_handler *oh)
 {
     struct timespec timespec;
 
@@ -21,7 +26,7 @@ print_timespec(const struct rbh_value *value, const char *header,
     timespec.tv_sec = value->map.pairs[0].value->int64;
     timespec.tv_nsec = value->map.pairs[1].value->int64;
 
-    switch (output_format) {
+    switch (oh->output_format) {
     case OF_NORMAL:
         printf(" - %-*s: %lu.%09lu\n", WIDTH, header,
                timespec.tv_sec, timespec.tv_nsec);
@@ -42,11 +47,11 @@ print_timespec(const struct rbh_value *value, const char *header,
 
 void
 print_time_from_timestamp(const struct rbh_value *value, const char *header,
-                          enum output_format output_format)
+                          struct output_handler *oh)
 {
     time_t time = (time_t) value->int64;
 
-    switch (output_format) {
+    switch (oh->output_format) {
     case OF_NORMAL:
         printf(" - %-*s: %s\n", WIDTH, header, time_from_timestamp(&time));
         break;
@@ -64,7 +69,7 @@ print_time_from_timestamp(const struct rbh_value *value, const char *header,
 
 void
 print_difftime(const struct rbh_value *value, const char *header,
-               enum output_format output_format)
+               struct output_handler *oh)
 {
     char _buffer[32];
     size_t bufsize;
@@ -75,7 +80,7 @@ print_difftime(const struct rbh_value *value, const char *header,
 
     difftime_printer(buffer, bufsize, value->int64);
 
-    switch (output_format) {
+    switch (oh->output_format) {
     case OF_NORMAL:
         printf(" - %-*s: %s\n", WIDTH, header, buffer);
         break;
@@ -93,9 +98,9 @@ print_difftime(const struct rbh_value *value, const char *header,
 
 void
 print_value(const struct rbh_value *value, const char *header,
-            enum output_format output_format)
+            struct output_handler *oh)
 {
-    switch (output_format) {
+    switch (oh->output_format) {
     case OF_NORMAL:
         printf(" - %-*s: ", WIDTH, header);
         break;
@@ -111,7 +116,7 @@ print_value(const struct rbh_value *value, const char *header,
 
     switch (value->type) {
     case RBH_VT_STRING:
-        if (output_format == OF_CSV)
+        if (oh->output_format == OF_CSV)
             printf("\"%s\"", value->string);
         else
             printf("%s", value->string);
@@ -139,7 +144,7 @@ print_value(const struct rbh_value *value, const char *header,
         __builtin_unreachable();
     }
 
-    switch (output_format) {
+    switch (oh->output_format) {
     case OF_NORMAL:
         printf("\n");
         break;
@@ -198,36 +203,35 @@ static const struct formatted_stats_value common_formatted_stats_value[] = {
 static void
 print_stats_info(const struct rbh_value *value,
                  const struct formatted_stats_value *flv,
-                 enum output_format output_format,
-                 bool *need_comma)
+                 struct output_handler *oh)
 {
-    switch (output_format) {
+    switch (oh->output_format) {
     case OF_NORMAL:
-        flv->print_stats_value(value, flv->header, output_format);
+        flv->print_stats_value(value, flv->header, oh);
         break;
     case OF_ONELINE:
         if (!flv->oneline)
             break;
 
-        if (*need_comma)
+        if (oh->need_comma)
             printf(", ");
 
-        flv->print_stats_value(value, flv->oneline_header, output_format);
-        *need_comma = true;
+        flv->print_stats_value(value, flv->oneline_header, oh);
+        oh->need_comma = true;
         break;
     case OF_CSV:
-        if (*need_comma)
+        if (oh->need_comma)
             printf(",");
 
-        flv->print_stats_value(value, flv->header, output_format);
-        *need_comma = true;
+        flv->print_stats_value(value, flv->header, oh);
+        oh->need_comma = true;
         break;
     case OF_JSON:
-        if (*need_comma)
+        if (oh->need_comma)
             printf(",\n");
 
-        flv->print_stats_value(value, flv->header, output_format);
-        *need_comma = true;
+        flv->print_stats_value(value, flv->header, oh);
+        oh->need_comma = true;
         break;
     }
 }
@@ -238,7 +242,10 @@ print_stats_wrapper(const struct rbh_value_map *stats,
                     const struct formatted_stats_value *flv,
                     int (*key2stats_value)(const char *))
 {
-    bool need_comma = false;
+    struct output_handler oh = {
+        .output_format = output_format,
+        .need_comma = false
+    };
 
     for (size_t i = 0 ; i < stats->count ; i++) {
         const struct rbh_value_pair *pair = &stats->pairs[i];
@@ -248,8 +255,7 @@ print_stats_wrapper(const struct rbh_value_map *stats,
         if (common_stats_value != CSV_UNKNOWN) {
             print_stats_info(pair->value,
                              &common_formatted_stats_value[common_stats_value],
-                             output_format,
-                             &need_comma);
+                             &oh);
             continue;
         }
 
@@ -261,7 +267,6 @@ print_stats_wrapper(const struct rbh_value_map *stats,
          * valid index or simply error out. So there is no possible segfault
          * here.
          */
-        print_stats_info(pair->value, &flv[key2stats_value(pair->key)],
-                         output_format, &need_comma);
+        print_stats_info(pair->value, &flv[key2stats_value(pair->key)], &oh);
     }
 }
