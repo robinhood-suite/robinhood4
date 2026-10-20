@@ -15,8 +15,7 @@ struct output_handler {
 };
 
 void
-print_timespec(const struct rbh_value *value, const char *header,
-               struct output_handler *oh)
+print_timespec(const struct rbh_value *value, struct output_handler *oh)
 {
     struct timespec timespec;
 
@@ -27,49 +26,37 @@ print_timespec(const struct rbh_value *value, const char *header,
     timespec.tv_nsec = value->map.pairs[1].value->int64;
 
     switch (oh->output_format) {
-    case OF_NORMAL:
-        printf(" - %-*s: %lu.%09lu\n", WIDTH, header,
-               timespec.tv_sec, timespec.tv_nsec);
-        break;
-    case OF_ONELINE:
-        printf("%s: %lu.%09lu", header,
-               timespec.tv_sec, timespec.tv_nsec);
-        break;
-    case OF_CSV:
-        printf("%lu.%09lu", timespec.tv_sec, timespec.tv_nsec);
-        break;
     case OF_JSON:
-        printf("        \"%s\": \"%lu.%09lu\"", header,
-               timespec.tv_sec, timespec.tv_nsec);
+        printf("\"%lu.%09lu\"", timespec.tv_sec, timespec.tv_nsec);
+        break;
+    default:
+        printf("%lu.%09lu", timespec.tv_sec, timespec.tv_nsec);
         break;
     }
 }
 
 void
-print_time_from_timestamp(const struct rbh_value *value, const char *header,
+print_time_from_timestamp(const struct rbh_value *value,
                           struct output_handler *oh)
 {
     time_t time = (time_t) value->int64;
 
     switch (oh->output_format) {
     case OF_NORMAL:
-        printf(" - %-*s: %s\n", WIDTH, header, time_from_timestamp(&time));
-        break;
     case OF_ONELINE:
-        printf("%s: %s", header, time_from_timestamp(&time));
+        printf("%s", time_from_timestamp(&time));
         break;
     case OF_CSV:
         printf("%lu", time);
         break;
     case OF_JSON:
-        printf("        \"%s\": \"%s\"", header, time_from_timestamp(&time));
+        printf("\"%s\"", time_from_timestamp(&time));
         break;
     }
 }
 
 void
-print_difftime(const struct rbh_value *value, const char *header,
-               struct output_handler *oh)
+print_difftime(const struct rbh_value *value, struct output_handler *oh)
 {
     char _buffer[32];
     size_t bufsize;
@@ -81,38 +68,20 @@ print_difftime(const struct rbh_value *value, const char *header,
     difftime_printer(buffer, bufsize, value->int64);
 
     switch (oh->output_format) {
-    case OF_NORMAL:
-        printf(" - %-*s: %s\n", WIDTH, header, buffer);
-        break;
-    case OF_ONELINE:
-        printf("%s: %s", header, buffer);
-        break;
-    case OF_CSV:
-        printf("%s", buffer);
-        break;
     case OF_JSON:
-        printf("        \"%s\": \"%s\"", header, buffer);
+        printf("\"%s\"", buffer);
+        break;
+    default:
+        printf("%s", buffer);
         break;
     }
 }
 
 void
-print_value(const struct rbh_value *value, const char *header,
-            struct output_handler *oh)
+print_value(const struct rbh_value *value, struct output_handler *oh)
 {
-    switch (oh->output_format) {
-    case OF_NORMAL:
-        printf(" - %-*s: ", WIDTH, header);
-        break;
-    case OF_ONELINE:
-        printf("%s: ", header);
-        break;
-    case OF_CSV:
-        break;
-    case OF_JSON:
-        printf("        \"%s\": \"", header);
-        break;
-    }
+    if (oh->output_format == OF_JSON)
+        printf("\"");
 
     switch (value->type) {
     case RBH_VT_STRING:
@@ -139,21 +108,13 @@ print_value(const struct rbh_value *value, const char *header,
         printf("enotsup");
         break;
     default:
-        error(EXIT_FAILURE, EINVAL, "Unexpected key type to print '%s': %d",
-              header, value->type);
+        error(EXIT_FAILURE, EINVAL, "Unexpected key type to print '%d'",
+              value->type);
         __builtin_unreachable();
     }
 
-    switch (oh->output_format) {
-    case OF_NORMAL:
-        printf("\n");
-        break;
-    case OF_JSON:
+    if (oh->output_format == OF_JSON)
         printf("\"");
-        break;
-    default:
-        break;
-    }
 }
 
 static int
@@ -205,32 +166,43 @@ print_stats_info(const struct rbh_value *value,
                  const struct formatted_stats_value *flv,
                  struct output_handler *oh)
 {
+    if (oh->output_format == OF_ONELINE && !flv->oneline)
+        return;
+
+    if (oh->need_comma) {
+        switch (oh->output_format) {
+        case OF_NORMAL:
+            break;
+        case OF_ONELINE:
+            printf(", ");
+            break;
+        case OF_CSV:
+            printf(",");
+            break;
+        case OF_JSON:
+            printf(",\n");
+            break;
+        }
+    }
+
     switch (oh->output_format) {
     case OF_NORMAL:
-        flv->print_stats_value(value, flv->header, oh);
+        printf("- %-*s: ", WIDTH, flv->header);
+        flv->print_stats_value(value, oh);
+        printf("\n");
         break;
     case OF_ONELINE:
-        if (!flv->oneline)
-            break;
-
-        if (oh->need_comma)
-            printf(", ");
-
-        flv->print_stats_value(value, flv->oneline_header, oh);
+        printf("%s: ", flv->oneline_header);
+        flv->print_stats_value(value, oh);
         oh->need_comma = true;
         break;
     case OF_CSV:
-        if (oh->need_comma)
-            printf(",");
-
-        flv->print_stats_value(value, flv->header, oh);
+        flv->print_stats_value(value, oh);
         oh->need_comma = true;
         break;
     case OF_JSON:
-        if (oh->need_comma)
-            printf(",\n");
-
-        flv->print_stats_value(value, flv->header, oh);
+        printf("\"%s\": ", flv->header);
+        flv->print_stats_value(value, oh);
         oh->need_comma = true;
         break;
     }
