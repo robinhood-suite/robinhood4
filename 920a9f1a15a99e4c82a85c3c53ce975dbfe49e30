@@ -91,6 +91,98 @@
       },
       "revId": "920a9f1a15a99e4c82a85c3c53ce975dbfe49e30",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9849b51_c7d44c55",
+        "filename": "rbh-stats/include/stats.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-10-20T06:50:03Z",
+      "side": 1,
+      "message": "style: alignement and all the lines below",
+      "range": {
+        "startLine": 49,
+        "startChar": 25,
+        "endLine": 49,
+        "endChar": 28
+      },
+      "revId": "920a9f1a15a99e4c82a85c3c53ce975dbfe49e30",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f69d4e4_cf653933",
+        "filename": "rbh-stats/rbh-stats.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-10-20T06:50:03Z",
+      "side": 1,
+      "message": "style: alignement",
+      "range": {
+        "startLine": 81,
+        "startChar": 11,
+        "endLine": 81,
+        "endChar": 16
+      },
+      "revId": "920a9f1a15a99e4c82a85c3c53ce975dbfe49e30",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29660c15_ce37e828",
+        "filename": "rbh-stats/src/common.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-10-20T06:50:03Z",
+      "side": 1,
+      "message": "style: alignement",
+      "range": {
+        "startLine": 197,
+        "startChar": 15,
+        "endLine": 197,
+        "endChar": 17
+      },
+      "revId": "920a9f1a15a99e4c82a85c3c53ce975dbfe49e30",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2311891a_1814b8fd",
+        "filename": "rbh-stats/src/common.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-10-20T06:50:03Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 234,
+        "startChar": 18,
+        "endLine": 234,
+        "endChar": 20
+      },
+      "revId": "920a9f1a15a99e4c82a85c3c53ce975dbfe49e30",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
