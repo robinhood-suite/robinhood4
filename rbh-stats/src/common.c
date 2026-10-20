@@ -85,10 +85,83 @@ print_difftime(const struct rbh_value *value, struct output_handler *oh)
     }
 }
 
+static void
+preprint_value_map(struct output_handler *oh)
+{
+    switch (oh->output_format) {
+    case OF_NORMAL: // output ended with "- <map_header>: "
+        printf("\n");
+        break;
+    case OF_ONELINE: // output ended with "<map_header>: "
+        printf("{ ");
+        break;
+    case OF_CSV: // output ended with ""
+        break;
+    case OF_JSON: // output ended with "\"<map_header>\": "
+        printf("{\n");
+        break;
+    }
+}
+
+static void
+print_value_map(const struct rbh_value *value, struct output_handler *oh)
+{
+    struct output_handler new_oh = *oh;
+
+    new_oh.tab_count++;
+
+    for (size_t i = 0; i < value->map.count; ++i) {
+        switch (oh->output_format) {
+        case OF_NORMAL:
+            print_tabs(&new_oh);
+            printf("- %-*s: ", WIDTH, value->map.pairs[i].key);
+            print_value(value->map.pairs[i].value, &new_oh);
+            if (i < value->map.count - 1)
+                printf("\n");
+            break;
+        case OF_ONELINE:
+            printf("%s: ", value->map.pairs[i].key);
+            print_value(value->map.pairs[i].value, &new_oh);
+            if (i < value->map.count - 1)
+                printf(", ");
+            break;
+        case OF_CSV:
+            print_value(value->map.pairs[i].value, &new_oh);
+            if (i < value->map.count - 1)
+                printf(",");
+            break;
+        case OF_JSON:
+            print_tabs(&new_oh);
+            printf("\"%s\": ", value->map.pairs[i].key);
+            print_value(value->map.pairs[i].value, &new_oh);
+            if (i < value->map.count - 1)
+                printf(",\n");
+            break;
+        }
+    }
+}
+
+static void
+postprint_value_map(struct output_handler *oh)
+{
+    switch (oh->output_format) {
+    case OF_NORMAL: // output ended with "- <map_header>: "
+        break;
+    case OF_ONELINE: // output ended with "<map_header>: "
+        printf(" }");
+        break;
+    case OF_CSV: // output ended with ""
+        break;
+    case OF_JSON: // output ended with "\"<map_header>\": "
+        printf("}");
+        break;
+    }
+}
+
 void
 print_value(const struct rbh_value *value, struct output_handler *oh)
 {
-    if (oh->output_format == OF_JSON)
+    if (oh->output_format == OF_JSON && value->type != RBH_VT_MAP)
         printf("\"");
 
     switch (value->type) {
@@ -113,7 +186,9 @@ print_value(const struct rbh_value *value, struct output_handler *oh)
         printf("%.3f", ((int) (10000 * value->float64)) / 10000.0);
         break;
     case RBH_VT_MAP:
-        printf("enotsup");
+        preprint_value_map(oh);
+        print_value_map(value, oh);
+        postprint_value_map(oh);
         break;
     default:
         error(EXIT_FAILURE, EINVAL, "Unexpected key type to print '%d'",
@@ -121,7 +196,7 @@ print_value(const struct rbh_value *value, struct output_handler *oh)
         __builtin_unreachable();
     }
 
-    if (oh->output_format == OF_JSON)
+    if (oh->output_format == OF_JSON && value->type != RBH_VT_MAP)
         printf("\"");
 }
 
