@@ -25,7 +25,7 @@ enum output_format {
 struct formatted_stats_value {
     const char *header;
     const char *oneline_header;
-    void (*print_stats_value)(const struct rbh_value *, const char *,
+    void (*print_stats_value)(const struct rbh_value *,
                               struct output_handler *);
     bool oneline;
 };
@@ -105,14 +105,13 @@ print_gc_stats(const struct rbh_value_map *stats,
  * timespec with format "tv_sec.tv_nsec".
  */
 void
-print_timespec(const struct rbh_value *value, const char *header,
-               struct output_handler *oh);
+print_timespec(const struct rbh_value *value, struct output_handler *oh);
 
 /**
  * Expects the value to be int64, prints it as a timestamp.
  */
 void
-print_time_from_timestamp(const struct rbh_value *value, const char *header,
+print_time_from_timestamp(const struct rbh_value *value,
                           struct output_handler *oh);
 
 /**
@@ -120,14 +119,12 @@ print_time_from_timestamp(const struct rbh_value *value, const char *header,
  * differential.
  */
 void
-print_difftime(const struct rbh_value *value, const char *header,
-               struct output_handler *oh);
+print_difftime(const struct rbh_value *value, struct output_handler *oh);
 
 /**
  * Print the value as-is, i.e. string as string, int64 as long int, ....
  */
 void
-print_value(const struct rbh_value *value, const char *header,
-            struct output_handler *oh);
+print_value(const struct rbh_value *value, struct output_handler *oh);
 
 #endif
