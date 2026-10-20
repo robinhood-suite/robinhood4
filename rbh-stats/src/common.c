@@ -12,7 +12,15 @@
 struct output_handler {
     enum output_format output_format;
     bool need_comma;
+    int tab_count;
 };
+
+static void
+print_tabs(struct output_handler *oh)
+{
+    for (int i = 0; i < oh->tab_count; ++i)
+        printf("    ");
+}
 
 void
 print_timespec(const struct rbh_value *value, struct output_handler *oh)
@@ -187,6 +195,7 @@ print_stats_info(const struct rbh_value *value,
 
     switch (oh->output_format) {
     case OF_NORMAL:
+        print_tabs(oh);
         printf("- %-*s: ", WIDTH, flv->header);
         flv->print_stats_value(value, oh);
         printf("\n");
@@ -201,6 +210,7 @@ print_stats_info(const struct rbh_value *value,
         oh->need_comma = true;
         break;
     case OF_JSON:
+        print_tabs(oh);
         printf("\"%s\": ", flv->header);
         flv->print_stats_value(value, oh);
         oh->need_comma = true;
@@ -216,7 +226,8 @@ print_stats_wrapper(const struct rbh_value_map *stats,
 {
     struct output_handler oh = {
         .output_format = output_format,
-        .need_comma = false
+        .need_comma = false,
+        .tab_count = 1
     };
 
     for (size_t i = 0 ; i < stats->count ; i++) {
