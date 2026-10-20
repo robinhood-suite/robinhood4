@@ -22,6 +22,30 @@
       },
       "revId": "6ae8c64464404a0a1d83ee78835657abbc530ce6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96087420_10e4a841",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-10-20T14:32:03Z",
+      "side": 1,
+      "message": "That\u0027s syslog API, you can specify a flag that tells syslog to output to both the logger itself and to stderr. After talking with the admins, they said having both is nice to see if an error occurs while the command runs, and to keep the info afterwards.",
+      "parentUuid": "dcd0d4d5_d0946f4e",
+      "range": {
+        "startLine": 61,
+        "startChar": 34,
+        "endLine": 62,
+        "endChar": 61
+      },
+      "revId": "6ae8c64464404a0a1d83ee78835657abbc530ce6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
