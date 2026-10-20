@@ -48,6 +48,9 @@ check_stats_result()
 
     echo "$output" | grep "Ratio" > /dev/null ||
         error "deduplication_ratio should have been retrieved, got '$output'"
+
+    echo "$output" | grep "Source-specific" > /dev/null ||
+        error "source-specific stats should have been retrieved, got '$output'"
 }
 
 test_N_logs()
@@ -251,8 +254,6 @@ test_changelogs_amount()
     rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
         src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
 
-    rbh_stats rbh:$db:$testdb --tool fsevents -n 5
-
     rbh_stats rbh:$db:$testdb --tool fsevents -n 5 | grep "changelog read" |
         cut -d':' -f2- | sed 's/^[ \t]*//' |
         difflines "$changelogs_count5" \
@@ -414,6 +415,36 @@ test_descending()
     test_order
 }
 
+test_changelog_type()
+{
+    local entry1="test_entry1"
+    local entry2="test_entry2"
+    local entry3="test_entry3"
+    local entry4="test_entry4"
+
+    mkdir d1
+    echo "blob" > f1
+    touch d1/f2
+    lfs migrate -c 3 f1
+    ln f1 f3
+
+    rbh_fsevents --enrich rbh:lustre:$LUSTRE_DIR \
+        src:lustre:$LUSTRE_MDT rbh:$db:$testdb > /dev/null
+
+    rbh_stats rbh:$db:$testdb --tool fsevents | grep "MKDIR" |
+        cut -d':' -f2 | xargs | difflines "1"
+    rbh_stats rbh:$db:$testdb --tool fsevents | grep "CREAT" |
+        cut -d':' -f2 | xargs | difflines "2"
+    rbh_stats rbh:$db:$testdb --tool fsevents | grep "CLOSE" |
+        cut -d':' -f2 | xargs | difflines "3"
+    rbh_stats rbh:$db:$testdb --tool fsevents | grep "LYOUT" |
+        cut -d':' -f2 | xargs | difflines "1"
+    rbh_stats rbh:$db:$testdb --tool fsevents | grep "HLINK" |
+        cut -d':' -f2 | xargs | difflines "1"
+    rbh_stats rbh:$db:$testdb --tool fsevents | grep "SLINK" |
+        cut -d':' -f2 | xargs | difflines "0"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -422,7 +453,7 @@ declare -a tests=(test_fsevents_1 test_fsevents_N test_more_than_N
                   test_timestamps test_command_line test_source_and_enrichment
                   test_worker_count_start_index test_changelogs_amount
                   test_work_timestamps test_deduplication_ratio test_ascending
-                  test_descending)
+                  test_descending test_changelog_type)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
