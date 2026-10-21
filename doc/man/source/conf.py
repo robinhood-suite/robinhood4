@@ -80,6 +80,9 @@ man_pages = [
     ('rbh-gc', 'rbh-gc',
      'remove deleted entries from a RobinHood4 mirror backend - RobinHood4 tool suite',
      [author], 1),
+    ('rbh-stats', 'rbh-stats',
+     'get statistics about previous RobinHood4 tool runs - RobinHood4 tool suite',
+     [author], 1),
 ]
 
 smartquotes = False
