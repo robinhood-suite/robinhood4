@@ -59,6 +59,10 @@ POST-OPTIONS
     | [x] indicates the field is included by default
     | [ ] indicates the field is excluded by default
 
+    For the xattrs specifically, every user-defined xattrs is excluded/included,
+    depending of the FIELD specified, but xattrs defined by RobinHood4, such as
+    the number of children for a directory, are always kept.
+
 **-n, --no-skip**
     Do not skip errors when synchronizing metadata. By default, if an
     entry-related error occurs during rbh-sync's run, it is skipped.
