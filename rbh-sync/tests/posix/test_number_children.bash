@@ -90,11 +90,38 @@ test_nb_children_two_sync()
         '"xattrs.nb_children.value": 0'
 }
 
+test_nb_children_without_xattrs()
+{
+    mkdir test1
+    setfattr -n user.something -v else "test1"
+
+    mkdir test2
+    touch test2/file2
+    setfattr -n user.other -v wise "test2"
+
+    mkdir test3
+    touch test3/file3 test3/file4
+    setfattr -n user.final -v lie "test3"
+
+    rbh_sync_posix "." "rbh:$db:$testdb" --field -xattrs
+
+    find_attribute '"ns.xattrs.path": "/test1"' \
+        '"xattrs.nb_children.value": 0' \
+        '"xattrs.user.something" : { $exists : false }'
+    find_attribute '"ns.xattrs.path": "/test2"' \
+        '"xattrs.nb_children.value": 1' \
+        '"xattrs.user.other" : { $exists : false }'
+    find_attribute '"ns.xattrs.path": "/test3"' \
+        '"xattrs.nb_children.value": 2' \
+        '"xattrs.user.final" : { $exists : false }'
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_sync_number_children test_nb_children_two_sync)
+declare -a tests=(test_sync_number_children test_nb_children_two_sync
+                  test_nb_children_without_xattrs)
 
 if [[ $WITH_MPI == true ]]; then
     tests+=(test_sync_number_children_mpi)
