@@ -10,6 +10,7 @@
 #endif
 
 #include <error.h>
+#include <linux/limits.h>
 
 #include "robinhood/value.h"
 #include "robinhood/utils.h"
@@ -21,24 +22,73 @@
  |                          bson_append_setxattrs()                           |
  *----------------------------------------------------------------------------*/
 
-#define ONSTACK_KEYLEN_MAX 128
+#define XATTR_ONSTACK_LENGTH 128
 
 static bool
 bson_append_xattr(bson_t *bson, const char *prefix, const char *xattr,
                   const struct rbh_value *value)
 {
-    char onstack[ONSTACK_KEYLEN_MAX];
+    char onstack[XATTR_ONSTACK_LENGTH];
+    int chars_to_escape = 0;
     char *key = onstack;
     bool success;
     int keylen;
 
+    /**
+     * Mongo considers the dollar sign as a special characters in keys:
+     * - If it is at the start of a string ("$<key>"), it is considered as an
+     * Mongo operator.
+     * - If it is after a dot and before a string (".$<key>"), it is considered
+     * as part of the key.
+     * - If it is between dots (".$."), it is considered as a way access all
+     * members of the array before the first dot. More specifically, for us, it
+     * is how we access all the members of the namespace array for an entry.
+     * - Otherwise it's considered a part of a key.
+     *
+     * The last two cases won't trigger any error. The first is not supposed to
+     * happen or that means we did something wrong in the code. The second case
+     * however can occur if an entry has an extended attribute with a key of
+     * that form, and Mongo will consider it as an error.
+     *
+     * To handle this case, we must escape the dollar character, but only if it
+     * is after a dot, which makes the condition a bit convoluted. Moreover,
+     * we do this escaping sequence on the 'xattr' part. This does not conflict
+     * with our use of the third case, as that use case is part of the 'prefix',
+     * so no issue there.
+     *
+     * XXX: We use the '\' character for escaping. However, that character is
+     * also escaped by Mongo itself, so what is stored in the database is
+     * '\\$<rest_of_key>'. It's ugly but at least it avoid issues. In any case,
+     * it's unlikely the dollar sign is used as part of a xattr key. And it's
+     * even more unlikely that any conflict arises because of another key
+     * already set with that same name.
+     */
+    for (int i = 0; i < strlen(xattr); ++i)
+        if ((xattr[i - 1] == '.' && xattr[i] == '$'))
+            chars_to_escape++;
+
     keylen = snprintf(key, sizeof(onstack), "%s.%s", prefix, xattr);
     if (keylen < 0)
         return false;
-    if ((size_t)keylen >= sizeof(onstack))
-        keylen = asprintf(&key, "%s.%s", prefix, xattr);
+    if ((size_t) keylen + chars_to_escape >= sizeof(onstack)) {
+        key = xmalloc(keylen + chars_to_escape + 1);
+        keylen = sprintf(key, "%s.%s", prefix, xattr);
+    }
     if (keylen < 0)
         return false;
+
+    if (chars_to_escape) {
+        for (int i = strlen(prefix) + 1; chars_to_escape > 0; ++i) {
+            if (key[i - 1] == '.' && key[i] == '$') { //&& key[i + 1] != '.') {
+                memmove(key + i + 1, key + i, keylen - i + 1);
+
+                key[i] = '\\';
+                i++;
+                keylen++;
+                chars_to_escape--;
+            }
+        }
+    }
 
     if (value == NULL)
         success = bson_append_null(bson, key, keylen);
