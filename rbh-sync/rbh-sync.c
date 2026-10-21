@@ -365,11 +365,27 @@ statx_project(struct rbh_statx *dest, const struct rbh_statx *source,
     return dest;
 }
 
+/** XXX: should probably find a better way to handle RobinHood4-created
+ * attributes in general, but this is good enough for now...
+ */
+static int
+fsentry_has_rbh_xattrs(const struct rbh_fsentry *fsentry)
+{
+    const struct rbh_value_map *fxattrs = &fsentry->xattrs.inode;
+
+    for (int i = 0; i < fxattrs->count; ++i)
+        if (strcmp(fxattrs->pairs[i].key, "nb_children") == 0)
+            return i;
+
+    return -1;
+}
+
 static struct rbh_fsevent *
 upsert_from_fsentry(struct rbh_fsevent *fsevent, struct rbh_statx *statx,
                     const struct rbh_fsentry *fsentry,
                     const struct rbh_filter_projection *projection)
 {
+    int nb_children_index = -1;
     struct {
         bool xattrs:1;
         bool statx:1;
@@ -388,8 +404,29 @@ upsert_from_fsentry(struct rbh_fsevent *fsevent, struct rbh_statx *statx,
     assert(fsentry->mask & RBH_FP_ID);
     fsevent->id = fsentry->id;
 
-    if (needs.xattrs & has.xattrs) {
-        fsevent->xattrs = fsentry->xattrs.inode;
+    /** 'needs.xattrs' is only false if we specifically request to *NOT* store
+     * xattrs when using rbh-sync, and 'has.xattrs' is only true if the entry
+     * has xattrs on it or if a RobinHood4-made xattr exists. For directories,
+     * such an attribute always exists: the number of children.
+     *
+     * So this condition should only trigger if we do not want to store xattrs
+     * but the entry has at least one anyway. In that case, we still do not
+     * want to record the entry's xattrs, but we do want to record RobinHood4
+     * specific attributes, i.e. the number of children. So we have to make an
+     * exception for that xattr in particular, which is why we retrieve its
+     * index and only record that one below.
+     */
+    if (!needs.xattrs && has.xattrs)
+        nb_children_index = fsentry_has_rbh_xattrs(fsentry);
+
+    if (needs.xattrs & has.xattrs || nb_children_index >= 0) {
+        if (needs.xattrs & has.xattrs) {
+            fsevent->xattrs = fsentry->xattrs.inode;
+        } else {
+            fsevent->xattrs.pairs =
+                &fsentry->xattrs.inode.pairs[nb_children_index];
+            fsevent->xattrs.count = 1;
+        }
 
         if (stack == NULL)
             stack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
@@ -642,8 +679,12 @@ sync(const struct rbh_filter_projection *projection,
     case RBH_BACKEND_ERROR:
         error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
         __builtin_unreachable();
+    case 0:
+        error(EXIT_FAILURE, 0,
+              "error while iterating over SOURCE's entries but no proper errno was recorded");
     default:
-        error(EXIT_FAILURE, errno, "while iterating over SOURCE's entries");
+        error(EXIT_FAILURE, errno,
+              "error while iterating over SOURCE's entries");
     }
 
     if (print_stats)
