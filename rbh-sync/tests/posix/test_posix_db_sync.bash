@@ -49,12 +49,20 @@ test_sync_xattrs()
     setfattr -n user.a -v b "fileA"
     truncate -s 1k "fileB"
     setfattr -n user.c -v d "fileB"
+    truncate -s 1k "fileC"
+    setfattr -n user.\$blob -v f "fileC"
+    setfattr -n user.bl\$ob -v f "fileC"
 
     rbh_sync_posix "." "rbh:$db:$testdb"
     find_attribute '"ns.xattrs.path":"/fileA"' \
                    '"xattrs.user.a" : { $exists : true }'
     find_attribute '"ns.xattrs.path":"/fileB"' \
                    '"xattrs.user.c" : { $exists : true }'
+    find_attribute '"ns.xattrs.path":"/fileC"' \
+                   '"xattrs.user.bl$ob" : { $exists : true }'
+    find_attribute '"ns.xattrs.path":"/fileC"' \
+                   '"xattrs.user.\\$blob" : { $exists : true }' \
+                   '"xattrs.user.bl$ob" : { $exists : true }'
 }
 
 test_sync_subdir()

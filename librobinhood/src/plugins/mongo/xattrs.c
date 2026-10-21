@@ -40,6 +40,42 @@ bson_append_xattr(bson_t *bson, const char *prefix, const char *xattr,
     if (keylen < 0)
         return false;
 
+    /**
+     * Mongo considers the dollar sign as a special characters in keys:
+     * - If it is at the start of a string ("$<key>"), it is considered as an
+     * Mongo operator.
+     * - If it is after a dot and before a string (".$<key>"), it is considered
+     * as part of the key.
+     * - If it is between dots (".$."), it is considered as a way access all
+     * members of the array before the first dot.
+     * - If it is part of a key, there is no issue.
+     *
+     * The last two cases won't trigger any error. The first is not supposed to
+     * happen or that means we did something wrong in the code. The second case
+     * however can occur if an entry has an extended attribute with a key of
+     * that form.
+     *
+     * To handle this case, we must escape the dollar character, but only if it
+     * is after a dot and not before another one, which makes the condition a
+     * bit convoluted.
+     *
+     * XXX: We use the '\' character for escaping. However, that character is
+     * also escaped by Mongo itself, so what is stored in the database is
+     * '\\$<rest_of_key>'. It's ugly but at least it avoid issues. In any case,
+     * it's unlikely the dollar sign is used as part of a xattr key.
+     */
+    for (int i = 1; i < keylen; ++i) {
+        if (key[i - 1] == '.' && key[i] == '$' && key[i + 1] != '.') {
+            /* Copy the rest of the array one character over, in place */
+            for (int j = keylen + 1; j > i; --j)
+                key[j] = key[j - 1];
+
+            key[i] = '\\';
+            i++;
+            keylen++;
+        }
+    }
+
     if (value == NULL)
         success = bson_append_null(bson, key, keylen);
     else
