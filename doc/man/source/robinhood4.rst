@@ -93,7 +93,7 @@ SEE ALSO
 --------
 
 rbh-info(1), rbh-find(1), rbh-report(1), rbh-sync(1), rbh-fsevents(1),
-rbh-undelete(1), rbh-update-path(1), rbh-gc(1), robinhood4(5)
+rbh-undelete(1), rbh-update-path(1), rbh-gc(1), rbh-stats(1), robinhood4(5)
 
 CREDITS
 -------
