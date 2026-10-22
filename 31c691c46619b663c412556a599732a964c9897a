@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2684b467_bf6da205",
+        "filename": "rbh-fsevents/src/sources/lustre/stats.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-10-22T07:23:17Z",
+      "side": 1,
+      "message": "sugest: Place multiple types on the same line",
+      "revId": "31c691c46619b663c412556a599732a964c9897a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
