@@ -33,6 +33,18 @@ PRE-OPTIONS
 **-h, --help**
     Display the help message and exits.
 
+**--stats**
+    Print command stats during execution to stderr.
+
+**--stats-file** *FILE*
+    Redirect command stats printing to the given `FILE`. Only used if
+    `--stats` is specified. If given 'syslog', will output to both the
+    system logger and stderr.
+
+**-I, --stats-interval** *INTERVAL*
+    Print stats each `INTERVAL` seconds, 60 by default, 0 to only print at
+    the end of the command. Only used if `--stats` is specified.
+
 POST-OPTIONS
 ++++++++++++
 
