@@ -31,6 +31,18 @@ Mandatory arguments to long options are mandatory for short options too.
 **-h, --help**
     Show the help message and exits.
 
+**--stats**
+    Print command stats during execution to stderr.
+
+**--stats-file** *FILE*
+    Redirect command stats printing to the given `FILE`. Only used if
+    `--stats` is specified. If given 'syslog', will output to both the
+    system logger and stderr.
+
+**-I, --stats-interval** *INTERVAL*
+    Print stats each `INTERVAL` seconds, 60 by default, 0 to only print at
+    the end of the command. Only used if `--stats` is specified.
+
 **-s, --sync-time** *SYNC_TIME*
     Only consider for deletion entries with a sync_time lesser than `SYNC_TIME`.
 

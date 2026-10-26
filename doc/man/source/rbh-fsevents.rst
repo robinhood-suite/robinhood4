@@ -65,6 +65,18 @@ Mandatory arguments to long options are mandatory for short options too.
     Outputs raw fsevents as they are collected, without enrichment (default
     behaviour). This mode disables all enrichment functionality.
 
+**--stats**
+    Print command stats during execution to stderr.
+
+**--stats-file** *FILE*
+    Redirect command stats printing to the given `FILE`. Only used if
+    `--stats` is specified. If given 'syslog', will output to both the
+    system logger and stderr.
+
+**-I**, **--stats-interval** *INTERVAL*
+    Print stats each `INTERVAL` seconds, 60 by default, 0 to only print at
+    the end of the command. Only used if `--stats` is specified.
+
 **-v**, **--verbose**
     Runs the tool in verbose mode, displaying additional information about
     processing.

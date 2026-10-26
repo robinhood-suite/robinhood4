@@ -53,6 +53,14 @@ Mandatory arguments to long options are mandatory for short options too.
 **-h, --help**
     Show the help message and exits.
 
+**--stats**
+    Print command stats after execution to stderr.
+
+**--stats-file** *FILE*
+    Redirect command stats printing to the given `FILE`. Only used if
+    `--stats` is specified. If given 'syslog', will output to both the
+    system logger and stderr.
+
 **-v, --verbose**
     Display the request sent by the backend to the underlying storage system.
 

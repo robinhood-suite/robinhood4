@@ -39,6 +39,14 @@ PRE-OPTIONS
     Display the help message. If a BACKEND is provided, also show the BACKEND's
     helper, which includes the list of available predicates for that backend.
 
+**--stats**
+    Print command stats after execution to stderr.
+
+**--stats-file** *FILE*
+    Redirect command stats printing to the given `FILE`. Only used if
+    `--stats` is specified. If given 'syslog', will output to both the
+    system logger and stderr.
+
 **-v, --verbose**
     Show the request sent to SOURCE after all predicates have been converted to
     SOURCE's filtering system (e.g. the MongoDB bson request sent to the
