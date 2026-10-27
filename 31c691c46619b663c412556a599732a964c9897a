@@ -16,6 +16,24 @@
       "message": "sugest: Place multiple types on the same line",
       "revId": "31c691c46619b663c412556a599732a964c9897a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fa8c2d8_ba7298ba",
+        "filename": "rbh-fsevents/src/sources/lustre/stats.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-10-27T10:20:05Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "2684b467_bf6da205",
+      "revId": "31c691c46619b663c412556a599732a964c9897a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
