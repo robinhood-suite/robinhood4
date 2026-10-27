@@ -196,14 +196,14 @@ archive_file()
 {
     local file="$1"
     local count=0
-    local max=10
+    local max=60
 
     lfs hsm_archive "$file"
 
     while ! lfs hsm_state "$file" | awk -F')' '{print $2}' | grep "archived"; do
         sleep 0.5
-        (( count++ > max )) &&
-            error "Failed to archive '$file' after $(echo "count * 0.5" | bc)s"
+        (( ++count >= max )) &&
+            error "Failed to archive '$file' after $(echo "$count * 0.5" | bc)s"
     done
 
     return 0
@@ -234,8 +234,27 @@ delete_test_user()
 avg()
 {
     IFS=+
-    local sum="$(echo "$(($*))")"
-    echo "scale=6; $sum / $#" | bc -l
+    sum="$(echo "$(($*))")"
+    output="$(echo "scale=7; $sum / $#" | bc -l)"
+    last="${output: -1}"
+    output="${output::-1}"
+    if (( last >= 5 )); then
+        echo "scale=6; $output + 0.000001" | bc -l
+    else
+        echo "$output"
+    fi
+}
+
+dump_hsm_state()
+{
+    echo "HSM states of the test directory:"
+    find "$testdir" -exec lfs hsm_state {} \;
+}
+
+dump_hsm_actions()
+{
+    echo "HSM actions:"
+    lctl get_param mdt.*.hsm.actions
 }
 
 ################################################################################
@@ -282,6 +301,10 @@ teardown()
         find $testdir >> "$errorfile"
         echo "Test DB content:" >> "$errorfile"
         do_db dump "$testdb" >> "$errorfile"
+
+        for dump in "${error_dumps[@]}"; do
+            "$dump" >> "$errorfile" 2>&1
+        done
     fi
 
     eval "$sub_teardown"
@@ -315,6 +338,9 @@ mongo_only_test()
 }
 
 db=${RBH_TEST_DB:-mongo}
+# Functions printing values to append to the error file on test failure. Test
+# scripts can override this array to request extra dumps (eg HSM states).
+declare -a error_dumps=()
 if "$WITH_MPI"; then
     # SQLite does not support concurrent writers so skip tests.
     mongo_only_test

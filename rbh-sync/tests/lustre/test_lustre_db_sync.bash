@@ -656,6 +656,8 @@ tests+=(test_flags test_gen test_mirror_count test_stripe_count
         test_begin test_end test_ost test_mdt_index_file test_mdt_index_dir
         test_mdt_hash test_mdt_count test_project_id)
 
+error_dumps=(dump_hsm_state dump_hsm_actions)
+
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
 

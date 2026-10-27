@@ -117,6 +117,8 @@ test_multiple_states()
 declare -a tests=(test_none test_archived_states test_independant_states
                   test_multiple_states)
 
+error_dumps=(dump_hsm_state dump_hsm_actions)
+
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
 
