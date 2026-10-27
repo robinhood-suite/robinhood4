@@ -69,7 +69,7 @@ test_stats()
     local syslog_output="$(journalctl -t RobinHood4 -o cat)"
 
     journalctl -t RobinHood4 --rotate
-    journalctl -t RobinHood4 --vacuum-time=10s
+    journalctl -t RobinHood4 --vacuum-size=1
 
     find_expected_values "$output" 1 1
     if [ "$output" != "$syslog_output" ]; then
