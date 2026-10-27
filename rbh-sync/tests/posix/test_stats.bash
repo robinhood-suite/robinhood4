@@ -77,7 +77,7 @@ test_stats()
 
     # Clean the journalctl logs to ensure future tests do not stumble on those
     journalctl -t RobinHood4 --rotate
-    journalctl -t RobinHood4 --vacuum-time=10s
+    journalctl -t RobinHood4 --vacuum-size=1
 
     find_expected_values "$output" 95 3
     if [ "$output" != "$syslog_output" ]; then
