@@ -162,8 +162,14 @@ print_fsevents_stats(struct rbh_metadata *metadata, time_t current,
     total_rd_ns = ((uint64_t) rd_sec * 1000000000ULL) + rd_nsec;
     total_eu_ns = ((uint64_t) eu_sec * 1000000000ULL) + eu_nsec;
 
-    avg_rd_ns = total_rd_ns / fsevents_md->changelog_read;
-    avg_eu_ns = total_eu_ns / fsevents_md->changelog_read;
+    if (fsevents_md->changelog_read) {
+        avg_rd_ns = total_rd_ns / fsevents_md->changelog_read;
+        avg_eu_ns = total_eu_ns / fsevents_md->changelog_read;
+    } else {
+        avg_rd_ns = 0;
+        avg_eu_ns = 0;
+    }
+
     avg_eu_ns = avg_eu_ns / fsevents_md->worker_count;
 
     rc = snprintf(message, *message_avail_size,
