@@ -1,0 +1,14 @@
+stages:
+- CI
+
+Non-regression tests:
+    stage: CI
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+        - if: $CI_PIPELINE_SOURCE == "web"
+    variables:
+        GIT_BRANCH: $CI_COMMIT_BRANCH
+    trigger:
+        project: st/robinhood4-dev/robinhood4-ci
+        branch: main
+        strategy: depend
