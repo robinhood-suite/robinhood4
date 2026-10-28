@@ -29,7 +29,7 @@ static inline bool rbh_attr_is_lustre(uint64_t flags)
 
 enum rbh_lustre_enrich_flags {
     RBH_LEF_LUSTRE         = RBH_ATTR_BACKEND_VALUE(LUSTRE),
-    RBH_LEF_ALL            = 0x1f,
+    RBH_LEF_ALL            = 0x3f,
     RBH_LEF_DIR_LOV        = 0x01,
     RBH_LEF_FID            = 0x02,
     RBH_LEF_STRIPE_COUNT   = 0x04,

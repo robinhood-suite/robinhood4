@@ -731,14 +731,16 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
         }
     } else {
         /**
-         * The ldiskfs backend calls the enricher with fd = -1 and this will fail
-         * regardless so we just skip it in this case.
+         * The ldiskfs backend calls the enricher with fd = -1 and this will
+         * fail regardless so we just skip it in this case.
          */
         lum = (struct lov_user_md *) get_lov_user_md(fd);
     }
 
-    if ((!lum) && (fd == -1))
-        return ENODATA;
+    if (!lum && fd == -1) {
+        errno = ENODATA;
+        return -1;
+    }
 
     if (lum == NULL)
         /* If lum is NULL and errno is ENODATA, that means the ioctl failed
