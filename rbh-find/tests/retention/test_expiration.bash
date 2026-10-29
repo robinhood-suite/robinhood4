@@ -112,13 +112,18 @@ test_expired_rel()
     local fileC="expired_file_C"
     local timeC="+50"
 
+    # Compute fileA's and fileB's mtimes from the same timestamp, so they are
+    # guaranteed to expire at the exact same second, as the assertions below
+    # (which use fileA's exact expiration date) assume.
+    local now=$(date +%s)
+
     touch "$fileA"
     setfattr -n user.expires -v "$timeA" "$fileA"
-    touch -t "$(date +%m%d%H%M.%S --date='-35 seconds')" "$fileA"
+    touch -t "$(date +%m%d%H%M.%S --date="@$(($now - 35))")" "$fileA"
 
     touch "$fileB"
     setfattr -n user.expires -v "$timeB" "$fileB"
-    touch -t "$(date +%m%d%H%M.%S --date='-105 seconds')" "$fileB"
+    touch -t "$(date +%m%d%H%M.%S --date="@$(($now - 105))")" "$fileB"
 
     touch "$fileC"
     setfattr -n user.expires -v "$timeC" "$fileC"
