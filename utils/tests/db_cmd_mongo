@@ -98,11 +98,13 @@ get_last_stats_id()
 count_stats()
 {
     local db="$1"
+    shift
+    local filter="$(args_to_filter "$@")"
 
     if (( $(mongo_version) < $(version_code 5.0.0) )); then
-        mongo $db --eval "db.stats.count({ $filter })"
+        mongo $db --eval "db.stat.count({ $filter })"
     else
-        mongo $db --eval "db.stats.countDocuments({ $filter })"
+        mongo $db --eval "db.stat.countDocuments({ $filter })"
     fi
 }
 
@@ -161,6 +163,12 @@ case "$cmd" in
                 {
                     $sort: { "ns.name": 1}
                 }])'
+        ;;
+    dump_info)
+        mongo "$db" --eval 'db.info.find({}, {"_id": 0}).forEach(printjson)'
+        ;;
+    dump_stats)
+        mongo "$db" --eval 'db.stat.find({}, {"_id": 0}).forEach(printjson)'
         ;;
     remove)
         remove_attribute "$db" "$@"

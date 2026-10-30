@@ -327,6 +327,22 @@ def dump_db(db: str, filters: List[str]):
             print(row)
 
 
+def dump_info(db: str, filters: List[str]):
+    with sqlite3.connect(db) as con:
+        cursor = con.cursor()
+        res = cursor.execute("select * from info")
+        for row in res.fetchall():
+            print(row)
+
+
+def dump_stats(db: str, filters: List[str]):
+    with sqlite3.connect(db) as con:
+        cursor = con.cursor()
+        res = cursor.execute("select * from log")
+        for row in res.fetchall():
+            print(row)
+
+
 def get_last_id(db: str, filters: List[str]):
     with sqlite3.connect(db) as con:
         query = "select last_read from readers where id = ?"
@@ -392,6 +408,8 @@ if __name__ == '__main__':
         "get": get_entry,
         "drop": drop_db,
         "dump": dump_db,
+        "dump_info": dump_info,
+        "dump_stats": dump_stats,
         "size": db_size,
         "source": source,
         "avgsize": db_avgsize,

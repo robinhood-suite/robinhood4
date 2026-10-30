@@ -301,6 +301,15 @@ teardown()
         find $testdir >> "$errorfile"
         echo "Test DB content:" >> "$errorfile"
         do_db dump "$testdb" >> "$errorfile"
+        # Some failures leave little evidence in the logs, especially under
+        # MPI where the output of quickly exiting ranks can be lost. The
+        # backend info tells whether the command reached the database at all,
+        # and the logged stats record how many entries it converted or
+        # skipped, so dump them as well to make those failures diagnosable.
+        echo "Test DB backend info:" >> "$errorfile"
+        do_db dump_info "$testdb" >> "$errorfile"
+        echo "Test DB logged stats:" >> "$errorfile"
+        do_db dump_stats "$testdb" >> "$errorfile"
 
         for dump in "${error_dumps[@]}"; do
             "$dump" >> "$errorfile" 2>&1
