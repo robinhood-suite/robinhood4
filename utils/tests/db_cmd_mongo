@@ -95,6 +95,17 @@ get_last_stats_id()
         cut -d'"' -f4
 }
 
+count_stats()
+{
+    local db="$1"
+
+    if (( $(mongo_version) < $(version_code 5.0.0) )); then
+        mongo $db --eval "db.stats.count({ $filter })"
+    else
+        mongo $db --eval "db.stats.countDocuments({ $filter })"
+    fi
+}
+
 remove_attribute()
 {
     local db="$1"
@@ -124,6 +135,9 @@ case "$cmd" in
         ;;
     get_last_stats_id)
         get_last_stats_id "$db" "$@"
+        ;;
+    count_stats)
+        count_stats "$db" "$@"
         ;;
     get)
         get_attribute "$db" "$@"
