@@ -38,10 +38,10 @@ test_max_mtime()
     touch -d "2 hours ago" second
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    local first_mtime="$(stat -c %Y first)"
+    local root_mtime="$(stat -c %Y .)"
 
     rbh_report "rbh:$db:$testdb" --csv --output "max(statx.mtime.sec)" |
-        difflines "$first_mtime"
+        difflines "$root_mtime"
 
     touch -d "+2 hours" third
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
