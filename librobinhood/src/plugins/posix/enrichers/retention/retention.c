@@ -117,14 +117,37 @@ create_expiration_date_value_pair(const char *attribute_value,
     return 0;
 }
 
+#define INT64_MAX_STR_LEN 19
+
+static int
+copy_int64_str_from_binary(char *buffer, const struct rbh_value *value)
+{
+    assert(value->type == RBH_VT_BINARY);
+
+    if (value->binary.size >= INT64_MAX_STR_LEN) {
+        fprintf(stderr,
+                "Invalid value for expiration attribute '%.*s', too long, max size is '%d'\n",
+                (int) value->binary.size,
+                value->binary.data,
+                INT64_MAX_STR_LEN);
+        errno = EINVAL;
+        return -1;
+    }
+
+    memcpy(buffer, value->binary.data, value->binary.size);
+    buffer[value->binary.size] = 0;
+
+    return 0;
+}
+
 static int
 update_or_cast_expiration_date(struct rbh_value_pair *expiration_date,
                                char *user_retention,
                                const struct rbh_statx *statx)
 {
+    char expiration_value[INT64_MAX_STR_LEN];
     int64_t current_expiration_date;
     int64_t user_expiration_date;
-    const char *expiration_value;
     char *end;
 
     user_expiration_date = parse_user_expiration_date(user_retention,
@@ -132,9 +155,9 @@ update_or_cast_expiration_date(struct rbh_value_pair *expiration_date,
     if (user_expiration_date < 0)
         return -1;
 
-    expiration_value = RBH_SSTACK_PUSH(_values,
-                                       expiration_date->value->binary.data,
-                                       expiration_date->value->binary.size);
+    if (copy_int64_str_from_binary(expiration_value,
+                                   expiration_date->value))
+        return -1;
 
     errno = 0;
     current_expiration_date = strtoul(expiration_value, &end, 10);
@@ -155,29 +178,6 @@ update_or_cast_expiration_date(struct rbh_value_pair *expiration_date,
     else
         fill_int64_pair(XATTR_EXPIRATION_DATE, current_expiration_date,
                         expiration_date, _values);
-
-    return 0;
-}
-
-#define INT64_MAX_STR_LEN 19
-
-static int
-copy_int64_str_from_binary(char *buffer, const struct rbh_value *value)
-{
-    assert(value->type == RBH_VT_BINARY);
-
-    if (value->binary.size >= INT64_MAX_STR_LEN) {
-        fprintf(stderr,
-                "Invalid value for expiration attribute '%.*s', too long, max size is '%d'\n",
-                (int) value->binary.size,
-                value->binary.data,
-                INT64_MAX_STR_LEN);
-        errno = EINVAL;
-        return -1;
-    }
-
-    memcpy(buffer, value->binary.data, value->binary.size);
-    buffer[value->binary.size] = 0;
 
     return 0;
 }
