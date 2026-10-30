@@ -257,10 +257,10 @@ declare -a tests=(test_sync test_sync_size test_sync_mtime test_sync_empty
                   test_sync_empty_bucket test_sync_custom_metadata
                   test_sync_multi_buckets test_sync_mixed_buckets
                   test_sync_valid_uri test_sync_partial_uri
-                  test_sync_invalid_uri test_sync_with_region)
+                  test_sync_with_region)
 
 if [[ $WITH_MPI == false ]]; then
-    tests+=(test_sync_branch)
+    tests+=(test_sync_branch test_sync_invalid_uri)
 fi
 
 trap -- "minio_teardown" EXIT
