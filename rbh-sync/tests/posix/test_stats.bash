@@ -144,12 +144,16 @@ test_mpi_stats()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid_stat_options)
+declare -a tests=()
 
 if [[ $WITH_MPI == true ]]; then
     tests+=(test_mpi_stats)
 else
-    tests+=(test_stats)
+    # Run the 'test_invalid_stat_options' without MPI because there can be
+    # an OpenMPI abort-path deadlock, so if every mpi process fails as the test
+    # expects, it can sometimes hang the full script up until timeout, at which
+    # point Meson aborts the script altogether
+    tests+=(test_invalid_stat_options test_stats)
 fi
 
 tmpdir=$(mktemp --directory)
