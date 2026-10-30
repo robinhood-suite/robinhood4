@@ -49,7 +49,7 @@ function test_set_retention
     ln -s $file $symlink
 
     local date="$(date -d "3PM - 5 minutes" +%s)"
-    rbh_retention $dir "3PM - 5 minutes"
+    rbh_retention $dir "$date"
     local attr="$(getfattr -n user.expires --only-values $dir)"
     if [ "$attr" != "$date" ]; then
         error "'user.expires' value should be set at '$date' for '$dir', got '$attr'"
@@ -92,35 +92,35 @@ function test_get_retention
         error "'$date' value should have been converted to '$date2attr' for '$dir', got '$attr'"
     fi
 
-    date="$(($(date -d "10 minutes" +%s) - $(date +%s)))"
+    date=600  # 10 minutes
     setfattr -n user.expires -v "+$date" $dir
     local attr="$(rbh_retention $dir)"
     if [[ "$attr" != *"10 minute(s)"* ]]; then
         error "'$date' value should have been converted to '10 minutes' for '$dir', got '$attr'"
     fi
 
-    date="$(($(date -d "12 hours" +%s) - $(date +%s)))"
+    date=43200  # 12 hours
     setfattr -n user.expires -v "+$date" $file
     local attr="$(rbh_retention $file)"
     if [[ "$attr" != *"12 hour(s)"* ]]; then
         error "'$date' value should have been converted to '12 hours' for '$file', got '$attr'"
     fi
 
-    date="$(($(date -d "2 days" +%s) - $(date +%s)))"
+    date=172800  # 2 days
     setfattr -n user.expires -v "+$date" $symlink
     local attr="$(rbh_retention $symlink)"
     if [[ "$attr" != *"2 day(s)"* ]]; then
         error "'$date' value should have been converted to '2 days' for '$symlink', got '$attr'"
     fi
 
-    date="$(($(date -d "2 days + 1 hour" +%s) - $(date +%s)))"
+    date=176400  # 2 days + 1 hour
     setfattr -n user.expires -v "+$date" $file
     local attr="$(rbh_retention $file)"
     if [[ "$attr" != *"2 day(s) and 1 hour(s)"* ]]; then
         error "'$date' value should have been converted to '2 days and 1 hours' for '$file', got '$attr'"
     fi
 
-    date="$(($(date -d "2 days + 2 hours + 5 minutes" +%s) - $(date +%s)))"
+    date=180300  # 2 days + 2 hours + 5 minutes
     setfattr -n user.expires -v "+$date" $file
     local attr="$(rbh_retention $file)"
     if [[ "$attr" != *"2 day(s), 2 hour(s) and 5 minute(s)"* ]]; then
@@ -154,7 +154,7 @@ RBH_RETENTION_XATTR: \"user.blob\"
     touch $file
 
     local date="$(date -d "now - 5 minutes" +%s)"
-    rbh_retention $file "now - 5 minutes"
+    rbh_retention $file "$date"
     local attr="$(rbh_retention $file)"
     local date2attr="$(date -d "@$date")"
     if [[ "$attr" != *"$date2attr"* ]]; then
