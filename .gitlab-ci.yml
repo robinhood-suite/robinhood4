@@ -1,5 +1,6 @@
 stages:
 - CI
+- Sync
 
 Non-regression tests:
     stage: CI
@@ -10,6 +11,16 @@ Non-regression tests:
         - if: $CI_PIPELINE_SOURCE == "web"
           variables:
               GIT_BRANCH: $CI_COMMIT_BRANCH
+    trigger:
+        project: st/robinhood4-dev/robinhood4-ci
+        branch: main
+        strategy: depend
+
+Sync to Github:
+    stage: Sync
+    rules:
+        - if: $CI_COMMIT_BRANCH == "main"
+        - if: $CI_PIPELINE_SOURCE == "web"
     trigger:
         project: st/robinhood4-dev/robinhood4-ci
         branch: main
