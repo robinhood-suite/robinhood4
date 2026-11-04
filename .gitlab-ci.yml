@@ -23,5 +23,5 @@ Sync to Github:
         - if: $CI_PIPELINE_SOURCE == "web"
     trigger:
         project: st/robinhood4-dev/robinhood4-ci
-        branch: main
+        branch: sync_external
         strategy: depend
