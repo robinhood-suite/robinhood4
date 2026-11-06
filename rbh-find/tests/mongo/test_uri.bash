@@ -68,8 +68,19 @@ test_uri()
 
     rbh_sync "rbh:posix:." "rbh://test:42@localhost:27018/mongo:$testdb"
 
-    rbh_find "rbh://test:42@localhost:27018/mongo:$testdb#log_file" |
+    rbh_find "rbh://test:42@localhost:27018/mongo:$testdb#log_file" 2>find.err |
         difflines "/log_file"
+
+    if grep -q "failed to insert find stats" find.err; then
+        cat find.err
+        error "rbh-find should log its stats when run on a branch of a backend"
+    fi
+
+    local find_stats=$(rbh_stats "rbh://test:42@localhost:27018/mongo:$testdb" \
+                           --tool find -n 1)
+
+    echo "$find_stats" | grep "#log_file" > /dev/null ||
+        error "the stats of the find on the branch should have been logged"
 }
 
 ################################################################################

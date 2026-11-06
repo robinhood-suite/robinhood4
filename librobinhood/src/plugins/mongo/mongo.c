@@ -1295,6 +1295,15 @@ mongo_branch_get_info(void *backend, int info_flags)
     return mongo_backend_get_info(&branch->mongo, info_flags);
 }
 
+static int
+mongo_branch_insert_stats(void *backend, const char *command,
+                          const struct rbh_value_map *map)
+{
+    struct mongo_branch_backend *branch = backend;
+
+    return mongo_backend_insert_stats(&branch->mongo, command, map);
+}
+
 static struct rbh_value_map *
 mongo_branch_get_stats_count(void *backend)
 {
@@ -1325,6 +1334,7 @@ static const struct rbh_backend_operations MONGO_BRANCH_BACKEND_OPS = {
     .update = mongo_backend_update,
     .filter = generic_branch_backend_filter,
     .get_info = mongo_branch_get_info,
+    .insert_stats = mongo_branch_insert_stats,
     .get_stats_count = mongo_branch_get_stats_count,
     .get_stats = mongo_branch_get_stats,
     .delete_stats = mongo_branch_delete_stats,
