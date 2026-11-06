@@ -46,6 +46,13 @@ rbh_sstack_new(size_t chunk_size)
     return sstack;
 }
 
+void
+rbh_sstack_increase_chunk_size(struct rbh_sstack *sstack, size_t size)
+{
+    if (size > sstack->chunk_size)
+        sstack->chunk_size = size;
+}
+
 void *
 rbh_sstack_push(struct rbh_sstack *sstack, const void *data, size_t size)
 {
@@ -57,7 +64,10 @@ retry:
     if (ret != NULL)
         return ret;
 
-    if (errno != ENOBUFS)
+    /* Move on to another chunk on ENOBUFS (the current one is full), or on
+     * EINVAL if a chunk of chunk_size bytes (a size that
+     * rbh_sstack_increase_chunk_size() can increase) could hold the data. */
+    if (errno != ENOBUFS && !(errno == EINVAL && size <= sstack->chunk_size))
         return NULL;
 
     if (++sstack->current >= sstack->count) {

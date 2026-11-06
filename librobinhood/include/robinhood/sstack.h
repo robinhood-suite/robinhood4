@@ -125,7 +125,8 @@ struct rbh_sstack;
  * Create a new sstack
  *
  * @param chunk_size    the maximum number of bytes that can be pushed onto the
- *                      sstack at once
+ *                      sstack at once (this limit can be increased
+ *                      afterwards with rbh_sstack_increase_chunk_size())
  *
  * @return              a pointer to a newly allocated sstack on success
  */
@@ -142,7 +143,8 @@ rbh_sstack_new(size_t chunk_size);
  * @return          the address where \p data was pushed on success, NULL on
  *                  error and errno is set appropriately
  *
- * @error EINVAL    \p size is greater than \p sstack's chunk size
+ * @error EINVAL    \p size is greater than \p sstack's chunk size (see
+ *                  rbh_sstack_increase_chunk_size() to increase it)
  * @error ENOMEM    there is not enough memory available
  *
  * \p data is guaranteed to be stored contiguously in \p sstack.
@@ -154,6 +156,20 @@ rbh_sstack_new(size_t chunk_size);
  */
 void *
 rbh_sstack_push(struct rbh_sstack *sstack, const void *data, size_t size);
+
+/**
+ * Increase the chunk size of an sstack
+ *
+ * Chunks of \p sstack allocated after this call will be at least \p size
+ * bytes big, making it possible to push up to \p size bytes at once. The
+ * chunks already allocated are left untouched: pointers to data previously
+ * pushed on \p sstack remain valid. No memory is allocated by this function.
+ *
+ * @param sstack    the sstack to increase the chunk size of
+ * @param size      the minimum size of the chunks allocated from now on
+ */
+void
+rbh_sstack_increase_chunk_size(struct rbh_sstack *sstack, size_t size);
 
 /**
  * Allocate \p size bytes on the stack respecting the memory alignment

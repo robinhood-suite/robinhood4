@@ -390,6 +390,68 @@ START_TEST(rvmn_misaligned)
 END_TEST
 
 /*----------------------------------------------------------------------------*
+ |                           fill_sequence_pair()                             |
+ *----------------------------------------------------------------------------*/
+
+/* A sequence bigger than a whole chunk of the sstack cannot be filled: any
+ * single push must fit in one chunk of the sstack.
+ *
+ * The lustre backend can push a lot of values at once, whose size depends
+ * on the number of components of each file: they may not fit in a whole
+ * chunk of the posix backend's values stack, which made the lustre backend
+ * lose the attributes of these files. It now increases the chunk size of
+ * the sstack when a sequence does not fit, which makes the sstack allocate
+ * chunks big enough to hold it.
+ */
+START_TEST(fsp_bigger_than_chunk)
+{
+    struct rbh_value ost_indices[49];
+    struct rbh_value_pair pair;
+    struct rbh_sstack *sstack;
+    int rc;
+
+    for (size_t i = 0; i < sizeof(ost_indices) / sizeof(ost_indices[0]); i++) {
+        ost_indices[i].type = RBH_VT_INT64;
+        ost_indices[i].int64 = i;
+    }
+
+    /* use the same chunk size as the posix backend's values stack */
+    sstack = rbh_sstack_new(1024);
+    ck_assert_ptr_nonnull(sstack);
+
+    errno = 0;
+    rc = fill_sequence_pair("ost", ost_indices,
+                            sizeof(ost_indices) / sizeof(ost_indices[0]),
+                            &pair, sstack);
+    ck_assert_int_eq(rc, -1);
+    ck_assert_int_eq(errno, EINVAL);
+
+    /* Grow the sstack like the lustre backend does when a sequence does not
+     * fit in one of its chunks: increase the chunk size to the next power
+     * of 2 big enough for the whole sequence, so that the chunks allocated
+     * from now on can hold it. The data already pushed on the sstack stays
+     * where it is. */
+    rbh_sstack_increase_chunk_size(sstack, 2048);
+
+    rc = fill_sequence_pair("ost", ost_indices,
+                            sizeof(ost_indices) / sizeof(ost_indices[0]),
+                            &pair, sstack);
+    ck_assert_int_eq(rc, 0);
+
+    ck_assert_str_eq(pair.key, "ost");
+    ck_assert_int_eq(pair.value->type, RBH_VT_SEQUENCE);
+    ck_assert_uint_eq(pair.value->sequence.count,
+                      sizeof(ost_indices) / sizeof(ost_indices[0]));
+    ck_assert_ptr_ne(pair.value->sequence.values, ost_indices);
+
+    for (size_t i = 0; i < pair.value->sequence.count; i++)
+        ck_assert_value_eq(&pair.value->sequence.values[i], &ost_indices[i]);
+
+    rbh_sstack_destroy(sstack);
+}
+END_TEST
+
+/*----------------------------------------------------------------------------*
  |                           value_map_data_size()                            |
  *----------------------------------------------------------------------------*/
 
@@ -1147,6 +1209,11 @@ unit_suite(void)
     tcase_add_test(tests, rvmn_basic);
     tcase_add_test(tests, rvmn_empty);
     tcase_add_test(tests, rvmn_misaligned);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("fill_sequence_pair");
+    tcase_add_test(tests, fsp_bigger_than_chunk);
 
     suite_add_tcase(suite, tests);
 

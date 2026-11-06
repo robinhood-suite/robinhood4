@@ -115,6 +115,60 @@ START_TEST(rspu_reuse_stacks)
 END_TEST
 
     /*--------------------------------------------------------------------*
+     |                  rbh_sstack_increase_chunk_size()                  |
+     *--------------------------------------------------------------------*/
+
+START_TEST(rsics_bigger_than_chunk)
+{
+    struct rbh_sstack *sstack;
+
+    sstack = rbh_sstack_new(16);
+    ck_assert_ptr_nonnull(sstack);
+
+    /* a push bigger than a whole chunk fails */
+    errno = 0;
+    ck_assert_ptr_null(rbh_sstack_push(sstack, NULL, 17));
+    ck_assert_int_eq(errno, EINVAL);
+
+    rbh_sstack_increase_chunk_size(sstack, 32);
+
+    /* a push bigger than the initial chunk size now succeeds */
+    ck_assert_ptr_nonnull(rbh_sstack_push(sstack, NULL, 17));
+
+    /* a push bigger than the new chunk size still fails */
+    errno = 0;
+    ck_assert_ptr_null(rbh_sstack_push(sstack, NULL, 33));
+    ck_assert_int_eq(errno, EINVAL);
+
+    rbh_sstack_destroy(sstack);
+}
+END_TEST
+
+START_TEST(rsics_keeps_previous_data)
+{
+    const char STRING[] = "0123456789abcdef";
+    struct rbh_sstack *sstack;
+    void *first;
+
+    sstack = rbh_sstack_new(sizeof(STRING));
+    ck_assert_ptr_nonnull(sstack);
+
+    first = rbh_sstack_push(sstack, STRING, sizeof(STRING));
+    ck_assert_ptr_nonnull(first);
+
+    /* the chunk is full: the next push goes to a new one, big enough for
+     * the data pushed after the chunk size increase */
+    rbh_sstack_increase_chunk_size(sstack, 64);
+    ck_assert_ptr_nonnull(rbh_sstack_push(sstack, NULL, 64));
+
+    /* the data pushed before the chunk size increase is still valid */
+    ck_assert_mem_eq(first, STRING, sizeof(STRING));
+
+    rbh_sstack_destroy(sstack);
+}
+END_TEST
+
+    /*--------------------------------------------------------------------*
      |                         rbh_sstack_peek()                          |
      *--------------------------------------------------------------------*/
 
@@ -242,6 +296,12 @@ unit_suite(void)
     tcase_add_test(tests, rspu_more_than_possible);
     tcase_add_test(tests, rspu_full_twice);
     tcase_add_test(tests, rspu_reuse_stacks);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("rbh_sstack_increase_chunk_size()");
+    tcase_add_test(tests, rsics_bigger_than_chunk);
+    tcase_add_test(tests, rsics_keeps_previous_data);
 
     suite_add_tcase(suite, tests);
 

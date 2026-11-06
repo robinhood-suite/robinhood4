@@ -451,6 +451,63 @@ init_iterator_data(struct iterator_data *data, const uint32_t length,
     data->has_extension = false;
 }
 
+/**
+ * Round a size up to the next power of 2
+ *
+ * @param size     the size to round up
+ *
+ * @return         the smallest power of 2 that is not smaller than \p size
+ */
+static size_t
+size_pow2(size_t size)
+{
+    size_t pow2 = 1;
+
+    while (pow2 < size)
+        pow2 <<= 1;
+
+    return pow2;
+}
+
+/**
+ * Fill a sequence pair, making sure the values sstack can hold the sequence
+ *
+ * A sequence is pushed in one go on the sstack: one of its chunks must be
+ * big enough to hold the whole sequence. Lustre can push a lot of values
+ * at once, and their size depends on the number of components of each
+ * file: the values sstack given by the posix backend may not have enough
+ * space for them, so we need to increase the size of its chunks. When the
+ * sequence does not fit in a whole chunk, raise the chunk size of the
+ * sstack to the next power of 2 big enough for the sequence and fill the
+ * pair again. Only the chunks allocated afterwards are affected, the data
+ * already pushed on the sstack stays where it is.
+ *
+ * @param key      the key of the pair to fill
+ * @param values   the sequence of values to push on the sstack
+ * @param length   the number of values in the sequence
+ * @param pair     the pair to fill
+ *
+ * @return         0 on success, -1 on error and errno is set appropriately
+ */
+static int
+lustre_fill_sequence_pair(const char *key, struct rbh_value *values,
+                          uint64_t length, struct rbh_value_pair *pair)
+{
+    int rc;
+
+    rc = fill_sequence_pair(key, values, length, pair, _values);
+    if (rc == 0 || errno != EINVAL)
+        return rc;
+
+    /* The sequence does not fit in a whole chunk of the sstack: raise its
+     * chunk size to the next power of 2 big enough for the sequence and
+     * fill the pair again. */
+    rbh_sstack_increase_chunk_size(_values,
+                                   size_pow2(length * sizeof(*values)));
+
+    return fill_sequence_pair(key, values, length, pair, _values);
+}
+
 static int
 xattrs_fill_layout(struct iterator_data *data, int nb_xattrs,
                    struct rbh_value_pair *pairs)
@@ -464,22 +521,22 @@ xattrs_fill_layout(struct iterator_data *data, int nb_xattrs,
     int rc;
 
     for (int i = 0; i < nb_xattrs; ++i) {
-        rc = fill_sequence_pair(keys[i], values[i], data->comp_index,
-                                &pairs[subcount++], _values);
+        rc = lustre_fill_sequence_pair(keys[i], values[i], data->comp_index,
+                                       &pairs[subcount++]);
         if (rc)
             return -1;
     }
 
     if (data->ost) {
-        rc = fill_sequence_pair("ost", data->ost, data->ost_idx,
-                                &pairs[subcount++], _values);
+        rc = lustre_fill_sequence_pair("ost", data->ost, data->ost_idx,
+                                       &pairs[subcount++]);
         if (rc)
             return -1;
     }
 
     if (data->has_extension) {
-        rc = fill_sequence_pair("extension_size", data->extension_size,
-                                data->comp_index, &pairs[subcount++], _values);
+        rc = lustre_fill_sequence_pair("extension_size", data->extension_size,
+                                       data->comp_index, &pairs[subcount++]);
         if (rc)
             return -1;
     }
@@ -946,8 +1003,9 @@ again:
         for (uint32_t i = 0; i < lum->lum_stripe_count; i++)
             mdt_idx[i] = create_uint32_value(objects[i].lum_mds);
 
-        rc = fill_sequence_pair("child_mdt_idx", mdt_idx, lum->lum_stripe_count,
-                                &pairs[subcount++], _values);
+        rc = lustre_fill_sequence_pair("child_mdt_idx", mdt_idx,
+                                       lum->lum_stripe_count,
+                                       &pairs[subcount++]);
         save_errno = errno;
         free(mdt_idx);
         errno = save_errno;
