@@ -126,9 +126,19 @@ test_last_sync_start_date()
 
     local output=$(rbh_info "rbh:$db:$testdb" --last-sync-start-date)
 
-    echo "output = '$output'"
     echo "$output" | grep "Last sync start date" ||
         error "last_sync_start_date should have been retrieved"
+
+    # Insert a noise-command to ensure '--last-sync-start-date' is still correct
+    # afterwards
+    rbh_gc "rbh:$db:$testdb"
+
+    local output2=$(rbh_info "rbh:$db:$testdb" --last-sync-start-date)
+
+    if [ "$output" != "$output2" ]; then
+        error "'--last-sync-start-date' after the noise command shouldn't" \
+              "have changed the result"
+    fi
 }
 
 ################################################################################

@@ -193,7 +193,7 @@ get_collection_last_sync_start_date(const struct mongo_backend *mongo,
     int rc = 0;
 
     buffer = _buffer;
-    filter = bson_new();
+    filter = BCON_NEW("sync", "{", "$exists", BCON_BOOL(true), "}");
     bufsize = sizeof(_buffer);
     value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*value));
     opts = BCON_NEW("sort", "{", "_id", BCON_INT32(-1), "}");
