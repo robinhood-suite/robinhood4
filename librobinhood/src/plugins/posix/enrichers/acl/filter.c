@@ -50,7 +50,7 @@ parse_acl_id(const char *arg)
 {
     uint64_t id;
 
-    if (str2uint64_t(arg, &id) || id > UINT32_MAX)
+    if (str2uint64_t(arg, &id, 10) || id > UINT32_MAX)
         error(EX_USAGE, 0, "invalid ACL identifier '%s'", arg);
 
     return id;

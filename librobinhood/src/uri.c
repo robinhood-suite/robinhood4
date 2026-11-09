@@ -366,7 +366,7 @@ skip_host:
         goto skip_port;
     }
 
-    rc = str2uint64_t(port, &authority->port);
+    rc = str2uint64_t(port, &authority->port, 10);
     if (rc)
         return rc;
 

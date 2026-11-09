@@ -236,7 +236,7 @@ find_parse_callback(struct filters_context *ctx, int *arg_idx,
 
                 (*arg_idx)++;
 
-                if (str2uint64_t(ctx->argv[*arg_idx], &options->limit) != 0)
+                if (str2uint64_t(ctx->argv[*arg_idx], &options->limit, 10) != 0)
                     error(EX_USAGE, 0, "invalid limit '%s'",
                           ctx->argv[*arg_idx]);
             }

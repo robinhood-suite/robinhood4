@@ -933,7 +933,7 @@ main(int argc, char *argv[])
             usage();
             return 0;
         case 'I':
-            if (str2int64_t(optarg, &metadata.stats_interval))
+            if (str2int64_t(optarg, &metadata.stats_interval, 10))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to int64_t",
                       optarg);
 

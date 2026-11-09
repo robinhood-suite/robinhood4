@@ -125,7 +125,8 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
             fsevents_md->source_read + strlen(fsevents_md->source_read) - 1;
          isdigit(*mdtname_index); mdtname_index--);
 
-    rc = str2int64_t(++mdtname_index, (int64_t *) &events->source_mdt_index);
+    rc = str2int64_t(++mdtname_index, (int64_t *) &events->source_mdt_index,
+                     16);
     if (rc)
         error(EXIT_FAILURE, errno, "str2int64_t");
 

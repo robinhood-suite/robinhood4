@@ -166,7 +166,7 @@ selinux_has_cat_filter(const char *arg)
     struct selinux_interval interval;
     uint64_t category;
 
-    if (str2uint64_t(arg, &category) || category > SELINUX_MAX_CATEGORY)
+    if (str2uint64_t(arg, &category, 10) || category > SELINUX_MAX_CATEGORY)
         error(EX_USAGE, 0, "invalid SELinux category '%s'", arg);
 
     interval.first = category;

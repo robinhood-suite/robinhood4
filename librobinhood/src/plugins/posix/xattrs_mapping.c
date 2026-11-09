@@ -72,7 +72,7 @@ set_value_to_int(enum rbh_value_type type, const char *name, const char *buffer,
     int64_t _value;
     int rc;
 
-    rc = str2int64_t(buffer, &_value);
+    rc = str2int64_t(buffer, &_value, 10);
     if (rc) {
         fprintf(stderr,
                 "Unexpected value for %s-type xattr '%s', found '%s'\n",
@@ -97,7 +97,7 @@ set_value_to_uint(enum rbh_value_type type, const char *name,
     uint64_t _value;
     int rc;
 
-    rc = str2uint64_t(buffer, &_value);
+    rc = str2uint64_t(buffer, &_value, 10);
     if (rc) {
         fprintf(stderr,
                 "Unexpected value for %s-type xattr '%s', found '%s'\n",

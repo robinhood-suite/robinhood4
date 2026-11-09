@@ -26,7 +26,7 @@ set_boundaries(int64_t *boundaries, char *boundaries_string)
 
     current_value = strtok_r(boundaries_string, ";", &saveptr);
     while (current_value) {
-        if (str2int64_t(current_value, &boundaries[counter++]))
+        if (str2int64_t(current_value, &boundaries[counter++], 10))
             error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
                           "'%s' ill-formed, not a number", current_value);
 

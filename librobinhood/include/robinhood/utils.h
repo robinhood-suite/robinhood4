@@ -115,22 +115,26 @@ shell2pcre(const char *shell);
  *
  * @param input     a string representing a long
  * @param result    a int64_t represented by \p string
+ * @param base      the base to use for conversion, must be between 2 and 36, or
+ *                  0, check 'strtol(3)' for more information
  *
  * @return          0 on success, -1 on error
  */
 int
-str2int64_t(const char *input, int64_t *result);
+str2int64_t(const char *input, int64_t *result, int base);
 
 /**
  * str2uint64_t - convert a string into a uint64_t
  *
  * @param input     a string representing an unsigned long
  * @param result    a uint64_t represented by \p string
+ * @param base      the base to use for conversion, must be between 2 and 36, or
+ *                  0, check 'strtoul(3)' for more information
  *
  * @return          0 on success, -1 on error
  */
 int
-str2uint64_t(const char *input, uint64_t *result);
+str2uint64_t(const char *input, uint64_t *result, int base);
 
 enum time_unit {
     TU_SECOND,

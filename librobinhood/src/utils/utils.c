@@ -24,12 +24,12 @@ rbh_print_version()
 }
 
 int
-str2int64_t(const char *input, int64_t *result)
+str2int64_t(const char *input, int64_t *result, int base)
 {
     char *end;
 
     errno = 0;
-    *result = strtol(input, &end, 0);
+    *result = strtol(input, &end, base);
     if (errno) {
         return -1;
     } else if ((!*result && input == end) || *end != '\0') {
@@ -41,7 +41,7 @@ str2int64_t(const char *input, int64_t *result)
 }
 
 int
-str2uint64_t(const char *input, uint64_t *result)
+str2uint64_t(const char *input, uint64_t *result, int base)
 {
     char *end;
 
@@ -54,7 +54,7 @@ str2uint64_t(const char *input, uint64_t *result)
     }
 
     errno = 0;
-    *result = strtoull(input, &end, 0);
+    *result = strtoull(input, &end, base);
     if (errno) {
         return -1;
     } else if ((!*result && input == end) || *end != '\0') {

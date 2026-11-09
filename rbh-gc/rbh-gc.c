@@ -676,7 +676,7 @@ main(int _argc, char *_argv[])
                 error(EXIT_FAILURE, EINVAL,
                       "Missing argument for '--stats-interval'");
 
-            if (str2int64_t(argv[i + 1], &metadata.stats_interval))
+            if (str2int64_t(argv[i + 1], &metadata.stats_interval, 10))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to int64_t",
                       argv[i + 1]);
 
@@ -689,7 +689,7 @@ main(int _argc, char *_argv[])
             if (i + 1 >= argc)
                 error(EXIT_FAILURE, EINVAL, "Missing argument for %s", arg);
 
-            if (str2int64_t(argv[++i], &metadata.gc_md.sync_time))
+            if (str2int64_t(argv[++i], &metadata.gc_md.sync_time, 10))
                 error(EXIT_FAILURE, errno, "str2int64_t");
         } else if (strcmp(arg, "--stats") == 0) {
             print_stats = true;

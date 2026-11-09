@@ -21,7 +21,7 @@ parse_prefixed_number(const char *string, char prefix, int max, uint64_t *number
         return -1;
     }
 
-    if (str2uint64_t(string + 1, number)) {
+    if (str2uint64_t(string + 1, number, 10)) {
         errno = EINVAL;
         return -1;
     }

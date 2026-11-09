@@ -256,7 +256,7 @@ ost_index2filter(const char *ost_index)
     if (!isdigit(*ost_index))
         error(EX_USAGE, 0, "invalid ost index: `%s'", ost_index);
 
-    rc = str2uint64_t(ost_index, &index);
+    rc = str2uint64_t(ost_index, &index, 16);
     if (rc)
         error(EX_USAGE, errno, "invalid ost index: `%s'", ost_index);
 
@@ -281,7 +281,7 @@ index2filter(const char *index, int predicate, const char *err_info)
     if (!isdigit(*index))
         error(EX_USAGE, 0, "invalid %s: `%s'", err_info, index);
 
-    rc = str2uint64_t(index, &_index);
+    rc = str2uint64_t(index, &_index, 10);
     if (rc)
         error(EX_USAGE, errno, "invalid %s: `%s'", err_info, index);
 

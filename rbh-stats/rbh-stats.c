@@ -272,7 +272,7 @@ main(int argc, char *argv[])
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'a':
-            if (str2uint64_t(optarg, &options.start_timestamp))
+            if (str2uint64_t(optarg, &options.start_timestamp, 10))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
                       optarg);
 
@@ -282,7 +282,7 @@ main(int argc, char *argv[])
 
             break;
         case 'b':
-            if (str2uint64_t(optarg, &options.end_timestamp))
+            if (str2uint64_t(optarg, &options.end_timestamp, 10))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
                       optarg);
 
@@ -318,7 +318,7 @@ main(int argc, char *argv[])
             output_format = OF_JSON;
             break;
         case 'n':
-            if (str2uint64_t(optarg, &options.count))
+            if (str2uint64_t(optarg, &options.count, 10))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to uint64_t",
                       optarg);
 

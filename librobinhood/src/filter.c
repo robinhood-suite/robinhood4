@@ -936,7 +936,7 @@ rbh_numeric2filter(const struct rbh_filter_field *field, const char *_numeric,
     }
 
     save_errno = errno;
-    if (str2uint64_t(numeric, &value))
+    if (str2uint64_t(numeric, &value, 10))
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "'%s' is not a valid number", numeric);
 

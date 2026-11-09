@@ -831,7 +831,7 @@ main(int argc, char *argv[])
                             LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'b':
-            if (str2uint64_t(optarg, &dedup_opts.batch_size))
+            if (str2uint64_t(optarg, &dedup_opts.batch_size, 10))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
 
             break;
@@ -852,14 +852,14 @@ main(int argc, char *argv[])
             usage();
             return 0;
         case 'i':
-            if (str2int64_t(optarg, &metadata.fsevents_md.start_index))
+            if (str2int64_t(optarg, &metadata.fsevents_md.start_index, 10))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
             if (metadata.fsevents_md.start_index < 0)
                 error(EXIT_FAILURE, 0, "'%s' cannot be a negative integer",
                       optarg);
             break;
         case 'I':
-            if (str2int64_t(optarg, &metadata.stats_interval))
+            if (str2int64_t(optarg, &metadata.stats_interval, 10))
                 error(EXIT_FAILURE, errno, "Failed to convert '%s' to int64_t",
                       optarg);
 
@@ -882,14 +882,14 @@ main(int argc, char *argv[])
             }
             break;
         case 'm':
-            if (str2uint64_t(optarg, &max_changelog))
+            if (str2uint64_t(optarg, &max_changelog, 10))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
             break;
         case 'n':
             skip_error = false;
             break;
         case 'w':
-            if (str2uint64_t(optarg, &nb_workers))
+            if (str2uint64_t(optarg, &nb_workers, 10))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
 
             metadata.fsevents_md.worker_count = nb_workers;
