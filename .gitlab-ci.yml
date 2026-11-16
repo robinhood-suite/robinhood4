@@ -11,10 +11,16 @@ Non-regression tests:
         - if: $CI_PIPELINE_SOURCE == "web"
           variables:
               GIT_BRANCH: $CI_COMMIT_BRANCH
+    variables:
+        REVIEW_MR_IID: $CI_MERGE_REQUEST_IID
+        REVIEW_TARGET_PROJECT: $CI_PROJECT_PATH
+        REVIEW_TARGET_PROJECT_ID: $CI_PROJECT_ID
+        REVIEW_TARGET_SHA: $CI_COMMIT_SHA
+        REVIEW_TARGET_BRANCH: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
     trigger:
         project: st/robinhood4-dev/robinhood4-ci
         branch: main
-        strategy: depend
+        strategy: mirror
 
 Sync to Github:
     stage: Sync
@@ -24,4 +30,4 @@ Sync to Github:
     trigger:
         project: st/robinhood4-dev/robinhood4-ci
         branch: sync_external
-        strategy: depend
+        strategy: mirror
