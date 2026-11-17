@@ -7,16 +7,17 @@ Non-regression tests:
     rules:
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
           variables:
+              RBH4_CI_STEP: "ci + ai-review"
               GIT_BRANCH: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+              REVIEW_MR_IID: $CI_MERGE_REQUEST_IID
+              REVIEW_TARGET_PROJECT: $CI_PROJECT_PATH
+              REVIEW_TARGET_PROJECT_ID: $CI_PROJECT_ID
+              REVIEW_TARGET_SHA: $CI_COMMIT_SHA
+              REVIEW_TARGET_BRANCH: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
         - if: $CI_PIPELINE_SOURCE == "web"
           variables:
               GIT_BRANCH: $CI_COMMIT_BRANCH
-    variables:
-        REVIEW_MR_IID: $CI_MERGE_REQUEST_IID
-        REVIEW_TARGET_PROJECT: $CI_PROJECT_PATH
-        REVIEW_TARGET_PROJECT_ID: $CI_PROJECT_ID
-        REVIEW_TARGET_SHA: $CI_COMMIT_SHA
-        REVIEW_TARGET_BRANCH: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+              RBH4_CI_STEP: "ci"
     trigger:
         project: st/robinhood4-dev/robinhood4-ci
         branch: main
@@ -27,7 +28,9 @@ Sync to Github:
     rules:
         - if: $CI_COMMIT_BRANCH == "main"
         - if: $CI_PIPELINE_SOURCE == "web"
+    variables:
+        RBH4_CI_STEP: "sync"
     trigger:
         project: st/robinhood4-dev/robinhood4-ci
-        branch: sync_external
+        branch: main
         strategy: mirror
