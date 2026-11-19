@@ -285,6 +285,7 @@ filter2op(const struct rbh_filter *filter, bool negate)
         case RBH_VT_UINT32:
         case RBH_VT_INT64:
         case RBH_VT_UINT64:
+        case RBH_VT_DOUBLE:
             return neg_int64_ops[filter->op];
 
         case RBH_VT_BINARY:
@@ -307,6 +308,7 @@ filter2op(const struct rbh_filter *filter, bool negate)
         case RBH_VT_UINT32:
         case RBH_VT_INT64:
         case RBH_VT_UINT64:
+        case RBH_VT_DOUBLE:
             return int64_ops[filter->op];
 
         case RBH_VT_BINARY:
@@ -811,6 +813,8 @@ bind_value(struct sqlite_cursor *cursor, const struct rbh_value *value,
             return sqlite_cursor_bind_int64(cursor, INT64_MAX);
 
         return sqlite_cursor_bind_int64(cursor, value->uint64);
+    case RBH_VT_DOUBLE:
+        return sqlite_cursor_bind_double(cursor, value->float64);
     case RBH_VT_STRING:
         return sqlite_cursor_bind_string(cursor, value->string);
     case RBH_VT_BINARY:
@@ -1149,7 +1153,7 @@ static const struct rbh_filter ROOT_FILTER = {
 struct rbh_fsentry *
 sqlite_backend_root(void *backend,
                     const struct rbh_filter_projection *projection,
-                    __attribute__((unused)) struct rbh_metadat *metadata)
+                    struct rbh_metadata *metadata)
 {
-    return rbh_backend_filter_one(backend, &ROOT_FILTER, projection);
+    return rbh_backend_filter_one(backend, &ROOT_FILTER, projection, metadata);
 }

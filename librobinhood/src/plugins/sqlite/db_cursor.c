@@ -184,6 +184,18 @@ sqlite_cursor_get_uint16(struct sqlite_cursor *trans)
 }
 
 bool
+sqlite_cursor_bind_double(struct sqlite_cursor *cursor, double value)
+{
+    int rc;
+
+    rc = sqlite3_bind_double(cursor->stmt, cursor->index++, value);
+    if (rc != SQLITE_OK)
+        return sqlite_db_fail(cursor->db, "failed to bind double '%f'", value);
+
+    return true;
+}
+
+bool
 sqlite_cursor_bind_string(struct sqlite_cursor *cursor, const char *string)
 {
     int rc;

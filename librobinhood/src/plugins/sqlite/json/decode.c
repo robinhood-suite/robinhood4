@@ -45,6 +45,9 @@ json2value(json_t *object, struct rbh_value *value,
          */
         value->type = RBH_VT_INT64;
         value->int64 = json_integer_value(object);
+    } else if (json_is_real(object)) {
+        value->type = RBH_VT_DOUBLE;
+        value->float64 = json_real_value(object);
     } else if (json_is_object(object)) {
         value->type = RBH_VT_MAP;
         if (!json2value_map(object, &value->map, sstack))

@@ -185,44 +185,48 @@ store_fsevents_source(struct sqlite_backend *sqlite,
     return true;
 }
 
-static bool
-insert_info(void *backend, const struct rbh_value_map *map)
+int
+sqlite_backend_insert_info(void *backend, const struct rbh_value_map *map)
 {
+    int rc = 0;
+    bool rc2;
+
     for (size_t i = 0; i < map->count; i++) {
         const struct rbh_value_pair *pair = &map->pairs[0];
 
         if (!strcmp(pair->key, "backend_source") &&
             pair->value->type == RBH_VT_SEQUENCE) {
-            if (!store_source(backend, pair->value))
-                return false;
+            rc2 = store_source(backend, pair->value);
 
         } else if (!strcmp(pair->key, "mountpoint") &&
                    pair->value->type == RBH_VT_STRING) {
-            if (!store_mountpoint(backend, pair->value->string))
-                return false;
+            rc2 = store_mountpoint(backend, pair->value->string);
 
         } else if (!strcmp(pair->key, "command_backend") &&
                    pair->value->type == RBH_VT_STRING) {
-            if (!store_command_backend(backend, pair->value->string))
-                return false;
+            rc2 = store_command_backend(backend, pair->value->string);
 
         } else if (!strcmp(pair->key, "fsevents_source") &&
                    pair->value->type == RBH_VT_MAP) {
-            if (!store_fsevents_source(backend, pair->value))
-                return false;
+            rc2 = store_fsevents_source(backend, pair->value);
 
         } else {
             errno = EINVAL;
-            return false;
+            rc2 = -1;
         }
+
+        if (!rc)
+            rc = rc2;
     }
 
-    return true;
+    return rc;
 }
 
-static bool
-insert_log(struct sqlite_backend *sqlite, const struct rbh_value_map *map)
+int
+sqlite_backend_insert_stats(void *backend, const char *command,
+                           const struct rbh_value_map *map)
 {
+    struct sqlite_backend *sqlite = backend;
     const char *query =
         "insert into log ("
         "    mountpoint, cli, duration, inserted, skipped, start, total, end"
@@ -238,6 +242,8 @@ insert_log(struct sqlite_backend *sqlite, const struct rbh_value_map *map)
     int64_t start = -1;
     int64_t total = -1;
     int64_t end = -1;
+
+    (void) command;
 
     for (size_t i = 0; i < map->count; i++) {
         const struct rbh_value_pair *pair = &map->pairs[i];
@@ -263,42 +269,20 @@ insert_log(struct sqlite_backend *sqlite, const struct rbh_value_map *map)
     if (duration == -1 || inserted == -1 || skipped == -1 || total == -1 ||
         end == -1 || start == -1 || mountpoint == NULL || cli == NULL) {
         errno = EINVAL;
-        return false;
-    }
-
-    return sqlite_cursor_setup(sqlite, &cursor) &&
-        sqlite_setup_query(&cursor, query) &&
-        sqlite_cursor_bind_string(&cursor, mountpoint) &&
-        sqlite_cursor_bind_string(&cursor, cli) &&
-        sqlite_cursor_bind_int64(&cursor, duration) &&
-        sqlite_cursor_bind_int64(&cursor, inserted) &&
-        sqlite_cursor_bind_int64(&cursor, skipped) &&
-        sqlite_cursor_bind_int64(&cursor, start) &&
-        sqlite_cursor_bind_int64(&cursor, total) &&
-        sqlite_cursor_bind_int64(&cursor, end) &&
-        sqlite_cursor_exec(&cursor);
-}
-
-int
-sqlite_backend_insert_metadata(void *backend,
-                               const struct rbh_value_map *map,
-                               enum metadata_type type)
-{
-    switch (type) {
-    case RBH_DT_INFO:
-        if (!insert_info(backend, map))
-            return -1;
-        break;
-    case RBH_DT_LOG:
-        if (!insert_log(backend, map))
-            return -1;
-        break;
-    default:
-        errno = EINVAL;
         return -1;
     }
 
-    return 0;
+    return (sqlite_cursor_setup(sqlite, &cursor) &&
+            sqlite_setup_query(&cursor, query) &&
+            sqlite_cursor_bind_string(&cursor, mountpoint) &&
+            sqlite_cursor_bind_string(&cursor, cli) &&
+            sqlite_cursor_bind_int64(&cursor, duration) &&
+            sqlite_cursor_bind_int64(&cursor, inserted) &&
+            sqlite_cursor_bind_int64(&cursor, skipped) &&
+            sqlite_cursor_bind_int64(&cursor, start) &&
+            sqlite_cursor_bind_int64(&cursor, total) &&
+            sqlite_cursor_bind_int64(&cursor, end) &&
+            sqlite_cursor_exec(&cursor)) ? 0 : -1;
 }
 
 /*----------------------------------------------------------------------------*
@@ -608,7 +592,7 @@ free_map:
 }
 
 struct rbh_value_map *
-sqlite_backend_get_logs(void *backend, struct rbh_log_options options)
+sqlite_backend_get_stats(void *backend, struct rbh_stats_options options)
 {
     struct sqlite_backend *sqlite = backend;
     struct rbh_value_map *map;

@@ -66,6 +66,9 @@ value2json(const struct rbh_value *value, struct rbh_sstack *sstack)
          */
         object = json_integer(value->uint64);
         break;
+    case RBH_VT_DOUBLE:
+        object = json_real(value->float64);
+        break;
     case RBH_VT_STRING:
         object = json_string(value->string);
         break;

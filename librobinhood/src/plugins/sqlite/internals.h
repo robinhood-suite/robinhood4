@@ -110,28 +110,32 @@ sqlite_backend_report(void *backend, const struct rbh_filter *filter,
 
 struct rbh_fsentry *
 sqlite_backend_root(void *backend,
-                   const struct rbh_filter_projection *projection);
+                   const struct rbh_filter_projection *projection,
+                   struct rbh_metadata *metadata);
 
 struct rbh_backend *
 sqlite_backend_branch(void *backend, const struct rbh_id *id, const char *path);
 
 struct rbh_fsentry *
 sqlite_branch_root(void *backend,
-                   const struct rbh_filter_projection *projection);
+                   const struct rbh_filter_projection *projection,
+                   struct rbh_metadata *metadata);
 
 void
 sqlite_backend_destroy(void *backend);
 
 int
-sqlite_backend_insert_metadata(void *backend,
-                               const struct rbh_value_map *value,
-                               enum metadata_type type);
+sqlite_backend_insert_info(void *backend, const struct rbh_value_map *map);
 
 struct rbh_value_map *
 sqlite_backend_get_info(void *backend, int flags);
 
 struct rbh_value_map *
-sqlite_backend_get_logs(void *backend, struct rbh_log_options options);
+sqlite_backend_get_stats(void *backend, struct rbh_stats_options options);
+
+int
+sqlite_backend_insert_stats(void *backend, const char *command,
+                            const struct rbh_value_map *map);
 
 /* Open db connexion. Create the DB if it does not exist */
 bool
@@ -183,6 +187,9 @@ sqlite_cursor_get_uint32(struct sqlite_cursor *trans);
 
 uint16_t
 sqlite_cursor_get_uint16(struct sqlite_cursor *trans);
+
+bool
+sqlite_cursor_bind_double(struct sqlite_cursor *cursor, double value);
 
 bool
 sqlite_cursor_bind_string(struct sqlite_cursor *cursor, const char *string);

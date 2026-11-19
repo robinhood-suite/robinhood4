@@ -875,7 +875,7 @@ destroy:
 }
 
 static int
-mongo_insert_info(void *backend, const struct rbh_value_map *map_value)
+mongo_backend_insert_info(void *backend, const struct rbh_value_map *map_value)
 {
     mongoc_collection_t *collection = NULL;
     struct mongo_backend *mongo = backend;
@@ -1048,12 +1048,12 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .update = mongo_backend_update,
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
+    .insert_info = mongo_backend_insert_info,
     .get_info = mongo_backend_get_info,
     .insert_stats = mongo_backend_insert_stats,
     .get_stats_count = mongo_backend_get_stats_count,
     .get_stats = mongo_backend_get_stats,
     .delete_stats = mongo_backend_delete_stats,
-    .insert_info = mongo_insert_info,
     .destroy = mongo_backend_destroy,
 };
 

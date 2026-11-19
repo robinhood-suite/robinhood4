@@ -350,7 +350,7 @@ mongo_backend_get_info(void *backend, int info_flags);
 
 int
 mongo_backend_insert_stats(void *backend, const char *command,
-                         const struct rbh_value_map *map);
+                           const struct rbh_value_map *map);
 
 struct rbh_value_map *
 mongo_backend_get_stats_count(void *backend);

@@ -20,9 +20,10 @@ static const struct rbh_backend_operations SQLITE_BRANCH_BACKEND_OPS = {
     .root            = sqlite_branch_root,
     .update          = sqlite_backend_update,
     .filter          = generic_branch_backend_filter,
-    .insert_metadata = sqlite_backend_insert_metadata,
+    .insert_stats    = sqlite_backend_insert_stats,
+    .insert_info     = sqlite_backend_insert_info,
     .get_info        = sqlite_backend_get_info,
-    .get_logs        = sqlite_backend_get_logs,
+    .get_stats       = sqlite_backend_get_stats,
     .destroy         = sqlite_backend_destroy,
 };
 
@@ -63,7 +64,7 @@ sqlite_backend_branch(void *backend, const struct rbh_id *id, const char *path)
 struct rbh_fsentry *
 sqlite_branch_root(void *backend,
                    const struct rbh_filter_projection *projection,
-                   __attribute__((unused)) struct rbh_metadata *metadata)
+                   struct rbh_metadata *metadata)
 {
     struct sqlite_backend_branch *branch = backend;
     const struct rbh_filter id_filter = {
@@ -86,7 +87,7 @@ sqlite_branch_root(void *backend,
 
     /* To avoid the infinite recursion root -> branch_filter -> root -> ... */
     branch->sqlite.backend.ops = &SQLITE_BACKEND_OPS;
-    root = rbh_backend_filter_one(backend, &id_filter, projection);
+    root = rbh_backend_filter_one(backend, &id_filter, projection, metadata);
     branch->sqlite.backend.ops = ops;
     return root;
 }
