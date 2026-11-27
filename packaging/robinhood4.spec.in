@@ -1,7 +1,20 @@
 %global python3_pkgversion 3.9
 
+# rpm-mpi-hooks qualifies libmpi requirements only for files installed in the
+# OpenMPI module directory; this package installs its libraries in the default
+# libdir. Filter the generated flavor-agnostic dependencies (the libmpi and
+# libmfu sonames, and the MPI requirement of the shipped robinhood.pc) and
+# rely on the explicit requirements on the qualified sonames of the AlmaLinux
+# OpenMPI and the Ocean libmfu.
+%global __requires_exclude ^libmpi\\.so.*$|^libmfu\\.so.*$|^pkgconfig\\(ompi\\)$
+
+# Qualified soname of the AlmaLinux OpenMPI runtime: only its module layout
+# can provide it, never a flat OpenMPI such as MOFED's. The flavor qualifier
+# follows the build architecture, so it stays satisfiable on every arch.
+%global openmpi_soname libmpi.so.40()(64bit)(openmpi-%{_arch})
+
 Name:    robinhood4
-Version: 1.5.2
+Version: @version@
 Release: 1%{?dist}
 Summary: RobinHood V4 tool suite
 
@@ -10,39 +23,43 @@ License: LGPLv3
 URL:     https://github.com/robinhood-suite/robinhood4.git
 Source0: %{name}-%{version}.tar.xz
 
-# build options    || .rpmmacros options || change to default action
-# =================  ====================  ===========================
-# --with ldiskfs   || %%_with_ldiskfs 1  || build ldiskfs plugin
-# --without lustre || %%_with_lustre 0   || don't build lustre extension
-# --without man    || %%_with_man 0      || don't build man pages
-# --with mfu       || %%_with_mfu 1      || build mfu plugin and extension
-# --without mongo  || %%_with_mongo 0    || don't build mongo plugin
-# --with mpi       || %%_with_mpi 1      || build mpi extension
-# --with s3        || %%_with_s3 1       || build s3 plugin
-# --with selinux   || %%_with_selinux 1  || build selinux plugin
-# --with acl       || %%_with_acl 1      || build acl plugin
+# build options     || .rpmmacros options || change to default action
+# ==================  ====================  ===========================
+# --without ldiskfs || %%_with_ldiskfs 0  || don't build ldiskfs plugin
+# --without lustre  || %%_with_lustre 0   || don't build lustre extension
+# --without man     || %%_with_man 0      || don't build man pages
+# --without mfu     || %%_with_mfu 0      || don't build mfu plugin and extension
+# --without mongo   || %%_with_mongo 0    || don't build mongo plugin
+# --without mpi     || %%_with_mpi 0      || don't build mpi extension
+# --with s3         || %%_with_s3 1       || build s3 plugin
+# --without selinux || %%_with_selinux 0  || don't build selinux plugin
+# --without acl     || %%_with_acl 0      || don't build acl plugin
 
-%bcond_with ldiskfs
+%bcond_without ldiskfs
 %bcond_without lustre
 %bcond_without man
-%bcond_with mfu
+%bcond_without mfu
 %bcond_without mongo
-%bcond_with mpi
+%bcond_without mpi
 %bcond_with s3
-%bcond_with selinux
-%bcond_with acl
+%bcond_without selinux
+%bcond_without acl
 
 Conflicts: robinhood
 
 Requires: miniyaml
 Requires: python39
 Requires: python39-yaml
+%if %{with mfu} || %{with mpi}
+Requires: %{openmpi_soname}
+%endif
 
 BuildRequires: meson
 BuildRequires: gcc
 BuildRequires: jansson-devel
 BuildRequires: check-devel
 BuildRequires: glib2-devel
+BuildRequires: libatomic
 BuildRequires: libuuid-devel
 BuildRequires: libyaml-devel
 BuildRequires: pkgconf-pkg-config
@@ -50,14 +67,22 @@ BuildRequires: miniyaml-devel
 BuildRequires: python39
 BuildRequires: python39-rpm-macros
 BuildRequires: python39-devel
+%if %{with mfu} || %{with mpi}
+# Build the MPI components against the OpenMPI from AlmaLinux, like libcircle:
+# the MOFED repositories ship a conflicting OpenMPI, flat and without
+# openmpi-devel, so its module is loaded in the build section to link the
+# AlmaLinux layout.
+BuildRequires: openmpi-devel
+BuildRequires: environment-modules
+%endif
 %if %{with man}
 BuildRequires: python3-sphinx
 %endif
 
 %description
 The RobinHood4 tool suite. Includes librobinhood and the POSIX plugin, rbh-sync,
-rbh-fsevents, rbh-find, rbh-report, rbh-info, rbh-gc, rbh-update-path,
-rbh-undelete, rbh-update-retention and rbh-policy.
+rbh-fsevents, rbh-find, rbh-report, rbh-info, rbh-gc, rbh-stats,
+rbh-update-path, rbh-undelete, rbh-update-retention and rbh-policy.
 
 %package devel
 Summary: C API for RobinHood V4 tool suite.
@@ -102,9 +127,8 @@ a C program.
 %package mfu
 Summary: MPI-File-Utils plugin and POSIX extension for the RobinHood V4 tool suite
 Requires: robinhood4 == %{version}
-Requires: openmpi
-Requires: libmfu
-BuildRequires: openmpi-devel
+Requires: %{openmpi_soname}
+Requires: libmfu.so.4.0.0()(64bit)(openmpi-%{_arch})
 BuildRequires: libmfu-devel
 
 %description mfu
@@ -115,7 +139,6 @@ usable by rbh-sync and rbh-find.
 Summary: C API of the MPI-File-Utils plugin and POSIX extension for the RobinHood V4 tool suite
 Requires: robinhood4-devel
 Requires: robinhood4-mfu
-Requires: openmpi-devel
 Requires: libmfu-devel
 
 %description mfu-devel
@@ -267,8 +290,7 @@ program.
 %package s3-mpi
 Summary: The MPI extension of the S3 plugin for the RobinHood V4 tool suite
 Requires: robinhood4-s3
-Requires: openmpi
-BuildRequires: openmpi-devel
+Requires: %{openmpi_soname}
 
 %description s3-mpi
 The MPI extension of the S3 plugin for the RobinHood V4 tool suite, usable by
@@ -277,7 +299,6 @@ rbh-sync.
 %package s3-mpi-devel
 Summary: C API of the MPI extension of the S3 plugin for the RobinHood V4 tool suite
 Requires: robinhood4-s3-devel
-Requires: openmpi-devel
 
 %description s3-mpi-devel
 This package contains header files and libraries to use the MPI extension of the
@@ -344,8 +365,21 @@ OPTS=""
     OPTS+="-Dacl=disabled "
 %endif
 
+%if %{with mfu} || %{with mpi}
+%_openmpi_load
+# Abort rather than link against an ambient MPI (e.g. MOFED's flat layout),
+# which yields uninstallable dependencies: check the mpicc the environment
+# resolves to, not just that the AlmaLinux OpenMPI appears somewhere in PATH.
+if [ "$(command -v mpicc)" != "%{_libdir}/openmpi/bin/mpicc" ]; then
+    echo "AlmaLinux OpenMPI module not loaded or shadowed, aborting" >&2
+    exit 1
+fi
+%endif
 %meson $OPTS
 %meson_build
+%if %{with mfu} || %{with mpi}
+%_openmpi_unload
+%endif
 
 %install
 %meson_install
@@ -353,6 +387,7 @@ OPTS=""
 %files
 %{_libdir}/librobinhood.so*
 %{_libdir}/librbh-posix.so*
+%{_libdir}/librbh-posix-fts-ext.so*
 %{_libdir}/pkgconfig/robinhood.pc
 %{_bindir}/rbh-sync
 %{_bindir}/rbh-find
@@ -363,7 +398,7 @@ OPTS=""
 %endif
 %{_bindir}/rbh-report
 %{_bindir}/rbh-gc
-%{_bindir}/rbh-log
+%{_bindir}/rbh-stats
 %{_bindir}/rbh-update-path
 %{_bindir}/rbh-policy
 %{python3_sitelib}/rbhpolicy/*
@@ -382,6 +417,7 @@ OPTS=""
 %{_includedir}/robinhood/backend.h
 %{_includedir}/robinhood/backends/posix.h
 %{_includedir}/robinhood/backends/posix_extension.h
+%{_includedir}/robinhood/backends/fts.h
 %{_includedir}/robinhood/config.h
 %{_includedir}/robinhood/filter.h
 %{_includedir}/robinhood/filters/core.h
@@ -393,7 +429,6 @@ OPTS=""
 %{_includedir}/robinhood/iterator.h
 %{_includedir}/robinhood/itertools.h
 %{_includedir}/robinhood/list.h
-%{_includedir}/robinhood/log.h
 %{_includedir}/robinhood/mpi_rc.h
 %{_includedir}/robinhood/open.h
 %{_includedir}/robinhood/plugin.h
@@ -410,6 +445,7 @@ OPTS=""
 %{_includedir}/robinhood/serialization.h
 %{_includedir}/robinhood/sstack.h
 %{_includedir}/robinhood/stack.h
+%{_includedir}/robinhood/stats.h
 %{_includedir}/robinhood/statx.h
 %{_includedir}/robinhood/uri.h
 %{_includedir}/robinhood/utils.h
@@ -504,6 +540,12 @@ OPTS=""
 ldconfig
 
 %changelog
+* Tue Nov 10 2026 - Yoann Valeri <yoann.valeri@cea.fr> - 1.6.0-1
+- All directives for Lustre printing in rbh-find are available
+- Add SELinux and ACL as available backends
+- New command rbh-stats to get statistics about RobinHood4 tool runs
+- New '--stats' options for multiple tools to get statistics during runs
+
 * Thu Apr 30 2026 - Yoann Valeri <yoann.valeri@cea.fr> - 1.5.2-1
 - Add ldiskfs as available backend
 - Fix issue with in map searching
